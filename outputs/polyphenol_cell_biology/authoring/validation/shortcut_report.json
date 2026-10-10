@@ -1,0 +1,545 @@
+{
+  "n_shortcuts": 6,
+  "any_wrong_science_accepted": false,
+  "shortcuts": [
+    {
+      "shortcut": "shortcut_1_largest_assay_signal",
+      "script": "shortcut_1_largest_assay_signal.py",
+      "ran_successfully": true,
+      "stderr_tail": "",
+      "verifier_exit": 1,
+      "verifier_rejected": true,
+      "verifier_checks_failed": [
+        "numeric_results_within_tolerance",
+        "classifications_match_expected"
+      ],
+      "n_wrong_conclusions": 4,
+      "wrong_conclusions": [
+        "PP04.protection_status: said 'protected', correct 'not_protected'",
+        "PP04.nrf2_dependence_status: said 'not_nrf2_dependent', correct 'not_assessable'",
+        "PP04.interference_flags: said 'none', correct 'mtt;ros'",
+        "PP06.interference_flags: said 'none', correct 'ros'"
+      ],
+      "n_wrong_numbers": 52,
+      "wrong_numbers": [
+        "PP01.protection_index_wt: said 0.0082, correct -0.0050",
+        "PP01.protection_index_wt_ci_low: said -0.0090, correct -0.0388",
+        "PP01.protection_index_ko_primary_conc: said -0.0392, correct -0.0516",
+        "PP01.protection_index_ko_exposure_matched: said -0.0392, correct -0.0516",
+        "PP01.protection_index_rescue: said 0.0047, correct -0.0096",
+        "PP01.nrf2_dependence_contrast_ci_low: said 0.0260, correct 0.0068",
+        "PP01.nrf2_dependence_contrast_ci_high: said 0.0687, correct 0.0864",
+        "PP02.protection_index_wt: said 0.5938, correct 0.6009",
+        "PP02.protection_index_wt_ci_low: said 0.5534, correct 0.5663",
+        "PP02.protection_index_ko_primary_conc: said -0.0395, correct -0.0342",
+        "PP02.protection_index_ko_exposure_matched: said -0.0395, correct -0.0342",
+        "PP02.protection_index_rescue: said 0.5714, correct 0.5807",
+        "PP02.nrf2_dependence_contrast_ci_high: said 0.6847, correct 0.6902",
+        "PP03.protection_index_wt: said 0.5110, correct 0.5218",
+        "PP03.protection_index_wt_ci_high: said 0.5240, correct 0.5418",
+        "PP03.protection_index_ko_primary_conc: said 0.2602, correct 0.2726",
+        "PP03.nrf2_dependence_contrast: said -0.0245, correct -0.0166",
+        "PP03.nrf2_dependence_contrast_ci_low: said -0.0753, correct -0.0617",
+        "PP04.primary_concentration_um: said 600.0000, correct 300.0000",
+        "PP04.wt_primary_exposure_pmol_per_1e6_cells: said 711.1, correct 437.4",
+        "PP04.exposure_matched_ko_concentration_um: said 600.0000, correct 300.0000",
+        "PP04.protection_index_wt: said 1.7662, correct -0.0081",
+        "PP04.protection_index_wt_ci_low: said 1.6046, correct -0.0474",
+        "PP04.protection_index_wt_ci_high: said 1.9277, correct 0.0312",
+        "PP04.protection_index_ko_primary_conc: said 1.8775, correct -0.0116",
+        "PP04.protection_index_ko_exposure_matched: said 1.8775, correct -0.0116",
+        "PP04.protection_index_rescue: said 1.9465, correct 0.0148",
+        "PP04.nrf2_dependence_contrast: said -0.1114, correct 0.0035",
+        "PP04.nrf2_dependence_contrast_ci_low: said -0.2686, correct -0.0436",
+        "PP05.protection_index_wt: said 0.5428, correct 0.5534",
+        "PP05.protection_index_wt_ci_low: said 0.5180, correct 0.5322",
+        "PP05.protection_index_wt_ci_high: said 0.5676, correct 0.5746",
+        "PP05.protection_index_rescue: said 0.5777, correct 0.5876",
+        "PP05.nrf2_dependence_contrast: said -0.0020, correct 0.0127",
+        "PP05.nrf2_dependence_contrast_ci_low: said -0.0284, correct -0.0215",
+        "PP05.nrf2_dependence_contrast_ci_high: said 0.0243, correct 0.0468",
+        "PP06.protection_index_wt: said 0.5712, correct 0.5819",
+        "PP06.protection_index_wt_ci_low: said 0.5314, correct 0.5410",
+        "PP06.protection_index_wt_ci_high: said 0.6110, correct 0.6228",
+        "PP06.nrf2_dependence_contrast: said 0.5993, correct 0.6137"
+      ],
+      "statuses_submitted": {
+        "PP01": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP02": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP03": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "not_nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP04": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "not_nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP05": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "not_nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP06": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP07": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP08": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "indeterminate",
+          "interference_flags": "none"
+        }
+      },
+      "verdict": "wrong_science_and_rejected"
+    },
+    {
+      "shortcut": "shortcut_2_gene_induction_is_protection",
+      "script": "shortcut_2_gene_induction_is_protection.py",
+      "ran_successfully": true,
+      "stderr_tail": "",
+      "verifier_exit": 1,
+      "verifier_rejected": true,
+      "verifier_checks_failed": [
+        "classifications_consistent_with_submitted_numbers",
+        "numeric_results_within_tolerance",
+        "classifications_match_expected"
+      ],
+      "n_wrong_conclusions": 6,
+      "wrong_conclusions": [
+        "PP01.protection_status: said 'protected', correct 'not_protected'",
+        "PP01.nrf2_dependence_status: said 'nrf2_dependent', correct 'not_assessable'",
+        "PP03.protection_status: said 'not_protected', correct 'protected'",
+        "PP03.nrf2_dependence_status: said 'not_assessable', correct 'not_nrf2_dependent'",
+        "PP05.protection_status: said 'not_protected', correct 'protected'",
+        "PP05.nrf2_dependence_status: said 'not_assessable', correct 'not_nrf2_dependent'"
+      ],
+      "n_wrong_numbers": 68,
+      "wrong_numbers": [
+        "PP01.protection_index_wt: said 1.5838, correct -0.0050",
+        "PP01.protection_index_wt_ci_low: said 1.5052, correct -0.0388",
+        "PP01.protection_index_wt_ci_high: said 1.6623, correct 0.0288",
+        "PP01.protection_index_ko_primary_conc: said 0.0949, correct -0.0516",
+        "PP01.protection_index_ko_exposure_matched: said 0.0949, correct -0.0516",
+        "PP01.protection_index_rescue: said 1.4001, correct -0.0096",
+        "PP01.nrf2_dependence_contrast: said 1.4889, correct 0.0466",
+        "PP01.nrf2_dependence_contrast_ci_low: said 1.3695, correct 0.0068",
+        "PP01.nrf2_dependence_contrast_ci_high: said 1.6082, correct 0.0864",
+        "PP02.protection_index_wt: said 1.8320, correct 0.6009",
+        "PP02.protection_index_wt_ci_low: said 1.7694, correct 0.5663",
+        "PP02.protection_index_wt_ci_high: said 1.8946, correct 0.6354",
+        "PP02.protection_index_ko_primary_conc: said 0.1055, correct -0.0342",
+        "PP02.protection_index_ko_exposure_matched: said 0.1055, correct -0.0342",
+        "PP02.protection_index_rescue: said 1.5600, correct 0.5807",
+        "PP02.nrf2_dependence_contrast: said 1.7265, correct 0.6351",
+        "PP02.nrf2_dependence_contrast_ci_low: said 1.6148, correct 0.5800",
+        "PP02.nrf2_dependence_contrast_ci_high: said 1.8382, correct 0.6902",
+        "PP03.protection_index_wt: said 0.1293, correct 0.5218",
+        "PP03.protection_index_wt_ci_low: said 0.0521, correct 0.5017",
+        "PP03.protection_index_wt_ci_high: said 0.2065, correct 0.5418",
+        "PP03.protection_index_ko_primary_conc: said 0.0875, correct 0.2726",
+        "PP03.protection_index_ko_exposure_matched: said 0.1086, correct 0.5384",
+        "PP03.protection_index_rescue: said 0.0963, correct 0.5296",
+        "PP03.nrf2_dependence_contrast: said 0.0208, correct -0.0166",
+        "PP03.nrf2_dependence_contrast_ci_low: said -0.1132, correct -0.0617",
+        "PP03.nrf2_dependence_contrast_ci_high: said 0.1547, correct 0.0284",
+        "PP04.protection_index_wt: said 0.3613, correct -0.0081",
+        "PP04.protection_index_wt_ci_low: said 0.2845, correct -0.0474",
+        "PP04.protection_index_wt_ci_high: said 0.4381, correct 0.0312",
+        "PP04.protection_index_ko_primary_conc: said 0.3425, correct -0.0116",
+        "PP04.protection_index_ko_exposure_matched: said 0.3425, correct -0.0116",
+        "PP04.protection_index_rescue: said 0.3042, correct 0.0148",
+        "PP04.nrf2_dependence_contrast: said 0.0188, correct 0.0035",
+        "PP04.nrf2_dependence_contrast_ci_low: said -0.1199, correct -0.0436",
+        "PP04.nrf2_dependence_contrast_ci_high: said 0.1574, correct 0.0505",
+        "PP05.protection_index_wt: said 0.1742, correct 0.5534",
+        "PP05.protection_index_wt_ci_low: said 0.0923, correct 0.5322",
+        "PP05.protection_index_wt_ci_high: said 0.2562, correct 0.5746",
+        "PP05.protection_index_ko_primary_conc: said 0.1337, correct 0.5408"
+      ],
+      "statuses_submitted": {
+        "PP01": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP02": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP03": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP04": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "mtt;ros"
+        },
+        "PP05": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP06": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "ros"
+        },
+        "PP07": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP08": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "indeterminate",
+          "interference_flags": "none"
+        }
+      },
+      "verdict": "wrong_science_and_rejected"
+    },
+    {
+      "shortcut": "shortcut_3_ignore_baselines",
+      "script": "shortcut_3_ignore_baselines.py",
+      "ran_successfully": true,
+      "stderr_tail": "",
+      "verifier_exit": 1,
+      "verifier_rejected": true,
+      "verifier_checks_failed": [
+        "numeric_results_within_tolerance",
+        "classifications_match_expected"
+      ],
+      "n_wrong_conclusions": 1,
+      "wrong_conclusions": [
+        "PP03.nrf2_dependence_status: said 'indeterminate', correct 'not_nrf2_dependent'"
+      ],
+      "n_wrong_numbers": 71,
+      "wrong_numbers": [
+        "PP01.protection_index_wt: said 0.0109, correct -0.0050",
+        "PP01.protection_index_wt_ci_low: said 0.0031, correct -0.0388",
+        "PP01.protection_index_wt_ci_high: said 0.0188, correct 0.0288",
+        "PP01.protection_index_ko_primary_conc: said -0.0045, correct -0.0516",
+        "PP01.protection_index_ko_exposure_matched: said -0.0045, correct -0.0516",
+        "PP01.protection_index_rescue: said 0.0048, correct -0.0096",
+        "PP01.nrf2_dependence_contrast: said 0.0154, correct 0.0466",
+        "PP01.nrf2_dependence_contrast_ci_high: said 0.0256, correct 0.0864",
+        "PP02.primary_concentration_um: said 30.0000, correct 50.0000",
+        "PP02.wt_primary_exposure_pmol_per_1e6_cells: said 78.22, correct 138",
+        "PP02.exposure_matched_ko_concentration_um: said 30.0000, correct 50.0000",
+        "PP02.protection_index_wt: said 0.2953, correct 0.6009",
+        "PP02.protection_index_wt_ci_low: said 0.2846, correct 0.5663",
+        "PP02.protection_index_wt_ci_high: said 0.3060, correct 0.6354",
+        "PP02.protection_index_ko_primary_conc: said 0.0007, correct -0.0342",
+        "PP02.protection_index_ko_exposure_matched: said 0.0007, correct -0.0342",
+        "PP02.protection_index_rescue: said 0.2509, correct 0.5807",
+        "PP02.nrf2_dependence_contrast: said 0.2946, correct 0.6351",
+        "PP02.nrf2_dependence_contrast_ci_low: said 0.2817, correct 0.5800",
+        "PP02.nrf2_dependence_contrast_ci_high: said 0.3074, correct 0.6902",
+        "PP03.protection_index_wt: said 0.3065, correct 0.5218",
+        "PP03.protection_index_wt_ci_low: said 0.2915, correct 0.5017",
+        "PP03.protection_index_wt_ci_high: said 0.3214, correct 0.5418",
+        "PP03.protection_index_ko_primary_conc: said 0.0706, correct 0.2726",
+        "PP03.protection_index_ko_exposure_matched: said 0.1729, correct 0.5384",
+        "PP03.protection_index_rescue: said 0.2956, correct 0.5296",
+        "PP03.nrf2_dependence_contrast: said 0.1336, correct -0.0166",
+        "PP03.nrf2_dependence_contrast_ci_low: said 0.1128, correct -0.0617",
+        "PP03.nrf2_dependence_contrast_ci_high: said 0.1543, correct 0.0284",
+        "PP04.primary_concentration_um: said 100.0000, correct 300.0000",
+        "PP04.wt_primary_exposure_pmol_per_1e6_cells: said 164.1, correct 437.4",
+        "PP04.exposure_matched_ko_concentration_um: said 100.0000, correct 300.0000",
+        "PP04.protection_index_wt: said 0.0144, correct -0.0081",
+        "PP04.protection_index_wt_ci_low: said 0.0068, correct -0.0474",
+        "PP04.protection_index_wt_ci_high: said 0.0221, correct 0.0312",
+        "PP04.protection_index_ko_primary_conc: said 0.0028, correct -0.0116",
+        "PP04.protection_index_ko_exposure_matched: said 0.0028, correct -0.0116",
+        "PP04.protection_index_rescue: said 0.0090, correct 0.0148",
+        "PP04.nrf2_dependence_contrast: said 0.0117, correct 0.0035",
+        "PP04.nrf2_dependence_contrast_ci_low: said 0.0008, correct -0.0436"
+      ],
+      "statuses_submitted": {
+        "PP01": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP02": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP03": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "indeterminate",
+          "interference_flags": "none"
+        },
+        "PP04": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "mtt;ros"
+        },
+        "PP05": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "not_nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP06": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "ros"
+        },
+        "PP07": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP08": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "indeterminate",
+          "interference_flags": "none"
+        }
+      },
+      "verdict": "wrong_science_and_rejected"
+    },
+    {
+      "shortcut": "shortcut_4_ignore_exposure",
+      "script": "shortcut_4_ignore_exposure.py",
+      "ran_successfully": true,
+      "stderr_tail": "",
+      "verifier_exit": 1,
+      "verifier_rejected": true,
+      "verifier_checks_failed": [
+        "numeric_results_within_tolerance",
+        "classifications_match_expected"
+      ],
+      "n_wrong_conclusions": 2,
+      "wrong_conclusions": [
+        "PP03.nrf2_dependence_status: said 'nrf2_dependent', correct 'not_nrf2_dependent'",
+        "PP08.nrf2_dependence_status: said 'nrf2_dependent', correct 'indeterminate'"
+      ],
+      "n_wrong_numbers": 18,
+      "wrong_numbers": [
+        "PP01.wt_primary_exposure_pmol_per_1e6_cells: said 'NA', correct '280.06'",
+        "PP02.wt_primary_exposure_pmol_per_1e6_cells: said 'NA', correct '137.99'",
+        "PP03.wt_primary_exposure_pmol_per_1e6_cells: said 'NA', correct '33.42'",
+        "PP03.exposure_matched_ko_concentration_um: said 10.0000, correct 50.0000",
+        "PP03.protection_index_ko_exposure_matched: said 0.2726, correct 0.5384",
+        "PP03.nrf2_dependence_contrast: said 0.2492, correct -0.0166",
+        "PP03.nrf2_dependence_contrast_ci_low: said 0.2204, correct -0.0617",
+        "PP03.nrf2_dependence_contrast_ci_high: said 0.2779, correct 0.0284",
+        "PP04.wt_primary_exposure_pmol_per_1e6_cells: said 'NA', correct '437.43'",
+        "PP05.wt_primary_exposure_pmol_per_1e6_cells: said 'NA', correct '308.85'",
+        "PP06.wt_primary_exposure_pmol_per_1e6_cells: said 'NA', correct '227.25'",
+        "PP07.wt_primary_exposure_pmol_per_1e6_cells: said 'NA', correct '27.76'",
+        "PP08.wt_primary_exposure_pmol_per_1e6_cells: said 'NA', correct '389.92'",
+        "PP08.exposure_matched_ko_concentration_um: said '50.0', correct 'NA'",
+        "PP08.protection_index_ko_exposure_matched: said '0.018474', correct 'NA'",
+        "PP08.nrf2_dependence_contrast: said '0.539468', correct 'NA'",
+        "PP08.nrf2_dependence_contrast_ci_low: said '0.489521', correct 'NA'",
+        "PP08.nrf2_dependence_contrast_ci_high: said '0.589415', correct 'NA'"
+      ],
+      "statuses_submitted": {
+        "PP01": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP02": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP03": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP04": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "mtt;ros"
+        },
+        "PP05": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "not_nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP06": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "ros"
+        },
+        "PP07": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP08": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        }
+      },
+      "verdict": "wrong_science_and_rejected"
+    },
+    {
+      "shortcut": "shortcut_5_technical_as_biological",
+      "script": "shortcut_5_technical_as_biological.py",
+      "ran_successfully": true,
+      "stderr_tail": "",
+      "verifier_exit": 1,
+      "verifier_rejected": true,
+      "verifier_checks_failed": [
+        "numeric_results_within_tolerance"
+      ],
+      "n_wrong_conclusions": 0,
+      "wrong_conclusions": [],
+      "n_wrong_numbers": 22,
+      "wrong_numbers": [
+        "PP01.protection_index_wt_ci_low: said -0.0231, correct -0.0388",
+        "PP01.protection_index_wt_ci_high: said 0.0131, correct 0.0288",
+        "PP01.nrf2_dependence_contrast_ci_low: said 0.0228, correct 0.0068",
+        "PP01.nrf2_dependence_contrast_ci_high: said 0.0705, correct 0.0864",
+        "PP02.protection_index_wt_ci_low: said 0.5816, correct 0.5663",
+        "PP02.protection_index_wt_ci_high: said 0.6201, correct 0.6354",
+        "PP02.nrf2_dependence_contrast_ci_low: said 0.6054, correct 0.5800",
+        "PP02.nrf2_dependence_contrast_ci_high: said 0.6648, correct 0.6902",
+        "PP03.nrf2_dependence_contrast_ci_low: said -0.0476, correct -0.0617",
+        "PP03.nrf2_dependence_contrast_ci_high: said 0.0143, correct 0.0284",
+        "PP04.protection_index_wt_ci_low: said -0.0305, correct -0.0474",
+        "PP04.protection_index_wt_ci_high: said 0.0143, correct 0.0312",
+        "PP04.nrf2_dependence_contrast_ci_low: said -0.0245, correct -0.0436",
+        "PP04.nrf2_dependence_contrast_ci_high: said 0.0314, correct 0.0505",
+        "PP06.protection_index_wt_ci_low: said 0.5564, correct 0.5410",
+        "PP06.protection_index_wt_ci_high: said 0.6074, correct 0.6228",
+        "PP06.nrf2_dependence_contrast_ci_low: said 0.5803, correct 0.5601",
+        "PP06.nrf2_dependence_contrast_ci_high: said 0.6472, correct 0.6674",
+        "PP07.protection_index_wt_ci_low: said -0.0278, correct -0.0391",
+        "PP07.protection_index_wt_ci_high: said -0.0005, correct 0.0107",
+        "PP07.nrf2_dependence_contrast_ci_low: said -0.0403, correct -0.0619",
+        "PP07.nrf2_dependence_contrast_ci_high: said 0.0063, correct 0.0279"
+      ],
+      "statuses_submitted": {
+        "PP01": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP02": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP03": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "not_nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP04": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "mtt;ros"
+        },
+        "PP05": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "not_nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP06": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "ros"
+        },
+        "PP07": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP08": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "indeterminate",
+          "interference_flags": "none"
+        }
+      },
+      "verdict": "correct_conclusions_but_rejected"
+    },
+    {
+      "shortcut": "shortcut_6_reject_any_interference",
+      "script": "shortcut_6_reject_any_interference.py",
+      "ran_successfully": true,
+      "stderr_tail": "",
+      "verifier_exit": 1,
+      "verifier_rejected": true,
+      "verifier_checks_failed": [
+        "classifications_consistent_with_submitted_numbers",
+        "classifications_match_expected"
+      ],
+      "n_wrong_conclusions": 2,
+      "wrong_conclusions": [
+        "PP06.protection_status: said 'not_protected', correct 'protected'",
+        "PP06.nrf2_dependence_status: said 'not_assessable', correct 'nrf2_dependent'"
+      ],
+      "n_wrong_numbers": 0,
+      "wrong_numbers": [],
+      "statuses_submitted": {
+        "PP01": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP02": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP03": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "not_nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP04": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "mtt;ros"
+        },
+        "PP05": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "not_nrf2_dependent",
+          "interference_flags": "none"
+        },
+        "PP06": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "ros"
+        },
+        "PP07": {
+          "protection_status": "not_protected",
+          "nrf2_dependence_status": "not_assessable",
+          "interference_flags": "none"
+        },
+        "PP08": {
+          "protection_status": "protected",
+          "nrf2_dependence_status": "indeterminate",
+          "interference_flags": "none"
+        }
+      },
+      "verdict": "wrong_science_and_rejected"
+    }
+  ]
+}

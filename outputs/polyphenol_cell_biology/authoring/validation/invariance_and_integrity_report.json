@@ -1,0 +1,385 @@
+{
+  "checks": [
+    {
+      "check": "row_order_invariance",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "compound_id_permutation_invariance",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "sample_id_unique",
+      "status": "pass",
+      "detail": "76160 rows, 76160 unique"
+    },
+    {
+      "check": "viability_readouts.csv:all_sample_ids_resolve",
+      "status": "pass",
+      "detail": "0 orphans e.g. []"
+    },
+    {
+      "check": "viability_readouts.csv:sample_ids_belong_to_its_panel",
+      "status": "pass",
+      "detail": "0 mismatched e.g. []"
+    },
+    {
+      "check": "viability_readouts.csv:declared_key_unique",
+      "status": "pass",
+      "detail": "0 duplicate rows on ['sample_id']"
+    },
+    {
+      "check": "viability_readouts.csv:every_manifest_sample_measured",
+      "status": "pass",
+      "detail": "0 manifest samples with no row e.g. []"
+    },
+    {
+      "check": "oxidative_stress_readouts.csv:all_sample_ids_resolve",
+      "status": "pass",
+      "detail": "0 orphans e.g. []"
+    },
+    {
+      "check": "oxidative_stress_readouts.csv:sample_ids_belong_to_its_panel",
+      "status": "pass",
+      "detail": "0 mismatched e.g. []"
+    },
+    {
+      "check": "oxidative_stress_readouts.csv:declared_key_unique",
+      "status": "pass",
+      "detail": "0 duplicate rows on ['sample_id']"
+    },
+    {
+      "check": "oxidative_stress_readouts.csv:every_manifest_sample_measured",
+      "status": "pass",
+      "detail": "0 manifest samples with no row e.g. []"
+    },
+    {
+      "check": "qpcr_ct_values.csv:all_sample_ids_resolve",
+      "status": "pass",
+      "detail": "0 orphans e.g. []"
+    },
+    {
+      "check": "qpcr_ct_values.csv:sample_ids_belong_to_its_panel",
+      "status": "pass",
+      "detail": "0 mismatched e.g. []"
+    },
+    {
+      "check": "qpcr_ct_values.csv:declared_key_unique",
+      "status": "pass",
+      "detail": "0 duplicate rows on ['sample_id', 'target_gene', 'reaction_replicate']"
+    },
+    {
+      "check": "qpcr_ct_values.csv:every_manifest_sample_measured",
+      "status": "pass",
+      "detail": "0 manifest samples with no row e.g. []"
+    },
+    {
+      "check": "exposure_measurements.csv:all_sample_ids_resolve",
+      "status": "pass",
+      "detail": "0 orphans e.g. []"
+    },
+    {
+      "check": "exposure_measurements.csv:sample_ids_belong_to_its_panel",
+      "status": "pass",
+      "detail": "0 mismatched e.g. []"
+    },
+    {
+      "check": "exposure_measurements.csv:declared_key_unique",
+      "status": "pass",
+      "detail": "0 duplicate rows on ['sample_id', 'matrix', 'injection_replicate']"
+    },
+    {
+      "check": "exposure_measurements.csv:every_manifest_sample_measured",
+      "status": "pass",
+      "detail": "0 manifest samples with no row e.g. []"
+    },
+    {
+      "check": "control_id_unique",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "controls_do_not_collide_with_sample_ids",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "manifest_cell_models_all_declared",
+      "status": "pass",
+      "detail": "[]"
+    },
+    {
+      "check": "manifest_compounds_all_declared",
+      "status": "pass",
+      "detail": "[]"
+    },
+    {
+      "check": "administered_concentrations_on_ladder",
+      "status": "pass",
+      "detail": "off-ladder: []"
+    },
+    {
+      "check": "iso_challenge_dose_matches_cell_models",
+      "status": "pass",
+      "detail": "0 mismatched rows"
+    },
+    {
+      "check": "common_challenge_dose_identical_across_cell_models",
+      "status": "pass",
+      "detail": "[300.0]"
+    },
+    {
+      "check": "unchallenged_rows_have_zero_oxidant",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "nuclei_counts_nonnegative_integers",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "ldh_activity_positive",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "mtt_absorbances_in_plausible_window",
+      "status": "pass",
+      "detail": "570nm range 0.099-1.683"
+    },
+    {
+      "check": "mtt_570_exceeds_630_reference",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "probe_fluorescence_positive",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "ct_values_in_plausible_window",
+      "status": "pass",
+      "detail": "range 15.62-29.07"
+    },
+    {
+      "check": "reference_genes_stable_across_treatments",
+      "status": "pass",
+      "detail": "largest within-cell-model spread of a reference gene mean Ct = 0.497"
+    },
+    {
+      "check": "derived_exposures_positive_and_plausible",
+      "status": "pass",
+      "detail": "range 1.073-3131.8 pmol per 1e6 cells"
+    },
+    {
+      "check": "medium_rows_have_no_cell_equivalents",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "censored_rows_have_empty_value",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "seven_biological_experiments",
+      "status": "pass",
+      "detail": "['BIO01', 'BIO02', 'BIO03', 'BIO04', 'BIO05', 'BIO06', 'BIO07']"
+    },
+    {
+      "check": "every_experiment_contains_every_cell_model",
+      "status": "pass",
+      "detail": "{'BIO01': 7, 'BIO02': 7, 'BIO03': 7, 'BIO04': 7, 'BIO05': 7, 'BIO06': 7, 'BIO07': 7}"
+    },
+    {
+      "check": "every_experiment_contains_every_treatment_level",
+      "status": "pass",
+      "detail": "{'BIO01': 73, 'BIO02': 73, 'BIO03': 73, 'BIO04': 73, 'BIO05': 73, 'BIO06': 73, 'BIO07': 73}"
+    },
+    {
+      "check": "no_plate_contains_only_one_cell_model",
+      "status": "pass",
+      "detail": "0 single-cell-model plates of 532"
+    },
+    {
+      "check": "no_plate_contains_only_one_compound",
+      "status": "pass",
+      "detail": "0 single-compound plates"
+    },
+    {
+      "check": "cell_model_not_nested_in_reagent_batch",
+      "status": "pass",
+      "detail": "{'RB1': 7, 'RB2': 7}"
+    },
+    {
+      "check": "viability_technical_replication_is_four",
+      "status": "pass",
+      "detail": "observed replicate counts [np.int64(4)]"
+    },
+    {
+      "check": "lysate_censoring_only_at_the_lowest_three_concentrations",
+      "status": "pass",
+      "detail": "0 censored lysate rows above 10 uM; highest censored concentration is 10.0 uM"
+    },
+    {
+      "check": "medium_censoring_only_in_the_post_washout_conditions",
+      "status": "pass",
+      "detail": "0 censored medium rows outside the washout conditions"
+    },
+    {
+      "check": "censoring_flag_matches_empty_value_one_to_one",
+      "status": "pass",
+      "detail": "0 rows where the flag and the empty value disagree"
+    },
+    {
+      "check": "only_undetermined_controls_have_an_empty_value",
+      "status": "pass",
+      "detail": "qualifiers on empty-value control rows: ['undetermined']"
+    },
+    {
+      "check": "sub_lloq_calibration_standards_still_carry_their_response",
+      "status": "pass",
+      "detail": "70 sub-LLOQ standard rows, 70 with a recorded value"
+    },
+    {
+      "check": "culture_format_agrees_with_well_grid_and_plate_capacity",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "technical_replicates_of_a_condition_share_one_plate",
+      "status": "pass",
+      "detail": "0 conditions split across plates"
+    },
+    {
+      "check": "reagent_lot_nesting_is_as_documented",
+      "status": "pass",
+      "detail": "reagent lot is nested within the biological experiment, as the dictionary now states: {RB1: ['BIO01', 'BIO02', 'BIO03'], RB2: ['BIO04', 'BIO05', 'BIO06', 'BIO07']}"
+    },
+    {
+      "check": "cell_model_crossed_with_reagent_lot",
+      "status": "pass",
+      "detail": "{'RB1': 7, 'RB2': 7}"
+    },
+    {
+      "check": "compounds.csv:empty_fields_only_in_declared_columns",
+      "status": "pass",
+      "detail": "unexpected empty columns: [] (total empty cells 9)"
+    },
+    {
+      "check": "cell_models.csv:empty_fields_only_in_declared_columns",
+      "status": "pass",
+      "detail": "unexpected empty columns: [] (total empty cells 0)"
+    },
+    {
+      "check": "sample_manifest.csv:empty_fields_only_in_declared_columns",
+      "status": "pass",
+      "detail": "unexpected empty columns: [] (total empty cells 208908)"
+    },
+    {
+      "check": "viability_readouts.csv:empty_fields_only_in_declared_columns",
+      "status": "pass",
+      "detail": "unexpected empty columns: [] (total empty cells 0)"
+    },
+    {
+      "check": "oxidative_stress_readouts.csv:empty_fields_only_in_declared_columns",
+      "status": "pass",
+      "detail": "unexpected empty columns: [] (total empty cells 0)"
+    },
+    {
+      "check": "qpcr_ct_values.csv:empty_fields_only_in_declared_columns",
+      "status": "pass",
+      "detail": "unexpected empty columns: [] (total empty cells 0)"
+    },
+    {
+      "check": "exposure_measurements.csv:empty_fields_only_in_declared_columns",
+      "status": "pass",
+      "detail": "unexpected empty columns: [] (total empty cells 14877)"
+    },
+    {
+      "check": "assay_controls.csv:empty_fields_only_in_declared_columns",
+      "status": "pass",
+      "detail": "unexpected empty columns: [] (total empty cells 12362)"
+    },
+    {
+      "check": "no_verdict_vocabulary_in_data_file_names_or_values",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "data_dictionary_never_ties_a_named_compound_to_a_conclusion",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "compounds_table_carries_only_physicochemical_descriptors",
+      "status": "pass",
+      "detail": "[]"
+    },
+    {
+      "check": "compound_id_order_does_not_group_outcomes",
+      "status": "pass",
+      "detail": "protection_status in id order = ['not_protected', 'protected', 'protected', 'not_protected', 'protected', 'protected', 'not_protected', 'protected'] (6 runs; a grouped layout would give 2)"
+    },
+    {
+      "check": "row_positions_uncorrelated_with_compound",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "sample_id_numbering_uncorrelated_with_compound",
+      "status": "pass",
+      "detail": "spread of mean identifier number across compounds = 0.0103 of the identifier range"
+    },
+    {
+      "check": "no_physicochemical_descriptor_separates_the_outcome",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "no_precomputed_score_or_verdict_columns",
+      "status": "pass",
+      "detail": "[]"
+    },
+    {
+      "check": "culture_vigour_shared_between_viability_and_exposure_tables",
+      "status": "pass",
+      "detail": "Pearson r = 0.994 across 7 biological experiments (independent generation would give r near 0)"
+    },
+    {
+      "check": "culture_vigour_shared_between_viability_and_control_tables",
+      "status": "pass",
+      "detail": "Pearson r = 0.882 across 7 biological experiments"
+    },
+    {
+      "check": "injury_severity_shared_between_count_and_probe_endpoints",
+      "status": "pass",
+      "detail": "Pearson r = -0.972 across 7 biological experiments between the pooled survival fraction (viability table) and the pooled gain-normalised probe response (probe table), each averaging about 657 wells per experiment per side: experiments that sustained more injury show both less survival and more oxidant signal, which only a shared realised-injury factor produces (independent per-table generation would give r near 0). The probe ratio is self-normalising for cell number, because the dye-loaded signal and its background both scale with it, so the only remaining shared driver is the realised injury severity."
+    },
+    {
+      "check": "reference_analysis_never_references_generator_truth",
+      "status": "pass",
+      "detail": "found in executable code: []"
+    },
+    {
+      "check": "reference_analysis_only_names_solver_visible_files",
+      "status": "pass",
+      "detail": "names files outside the solver-visible set plus its own output: []"
+    },
+    {
+      "check": "verifier_never_references_generator_truth",
+      "status": "pass",
+      "detail": "found in executable code: []"
+    }
+  ],
+  "failed": false,
+  "summary": {
+    "checks_run": 75,
+    "checks_failed": 0,
+    "overall": "PASS"
+  }
+}

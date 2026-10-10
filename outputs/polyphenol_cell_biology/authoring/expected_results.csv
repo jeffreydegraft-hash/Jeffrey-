@@ -1,0 +1,9 @@
+compound_id,primary_concentration_um,wt_primary_exposure_pmol_per_1e6_cells,exposure_matched_ko_concentration_um,protection_index_wt,protection_index_wt_ci_low,protection_index_wt_ci_high,protection_index_ko_primary_conc,protection_index_ko_exposure_matched,protection_index_rescue,nrf2_dependence_contrast,nrf2_dependence_contrast_ci_low,nrf2_dependence_contrast_ci_high,protection_status,nrf2_dependence_status,interference_flags,evidence_sample_ids
+PP01,100.0,280.06,100.0,-0.0050,-0.0388,0.0288,-0.0516,-0.0516,-0.0096,0.0466,0.0068,0.0864,not_protected,not_assessable,none,SMP017622;SMP039645;SMP009874;SMP031684;SMP031908;SMP037225;SMP000288
+PP02,50.0,137.99,50.0,0.6009,0.5663,0.6354,-0.0342,-0.0342,0.5807,0.6351,0.5800,0.6902,protected,nrf2_dependent,none,SMP053279;SMP007490;SMP001166;SMP012180;SMP001128;SMP023385;SMP011139
+PP03,10.0,33.42,50.0,0.5218,0.5017,0.5418,0.2726,0.5384,0.5296,-0.0166,-0.0617,0.0284,protected,not_nrf2_dependent,none,SMP012463;SMP011101;SMP023983;SMP000260;SMP003697;SMP011640;SMP002549
+PP04,300.0,437.43,300.0,-0.0081,-0.0474,0.0312,-0.0116,-0.0116,0.0148,0.0035,-0.0436,0.0505,not_protected,not_assessable,mtt;ros,SMP015677;SMP002016;SMP006863;SMP017800;SMP013055;SMP009378;SMP016600
+PP05,100.0,308.85,100.0,0.5534,0.5322,0.5746,0.5408,0.5408,0.5876,0.0127,-0.0215,0.0468,protected,not_nrf2_dependent,none,SMP007009;SMP025025;SMP000239;SMP001800;SMP025409;SMP025490;SMP024653
+PP06,100.0,227.25,100.0,0.5819,0.5410,0.6228,-0.0318,-0.0318,0.5466,0.6137,0.5601,0.6674,protected,nrf2_dependent,ros,SMP021569;SMP003810;SMP027743;SMP012132;SMP004312;SMP022561;SMP012065
+PP07,10.0,27.76,10.0,-0.0142,-0.0391,0.0107,0.0028,0.0028,0.0090,-0.0170,-0.0619,0.0279,not_protected,not_assessable,none,SMP002594;SMP022764;SMP007274;SMP000309;SMP016719;SMP035911;SMP018882
+PP08,50.0,389.92,NA,0.5579,0.5329,0.5830,0.0185,NA,0.5314,NA,NA,NA,protected,indeterminate,none,SMP021340;SMP002262;SMP012346;SMP012942;SMP002706;SMP002967;SMP005823

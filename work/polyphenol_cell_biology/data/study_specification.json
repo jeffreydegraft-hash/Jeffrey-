@@ -1,0 +1,316 @@
+{
+  "specification_version": "1.0.0",
+  "study_id": "polyphenol_cell_biology",
+  "title": "NRF2-dependent protection against oxidative injury in a simulated intestinal epithelial model: eight polyphenol-like candidates",
+  "data_nature": {
+    "synthetic": true,
+    "statement": "Every value in this dataset is synthetic, produced by a stochastic simulation. No value was measured in any laboratory. The compound identifiers PP01-PP08 denote fictional test articles; they do not correspond to, and must not be attributed to, any real natural product or named polyphenol.",
+    "ai_assisted": true
+  },
+  "scientific_question": {
+    "umbrella": "For each candidate compound, does pretreatment produce a genuine improvement in survival of intestinal epithelial cells subjected to an acute oxidative challenge; do the observations support an NRF2-dependent contribution to that protection; and does the compound interfere with one or more assay measurements?",
+    "decomposition": [
+      "Q1 Protection at a fixed administered concentration, in wild-type cells.",
+      "Q2 Protection compared between genotypes at a common MEASURED intracellular exposure.",
+      "Q3 Genotype-specific baseline susceptibility to the oxidant, independent of any compound.",
+      "Q4 The contribution of NRF2 under the supplied interventions (two independent knockout lineages, empty-vector controls, functional NFE2L2 re-expression, pretreatment with and without washout, measured residual exposure)."
+    ],
+    "separate_findings": "Protection, NRF2 dependence and assay interference are three SEPARATE findings. A compound may show genuine protection AND assay interference. A compound may protect without NRF2. A compound may induce pathway-response genes without protecting.",
+    "causal_note": "Intracellular exposure can MEDIATE a genotype effect: if uptake depends on an NRF2-regulated process, NFE2L2-null cells genuinely receive less compound. Conditioning on measured exposure therefore blocks a causal path rather than removing a confounder, and answers a different question than the unconditioned comparison. Both comparisons are reported in the output; `nrf2_dependence_status` is defined on the exposure-conditioned one (see classification.nrf2_dependence_status)."
+  },
+  "interpretation_limits": [
+    "No molecular-binding claim is supported. 'NRF2-dependent' here means only that the protective effect requires NFE2L2 gene function under the supplied interventions.",
+    "No clinical, dietary or bioavailability inference is supported.",
+    "No claim about any real compound is supported; PP01-PP08 are fictional.",
+    "Where measured exposure ranges do not overlap between genotypes, the design cannot separate pathway dependence from delivery dependence, and the required answer is `indeterminate`.",
+    "The design distinguishes adaptive cellular protection from extracellular oxidant chemistry, and pathway-dependent from pathway-independent protection. It does not identify which target gene product is proximally responsible, and no output asks for that."
+  ],
+  "input_files": {
+    "mount_point": "/app/data/",
+    "files": [
+      {
+        "name": "compounds.csv",
+        "description": "Test-article physicochemical descriptors, vehicle, stock, LC-MS transition and limits of quantification."
+      },
+      {
+        "name": "cell_models.csv",
+        "description": "Cell model genotypes, editing details, transgenes, selection, immunoblot verification, seeding density, and the challenge doses used for each model."
+      },
+      {
+        "name": "sample_manifest.csv",
+        "description": "One row per biological sample/well. The join hub: links every measurement to its compound, administered concentration, cell model, treatment schedule, challenge condition, reagent batch, plate, biological experiment and technical replicate."
+      },
+      {
+        "name": "viability_readouts.csv",
+        "description": "Direct live/dead nuclei counts, LDH activity in the supernatant, and MTT absorbances, per viability well."
+      },
+      {
+        "name": "oxidative_stress_readouts.csv",
+        "description": "Fluorescent probe signal with matched dye-free background wells."
+      },
+      {
+        "name": "qpcr_ct_values.csv",
+        "description": "Raw Ct values for pathway-response genes, the NFE2L2 amplicon, and two reference genes."
+      },
+      {
+        "name": "exposure_measurements.csv",
+        "description": "LC-MS/MS compound amounts in cell lysate and medium at four sampling conditions, including residual exposure after washout."
+      },
+      {
+        "name": "assay_controls.csv",
+        "description": "Cell-free and instrument controls: cell-free MTT, cell-free probe with and without dye, fixed fluorescein standard, cell-free oxidant neutralisation, peroxide calibration, LDH blank and maximum lysis, qPCR no-template and no-RT, LC-MS calibration and spike recovery."
+      },
+      {
+        "name": "data_dictionary.csv",
+        "description": "Column-level dictionary for every input file."
+      },
+      {
+        "name": "study_specification.json",
+        "description": "This file."
+      },
+      {
+        "name": "output_schema.json",
+        "description": "Required schema of /app/results.csv."
+      }
+    ],
+    "join_keys": {
+      "sample_manifest.csv": "sample_id is unique and is the primary key.",
+      "viability_readouts.csv": "sample_id -> sample_manifest.sample_id (one row per sample).",
+      "oxidative_stress_readouts.csv": "sample_id -> sample_manifest.sample_id (one row per sample).",
+      "qpcr_ct_values.csv": "(sample_id, target_gene, reaction_replicate) is unique; sample_id -> sample_manifest.sample_id.",
+      "exposure_measurements.csv": "(sample_id, matrix, injection_replicate) is unique; sample_id -> sample_manifest.sample_id.",
+      "assay_controls.csv": "control_id is unique. These are cell-free or no-template wells and deliberately do NOT join to sample_manifest; they carry their own biological_experiment_id, plate_id and technical_replicate."
+    }
+  },
+  "experimental_design": {
+    "cell_models": {
+      "CM_WT": "parental, wild-type NFE2L2",
+      "CM_WT_VEC": "parental, empty lentiviral vector (controls for transduction and selection)",
+      "CM_KO_A": "clone A, biallelic NFE2L2 frameshift",
+      "CM_KO_A_VEC": "clone A knockout, empty lentiviral vector (vector control for the rescue)",
+      "CM_KO_A_RES": "clone A knockout with functional NFE2L2 re-expression (rescue)",
+      "CM_KO_B": "clone B, independently derived with a different guide RNA, biallelic NFE2L2 frameshift",
+      "CM_KO_B_RES": "clone B knockout with functional NFE2L2 re-expression (rescue)",
+      "note": "NFE2L2 re-expression is partial, as is usual for rescue experiments. Decision rules below therefore do not require the rescue to match wild type."
+    },
+    "concentration_ladder_um": [
+      1.0,
+      3.0,
+      10.0,
+      30.0,
+      50.0,
+      100.0,
+      200.0,
+      300.0,
+      600.0
+    ],
+    "ladder_note": "Identical for every compound and every cell model. The ladder extends well above the wild-type working range on purpose, so that cell models which take up a compound less can be dosed up to a MATCHED MEASURED EXPOSURE instead of being compared by extrapolation.",
+    "challenge_conditions": {
+      "CHAL_NONE": "no oxidant",
+      "CHAL_ISO": "cell-model-specific isoeffective tert-butyl hydroperoxide dose, chosen from the vehicle-only titration so that every cell model sustains a closely comparable injury; the dose used for each cell model is given in cell_models.isoeffective_challenge_tbhp_um and in sample_manifest.challenge_conc_um. The doses differ roughly 1.7-fold between models because the models differ that much in baseline susceptibility.",
+      "CHAL_COMMON": "300 uM tert-butyl hydroperoxide for EVERY cell model (the same administered oxidant dose arm)",
+      "CHAL_T050 .. CHAL_T700": "vehicle-only oxidant titration levels (50, 75, 150, 250, 400, 700 uM) used to characterise baseline susceptibility",
+      "warning": "Cell models differ in baseline susceptibility. In the CHAL_COMMON arm they sit at different points on their own injury curves, so genotype comparisons made in that arm are distorted even after normalisation. The primary condition is CHAL_ISO (see primary_condition)."
+    },
+    "schedules": {
+      "PRE_NOWASH": "18 h pretreatment; compound retained through the challenge and the recovery period",
+      "PRE_WASH": "18 h pretreatment; two medium washes; challenge and recovery in compound-free medium"
+    },
+    "panels": {
+      "A_TITRATION": "vehicle-only oxidant titration, all 7 cell models, PRE_NOWASH",
+      "B_DOSE_RESPONSE": "full 9-point ladder, CHAL_NONE and CHAL_ISO; PRE_NOWASH in all 7 cell models, PRE_WASH in CM_WT, CM_KO_A, CM_KO_A_VEC, CM_KO_A_RES",
+      "D_COMMON_DOSE": "CHAL_COMMON arm, all 7 cell models, concentrations 10/30/100 uM, PRE_NOWASH",
+      "R_PROBE": "oxidative-stress probe, CM_WT / CM_KO_A / CM_KO_A_RES, full ladder, with matched dye-free wells",
+      "Q_TRANSCRIPT": "transcript samples harvested at 6 h and 18 h of pretreatment, 6 cell models, concentrations 10/50/100/300 uM (this set includes every compound's primary concentration, so the pathway response can be read at the concentration the protection endpoint is evaluated at)",
+      "X_EXPOSURE": "LC-MS/MS exposure, 5 cell models, full ladder, four sampling conditions"
+    },
+    "replication": {
+      "biological_experiments": [
+        "BIO01",
+        "BIO02",
+        "BIO03",
+        "BIO04",
+        "BIO05",
+        "BIO06",
+        "BIO07"
+      ],
+      "n_biological_experiments": 7,
+      "unit_of_inference": "biological_experiment_id. The seven biological experiments are the independent units. Technical replicates are NESTED inside them and must NOT be treated as independent observations.",
+      "technical_replication": {
+        "viability_and_probe": "4 replicate wells per condition per biological experiment for the viability panel (the primary endpoint), 3 for the probe panel, and 1 well for the dye-free probe background controls",
+        "qpcr": "1 culture sample per condition per biological experiment, with 3 qPCR reaction replicates",
+        "exposure": "1 culture sample per condition per biological experiment, with 2 LC-MS injection replicates (cell lysate) and 1 injection (medium)"
+      },
+      "batch_balance": "Every biological experiment contains every cell model and every treatment level, so cell model and treatment are never nested inside a batch. Each plate carries several cell models and several treatments, so cell model is not inseparable from plate either."
+    },
+    "challenge_agent": "tert-butyl hydroperoxide throughout, applied for 1.5 h before the medium was replaced for recovery. Constant for the whole study, so it is recorded in cell_models.csv rather than on every manifest row. sample_manifest.challenge_conc_um carries the dose actually applied to each well; an unchallenged well has 0."
+  },
+  "derived_quantities": {
+    "live_cell_density_1e3_per_well": "live_nuclei_count / imaged_area_fraction / 1000. imaged_area_fraction is the fraction of the well imaged and is constant across all wells, so any analysis that is invariant to a constant scale factor may use live_nuclei_count directly.",
+    "dead_cell_density_1e3_per_well": "dead_nuclei_count / imaged_area_fraction / 1000.",
+    "mtt_signal": "mtt_absorbance_570nm - mtt_absorbance_630nm (the 630 nm reading is the reference/scatter channel).",
+    "ldh_release_index": "(ldh_activity_mu_per_l - B) / (M - B), where B is the mean of assay_controls control_type='ldh_medium_blank' in the same biological experiment, and M is the mean of control_type='ldh_maximum_lysis' for the SAME cell_model_id in the same biological experiment. The index is a ratio of noisy measurements against two small control sets, so individual wells can fall slightly below 0 or above 1. That is expected and must NOT be clipped: clipping would change the value. This endpoint is the independent corroborating measure of injury and is not itself graded.",
+    "intracellular_exposure_pmol_per_1e6_cells": "For exposure_measurements rows with matrix='cell_lysate' and qualifier='measured': measured_value / cell_equivalents_1e6. Rows with qualifier='below_lloq' have an empty measured_value and are censored (see missing_value_conventions). Aggregation across injection replicates and biological experiments follows exposure_matching_rule.aggregation.",
+    "delta_delta_ct": "Within a cell model and biological experiment: dCt = mean_reaction_replicates(Ct_target) - mean over the two reference genes ACTB and RPLP0 of mean_reaction_replicates(Ct_reference). ddCt = dCt(treated) - dCt(matched vehicle, same cell_model_id, same biological_experiment_id, same harvest time). log2_fold_change = -ddCt. Reference-gene stability can and should be checked from the raw Ct values rather than assumed.",
+    "note": "These derived quantities are provided so that no analysis has to guess a convention. Only the ones used by the graded outputs below are graded."
+  },
+  "missing_value_conventions": {
+    "empty_cell": "An empty field means the quantity does not apply to that row (for example cell_equivalents_1e6 on a medium row, or sampling_condition on a viability well).",
+    "below_lloq": "exposure_measurements rows with qualifier='below_lloq' carry an EMPTY measured_value. The true value is known only to lie between zero and lloq_value. These are genuine left-censored observations and occur exactly where they are scientifically expected: in cell lysate at the lowest administered concentrations (1, 3 and 10 uM) and most often after washout, where most of the compound has been removed; and in medium at every concentration in the two post-washout sampling conditions, where the compound was washed out of the medium. No cell-lysate measurement above 10 uM administered, and no medium measurement in a non-washout condition, is censored. The flag matches an empty measured_value one-to-one on every row. Censored values must not be read as zero and must not be imputed when computing the graded exposure quantity.",
+    "undetermined_ct": "assay_controls rows with measured_quantity='ct_value' and qualifier='undetermined' had no amplification within 40 cycles and carry an empty value. This is the expected result for the no-template and no-reverse-transcriptase controls, and they are the only rows in that file with an empty value.",
+    "no_other_missingness": "No values are missing for any other reason. No file is malformed, truncated or deliberately obscured.",
+    "below_lloq_in_assay_controls": "assay_controls rows with qualifier='below_lloq' are LC-MS calibration standards prepared below the limit of quantification. Unlike the censored sample measurements, these DO carry a value: the standard's nominal amount is known by construction, so its measured peak-area ratio is recorded even though it falls below the quantifiable range. The qualifier marks the standard as sub-LLOQ, not the value as missing."
+  },
+  "primary_endpoint": {
+    "quantity": "live_cell_density_1e3_per_well",
+    "source_file": "viability_readouts.csv",
+    "readout_time_h_post_challenge": 24.0,
+    "rationale": "A direct live/dead count is not a redox measurement, so it cannot be inflated by a compound that reduces tetrazolium or that fluoresces. The MTT and probe readouts are reported for the same wells and are deliberately vulnerable to interference; they are not the primary endpoint.",
+    "independent_corroborating_endpoint": "ldh_release_index from the same wells."
+  },
+  "primary_condition": {
+    "cell_model_id": "CM_WT",
+    "challenge_id": "CHAL_ISO",
+    "schedule_id": "PRE_NOWASH",
+    "readout_time_h_post_challenge": 24.0,
+    "panel_id": "B_DOSE_RESPONSE",
+    "administered_concentration": "the compound's primary concentration, selected by concentration_selection_rule"
+  },
+  "effect_scale": {
+    "name": "protection_index",
+    "symbol": "PI",
+    "definition": "PI(cell_model g, compound c, concentration d, biological experiment b) = ( Lbar(g,c,d,b,CHAL_ISO) - Lbar(g,VEH,0,b,CHAL_ISO) ) / ( Lbar(g,VEH,0,b,CHAL_NONE) - Lbar(g,VEH,0,b,CHAL_ISO) )",
+    "Lbar": "the arithmetic mean of live_cell_density_1e3_per_well over the technical replicate wells of that condition, within that single biological experiment",
+    "control_matching": "All three terms are taken from the SAME cell_model_id, the SAME biological_experiment_id, the SAME schedule_id and the SAME readout time. Vehicle terms use compound_id='VEH' and administered_conc_um=0.",
+    "meaning": "the fraction of the challenge-induced viability deficit that is recovered",
+    "why_this_scale": "It is computed inside each cell model against that cell model's own matched unchallenged and challenged vehicle controls, so it is not distorted by the different baseline susceptibility of the cell models, nor by imperfect isoeffective matching.",
+    "aggregation": "The point estimate is the arithmetic MEAN OVER THE 7 BIOLOGICAL EXPERIMENTS of the per-experiment PI values. It is a mean of seven ratios, NOT a ratio of means. This is stated explicitly because the two differ and both would otherwise be defensible.",
+    "sign": "PI may be negative; negative values indicate fewer surviving cells than vehicle, which is the expected result for a compound with intrinsic toxicity. Negative values must be reported as computed and must not be clipped to zero."
+  },
+  "uncertainty_convention": {
+    "estimator": "Student-t interval on the per-biological-experiment values.",
+    "formula": "CI = mean +/- t(0.975, n-1) * SD / sqrt(n), where SD is the sample standard deviation (denominator n-1) of the per-biological-experiment values and n is the number of biological experiments contributing.",
+    "n_for_graded_quantities": 7,
+    "t_quantiles_two_sided_95pct": {
+      "1": 12.706204736,
+      "2": 4.30265273,
+      "3": 3.182446305,
+      "4": 2.776445105,
+      "5": 2.570581836,
+      "6": 2.446911851,
+      "7": 2.364624252,
+      "8": 2.306004135,
+      "9": 2.262157163
+    },
+    "t_table_note": "These quantiles are tabulated so that no statistics library is needed and so that two correct implementations cannot disagree on them. Index the table by the degrees of freedom (n-1).",
+    "pairing": "The NRF2-dependence contrast compares two cell models that were measured in the SAME seven biological experiments. It is therefore computed PAIRED: form the per-experiment difference first, then take the mean and the Student-t interval of those seven differences. Do not compute two separate intervals and subtract them.",
+    "interference_indices": "Also computed per biological experiment and then summarised with the same Student-t interval.",
+    "t_quantile_for_graded_quantities": 2.446911851
+  },
+  "concentration_selection_rule": {
+    "name": "highest tolerated concentration in wild-type cells",
+    "definition": "tox_ratio(c,d) = mean over biological experiments of Lbar(CM_WT, c, d, b, CHAL_NONE, PRE_NOWASH) divided by mean over biological experiments of Lbar(CM_WT, VEH, 0, b, CHAL_NONE, PRE_NOWASH).",
+    "criterion": "A concentration is tolerated if tox_ratio >= 0.85. The PRIMARY CONCENTRATION is the HIGHEST concentration on the ladder that is tolerated.",
+    "point_estimate_only": "The rule uses the point estimate only, with no interval, so that it is deterministic.",
+    "panel": "B_DOSE_RESPONSE, readout_time_h_post_challenge = 24.0",
+    "if_none_qualifies": "If no concentration is tolerated, report primary_concentration_um = NA, wt_primary_exposure_pmol_per_1e6_cells = NA, exposure_matched_ko_concentration_um = NA, every protection-index and contrast field = NA, evidence_sample_ids = NA, protection_status = 'not_evaluable', nrf2_dependence_status = 'not_assessable' and interference_flags = 'none'. (No compound in this dataset takes this branch; the branch is defined so the contract is complete.)",
+    "rationale": "Protection must never be evaluated inside the toxic range of a compound.",
+    "aggregation_note": "Note that this rule is a RATIO OF MEANS, whereas the protection index is a MEAN OF RATIOS (effect_scale.aggregation). The difference is deliberate: the selection rule is a screening criterion on a point estimate with no interval, for which the ratio of the two treatment-group means is the natural reading, while the protection index is an effect estimate whose unit of inference is the biological experiment. Implement each exactly as written."
+  },
+  "exposure_matching_rule": {
+    "reference_quantity": "E_WT = the mean over biological experiments of the per-experiment mean (over injection replicates) intracellular_exposure_pmol_per_1e6_cells for CM_WT at the compound's primary concentration, sampling_condition = 'END_PRETREAT_NOWASH'.",
+    "candidate_quantity": "E_KO(d) = the same quantity for CM_KO_A at administered concentration d, sampling_condition = 'END_PRETREAT_NOWASH'.",
+    "qualifying_window": "A concentration d qualifies if 0.70 <= E_KO(d) / E_WT <= 1.428571428571,  i.e. the measured knockout exposure is within a factor 1/0.70 of the wild-type reference exposure.",
+    "selection": "Among qualifying concentrations, choose the one minimising |ln( E_KO(d) / E_WT )|. If two qualify equally, choose the lower concentration.",
+    "censoring": "Concentrations whose CM_KO_A exposure is censored (all injections below the limit of quantification) cannot qualify.",
+    "if_none_qualifies": "There is NO exposure-matched stratum. Report exposure_matched_ko_concentration_um = NA, protection_index_ko_exposure_matched = NA, nrf2_dependence_contrast = NA with NA bounds, and nrf2_dependence_status = 'indeterminate'. This is the scientifically correct answer: with no overlapping measured exposure range, pathway dependence cannot be separated from delivery dependence, and the design does not support a stronger claim.",
+    "rationale": "Comparing genotypes at the same administered concentration answers 'does this compound work less well in NRF2-deficient cells as administered'. Comparing them at matched measured exposure answers 'is the protective effect itself NRF2-dependent'. Both are reported. The classification uses the second.",
+    "aggregation": "Within one exposure sample, average only the injection replicates whose qualifier is 'measured'. A sample with no measured injection is censored and is excluded. The per-concentration exposure is then the mean over the biological experiments that yielded a measured value. A CANDIDATE concentration is treated as CENSORED, and cannot qualify as exposure-matched, if fewer than 4 of the seven biological experiments yield a measured value. This minimum applies to the candidate concentrations only; the reference quantity E_WT is simply the mean over the experiments that yielded a measured value. Censored observations are never imputed and never read as zero."
+  },
+  "classification": {
+    "protection_status": {
+      "input": "PI in CM_WT at the primary concentration, primary condition, with its 95% Student-t interval over the seven biological experiments",
+      "threshold_theta_P": 0.15,
+      "rules": [
+        "protected            : CI lower bound > 0.15",
+        "not_protected        : CI upper bound < 0.15",
+        "indeterminate        : the interval contains 0.15",
+        "not_evaluable        : no tolerated concentration exists"
+      ]
+    },
+    "nrf2_dependence_status": {
+      "contrast": "Delta = PI(CM_WT, primary concentration) - PI(CM_KO_A, exposure-matched concentration), computed PAIRED by biological experiment, both in the primary condition (CHAL_ISO, PRE_NOWASH, 24 h)",
+      "threshold_theta_D": 0.15,
+      "rescue_criterion": "PI(CM_KO_A_RES, primary administered concentration), primary condition, has CI lower bound > 0.15",
+      "independent_lineage_corroboration": "A knockout lineage 'shows protection' when its PI at the primary administered concentration has a 95% interval lower bound above theta_P. If CM_KO_A and CM_KO_B disagree on that single boolean, a clone-specific explanation cannot be excluded and the status is 'indeterminate'. The comparison is between these two booleans only; there is no three-way comparison.",
+      "rules": [
+        "not_assessable       : protection_status is not 'protected' (there is no protective effect whose dependence could be assessed)",
+        "indeterminate        : no exposure-matched stratum exists (exposure_matching_rule.if_none_qualifies)",
+        "indeterminate        : the two independent knockout lineages disagree (independent_lineage_corroboration)",
+        "nrf2_dependent       : Delta CI lower bound > 0.15 AND the rescue criterion holds",
+        "not_nrf2_dependent   : Delta CI upper bound < 0.15",
+        "indeterminate        : anything else, including Delta clearly above threshold while the rescue criterion fails"
+      ],
+      "evaluation_order": "Apply the rules in the order listed; the first matching rule wins. The lineage test is deliberately placed BEFORE both Delta tests, so a lineage disagreement yields 'indeterminate' whichever side of the threshold Delta falls on."
+    },
+    "interference_flags": {
+      "principle": "Assay interference is assessed INDEPENDENTLY of protection, from cell-free controls at the compound's primary concentration. A compound may be both protective and interfering. Interference is a statement about the measurement, not a disqualification of the biology.",
+      "mtt_interference_index": "Per biological experiment: ( mean cell-free mtt_signal with the compound at the primary concentration  -  mean cell-free mtt_signal with vehicle ) / ( mean mtt_signal of vehicle-treated CM_WT cells at CHAL_NONE, PRE_NOWASH, panel B_DOSE_RESPONSE, readout 24 h  -  mean cell-free mtt_signal with vehicle ). Cell-free wells are assay_controls control_type='cell_free_mtt' with challenge_id='CHAL_NONE'.",
+      "probe_autofluorescence_index": "Per biological experiment: ( mean fluorescence_au of dye-free wells with the compound at the primary concentration  -  mean fluorescence_au of dye-free wells with vehicle ) / ( mean fluorescence_au of dye-loaded vehicle wells  -  mean fluorescence_au of dye-free vehicle wells ), all in CM_WT at CHAL_ISO, PRE_NOWASH, from oxidative_stress_readouts.csv.",
+      "probe_quench_index": "Per biological experiment: ( mean fluorescein_standard_fluorescence_au with vehicle  -  mean with the compound at the primary concentration ) / ( mean with vehicle ). From assay_controls control_type='fluorescein_standard_quench'.",
+      "threshold": 0.1,
+      "rules": [
+        "flag 'mtt' if the mtt_interference_index 95% CI lower bound > 0.10",
+        "flag 'ros' if the probe_autofluorescence_index 95% CI lower bound > 0.10 OR the probe_quench_index 95% CI lower bound > 0.10",
+        "report 'none' if neither flag applies"
+      ],
+      "format": "If both apply, report exactly 'mtt;ros' (that order). Otherwise 'mtt', 'ros', or 'none'."
+    }
+  },
+  "supporting_evidence_available": {
+    "note": "These contrasts are supplied so that competing explanations can be separated. They are NOT separately graded; they exist so the graded conclusions can be reached on evidence rather than guessed.",
+    "contrasts": [
+      "Washout vs no washout (schedule_id) separates protection that persists after the compound is removed from protection that requires the compound to be present during the challenge.",
+      "Residual exposure after washout (exposure_measurements sampling_condition='POST_WASH_0P5H') shows how much compound actually remains, so washout-resistant protection is not inferred from an assumption that washing worked.",
+      "Cell-free oxidant neutralisation (assay_controls control_type='cell_free_oxidant_neutralisation', with control_type='peroxide_calibration_standard') measures direct extracellular consumption of the oxidant, distinguishing extracellular chemistry from cellular protection.",
+      "Empty-vector cell models (CM_WT_VEC, CM_KO_A_VEC) control for transduction and selection.",
+      "Two independently derived knockout lineages (CM_KO_A, CM_KO_B) with rescues in both address clone-specific explanations.",
+      "The vehicle-only oxidant titration (panel A_TITRATION) characterises each cell model's baseline susceptibility.",
+      "Transcript kinetics at 6 h and 18 h of pretreatment, over four pathway-response genes plus the NFE2L2 amplicon and two reference genes, characterise the pathway response. Note that pathway-response gene induction is NOT evidence of improved survival, and that one of the measured genes has a substantial NRF2-INDEPENDENT inducible component.",
+      "The MTT and probe readouts come from the same wells as the direct count, so interference can be seen as a discrepancy between redox-dependent and count-based endpoints."
+    ]
+  },
+  "output": {
+    "path": "/app/results.csv",
+    "schema": "see output_schema.json",
+    "one_row_per": "compound_id, for all eight compounds PP01..PP08, no duplicates, vehicle excluded"
+  },
+  "na_convention": {
+    "token": "NA",
+    "statement": "Where a quantity is not defined under the rules above, write the literal three-character-free token NA (case-sensitive, no quotes, no empty cell) in that field. Empty cells are rejected."
+  },
+  "grading_tolerances": {
+    "statement": "Tolerances were established by writing two independent implementations of this specification and measuring their disagreement. The largest disagreement observed on any protection index, contrast or interval bound was 5e-5, and on the exposure quantity 1.3e-4 relative; that residual is output rounding, not method. The tolerances below are set well above that measured disagreement so that an implementation which writes results to two decimal places is still accepted, and far below the distance from any classification boundary to the nearest graded value (the closest approach across ten generation seeds is 0.051), so a disagreement within tolerance cannot change any status field. They are NOT widened to conceal disagreement between implementations.",
+    "protection_index_absolute": 0.005,
+    "nrf2_dependence_contrast_absolute": 0.005,
+    "confidence_interval_bound_absolute": 0.008,
+    "exposure_relative": 0.01,
+    "primary_concentration": "exact match to a value on the concentration ladder",
+    "exposure_matched_ko_concentration": "exact match to a value on the concentration ladder, or NA",
+    "status_fields": "exact match",
+    "interference_flags": "exact match as a set; either ordering of 'mtt' and 'ros' is accepted",
+    "minimum_output_precision": "Write at least 3 decimal places for every protection index, contrast and interval bound, and at least 3 significant figures for the exposure quantity. Results rounded more coarsely than that may fall outside tolerance.",
+    "classification_margin_note": "Every compound's graded quantities sit far enough from every classification boundary that a disagreement within these tolerances cannot change any status field."
+  },
+  "evidence_reference_format": {
+    "field": "evidence_sample_ids",
+    "format": "A semicolon-separated list of sample_id values from sample_manifest.csv, with no spaces. Between 7 and 30 identifiers.",
+    "requirements": [
+      "Every identifier must exist in sample_manifest.csv.",
+      "Every referenced sample must have assay_panel='VIABILITY', cell_model_id='CM_WT', compound_id equal to the row's compound, administered_conc_um equal to the row's primary_concentration_um, challenge_id='CHAL_ISO', schedule_id='PRE_NOWASH', readout_time_h_post_challenge=24.0.",
+      "The referenced samples must together cover all seven biological experiments (BIO01..BIO07), i.e. at least one per experiment.",
+      "If primary_concentration_um is NA, write NA in this field as well."
+    ],
+    "purpose": "To show that the reported wild-type protection estimate is anchored in identifiable experimental records, and that the biological experiment was used as the unit of inference."
+  }
+}

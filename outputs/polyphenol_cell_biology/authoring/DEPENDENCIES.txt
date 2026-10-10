@@ -1,0 +1,20 @@
+Runtime environment used to build and validate this package
+==========================================================
+
+python                3.13.16  (cpython)
+numpy                 2.5.3        (BSD-3-Clause)
+pandas                3.0.5        (BSD-3-Clause)
+scipy                 NOT INSTALLED - deliberately not required
+
+Dependency policy
+-----------------
+The GRADED PATH has no third-party dependency at all:
+  authoring/reference/reference_analysis.py  - Python standard library only
+  authoring/verifier/verify_results.py       - Python standard library only
+Both therefore run in a clean interpreter with nothing installed. The Student-t
+quantiles they need are published in study_specification.json precisely so that
+no statistics library is required and no two implementations can disagree on
+them.
+
+numpy and pandas are used only by the generator, the independent cross-check and
+the validation suite. They are used, not redistributed.

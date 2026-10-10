@@ -1,0 +1,309 @@
+{
+  "all_cases_behaved_as_expected": true,
+  "cases": [
+    {
+      "case": "non_utf8_bytes",
+      "expected_pass": false,
+      "verifier_exit": 1,
+      "checks_failed": [
+        "file_is_utf8"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "missing_compound",
+      "expected_pass": false,
+      "expected_checks": [
+        "all_required_compounds_present",
+        "row_count_is_8"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "row_count_is_8",
+        "all_required_compounds_present"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "duplicate_compound",
+      "expected_pass": false,
+      "expected_checks": [
+        "compound_ids_unique",
+        "row_count_is_8"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "row_count_is_8",
+        "compound_ids_unique"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "extra_unexpected_compound",
+      "expected_pass": false,
+      "expected_checks": [
+        "no_unexpected_compounds",
+        "row_count_is_8"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "row_count_is_8",
+        "no_unexpected_compounds"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "reordered_header",
+      "expected_pass": false,
+      "expected_checks": [
+        "header_matches_schema_exactly"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "header_matches_schema_exactly"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "renamed_column",
+      "expected_pass": false,
+      "expected_checks": [
+        "header_matches_schema_exactly"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "header_matches_schema_exactly"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "empty_field_instead_of_NA",
+      "expected_pass": false,
+      "expected_checks": [
+        "fields_parse_as_declared_types"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "fields_parse_as_declared_types",
+        "na_token_used_exactly_where_required"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "exposure_within_relative_tolerance",
+      "expected_pass": true,
+      "expected_checks": [],
+      "verifier_exit": 0,
+      "checks_failed": [],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "exposure_wrong_basis_40x",
+      "expected_pass": false,
+      "expected_checks": [
+        "numeric_results_within_tolerance"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "numeric_results_within_tolerance"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "protection_index_as_percentage",
+      "expected_pass": false,
+      "expected_checks": [
+        "units_and_ranges_plausible"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "units_and_ranges_plausible",
+        "classifications_consistent_with_submitted_numbers",
+        "numeric_results_within_tolerance"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "concentration_off_ladder",
+      "expected_pass": false,
+      "expected_checks": [
+        "units_and_ranges_plausible"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "units_and_ranges_plausible",
+        "numeric_results_within_tolerance",
+        "evidence_references_valid_and_relevant"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "confidence_bounds_swapped",
+      "expected_pass": false,
+      "expected_checks": [
+        "confidence_intervals_bracket_point_estimates"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "confidence_intervals_bracket_point_estimates",
+        "numeric_results_within_tolerance"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "evidence_identifiers_nonexistent",
+      "expected_pass": false,
+      "expected_checks": [
+        "evidence_references_valid_and_relevant"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "evidence_references_valid_and_relevant"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "evidence_from_wrong_cell_model",
+      "expected_pass": false,
+      "expected_checks": [
+        "evidence_references_valid_and_relevant"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "evidence_references_valid_and_relevant"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "evidence_covers_too_few_experiments",
+      "expected_pass": false,
+      "expected_checks": [
+        "evidence_references_valid_and_relevant"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "evidence_references_valid_and_relevant"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "numeric_shift_just_over_tolerance",
+      "expected_pass": false,
+      "expected_checks": [
+        "numeric_results_within_tolerance"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "numeric_results_within_tolerance"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "numeric_shift_within_tolerance",
+      "expected_pass": true,
+      "expected_checks": [],
+      "verifier_exit": 0,
+      "checks_failed": [],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "numeric_shift_large",
+      "expected_pass": false,
+      "expected_checks": [
+        "numeric_results_within_tolerance"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "classifications_consistent_with_submitted_numbers",
+        "numeric_results_within_tolerance"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "status_flipped_numbers_intact",
+      "expected_pass": false,
+      "expected_checks": [
+        "classifications_consistent_with_submitted_numbers",
+        "classifications_match_expected"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "classifications_consistent_with_submitted_numbers",
+        "classifications_match_expected"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "status_value_not_allowed",
+      "expected_pass": false,
+      "expected_checks": [
+        "status_and_flag_values_allowed"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "status_and_flag_values_allowed",
+        "classifications_match_expected"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "NA_where_value_required",
+      "expected_pass": false,
+      "expected_checks": [
+        "na_token_used_exactly_where_required"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "na_token_used_exactly_where_required",
+        "numeric_results_within_tolerance"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "claims_match_for_unmatchable_compound",
+      "expected_pass": false,
+      "expected_checks": [
+        "numeric_results_within_tolerance",
+        "classifications_match_expected"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "numeric_results_within_tolerance",
+        "classifications_match_expected"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "interference_flag_order_swapped",
+      "expected_pass": true,
+      "expected_checks": [],
+      "verifier_exit": 0,
+      "checks_failed": [],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "interference_missed",
+      "expected_pass": false,
+      "expected_checks": [
+        "classifications_match_expected"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "classifications_match_expected"
+      ],
+      "behaved_as_expected": true
+    },
+    {
+      "case": "interference_overcalled",
+      "expected_pass": false,
+      "expected_checks": [
+        "classifications_match_expected"
+      ],
+      "verifier_exit": 1,
+      "checks_failed": [
+        "classifications_match_expected"
+      ],
+      "behaved_as_expected": true
+    }
+  ]
+}

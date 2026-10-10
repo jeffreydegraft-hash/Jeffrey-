@@ -1,0 +1,520 @@
+{
+  "assay_calibration": {
+    "FOX_BLANK": 0.031,
+    "FOX_SLOPE": 0.00214,
+    "LDH_BLANK": 320.0,
+    "LDH_SLOPE": 61.0,
+    "MTT_AMP": 0.0183,
+    "MTT_BLANK": 0.082,
+    "MTT_REF_WAVELENGTH": 0.045,
+    "PROBE_AMP": 2900.0,
+    "PROBE_BG": 850.0,
+    "PROBE_NODYE_BG": 190.0,
+    "PROBE_ROS_EXP": 1.2,
+    "QUENCH_STD_F": 42000.0
+  },
+  "cell_models": {
+    "CM_KO_A": {
+      "doubling_h": 23.8,
+      "edit": "NFE2L2 exon 2, biallelic 11 bp deletion (frameshift)",
+      "growth": 0.952,
+      "guide": "sgNFE2L2-1",
+      "iso_tbhp": 118.0,
+      "lineage": "clone_A",
+      "nfe2l2_ct_shift": 2.7,
+      "nfe2l2_protein": "not_detected",
+      "nrf2_func": 0.0,
+      "passage": 15,
+      "selection": "none",
+      "suscept": 1.7,
+      "transgene": "none"
+    },
+    "CM_KO_A_RES": {
+      "doubling_h": 22.4,
+      "edit": "NFE2L2 exon 2, biallelic 11 bp deletion (frameshift)",
+      "growth": 0.961,
+      "guide": "sgNFE2L2-1",
+      "iso_tbhp": 179.0,
+      "lineage": "clone_A",
+      "nfe2l2_ct_shift": -2.95,
+      "nfe2l2_protein": "detected",
+      "nrf2_func": 0.85,
+      "passage": 15,
+      "selection": "puromycin",
+      "suscept": 1.12,
+      "transgene": "NFE2L2_CDS"
+    },
+    "CM_KO_A_VEC": {
+      "doubling_h": 24.2,
+      "edit": "NFE2L2 exon 2, biallelic 11 bp deletion (frameshift)",
+      "growth": 0.938,
+      "guide": "sgNFE2L2-1",
+      "iso_tbhp": 115.0,
+      "lineage": "clone_A",
+      "nfe2l2_ct_shift": 2.74,
+      "nfe2l2_protein": "not_detected",
+      "nrf2_func": 0.0,
+      "passage": 15,
+      "selection": "puromycin",
+      "suscept": 1.74,
+      "transgene": "empty_vector"
+    },
+    "CM_KO_B": {
+      "doubling_h": 23.1,
+      "edit": "NFE2L2 exon 2, biallelic 4 bp insertion (frameshift)",
+      "growth": 0.967,
+      "guide": "sgNFE2L2-4",
+      "iso_tbhp": 123.0,
+      "lineage": "clone_B",
+      "nfe2l2_ct_shift": 2.42,
+      "nfe2l2_protein": "not_detected",
+      "nrf2_func": 0.0,
+      "passage": 13,
+      "selection": "none",
+      "suscept": 1.62,
+      "transgene": "none"
+    },
+    "CM_KO_B_RES": {
+      "doubling_h": 22.1,
+      "edit": "NFE2L2 exon 2, biallelic 4 bp insertion (frameshift)",
+      "growth": 0.974,
+      "guide": "sgNFE2L2-4",
+      "iso_tbhp": 185.0,
+      "lineage": "clone_B",
+      "nfe2l2_ct_shift": -3.1,
+      "nfe2l2_protein": "detected",
+      "nrf2_func": 0.9,
+      "passage": 13,
+      "selection": "puromycin",
+      "suscept": 1.08,
+      "transgene": "NFE2L2_CDS"
+    },
+    "CM_WT": {
+      "doubling_h": 21.5,
+      "edit": "none (parental)",
+      "growth": 1.0,
+      "guide": "none",
+      "iso_tbhp": 200.0,
+      "lineage": "parental",
+      "nfe2l2_ct_shift": 0.0,
+      "nfe2l2_protein": "detected",
+      "nrf2_func": 1.0,
+      "passage": 14,
+      "selection": "none",
+      "suscept": 1.0,
+      "transgene": "none"
+    },
+    "CM_WT_VEC": {
+      "doubling_h": 22.0,
+      "edit": "none (parental)",
+      "growth": 0.984,
+      "guide": "none",
+      "iso_tbhp": 194.0,
+      "lineage": "parental",
+      "nfe2l2_ct_shift": 0.05,
+      "nfe2l2_protein": "detected",
+      "nrf2_func": 1.0,
+      "passage": 14,
+      "selection": "puromycin",
+      "suscept": 1.03,
+      "transgene": "empty_vector"
+    }
+  },
+  "compounds": {
+    "PP01": {
+      "archetype": "pathway_induction_without_protection",
+      "coup": {
+        "HMOX1": 3.8,
+        "NQO1": 5.0,
+        "TXNRD1": 2.8
+      },
+      "indep_hmox1": 0.35,
+      "kp": 900.0,
+      "ks": 0.3,
+      "kt": 900.0,
+      "mechanism": "adaptive",
+      "mtt_cf": 0.0,
+      "mtt_ic": 0.004,
+      "neut_k": 0.0,
+      "next_conc": 200.0,
+      "p_max": 2800.0,
+      "pi_target": 0.01,
+      "pot": 1.0,
+      "primary_conc": 100.0,
+      "probe_auto": 0.012,
+      "probe_quench": 8e-05,
+      "retention": 0.46,
+      "t_max": 0.0,
+      "tox_ratio_next": 0.74,
+      "tox_ratio_primary": 0.95
+    },
+    "PP02": {
+      "archetype": "nrf2_dependent_clean",
+      "coup": {
+        "HMOX1": 4.5,
+        "NQO1": 6.5,
+        "TXNRD1": 3.2
+      },
+      "indep_hmox1": 0.28,
+      "kp": 900.0,
+      "ks": 0.3,
+      "kt": 900.0,
+      "mechanism": "adaptive",
+      "mtt_cf": 0.0,
+      "mtt_ic": 0.003,
+      "neut_k": 0.0,
+      "next_conc": 100.0,
+      "p_max": 2600.0,
+      "pi_target": 0.6,
+      "pot": 1.0,
+      "primary_conc": 50.0,
+      "probe_auto": 0.008,
+      "probe_quench": 5e-05,
+      "retention": 0.52,
+      "t_max": 0.0,
+      "tox_ratio_next": 0.73,
+      "tox_ratio_primary": 0.96
+    },
+    "PP03": {
+      "archetype": "exposure_explained_not_nrf2_dependent",
+      "coup": {
+        "GCLC": 1.6,
+        "HMOX1": 1.5,
+        "NQO1": 2.0,
+        "TXNRD1": 1.2
+      },
+      "indep_hmox1": 0.45,
+      "kp": 900.0,
+      "ks": 0.05,
+      "kt": 900.0,
+      "mechanism": "direct",
+      "mtt_cf": 0.0,
+      "mtt_ic": 0.005,
+      "neut_k": 0.0005,
+      "next_conc": 30.0,
+      "p_max": 620.0,
+      "pi_target": 0.52,
+      "pot": 0.05,
+      "primary_conc": 10.0,
+      "probe_auto": 0.03,
+      "probe_quench": 0.0002,
+      "retention": 0.25,
+      "t_max": 2350.0,
+      "tox_ratio_next": 0.74,
+      "tox_ratio_primary": 0.94
+    },
+    "PP04": {
+      "archetype": "assay_interference_without_protection",
+      "coup": {
+        "GCLC": 1.6,
+        "HMOX1": 1.5,
+        "NQO1": 2.0,
+        "TXNRD1": 1.2
+      },
+      "indep_hmox1": 1.6,
+      "kp": 1200.0,
+      "ks": 0.6,
+      "kt": 1200.0,
+      "mechanism": "direct",
+      "mtt_cf": 0.00128,
+      "mtt_ic": 0.06,
+      "neut_k": 4e-05,
+      "next_conc": 600.0,
+      "p_max": 2200.0,
+      "pi_target": 0.0,
+      "pot": 0.03,
+      "primary_conc": 300.0,
+      "probe_auto": 4.0,
+      "probe_quench": 0.0018,
+      "retention": 0.38,
+      "t_max": 0.0,
+      "tox_ratio_next": 0.76,
+      "tox_ratio_primary": 0.95
+    },
+    "PP05": {
+      "archetype": "direct_scavenger_not_nrf2_dependent",
+      "coup": {
+        "GCLC": 1.6,
+        "HMOX1": 1.5,
+        "NQO1": 2.0,
+        "TXNRD1": 1.2
+      },
+      "indep_hmox1": 0.4,
+      "kp": 1000.0,
+      "ks": 0.4,
+      "kt": 1000.0,
+      "mechanism": "direct",
+      "mtt_cf": 0.0,
+      "mtt_ic": 0.012,
+      "neut_k": 0.0015,
+      "next_conc": 200.0,
+      "p_max": 3200.0,
+      "pi_target": 0.55,
+      "pot": 0.08,
+      "primary_conc": 100.0,
+      "probe_auto": 0.045,
+      "probe_quench": 0.0003,
+      "retention": 0.12,
+      "t_max": 0.0,
+      "tox_ratio_next": 0.75,
+      "tox_ratio_primary": 0.95
+    },
+    "PP06": {
+      "archetype": "nrf2_dependent_plus_probe_interference",
+      "coup": {
+        "HMOX1": 4.0,
+        "NQO1": 5.5,
+        "TXNRD1": 3.0
+      },
+      "indep_hmox1": 0.3,
+      "kp": 950.0,
+      "ks": 0.3,
+      "kt": 950.0,
+      "mechanism": "adaptive",
+      "mtt_cf": 0.0,
+      "mtt_ic": 0.006,
+      "neut_k": 0.0,
+      "next_conc": 200.0,
+      "p_max": 2400.0,
+      "pi_target": 0.58,
+      "pot": 1.0,
+      "primary_conc": 100.0,
+      "probe_auto": 0.09,
+      "probe_quench": 0.0052,
+      "retention": 0.5,
+      "t_max": 0.0,
+      "tox_ratio_next": 0.74,
+      "tox_ratio_primary": 0.96
+    },
+    "PP07": {
+      "archetype": "dose_limiting_toxicity_no_protection",
+      "coup": {
+        "GCLC": 1.6,
+        "HMOX1": 1.5,
+        "NQO1": 2.0,
+        "TXNRD1": 1.2
+      },
+      "indep_hmox1": 1.2,
+      "kp": 900.0,
+      "ks": 0.2,
+      "kt": 900.0,
+      "mechanism": "direct",
+      "mtt_cf": 0.0,
+      "mtt_ic": 0.004,
+      "neut_k": 8e-05,
+      "next_conc": 30.0,
+      "p_max": 2500.0,
+      "pi_target": 0.0,
+      "pot": 0.15,
+      "primary_conc": 10.0,
+      "probe_auto": 0.02,
+      "probe_quench": 0.00012,
+      "retention": 0.3,
+      "t_max": 0.0,
+      "tox_ratio_next": 0.55,
+      "tox_ratio_primary": 0.94
+    },
+    "PP08": {
+      "archetype": "nrf2_dependent_exposure_not_matchable",
+      "coup": {
+        "HMOX1": 4.2,
+        "NQO1": 5.8,
+        "TXNRD1": 2.9
+      },
+      "indep_hmox1": 0.3,
+      "kp": 60.0,
+      "ks": 0.3,
+      "kt": 900.0,
+      "mechanism": "adaptive",
+      "mtt_cf": 0.0,
+      "mtt_ic": 0.004,
+      "neut_k": 0.0,
+      "next_conc": 100.0,
+      "p_max": 120.0,
+      "pi_target": 0.56,
+      "pot": 1.0,
+      "primary_conc": 50.0,
+      "probe_auto": 0.015,
+      "probe_quench": 9e-05,
+      "retention": 0.55,
+      "t_max": 6262.0,
+      "tox_ratio_next": 0.72,
+      "tox_ratio_primary": 0.95
+    }
+  },
+  "concentration_ladder": [
+    1.0,
+    3.0,
+    10.0,
+    30.0,
+    50.0,
+    100.0,
+    200.0,
+    300.0,
+    600.0
+  ],
+  "ct_anchors": {
+    "ACTB": 17.4,
+    "GCLC": 25.3,
+    "HMOX1": 26.1,
+    "NFE2L2": 24.9,
+    "NQO1": 24.6,
+    "RPLP0": 18.9,
+    "TXNRD1": 25.8
+  },
+  "derived_direct_scavenging_dmax": {
+    "PP01": 0.0,
+    "PP02": 0.0,
+    "PP03": 2.3039255075614076,
+    "PP04": 0.046758081597843316,
+    "PP05": 1.596909527436501,
+    "PP06": 0.0,
+    "PP07": 0.3801424421256732,
+    "PP08": 0.0
+  },
+  "derived_gclc_coupling": {
+    "PP01": 0.20366330078738715,
+    "PP02": 5.542444029137016,
+    "PP03": 1.6,
+    "PP04": 1.6,
+    "PP05": 1.6,
+    "PP06": 3.846062450933091,
+    "PP07": 1.6,
+    "PP08": 2.9976144842627526
+  },
+  "derived_hmox1_independent_saturation_u": {
+    "PP01": 0.09333333333333334,
+    "PP02": 0.0456140350877193,
+    "PP03": 0.01087912087912088,
+    "PP04": 0.14666666666666667,
+    "PP05": 0.09696969696969698,
+    "PP06": 0.0761904761904762,
+    "PP07": 0.009157509157509158,
+    "PP08": 0.1280414673046252
+  },
+  "derived_toxicity_k50_hill": {
+    "PP01": [
+      0.7076905172115896,
+      3.1755652821491984
+    ],
+    "PP02": [
+      0.34830082550519237,
+      3.401757475092139
+    ],
+    "PP03": [
+      0.18544173664784613,
+      1.583815234769635
+    ],
+    "PP04": [
+      1.018642422835181,
+      3.5075755519438454
+    ],
+    "PP05": [
+      0.7650267865487376,
+      3.045236198927495
+    ],
+    "PP06": [
+      0.5608436905366777,
+      3.5406382705600743
+    ],
+    "PP07": [
+      0.0877747515670869,
+      2.368771685154455
+    ],
+    "PP08": [
+      0.9316875116430143,
+      3.3231782585654654
+    ]
+  },
+  "global_constants": {
+    "AD_K": 0.55,
+    "CHALLENGE_COMMON_UM": 300.0,
+    "DEAD_COUNTABLE": 0.55,
+    "E_REF": 1000.0,
+    "HILL": 2.2,
+    "I50": 200.0,
+    "KA_ACT": 0.25,
+    "L0": 42.0,
+    "MET_LOSS": 0.15
+  },
+  "physicochemical_descriptors": {
+    "PP01": {
+      "lloq_medium_um": 0.05,
+      "lloq_pmol": 2.0,
+      "logp": 1.48,
+      "mrm": "301.0 > 151.0",
+      "mw": 302.24,
+      "purity": 99.1,
+      "solubility_mm": 12.0
+    },
+    "PP02": {
+      "lloq_medium_um": 0.05,
+      "lloq_pmol": 2.0,
+      "logp": 0.52,
+      "mrm": "445.1 > 283.0",
+      "mw": 446.37,
+      "purity": 98.4,
+      "solubility_mm": 8.5
+    },
+    "PP03": {
+      "lloq_medium_um": 0.04,
+      "lloq_pmol": 1.5,
+      "logp": 3.12,
+      "mrm": "227.1 > 143.1",
+      "mw": 228.24,
+      "purity": 99.6,
+      "solubility_mm": 4.2
+    },
+    "PP04": {
+      "lloq_medium_um": 0.06,
+      "lloq_pmol": 2.5,
+      "logp": 0.31,
+      "mrm": "609.1 > 300.0",
+      "mw": 610.52,
+      "purity": 97.8,
+      "solubility_mm": 20.0
+    },
+    "PP05": {
+      "lloq_medium_um": 0.05,
+      "lloq_pmol": 2.0,
+      "logp": 2.04,
+      "mrm": "289.1 > 109.0",
+      "mw": 290.27,
+      "purity": 99.3,
+      "solubility_mm": 15.0
+    },
+    "PP06": {
+      "lloq_medium_um": 0.045,
+      "lloq_pmol": 1.8,
+      "logp": 1.76,
+      "mrm": "353.1 > 191.0",
+      "mw": 354.31,
+      "purity": 98.9,
+      "solubility_mm": 6.8
+    },
+    "PP07": {
+      "lloq_medium_um": 0.035,
+      "lloq_pmol": 1.2,
+      "logp": 1.21,
+      "mrm": "179.0 > 135.0",
+      "mw": 180.16,
+      "purity": 99.8,
+      "solubility_mm": 30.0
+    },
+    "PP08": {
+      "lloq_medium_um": 0.055,
+      "lloq_pmol": 2.2,
+      "logp": 3.81,
+      "mrm": "471.2 > 271.1",
+      "mw": 472.44,
+      "purity": 98.1,
+      "solubility_mm": 3.0
+    }
+  },
+  "transcript_kinetics_fraction_at_6h": {
+    "GCLC": 0.34,
+    "HMOX1": 0.72,
+    "NQO1": 0.58,
+    "TXNRD1": 0.5
+  }
+}

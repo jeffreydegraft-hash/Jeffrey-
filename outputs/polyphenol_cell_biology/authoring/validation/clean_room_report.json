@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "extracted_files": [
+    "assay_controls.csv",
+    "cell_models.csv",
+    "compounds.csv",
+    "data_dictionary.csv",
+    "exposure_measurements.csv",
+    "output_schema.json",
+    "oxidative_stress_readouts.csv",
+    "qpcr_ct_values.csv",
+    "sample_manifest.csv",
+    "study_specification.json",
+    "viability_readouts.csv"
+  ],
+  "extracted_file_count": 11,
+  "reference_analysis_exit": 0,
+  "reference_analysis_stderr": "",
+  "verifier_exit": 0,
+  "results_byte_identical_to_working_copy": true,
+  "clean_room_dir": "/tmp/claude-0/-home-user-Jeffrey-/dbcea3b5-955c-5039-8b55-381e732ecdb3/scratchpad/pkg/clean_room"
+}

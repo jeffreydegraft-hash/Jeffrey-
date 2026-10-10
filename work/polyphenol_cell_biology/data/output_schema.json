@@ -1,0 +1,232 @@
+{
+  "schema_version": "1.0.0",
+  "study_id": "polyphenol_cell_biology",
+  "output_path": "/app/results.csv",
+  "format": {
+    "file_type": "CSV",
+    "encoding": "UTF-8",
+    "header_required": true,
+    "header_must_match_exactly": true,
+    "column_order_enforced": true,
+    "row_count": 8,
+    "one_row_per": "compound_id",
+    "required_compounds": [
+      "PP01",
+      "PP02",
+      "PP03",
+      "PP04",
+      "PP05",
+      "PP06",
+      "PP07",
+      "PP08"
+    ],
+    "duplicates_allowed": false,
+    "extra_rows_allowed": false,
+    "extra_columns_allowed": false,
+    "row_order": "any; rows are matched on compound_id",
+    "na_token": "NA",
+    "na_note": "Where a quantity is undefined under the rules in study_specification.json, write the literal token NA. Empty fields are rejected."
+  },
+  "columns": [
+    {
+      "name": "compound_id",
+      "type": "string",
+      "unit": null,
+      "allowed_values": [
+        "PP01",
+        "PP02",
+        "PP03",
+        "PP04",
+        "PP05",
+        "PP06",
+        "PP07",
+        "PP08"
+      ],
+      "nullable": false,
+      "description": "Compound identifier as given in compounds.csv. The vehicle control VEH is not a compound and must not appear.",
+      "tolerance": ""
+    },
+    {
+      "name": "primary_concentration_um",
+      "type": "number",
+      "unit": "umol_per_litre_administered_in_medium",
+      "nullable": true,
+      "allowed_values": [
+        1.0,
+        3.0,
+        10.0,
+        30.0,
+        50.0,
+        100.0,
+        200.0,
+        300.0,
+        600.0
+      ],
+      "description": "The compound's primary administered concentration, selected by study_specification.json concentration_selection_rule: the highest concentration on the ladder whose wild-type unchallenged viability ratio to vehicle is at least 0.85. NA only if no concentration is tolerated.",
+      "tolerance": "exact"
+    },
+    {
+      "name": "wt_primary_exposure_pmol_per_1e6_cells",
+      "type": "number",
+      "unit": "pmol_per_1e6_cells",
+      "nullable": true,
+      "description": "E_WT: mean over the seven biological experiments of the per-experiment mean (over LC-MS injection replicates) intracellular exposure in CM_WT at the primary concentration, sampling_condition 'END_PRETREAT_NOWASH'. Derived as measured_value / cell_equivalents_1e6 from exposure_measurements.csv. This is the reference exposure used by the exposure-matching rule.",
+      "tolerance": "relative 0.01"
+    },
+    {
+      "name": "exposure_matched_ko_concentration_um",
+      "type": "number",
+      "unit": "umol_per_litre_administered_in_medium",
+      "nullable": true,
+      "allowed_values": [
+        1.0,
+        3.0,
+        10.0,
+        30.0,
+        50.0,
+        100.0,
+        200.0,
+        300.0,
+        600.0
+      ],
+      "description": "The CM_KO_A administered concentration selected by study_specification.json exposure_matching_rule, i.e. the concentration whose measured knockout exposure best matches E_WT within the window 0.70 to 1.4286. NA if no concentration on the ladder qualifies, in which case there is no exposure-matched stratum and nrf2_dependence_status must be 'indeterminate'.",
+      "tolerance": "exact"
+    },
+    {
+      "name": "protection_index_wt",
+      "type": "number",
+      "unit": "fraction_of_challenge_induced_viability_deficit_recovered",
+      "nullable": false,
+      "description": "PI in CM_WT at the primary concentration, primary condition (CHAL_ISO, PRE_NOWASH, 24 h post challenge). Mean over the seven biological experiments of the per-experiment protection index. May be negative.",
+      "tolerance": "absolute 0.005"
+    },
+    {
+      "name": "protection_index_wt_ci_low",
+      "type": "number",
+      "unit": "fraction_of_challenge_induced_viability_deficit_recovered",
+      "nullable": false,
+      "description": "Lower bound of the two-sided 95% Student-t interval on protection_index_wt over the seven biological experiments: mean - 2.446911851 * SD / sqrt(7).",
+      "tolerance": "absolute 0.008"
+    },
+    {
+      "name": "protection_index_wt_ci_high",
+      "type": "number",
+      "unit": "fraction_of_challenge_induced_viability_deficit_recovered",
+      "nullable": false,
+      "description": "Upper bound of the same interval: mean + 2.446911851 * SD / sqrt(7).",
+      "tolerance": "absolute 0.008"
+    },
+    {
+      "name": "protection_index_ko_primary_conc",
+      "type": "number",
+      "unit": "fraction_of_challenge_induced_viability_deficit_recovered",
+      "nullable": false,
+      "description": "PI in CM_KO_A at the SAME ADMINISTERED CONCENTRATION as the wild type (the primary concentration), primary condition. This is the UNCONDITIONED genotype comparison: it answers 'does this compound work less well in NRF2-deficient cells as administered'. It is reported alongside the exposure-matched value because the two can differ, and the difference is informative. It is NOT the basis of nrf2_dependence_status.",
+      "tolerance": "absolute 0.005"
+    },
+    {
+      "name": "protection_index_ko_exposure_matched",
+      "type": "number",
+      "unit": "fraction_of_challenge_induced_viability_deficit_recovered",
+      "nullable": true,
+      "description": "PI in CM_KO_A at exposure_matched_ko_concentration_um, primary condition. This is the EXPOSURE-CONDITIONED genotype comparison: it answers 'is the protective effect itself NRF2-dependent, at equal intracellular exposure'. NA if no exposure-matched stratum exists.",
+      "tolerance": "absolute 0.005"
+    },
+    {
+      "name": "protection_index_rescue",
+      "type": "number",
+      "unit": "fraction_of_challenge_induced_viability_deficit_recovered",
+      "nullable": false,
+      "description": "PI in CM_KO_A_RES (knockout clone A with functional NFE2L2 re-expression) at the primary administered concentration, primary condition. Used by the rescue criterion of the NRF2-dependence classification. Re-expression is partial, so this value is not expected to equal protection_index_wt.",
+      "tolerance": "absolute 0.005"
+    },
+    {
+      "name": "nrf2_dependence_contrast",
+      "type": "number",
+      "unit": "difference_in_protection_index",
+      "nullable": true,
+      "description": "Delta = PI(CM_WT, primary concentration) - PI(CM_KO_A, exposure-matched concentration), computed PAIRED by biological experiment: form the per-experiment difference first, then average the seven differences. NA if no exposure-matched stratum exists.",
+      "tolerance": "absolute 0.005"
+    },
+    {
+      "name": "nrf2_dependence_contrast_ci_low",
+      "type": "number",
+      "unit": "difference_in_protection_index",
+      "nullable": true,
+      "description": "Lower bound of the two-sided 95% Student-t interval on the seven paired per-experiment differences: mean - 2.446911851 * SD / sqrt(7). NA if the contrast is NA.",
+      "tolerance": "absolute 0.008"
+    },
+    {
+      "name": "nrf2_dependence_contrast_ci_high",
+      "type": "number",
+      "unit": "difference_in_protection_index",
+      "nullable": true,
+      "description": "Upper bound of the same paired interval. NA if the contrast is NA.",
+      "tolerance": "absolute 0.008"
+    },
+    {
+      "name": "protection_status",
+      "type": "string",
+      "unit": null,
+      "nullable": false,
+      "allowed_values": [
+        "protected",
+        "not_protected",
+        "indeterminate",
+        "not_evaluable"
+      ],
+      "description": "From the 95% interval on protection_index_wt against the threshold 0.15: 'protected' if the lower bound exceeds 0.15; 'not_protected' if the upper bound is below 0.15; 'indeterminate' if the interval contains 0.15; 'not_evaluable' if no tolerated concentration exists.",
+      "tolerance": "exact"
+    },
+    {
+      "name": "nrf2_dependence_status",
+      "type": "string",
+      "unit": null,
+      "nullable": false,
+      "allowed_values": [
+        "nrf2_dependent",
+        "not_nrf2_dependent",
+        "indeterminate",
+        "not_assessable"
+      ],
+      "description": "Per study_specification.json classification.nrf2_dependence_status, applied in the stated order: 'not_assessable' when protection_status is not 'protected'; 'indeterminate' when no exposure-matched stratum exists; 'indeterminate' when the two independent knockout lineages disagree; 'nrf2_dependent' when the paired contrast interval lower bound exceeds 0.15 AND the rescue criterion holds; 'not_nrf2_dependent' when the contrast interval upper bound is below 0.15; 'indeterminate' otherwise. Kept separate from protection_status so that mixed findings remain representable.",
+      "tolerance": "exact"
+    },
+    {
+      "name": "interference_flags",
+      "type": "string",
+      "unit": null,
+      "nullable": false,
+      "allowed_values": [
+        "none",
+        "mtt",
+        "ros",
+        "mtt;ros"
+      ],
+      "description": "Assay interference at the primary concentration, assessed from cell-free controls and INDEPENDENTLY of protection. 'mtt' if the compound reduces the tetrazolium directly (cell-free MTT index interval lower bound > 0.10). 'ros' if the compound is autofluorescent in the probe channel or quenches probe emission (either index interval lower bound > 0.10). Both as 'mtt;ros'. 'none' otherwise. A compound can be protective and still carry flags; flags are not a verdict on the biology. The canonical form is 'mtt;ros' when both apply; the verifier compares the flags as a SET, so the opposite order is also accepted.",
+      "tolerance": "exact set"
+    },
+    {
+      "name": "evidence_sample_ids",
+      "type": "string",
+      "unit": null,
+      "nullable": true,
+      "description": "Semicolon-separated list of 7 to 30 sample_id values from sample_manifest.csv, no spaces, supporting protection_index_wt. Every referenced sample must be a VIABILITY well in CM_WT with this compound at the primary concentration, challenge_id CHAL_ISO, schedule_id PRE_NOWASH, readout 24 h; and the set must cover all seven biological experiments BIO01..BIO07. NA only if primary_concentration_um is NA.",
+      "tolerance": "validity and relevance checked, not an exact list"
+    }
+  ],
+  "checks_applied_by_the_verifier": [
+    "The file is readable UTF-8 CSV with exactly the required header in the required order.",
+    "Exactly eight rows, one per required compound, no duplicates, no extras, VEH absent.",
+    "Every field parses as the declared type, or is the NA token where nullable.",
+    "Concentration fields are values on the published ladder.",
+    "Numeric results agree with the reference analysis within the tolerances in study_specification.json grading_tolerances.",
+    "Confidence bounds bracket their point estimate and agree with the reference analysis within tolerance.",
+    "Status fields take only the allowed values, match the reference analysis, and are internally consistent with the reported numbers under the disclosed classification rules.",
+    "NA is used exactly where the rules require it: where no exposure-matched stratum exists, the three contrast fields and protection_index_ko_exposure_matched and exposure_matched_ko_concentration_um are NA and nrf2_dependence_status is 'indeterminate'.",
+    "Evidence identifiers exist, refer to samples matching the required condition, and cover all seven biological experiments."
+  ],
+  "not_checked": [
+    "How the analysis was implemented, what language or libraries were used, how the code is structured, or what intermediate files were produced. Any implementation that produces results satisfying the checks above is accepted."
+  ]
+}

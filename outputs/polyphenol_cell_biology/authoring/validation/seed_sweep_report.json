@@ -1,0 +1,1662 @@
+{
+  "seeds": {
+    "20261010": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": -0.005,
+          "contrast": 0.0466,
+          "margin_protection": 0.1212,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.6009,
+          "contrast": 0.6351,
+          "margin_protection": 0.4163,
+          "margin_dependence": 0.43
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5218,
+          "contrast": -0.0166,
+          "margin_protection": 0.3517,
+          "margin_dependence": 0.1216
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0081,
+          "contrast": 0.0035,
+          "margin_protection": 0.1188,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5534,
+          "contrast": 0.0127,
+          "margin_protection": 0.3822,
+          "margin_dependence": 0.1032
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5819,
+          "contrast": 0.6137,
+          "margin_protection": 0.391,
+          "margin_dependence": 0.4101
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0142,
+          "contrast": -0.017,
+          "margin_protection": 0.1393,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.5579,
+          "contrast": null,
+          "margin_protection": 0.3829,
+          "margin_dependence": null
+        }
+      }
+    },
+    "7": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0155,
+          "contrast": 0.0563,
+          "margin_protection": 0.1109,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5979,
+          "contrast": 0.6407,
+          "margin_protection": 0.4364,
+          "margin_dependence": 0.4671
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5058,
+          "contrast": -0.0349,
+          "margin_protection": 0.3331,
+          "margin_dependence": 0.1341
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0079,
+          "contrast": 0.022,
+          "margin_protection": 0.134,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5336,
+          "contrast": -0.0066,
+          "margin_protection": 0.3571,
+          "margin_dependence": 0.1105
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5744,
+          "contrast": 0.6101,
+          "margin_protection": 0.3989,
+          "margin_dependence": 0.4195
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0004,
+          "contrast": 0.0143,
+          "margin_protection": 0.1244,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.5387,
+          "contrast": null,
+          "margin_protection": 0.3705,
+          "margin_dependence": null
+        }
+      }
+    },
+    "101": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0044,
+          "contrast": 0.0715,
+          "margin_protection": 0.1243,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.6266,
+          "contrast": 0.6824,
+          "margin_protection": 0.4396,
+          "margin_dependence": 0.4862
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5253,
+          "contrast": -0.0127,
+          "margin_protection": 0.3474,
+          "margin_dependence": 0.1217
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": -0.014,
+          "contrast": 0.0059,
+          "margin_protection": 0.1469,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5637,
+          "contrast": 0.0309,
+          "margin_protection": 0.3902,
+          "margin_dependence": 0.0747
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5818,
+          "contrast": 0.6234,
+          "margin_protection": 0.3941,
+          "margin_dependence": 0.4405
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0108,
+          "contrast": 0.0262,
+          "margin_protection": 0.1366,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.5715,
+          "contrast": null,
+          "margin_protection": 0.3988,
+          "margin_dependence": null
+        }
+      }
+    },
+    "20240229": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0059,
+          "contrast": 0.0343,
+          "margin_protection": 0.1244,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5939,
+          "contrast": 0.6176,
+          "margin_protection": 0.4126,
+          "margin_dependence": 0.4373
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5119,
+          "contrast": -0.0256,
+          "margin_protection": 0.3273,
+          "margin_dependence": 0.1326
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0032,
+          "contrast": 0.0123,
+          "margin_protection": 0.1291,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5387,
+          "contrast": 0.0069,
+          "margin_protection": 0.361,
+          "margin_dependence": 0.0996
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5781,
+          "contrast": 0.6147,
+          "margin_protection": 0.4067,
+          "margin_dependence": 0.4328
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0063,
+          "contrast": 0.0065,
+          "margin_protection": 0.1098,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.5564,
+          "contrast": null,
+          "margin_protection": 0.3737,
+          "margin_dependence": null
+        }
+      }
+    },
+    "31337": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0047,
+          "contrast": 0.0602,
+          "margin_protection": 0.1278,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5801,
+          "contrast": 0.6272,
+          "margin_protection": 0.4009,
+          "margin_dependence": 0.4406
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5321,
+          "contrast": 0.0148,
+          "margin_protection": 0.3564,
+          "margin_dependence": 0.0799
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0002,
+          "contrast": 0.0347,
+          "margin_protection": 0.1283,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5257,
+          "contrast": -0.0131,
+          "margin_protection": 0.3372,
+          "margin_dependence": 0.1098
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5798,
+          "contrast": 0.6294,
+          "margin_protection": 0.4124,
+          "margin_dependence": 0.4681
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": -0.005,
+          "contrast": 0.0134,
+          "margin_protection": 0.1306,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.558,
+          "contrast": null,
+          "margin_protection": 0.3602,
+          "margin_dependence": null
+        }
+      }
+    },
+    "555": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0032,
+          "contrast": 0.0493,
+          "margin_protection": 0.1161,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.6346,
+          "contrast": 0.694,
+          "margin_protection": 0.4397,
+          "margin_dependence": 0.4966
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5394,
+          "contrast": 0.0061,
+          "margin_protection": 0.3713,
+          "margin_dependence": 0.101
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0079,
+          "contrast": 0.0264,
+          "margin_protection": 0.1127,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5646,
+          "contrast": 0.0227,
+          "margin_protection": 0.3794,
+          "margin_dependence": 0.0855
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.6016,
+          "contrast": 0.6497,
+          "margin_protection": 0.4199,
+          "margin_dependence": 0.4727
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0098,
+          "contrast": 0.0161,
+          "margin_protection": 0.1221,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.5708,
+          "contrast": null,
+          "margin_protection": 0.3825,
+          "margin_dependence": null
+        }
+      }
+    },
+    "20260601": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0049,
+          "contrast": 0.0513,
+          "margin_protection": 0.1264,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.583,
+          "contrast": 0.6254,
+          "margin_protection": 0.4041,
+          "margin_dependence": 0.4288
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5083,
+          "contrast": -0.0169,
+          "margin_protection": 0.3354,
+          "margin_dependence": 0.1356
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0156,
+          "contrast": 0.0096,
+          "margin_protection": 0.1456,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5413,
+          "contrast": 0.0199,
+          "margin_protection": 0.3613,
+          "margin_dependence": 0.0893
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5558,
+          "contrast": 0.609,
+          "margin_protection": 0.3793,
+          "margin_dependence": 0.4159
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0113,
+          "contrast": 0.0081,
+          "margin_protection": 0.1347,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.543,
+          "contrast": null,
+          "margin_protection": 0.363,
+          "margin_dependence": null
+        }
+      }
+    },
+    "1": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0183,
+          "contrast": 0.069,
+          "margin_protection": 0.1035,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.6194,
+          "contrast": 0.6743,
+          "margin_protection": 0.4319,
+          "margin_dependence": 0.4657
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5308,
+          "contrast": 0.0274,
+          "margin_protection": 0.3585,
+          "margin_dependence": 0.0935
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": -0.0057,
+          "contrast": 0.0218,
+          "margin_protection": 0.1302,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5664,
+          "contrast": 0.0615,
+          "margin_protection": 0.3774,
+          "margin_dependence": 0.0507
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5794,
+          "contrast": 0.6219,
+          "margin_protection": 0.392,
+          "margin_dependence": 0.4227
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": -0.005,
+          "contrast": 0.0077,
+          "margin_protection": 0.1399,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.5578,
+          "contrast": null,
+          "margin_protection": 0.3656,
+          "margin_dependence": null
+        }
+      }
+    },
+    "999983": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0022,
+          "contrast": 0.0484,
+          "margin_protection": 0.1189,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5741,
+          "contrast": 0.6077,
+          "margin_protection": 0.3913,
+          "margin_dependence": 0.4191
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5149,
+          "contrast": -0.0216,
+          "margin_protection": 0.3345,
+          "margin_dependence": 0.1543
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": -0.006,
+          "contrast": 0.011,
+          "margin_protection": 0.131,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5343,
+          "contrast": -0.0076,
+          "margin_protection": 0.3436,
+          "margin_dependence": 0.1163
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5787,
+          "contrast": 0.6336,
+          "margin_protection": 0.3952,
+          "margin_dependence": 0.4527
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0011,
+          "contrast": 0.0179,
+          "margin_protection": 0.1262,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.5432,
+          "contrast": null,
+          "margin_protection": 0.3527,
+          "margin_dependence": null
+        }
+      }
+    },
+    "42": {
+      "compounds": {
+        "PP01": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0149,
+          "contrast": 0.0924,
+          "margin_protection": 0.1108,
+          "margin_dependence": null
+        },
+        "PP02": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.619,
+          "contrast": 0.6799,
+          "margin_protection": 0.434,
+          "margin_dependence": 0.4871
+        },
+        "PP03": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 50.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5335,
+          "contrast": 0.0255,
+          "margin_protection": 0.3467,
+          "margin_dependence": 0.0815
+        },
+        "PP04": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "mtt;ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 300.0,
+          "matched_conc": 300.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0038,
+          "contrast": 0.0505,
+          "margin_protection": 0.1242,
+          "margin_dependence": null
+        },
+        "PP05": {
+          "statuses": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "not_nrf2_dependent",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5597,
+          "contrast": 0.0329,
+          "margin_protection": 0.3777,
+          "margin_dependence": 0.063
+        },
+        "PP06": {
+          "statuses": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "expected": [
+            "protected",
+            "nrf2_dependent",
+            "ros"
+          ],
+          "statuses_match": true,
+          "primary_conc": 100.0,
+          "matched_conc": 100.0,
+          "concentrations_match": true,
+          "pi_wt": 0.5966,
+          "contrast": 0.6594,
+          "margin_protection": 0.3988,
+          "margin_dependence": 0.448
+        },
+        "PP07": {
+          "statuses": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "expected": [
+            "not_protected",
+            "not_assessable",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 10.0,
+          "matched_conc": 10.0,
+          "concentrations_match": true,
+          "pi_wt": 0.0188,
+          "contrast": 0.0778,
+          "margin_protection": 0.115,
+          "margin_dependence": null
+        },
+        "PP08": {
+          "statuses": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "expected": [
+            "protected",
+            "indeterminate",
+            "none"
+          ],
+          "statuses_match": true,
+          "primary_conc": 50.0,
+          "matched_conc": null,
+          "concentrations_match": true,
+          "pi_wt": 0.5593,
+          "contrast": null,
+          "margin_protection": 0.375,
+          "margin_dependence": null
+        }
+      }
+    }
+  },
+  "same_seed_reproducible": true,
+  "all_classifications_stable": true,
+  "min_margins": {
+    "PP01:protection": 0.1035,
+    "PP02:dependence": 0.4191,
+    "PP02:protection": 0.3913,
+    "PP03:dependence": 0.0799,
+    "PP03:protection": 0.3273,
+    "PP04:protection": 0.1127,
+    "PP05:dependence": 0.0507,
+    "PP05:protection": 0.3372,
+    "PP06:dependence": 0.4101,
+    "PP06:protection": 0.3793,
+    "PP07:protection": 0.1098,
+    "PP08:protection": 0.3527
+  },
+  "same_seed_mismatches": [],
+  "smallest_margin_overall": 0.050699999999999995
+}
