@@ -13,7 +13,8 @@
   <select> when the product has variants, a hidden input otherwise) and a
   submit button whose first plain label span swaps to "Added". With no
   product chosen the editor shows Shopify's neutral placeholder; the live
-  store renders nothing rather than a fake product. Motion inventory: the shared reveal (text, then image) and the
+  store renders nothing rather than a fake product, and a product without
+  media renders text-only (stacked, no image stage). Motion inventory: the shared reveal (text, then image) and the
   pill/link press from base.css; nothing else moves.
 {%- endcomment -%}
 {%- liquid
@@ -49,6 +50,12 @@
     elsif media_ratio > 1.8
       assign media_ratio = 1.8
     endif
+  endif
+
+  # A chosen product without media is text-only on the live store (APPLE-SPEC
+  # §0.2): no stage, and stacked so split does not leave an empty column
+  if has_media == false and request.design_mode == false
+    assign layout = 'stacked'
   endif
 
   # On a band that is already the photo's white ground the stage needs no padding
@@ -182,6 +189,7 @@
         {%- endif -%}
       </div>
 
+      {%- if has_media or request.design_mode -%}
       <div class="featured-product__media" data-reveal>
         {%- if has_media -%}
           <a href="{{ product.url }}" class="featured-product__stage" aria-label="{{ product.title | escape }}" tabindex="-1" style="--fp-ratio: {{ media_ratio }};">
@@ -195,6 +203,7 @@
           </div>
         {%- endif -%}
       </div>
+      {%- endif -%}
     </div>
   </div>
 </div>

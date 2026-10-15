@@ -1,6 +1,11 @@
 {%- comment -%}
   Search page: a centred title and a big search field, a 17px result count,
   product tiles, then pages and articles as clean rows under "Also found".
+  The product tiles sit on a full-bleed band in their own scheme (gray by
+  default, Apple Store style: white photo tiles on #F5F5F7), so the band sits
+  outside any .page-width; the header, "Also found", the empty state and
+  pagination stay on the section's own surface. Pagination goes inside the
+  band when products are the only group, so the band meets the footer.
   Pagination covers the whole result set (Shopify paginates search.results
   as one list, so a page may hold any mix of types).
 {%- endcomment -%}
@@ -52,92 +57,110 @@
         </p>
       {%- endif -%}
     </header>
+  </div>
 
-    {%- if search.performed -%}
-      {%- paginate search.results by section.settings.products_per_page -%}
-        {%- liquid
-          assign product_count = 0
-          assign other_count = 0
-          for item in search.results
-            if item.object_type == 'product'
-              assign product_count = product_count | plus: 1
-            else
-              assign other_count = other_count | plus: 1
-            endif
-          endfor
-        -%}
+  {%- if search.performed -%}
+    {%- paginate search.results by section.settings.products_per_page -%}
+      {%- liquid
+        assign product_count = 0
+        assign other_count = 0
+        for item in search.results
+          if item.object_type == 'product'
+            assign product_count = product_count | plus: 1
+          else
+            assign other_count = other_count | plus: 1
+          endif
+        endfor
+      -%}
 
-        <div id="SearchResults" class="main-search__results">
-          {%- if search.results_count == 0 -%}
-            <div class="empty-state main-search__empty" role="status">
-              <h2 class="h4">{{ 'search.no_results' | t: terms: terms }}</h2>
-              <p class="main-search__empty-body">{{ 'search.no_results_body' | t }}</p>
-              <div class="cta-row">
-                <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'collections.general.all' | t }}</a>
+      <div id="SearchResults" class="main-search__results">
+        {%- if search.results_count == 0 -%}
+          <div class="page-width">
+            <div class="main-search__column">
+              <div class="empty-state main-search__empty" role="status">
+                <h2 class="h4">{{ 'search.no_results' | t: terms: terms }}</h2>
+                <p class="main-search__empty-body">{{ 'search.no_results_body' | t }}</p>
+                <div class="cta-row">
+                  <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'collections.general.all' | t }}</a>
+                </div>
               </div>
             </div>
-          {%- else -%}
-            {%- if product_count > 0 -%}
-              <section class="main-search__group" aria-labelledby="MainSearch-Products">
-                <h2 class="h4 main-search__group-title" id="MainSearch-Products">{{ 'search.products' | t }}</h2>
-                <ul class="grid grid--3 grid--mobile-2 product-grid main-search__grid" role="list">
-                  {%- for item in search.results -%}
-                    {%- if item.object_type == 'product' -%}
-                      <li class="product-grid__item">
-                        {%- render 'card-product', product: item, index: forloop.index0, sizes: '(min-width: 990px) 33vw, 50vw' -%}
-                      </li>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </ul>
-              </section>
-            {%- endif -%}
+          </div>
+        {%- else -%}
+          {%- if product_count > 0 -%}
+            <div class="color-{{ section.settings.results_color_scheme }} main-search__band">
+              <div class="page-width">
+                <div class="main-search__column">
+                  <section class="main-search__group" aria-labelledby="MainSearch-Products">
+                    <h2 class="h4 main-search__group-title" id="MainSearch-Products">{{ 'search.products' | t }}</h2>
+                    <ul class="grid grid--3 grid--mobile-2 product-grid main-search__grid" role="list">
+                      {%- for item in search.results -%}
+                        {%- if item.object_type == 'product' -%}
+                          <li class="product-grid__item">
+                            {%- render 'card-product', product: item, index: forloop.index0, sizes: '(min-width: 990px) 33vw, 50vw' -%}
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ul>
+                  </section>
 
-            {%- if other_count > 0 -%}
-              <section class="main-search__group main-search__group--other" aria-labelledby="MainSearch-Other">
-                <h2 class="h4 main-search__group-title" id="MainSearch-Other">{{ 'search.also_found' | t }}</h2>
-                <ul class="search-results" role="list">
-                  {%- for item in search.results -%}
-                    {%- unless item.object_type == 'product' -%}
-                      {%- liquid
-                        assign stagger = forloop.index0 | modulo: 8
-                        if item.object_type == 'article'
-                          assign type_label = 'search.article' | t
-                          assign excerpt = item.excerpt_or_content | replace: '</', ' </' | strip_html | strip_newlines | truncatewords: 30
-                        else
-                          assign type_label = 'search.page' | t
-                          assign excerpt = item.content | replace: '</', ' </' | strip_html | strip_newlines | truncatewords: 30
-                        endif
-                      -%}
-                      <li class="search-results__item" data-reveal style="--i: {{ stagger }}">
-                        <a href="{{ item.url }}" class="search-results__link">
-                          <span class="search-results__text">
-                            <span class="search-results__meta">
-                              <span>{{ type_label }}</span>
-                              {%- if item.object_type == 'article' and item.published_at -%}
-                                <span aria-hidden="true">&middot;</span>
-                                <time datetime="{{ item.published_at | date: '%Y-%m-%d' }}">{{ item.published_at | date: '%b %-d, %Y' }}</time>
+                  {%- if other_count == 0 -%}
+                    {%- render 'pagination', paginate: paginate, anchor: '#SearchResults' -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if other_count > 0 -%}
+            <div class="page-width">
+              <div class="main-search__column">
+                <section class="main-search__group main-search__group--other" aria-labelledby="MainSearch-Other">
+                  <h2 class="h4 main-search__group-title" id="MainSearch-Other">{{ 'search.also_found' | t }}</h2>
+                  <ul class="search-results" role="list">
+                    {%- for item in search.results -%}
+                      {%- unless item.object_type == 'product' -%}
+                        {%- liquid
+                          assign stagger = forloop.index0 | modulo: 8
+                          if item.object_type == 'article'
+                            assign type_label = 'search.article' | t
+                            assign excerpt = item.excerpt_or_content | replace: '</', ' </' | strip_html | strip_newlines | truncatewords: 30
+                          else
+                            assign type_label = 'search.page' | t
+                            assign excerpt = item.content | replace: '</', ' </' | strip_html | strip_newlines | truncatewords: 30
+                          endif
+                        -%}
+                        <li class="search-results__item" data-reveal style="--i: {{ stagger }}">
+                          <a href="{{ item.url }}" class="search-results__link">
+                            <span class="search-results__text">
+                              <span class="search-results__meta">
+                                <span>{{ type_label }}</span>
+                                {%- if item.object_type == 'article' and item.published_at -%}
+                                  <span aria-hidden="true">&middot;</span>
+                                  <time datetime="{{ item.published_at | date: '%Y-%m-%d' }}">{{ item.published_at | date: '%b %-d, %Y' }}</time>
+                                {%- endif -%}
+                              </span>
+                              <span class="search-results__title">{{ item.title | escape }}</span>
+                              {%- if excerpt != blank -%}
+                                <span class="search-results__excerpt">{{ excerpt }}</span>
                               {%- endif -%}
                             </span>
-                            <span class="search-results__title">{{ item.title | escape }}</span>
-                            {%- if excerpt != blank -%}
-                              <span class="search-results__excerpt">{{ excerpt }}</span>
-                            {%- endif -%}
-                          </span>
-                          <span class="search-results__chevron" aria-hidden="true">{% render 'icon', name: 'chevron-right', size: 14 %}</span>
-                        </a>
-                      </li>
-                    {%- endunless -%}
-                  {%- endfor -%}
-                </ul>
-              </section>
-            {%- endif -%}
+                            <span class="search-results__chevron" aria-hidden="true">{% render 'icon', name: 'chevron-right', size: 14 %}</span>
+                          </a>
+                        </li>
+                      {%- endunless -%}
+                    {%- endfor -%}
+                  </ul>
+                </section>
 
-            {%- render 'pagination', paginate: paginate, anchor: '#SearchResults' -%}
+                {%- render 'pagination', paginate: paginate, anchor: '#SearchResults' -%}
+              </div>
+            </div>
           {%- endif -%}
-        </div>
-      {%- endpaginate -%}
-    {%- endif -%}
-  </div>
+        {%- endif -%}
+      </div>
+    {%- endpaginate -%}
+  {%- endif -%}
 </div>
 
 <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
@@ -160,6 +183,13 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "results_color_scheme",
+      "label": "Product results color scheme",
+      "info": "The full-width band behind product results. Choose the section's scheme for one surface.",
+      "default": "scheme-2"
     },
     {
       "type": "select",

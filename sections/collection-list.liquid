@@ -1,12 +1,21 @@
 {%- comment -%}
   Collection list: a centred heading and a grid of hand-picked collection
   tiles.
-  Each block is a collection picker; an unassigned block renders a
-  placeholder card so the editor never shows a hole.
+  Each block is a collection picker. In the theme editor an unassigned block
+  renders a placeholder card so the editor never shows a hole; on the live
+  store it is skipped (APPLE-SPEC §0.2), the grid is sized to the tiles that
+  actually render, and with none the section renders nothing.
 {%- endcomment -%}
 {%- liquid
   assign col_vw = 100 | divided_by: section.settings.columns_desktop
   assign card_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, 50vw'
+
+  assign tile_count = 0
+  for block in section.blocks
+    if block.settings.collection != blank or request.design_mode
+      assign tile_count = tile_count | plus: 1
+    endif
+  endfor
 
   assign spacing_class = ''
   case section.settings.spacing
@@ -16,7 +25,7 @@
       assign spacing_class = ' section--none'
   endcase
 -%}
-{%- if section.blocks.size > 0 or request.design_mode -%}
+{%- if tile_count > 0 or request.design_mode -%}
   <div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} collection-list" id="section-{{ section.id }}">
     <div class="page-width">
       {%- if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.show_view_all -%}
@@ -36,12 +45,16 @@
         </header>
       {%- endif -%}
 
-      {%- if section.blocks.size > 0 -%}
-        <ul class="grid grid--3 grid--mobile-2 collection-list__grid{% if section.blocks.size < section.settings.columns_desktop %} collection-list__grid--few{% endif %}" role="list" style="--cols-desktop: {{ section.settings.columns_desktop }}; --count: {{ section.blocks.size }};">
+      {%- if tile_count > 0 -%}
+        <ul class="grid grid--3 grid--mobile-2 collection-list__grid{% if tile_count < section.settings.columns_desktop %} collection-list__grid--few{% endif %}" role="list" style="--cols-desktop: {{ section.settings.columns_desktop }}; --count: {{ tile_count }};">
+          {%- assign tile_index = 0 -%}
           {%- for block in section.blocks -%}
-            <li {{ block.shopify_attributes }}>
-              {%- render 'card-collection', collection: block.settings.collection, index: forloop.index0, sizes: card_sizes -%}
-            </li>
+            {%- if block.settings.collection != blank or request.design_mode -%}
+              <li {{ block.shopify_attributes }}>
+                {%- render 'card-collection', collection: block.settings.collection, index: tile_index, sizes: card_sizes -%}
+              </li>
+              {%- assign tile_index = tile_index | plus: 1 -%}
+            {%- endif -%}
           {%- endfor -%}
         </ul>
       {%- else -%}

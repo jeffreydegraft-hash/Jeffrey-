@@ -11,6 +11,8 @@
   - wrapper_class: {String} extra classes for the wrapper when ratio is set
   - alt: {String} override alt text
   - preload: {Boolean} emit a preload hint (hero images only)
+  A blank image renders Shopify's neutral placeholder only in the theme editor (APPLE-SPEC §0.2);
+  on the live store it renders nothing (an empty .media box when ratio is set).
   Usage: {% render 'image', image: product.featured_image, sizes: '(min-width: 990px) 50vw, 100vw', ratio: '4 / 5' %}
 {%- endcomment -%}
 {%- liquid
@@ -33,7 +35,7 @@
   {%- else -%}
     {{ image | image_url: width: max_width | image_tag: widths: widths, sizes: sizes, class: img_class, loading: loading, alt: alt_text }}
   {%- endif -%}
-{%- else -%}
+{%- elsif request.design_mode -%}
   {{ placeholder | default: 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
 {%- endif -%}
 {%- if ratio != blank -%}

@@ -570,6 +570,9 @@
 
 .card-article:active {
   transform: scale(0.985);
+  /* A scroll that starts on a tile must not press it (iOS applies :active
+     on touch-down); release stays immediate. */
+  transition-delay: 70ms;
 }
 
 /* Editorial photos fill the top of the tile untouched (no blend, no

@@ -349,7 +349,8 @@ sticky-header.header-wrapper {
 }
 
 /* The merchant's logo, intact (APPLE-SPEC §0.1). Height caps at --logo-max-h
-   (40px; 32px on phones and in the compact bar). The box is sized from the
+   (the header's Logo height setting, 32-48px, default 40px; 32px at most on
+   phones and in the compact bar). The box is sized from the
    logo's aspect ratio (--logo-ratio, set inline by header.liquid), so it
    hugs the logo instead of letterboxing a narrow lockup, and its width is
    definite before the file loads (no shift). --logo-h is resolved here, on
@@ -567,7 +568,7 @@ a.header__flyout-heading:active {
   opacity: 1;
   transform: none;
   transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
-  transition-delay: calc(min(var(--i, 0), 8) * 30ms + 40ms);
+  transition-delay: calc(min(var(--i, 0), 8) * 40ms + 40ms);
 }
 
 @starting-style {

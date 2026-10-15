@@ -302,6 +302,13 @@
     opacity: 1;
   }
 
+  /* theme.js writes the panel's opacity on every drag move: it tracks the
+     finger with no lag. The release and dismiss fades still animate, since
+     SheetGesture drops .is-dragging before the inline opacity is cleared. */
+  .drawer__panel.is-dragging {
+    transition: none;
+  }
+
   /* Nothing lifts, so the phone sheet needs no extension below its edge. The
      material stays on the panel itself: under the fading panel (opacity < 1
      makes it a backdrop root) a pseudo-element's blur would show nothing. */
@@ -378,6 +385,20 @@
   min-width: 0;
 }
 
+/* Tile edge: a hairline only where the white tile meets a white ground
+   (scheme 1, which :root also carries). On gray, sage and dark grounds the
+   surface change is the edge, so the tile is flat (APPLE-SPEC §3). Set on
+   the scheme wrappers, it inherits from the nearest one: tiles in a gray
+   band nested inside a white section are flat too. */
+[class*="color-scheme-"] {
+  --card-edge: none;
+}
+
+:root,
+.color-scheme-1 {
+  --card-edge: inset 0 0 0 1px rgba(var(--c-ink), 0.06);
+}
+
 /* Product photography is shot on white, so the tile is the photo's own white
    ground and the bottle sits on it untouched (APPLE-SPEC §0.3: no blending). */
 .card--product {
@@ -386,7 +407,7 @@
   padding: clamp(16px, 2.2vw, 28px) clamp(16px, 2.2vw, 28px) clamp(20px, 2.6vw, 32px);
   border-radius: var(--r-tile);
   background: rgb(var(--c-photo-ground));
-  box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.06);
+  box-shadow: var(--card-edge, none);
   text-align: center;
   transition: transform var(--dur-press) var(--ease-out);
 }
@@ -593,6 +614,11 @@
 
 .card--product:active {
   transform: scale(0.985);
+  /* iOS applies :active on touch-down, even when the touch starts a scroll.
+     A 70ms entry delay (UIScrollView's delaysContentTouches) keeps tiles that
+     fill a phone grid from shrinking as a scroll begins; on :active only, so
+     release stays instant. Beats the reveal rule's 0ms (base.css loads first). */
+  transition-delay: 70ms;
 }
 
 /* Pressing the pill presses the pill, not the whole tile */
@@ -770,6 +796,34 @@ a.pagination__item:active {
 
 .pagination__item--ellipsis {
   color: rgb(var(--c-ink-2));
+}
+
+/* No previous / next page: the arrow holds its place, muted, not tappable */
+.pagination__item--disabled {
+  color: rgb(var(--c-ink-2));
+  opacity: 0.4;
+}
+
+/* Ships with [hidden]; only the phone query below reveals it */
+.pagination__status {
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 12px;
+  font-size: 1.0625rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: rgb(var(--c-ink));
+}
+
+/* Phones: "‹ Page N of M ›" on one line instead of a wrapping number row */
+@media (max-width: 749px) {
+  .pagination__status {
+    display: inline-flex;
+  }
+
+  .pagination__page {
+    display: none;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

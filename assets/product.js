@@ -613,6 +613,9 @@
             offset: 0,
             samples: [{ t: event.timeStamp, y: event.clientY }],
           };
+          // Catch an image still springing home: it stops under the finger (apple-design §3)
+          const mo = Olivet.motion;
+          this.drag.caught = !!(mo && typeof mo.stop === 'function' && mo.stop(this.lbBody));
           window.addEventListener('pointermove', this.onDragMove, { passive: true });
           window.addEventListener('pointerup', this.onDragUp);
           window.addEventListener('pointercancel', this.onDragUp);
@@ -645,6 +648,7 @@
           }
           if (d.state !== 'dragging') return;
           const raw = d.base + dy; // 1:1 from the grab point
+          d.raw = raw;
           const rubber = m && typeof m.rubberband === 'function' ? m.rubberband : (o) => o * 0.3;
           const offset = raw < 0 ? -rubber(-raw, d.height) : raw;
           d.offset = offset;
@@ -665,13 +669,16 @@
           const d = this.drag;
           if (!d || event.pointerId !== d.id) return;
           if (d.state === 'dragging') {
+            // Velocity from the moves of the last 80ms. A resting finger sends no
+            // pointermove, so a pointerup more than 100ms after the last move means
+            // it stopped before lifting: no stale flick. A cancelled pointer never dismisses.
+            const cancelled = event.type === 'pointercancel';
             const first = d.samples[0];
             const last = d.samples[d.samples.length - 1];
-            const dt = Math.max(1, last.t - first.t);
-            const velocity = ((last.y - first.y) / dt) * 1000; // px/s, + = down
+            const rested = event.timeStamp - last.t > 100; // no move for 100ms: the finger stopped before lifting
+            const velocity = cancelled || rested ? 0 : ((last.y - first.y) / Math.max(1, last.t - first.t)) * 1000; // px/s, + = down
             const project = Olivet.motion && Olivet.motion.project ? Olivet.motion.project : (v) => v * 0.5;
             const projected = d.offset + project(velocity);
-            const cancelled = event.type === 'pointercancel';
             const dismiss = !cancelled && (projected > d.height * 0.3 || velocity > 700) && velocity > -200;
             this.lightbox.classList.remove('is-dragging');
             if (dismiss) {
@@ -698,9 +705,12 @@
             this.lbBody.style.transform = '';
             return;
           }
-          const distance = Math.abs(d.offset) || 1;
+          // Progress runs offset → 0, so dp/dt = −(image velocity) / offset, sign kept: above
+          // home (offset < 0) an image still rising keeps rising before it turns. There it
+          // moves at the rubber band's slope, not at the finger's speed.
+          const slope = d.offset < 0 ? (0.55 * d.height * d.height) / Math.pow(d.height + 0.55 * Math.abs(d.raw || 0), 2) : 1;
           const momentum = Math.abs(velocity) > 300;
-          m.animate(this.lbBody, { from, to: 'none' }, { duration: 0.4, bounce: momentum ? 0.15 : 0, velocity: -velocity / distance });
+          m.animate(this.lbBody, { from, to: 'none' }, { duration: 0.4, bounce: momentum ? 0.15 : 0, velocity: -(velocity * slope) / (d.offset || 1) });
         }
 
         endDrag() {
@@ -714,6 +724,11 @@
             } catch (e) {
               /* already released */
             }
+          }
+          // A press that caught the settling image but never became a drag (tap,
+          // sideways, second finger, cancel) lets it finish settling. Not while closing.
+          if (d && d.state === 'pending' && d.caught && this.lbBody && this.lightbox && this.lightbox.open && !this.lbClosing && Olivet.motion) {
+            Olivet.motion.animate(this.lbBody, { to: 'none' }, { duration: 0.4, bounce: 0 });
           }
           this.drag = null;
         }

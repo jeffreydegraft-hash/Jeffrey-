@@ -38,6 +38,10 @@
             {%- liquid
               assign input_id = 'Option-' | append: section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0
               assign value_name = value | escape
+              # Visible name only: bind each number to its unit with a no-break space so
+              # text-wrap: balance never strands "ml)" on its own line. The input keeps the
+              # plain value (product.js matches it against variant.options).
+              assign display_name = value_name | replace: ' ml', '&nbsp;ml' | replace: ' mL', '&nbsp;mL' | replace: ' oz', '&nbsp;oz' | replace: ' g)', '&nbsp;g)' | replace: ' × ', '&nbsp;×&nbsp;'
             -%}
             <input
               type="radio"
@@ -53,7 +57,7 @@
               class="variant-picker__pill variant-card{% if value.selected %} is-selected{% endif %}{% unless value.available %} is-unavailable{% endunless %}"
               for="{{ input_id }}"
             >
-              <span class="variant-card__name">{{ value_name }}</span>
+              <span class="variant-card__name">{{ display_name }}</span>
               <span class="variant-card__price money" data-option-price {% if value.variant == blank %}hidden{% endif %}>
                 {%- if value.variant != blank -%}
                   {%- if settings.currency_code_enabled -%}
@@ -64,7 +68,7 @@
                 {%- endif -%}
               </span>
               <span class="visually-hidden" data-option-unavailable {% if value.available %}hidden{% endif %}>
-                {{- 'products.product.value_unavailable' | t: option_value: value_name -}}
+                {{- 'products.product.value_unavailable' | t: option_value: value.name -}}
               </span>
             </label>
           {%- endfor -%}

@@ -34,6 +34,13 @@
     assign has_header = true
   endif
 
+  # A centred lead past about three phone lines turns the header start-aligned below 750px (APPLE-SPEC §6)
+  assign long_class = ''
+  assign intro_length = section.settings.intro | size
+  if intro_length > 100
+    assign long_class = ' science-pillars--long'
+  endif
+
   assign has_cta = false
   if section.settings.button_label != blank and section.settings.button_link != blank
     assign has_cta = true
@@ -45,7 +52,7 @@
   endif
 -%}
 {%- if has_content -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} science-pillars" id="section-{{ section.id }}">
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} science-pillars{{ long_class }}" id="section-{{ section.id }}">
   <div class="page-width">
     {%- if has_header -%}
       <header class="section__header section__header--center science-pillars__header" data-reveal>

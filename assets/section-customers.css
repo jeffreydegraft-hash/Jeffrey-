@@ -695,6 +695,12 @@
   object-fit: contain;
 }
 
+/* No image (e.g. a deleted product on a past order): the white ground keeps
+   a faint edge so the empty tile still reads as a tile, as in the cart */
+.order-line__media--empty {
+  box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.06);
+}
+
 .order-line__body {
   display: flex;
   flex-direction: column;

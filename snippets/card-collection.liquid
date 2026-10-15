@@ -1,8 +1,12 @@
 {%- comment -%}
   Collection card: a flat rounded tile with the collection image and a
   centred title and product count. The title link covers the whole tile.
+  With no collection image, collection.featured_image is the first product's
+  photo, shown whole on white (.card--collection-fit, APPLE-SPEC §0.3). With
+  no image at all the live store gets a text-only tile (.card--text); the
+  Shopify placeholder art appears only in the theme editor (APPLE-SPEC §0.2).
   Accepts:
-  - collection: {Object} collection (optional; renders a placeholder card when blank)
+  - collection: {Object} collection (optional; renders a placeholder card when blank, meant for the editor only)
   - index: {Number} position in the grid, used for the reveal stagger (optional)
   - sizes: {String} sizes attribute for the image (optional)
   - placeholder: {String} placeholder_svg_tag name used when there is no image, default 'collection-1'
@@ -18,17 +22,27 @@
   {%- liquid
     assign card_image = collection.featured_image
     assign image_alt = card_image.alt | default: collection.title
+    assign card_class = ''
+    if card_image != blank
+      if collection.image == blank
+        assign card_class = ' card--collection-fit'
+      endif
+    elsif request.design_mode == false
+      assign card_class = ' card--text'
+    endif
   -%}
-  <article class="card card--collection" {% if reveal != false %}data-reveal style="--i: {{ stagger }}"{% endif %}>
-    <a href="{{ collection.url }}" class="card__media-link" aria-label="{{ collection.title | escape }}" tabindex="-1">
-      <div class="card__media media">
-        {%- if card_image -%}
-          {%- render 'image', image: card_image, sizes: sizes, loading: 'lazy', class: 'card__img card__img--primary', widths: '300, 400, 500, 600, 800, 1000', alt: image_alt -%}
-        {%- else -%}
-          {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
-        {%- endif -%}
-      </div>
-    </a>
+  <article class="card card--collection{{ card_class }}" {% if reveal != false %}data-reveal style="--i: {{ stagger }}"{% endif %}>
+    {%- if card_image != blank or request.design_mode -%}
+      <a href="{{ collection.url }}" class="card__media-link" aria-label="{{ collection.title | escape }}" tabindex="-1">
+        <div class="card__media media">
+          {%- if card_image != blank -%}
+            {%- render 'image', image: card_image, sizes: sizes, loading: 'lazy', class: 'card__img card__img--primary', widths: '300, 400, 500, 600, 800, 1000', alt: image_alt -%}
+          {%- elsif request.design_mode -%}
+            {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+      </a>
+    {%- endif -%}
     <div class="card__body">
       <h3 class="card__title card-collection__title h5">
         <a href="{{ collection.url }}" class="card__link">{{ collection.title | escape }}</a>

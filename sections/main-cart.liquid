@@ -10,7 +10,10 @@
   assign show_shipping_bar = false
   assign shipping_reached = false
   assign has_threshold = false
-  if settings.cart_show_free_shipping and settings.cart_free_shipping_threshold > 0
+  # Same gate as snippets/cart-drawer.liquid: the threshold is in the shop's
+  # base currency and Liquid has no exchange rate, so the bar and lead hide
+  # instead of comparing two currencies.
+  if settings.cart_show_free_shipping and settings.cart_free_shipping_threshold > 0 and cart.currency.iso_code == shop.currency and localization.country.iso_code == 'US'
     assign has_threshold = true
     assign shipping_threshold = settings.cart_free_shipping_threshold | times: 100
     assign shipping_threshold_money = shipping_threshold | money_without_trailing_zeros

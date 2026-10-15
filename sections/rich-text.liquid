@@ -74,14 +74,20 @@
             {%- when 'eyebrow' -%}
               {%- if block.settings.text != blank -%}
                 <p class="{{ eyebrow_class }} rich-text__eyebrow" data-reveal {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
+              {%- elsif request.design_mode -%}
+                <p class="caption muted" {{ block.shopify_attributes }}>{{ 'sections.rich_text.empty_block' | t }}</p>
               {%- endif -%}
             {%- when 'heading' -%}
               {%- if block.settings.heading != blank -%}
                 <h2 class="{{ block.settings.size }} rich-text__heading" data-reveal {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+              {%- elsif request.design_mode -%}
+                <p class="caption muted" {{ block.shopify_attributes }}>{{ 'sections.rich_text.empty_block' | t }}</p>
               {%- endif -%}
             {%- when 'text' -%}
               {%- if block.settings.text != blank -%}
                 <div class="rte rich-text__text rich-text__text--{{ block.settings.size }}" data-reveal {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+              {%- elsif request.design_mode -%}
+                <p class="caption muted" {{ block.shopify_attributes }}>{{ 'sections.rich_text.empty_block' | t }}</p>
               {%- endif -%}
           {%- endcase -%}
         {%- endfor -%}

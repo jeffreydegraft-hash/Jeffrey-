@@ -21,7 +21,8 @@
       "label": "Pagination",
       "page": "Page {{ number }}",
       "next": "Next page",
-      "previous": "Previous page"
+      "previous": "Previous page",
+      "page_of": "Page {{ current }} of {{ total }}"
     },
     "social": {
       "label": "Follow {{ shop }}",
@@ -380,6 +381,12 @@
     }
   },
   "sections": {
+    "main_product": {
+      "empty_block": "Nothing to show for this product yet. Fill in the product metafield or this block's settings."
+    },
+    "rich_text": {
+      "empty_block": "This block is empty. Add its text in the block settings."
+    },
     "announcements": {
       "previous_announcement": "Previous announcement",
       "next_announcement": "Next announcement",

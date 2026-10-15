@@ -89,7 +89,7 @@
     <div class="header__logo">
       <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">
         {%- if brand_logo != blank -%}
-          <span class="header__logo-media" style="--logo-width: {{ logo_width }}px;">
+          <span class="header__logo-media" style="--logo-width: {{ logo_width }}px; --logo-ratio: {{ brand_logo.aspect_ratio | default: 4 }}; --logo-max-h: {{ section.settings.logo_max_height | default: 40 }}px;">
             {%- render 'brand-logo', tone: logo_tone, width: logo_width, class: 'header__logo-img', priority: true, alt_empty: true -%}
           </span>
         {%- else -%}
@@ -335,6 +335,17 @@
         { "value": "center", "label": "Center" }
       ],
       "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_height",
+      "min": 32,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Logo height",
+      "default": 40,
+      "info": "The logo grows with Logo width until it reaches this height. Phones and the compact bar show it at 32px at most."
     },
     {
       "type": "link_list",

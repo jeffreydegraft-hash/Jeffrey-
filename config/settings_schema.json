@@ -24,7 +24,8 @@
         "step": 10,
         "unit": "px",
         "label": "Logo width",
-        "default": 140
+        "default": 140,
+        "info": "The logo grows with this width until it reaches the header's Logo height (40px by default; 32px at most on phones), then stops."
       },
       {
         "type": "image_picker",

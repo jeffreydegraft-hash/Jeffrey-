@@ -13,9 +13,17 @@
    Centred title + short muted description, then the merchant's collection
    image (on by default) as a rounded tile at the image's own aspect ratio,
    never cropped. Nothing here moves: the title must be legible the
-   instant the page paints. The bottom spacing is handed to the grid below,
-   so stacked sections never double their padding. */
-.collection-banner.section {
+   instant the page paints. On the same surface the bottom spacing is handed
+   to the grid below (base.css keeps the grid's top padding after a banner),
+   so stacked sections never double their padding. On a different surface
+   (white banner over the gray grid) the banner keeps its bottom padding, so
+   the description never touches the seam. Without :has() the banner keeps
+   it too: a larger gap, never a collision. */
+.shopify-section:has(+ .shopify-section > .section.color-scheme-1:not(.section--none, .section--top-none)) > .collection-banner.section.color-scheme-1,
+.shopify-section:has(+ .shopify-section > .section.color-scheme-2:not(.section--none, .section--top-none)) > .collection-banner.section.color-scheme-2,
+.shopify-section:has(+ .shopify-section > .section.color-scheme-3:not(.section--none, .section--top-none)) > .collection-banner.section.color-scheme-3,
+.shopify-section:has(+ .shopify-section > .section.color-scheme-4:not(.section--none, .section--top-none)) > .collection-banner.section.color-scheme-4,
+.shopify-section:has(+ .shopify-section > .section.color-scheme-5:not(.section--none, .section--top-none)) > .collection-banner.section.color-scheme-5 {
   padding-bottom: 0;
 }
 
@@ -401,7 +409,7 @@
   width: 100%;
 }
 
-/* Three-line names and whole-amount price wrapping: components.css (.card--product). */
+/* Product names wrap in full (never clamped) and prices wrap as whole amounts: components.css (.card--product). */
 
 @media (max-width: 749px) {
   .product-grid .card__title {
@@ -748,6 +756,9 @@
 
 .card--collection:active {
   transform: scale(0.985);
+  /* A scroll that starts on a large tile must not press it (iOS applies
+     :active on touch-down); release stays immediate. */
+  transition-delay: 70ms;
 }
 
 .card--collection .card__media-link,
@@ -783,6 +794,12 @@
   justify-content: flex-start;
   gap: 2px;
   padding: clamp(16px, 2vw, 24px) clamp(12px, 2vw, 24px) clamp(20px, 2.4vw, 28px);
+}
+
+/* No image at all (live store): a text-only tile, its title centred in the
+   tile a stretched row gives it. The editor shows Shopify's placeholder. */
+.card--collection.card--text .card__body {
+  justify-content: center;
 }
 
 .card--collection .card-collection__title {
@@ -906,10 +923,28 @@
 }
 
 /* Results sit in one centred column (the content measure), so the tiles
-   and the rows below share both edges under the centred field. */
-.main-search__results {
+   and the rows below share both edges under the centred field. The column
+   lives inside each .page-width, so the product band can run full-bleed. */
+.main-search__column {
   max-width: var(--content-max);
   margin-inline: auto;
+}
+
+/* Product tiles on their own full-bleed surface (white photo tiles on gray,
+   Apple Store style). Rhythm matches the collection grid's tight spacing. */
+.main-search__band {
+  padding-block: calc(var(--section-y) * 0.6);
+}
+
+/* "Also found" after the band: the seam is the divider, padding the gap */
+.main-search__band + .page-width {
+  padding-top: calc(var(--section-y) * 0.6);
+}
+
+/* The band ends the page: it meets the footer with no white strip. Without
+   :has() the section keeps its bottom padding (a white strip, no collision). */
+.main-search:has(> .main-search__results > .main-search__band:last-child) {
+  padding-bottom: 0;
 }
 
 /* No results: the message belongs to the field, so it sits close under it */
@@ -919,10 +954,6 @@
 
 .main-search__empty.empty-state {
   padding-top: clamp(40px, 6vw, 72px);
-}
-
-.main-search__group + .main-search__group {
-  margin-top: clamp(56px, 8vw, 96px);
 }
 
 .main-search__group-title {

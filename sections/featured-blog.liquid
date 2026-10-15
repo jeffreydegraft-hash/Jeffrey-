@@ -55,8 +55,15 @@
   if section.settings.heading != blank or section.settings.intro != blank or show_view_all
     assign has_header = true
   endif
+
+  # A centred lead past about three phone lines turns the header start-aligned below 750px (APPLE-SPEC §6)
+  assign long_class = ''
+  assign intro_length = section.settings.intro | size
+  if intro_length > 100
+    assign long_class = ' featured-blog--long'
+  endif
 -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-blog" id="section-{{ section.id }}">
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-blog{{ long_class }}" id="section-{{ section.id }}">
   <div class="page-width">
     {%- if has_header -%}
       <header class="section__header section__header--center featured-blog__header" data-reveal>

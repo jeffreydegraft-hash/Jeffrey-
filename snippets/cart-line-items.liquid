@@ -37,8 +37,11 @@
           {%- if item.image -%}
             {%- render 'image', image: item.image, sizes: media_sizes, widths: media_widths, ratio: '1 / 1', wrapper_class: 'cart-line__media-box media--contain', class: 'cart-line__img', loading: 'lazy', alt: item.image.alt -%}
           {%- else -%}
+            {%- comment -%} No drawn product on the live store (APPLE-SPEC §0): the empty white, ringed ground stands in; the placeholder shows only in the editor. {%- endcomment -%}
             <div class="media cart-line__media-box" style="--ratio: 1 / 1;">
-              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- if request.design_mode -%}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
             </div>
           {%- endif -%}
         </a>

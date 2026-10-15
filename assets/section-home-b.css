@@ -24,6 +24,23 @@
   text-wrap: balance;
 }
 
+/* an intro past about three phone lines (Liquid adds --long) reads
+   start-aligned below 750px instead of as a centred block (APPLE-SPEC §6) */
+@media (max-width: 749px) {
+  .science-pillars--long .section__header {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .science-pillars--long .science-pillars__intro {
+    text-wrap: pretty;
+  }
+
+  .science-pillars--long .science-pillars__cta {
+    justify-content: flex-start;
+  }
+}
+
 .science-pillars__grid {
   --gap: clamp(12px, 1.6vw, 24px);
   --cols: 1;
@@ -694,6 +711,19 @@
   margin-top: calc(var(--space-2) * -1);
 }
 
+/* an intro past about three phone lines (Liquid adds --long) reads
+   start-aligned below 750px instead of as a centred block (APPLE-SPEC §6) */
+@media (max-width: 749px) {
+  .featured-blog--long .section__header {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .featured-blog--long .featured-blog__intro {
+    text-wrap: pretty;
+  }
+}
+
 .featured-blog__grid {
   --gap: clamp(16px, 2vw, 24px);
   --cols: 1;
@@ -742,6 +772,8 @@
 
 .featured-blog__tile:active {
   transform: scale(0.985);
+  /* 70ms entry delay so a scroll that starts on a tile does not press it */
+  transition-delay: 70ms;
 }
 
 .featured-blog__tile:has(.featured-blog__link:focus-visible) {

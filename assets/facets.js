@@ -271,6 +271,9 @@
           else this.mq.addListener(this.onMq);
         }
         disconnectedCallback() {
+          // The base releases the scroll lock, keydown listener and focus trap
+          // when the theme editor re-renders an open sheet.
+          super.disconnectedCallback();
           if (!this.mq) return;
           if (this.mq.removeEventListener) this.mq.removeEventListener('change', this.onMq);
           else this.mq.removeListener(this.onMq);
