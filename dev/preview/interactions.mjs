@@ -6,8 +6,10 @@ import http from 'node:http';
 import { chromium } from 'playwright-core';
 
 const HERE = path.resolve(new URL('.', import.meta.url).pathname);
-const DIST = path.join(HERE, 'dist');
-const OUT = path.join(HERE, 'shots');
+const distIdx = process.argv.indexOf('--dist');
+const DIST = path.resolve(distIdx >= 0 ? process.argv[distIdx + 1] : path.join(HERE, 'dist'));
+const outIdx = process.argv.indexOf('--out');
+const OUT = path.resolve(outIdx >= 0 ? process.argv[outIdx + 1] : path.join(HERE, 'shots'));
 fs.mkdirSync(OUT, { recursive: true });
 const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
 const server = http.createServer((req, res) => {

@@ -511,6 +511,11 @@ const PAGES = {
   'customers/reset_password': () => globalsFor('customers/reset_password', { path: '/account/reset', page_title: 'Reset password' }),
 };
 
+/* ---------- preview-only font ----------
+   Linux has no San Francisco. Inter (closest open match) stands in so
+   screenshots resemble Apple devices. Never shipped with the theme. */
+const PREVIEW_FONT = `<style id="preview-font">@font-face{font-family:"Inter Preview";font-style:normal;font-weight:100 900;font-display:block;src:url("fonts/inter-latin-wght-normal.woff2") format("woff2")}:root{--font-system:"Inter Preview",-apple-system,BlinkMacSystemFont,sans-serif}</style>`;
+
 /* ---------- render ---------- */
 async function renderTemplate(name) {
   const makeGlobals = PAGES[name];
@@ -541,7 +546,8 @@ async function renderTemplate(name) {
   }
   if (layoutName === false || layoutName === 'none') return content;
   const { tpl: layoutTpl } = parseFile(path.join(ROOT, 'layout', `${layoutName}.liquid`));
-  return engine.render(layoutTpl, { content_for_layout: content }, { globals });
+  const page = await engine.render(layoutTpl, { content_for_layout: content }, { globals });
+  return page.replace('</head>', PREVIEW_FONT + '</head>');
 }
 
 const targets = only.length ? only : Object.keys(PAGES);
@@ -563,7 +569,7 @@ for (const f of fs.readdirSync(path.join(ROOT, 'assets'))) fs.copyFileSync(path.
 M.writeImages(OUT);
 const fontsOut = path.join(OUT, 'fonts');
 fs.mkdirSync(fontsOut, { recursive: true });
-for (const pkg of ['cormorant-garamond', 'dm-sans']) {
+for (const pkg of ['cormorant-garamond', 'dm-sans', '../@fontsource-variable/inter']) {
   const dir = path.join(ROOT, 'dev/preview/node_modules/@fontsource', pkg, 'files');
   if (!fs.existsSync(dir)) continue;
   for (const f of fs.readdirSync(dir)) if (f.includes('latin-') && !f.includes('ext') && f.endsWith('.woff2')) fs.copyFileSync(path.join(dir, f), path.join(fontsOut, f));

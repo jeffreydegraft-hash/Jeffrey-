@@ -183,7 +183,8 @@
         stop(this.panel);
         this.size = this.axis === 'x' ? this.panel.getBoundingClientRect().width : this.panel.getBoundingClientRect().height;
         this.base = this.currentOffset();
-        this.startPoint = p; // track from here: respects the grab offset
+        // Keep the original grab point: once the 10px threshold commits the
+        // drag, the sheet sits exactly where the finger is (1:1 from the grab).
         this.panel.classList.add('is-dragging');
       }
       if (this.state !== 'dragging') return;

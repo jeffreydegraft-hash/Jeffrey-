@@ -9,8 +9,9 @@ const HERE = path.resolve(new URL('.', import.meta.url).pathname);
 const argv = process.argv.slice(2);
 const outIdx = argv.indexOf('--out');
 const OUT = path.resolve(outIdx >= 0 ? argv[outIdx + 1] : path.join(HERE, 'shots'));
-const only = argv.filter((a, i) => !a.startsWith('--') && argv[i - 1] !== '--out');
-const DIST = path.join(HERE, 'dist');
+const only = argv.filter((a, i) => !a.startsWith('--') && argv[i - 1] !== '--out' && argv[i - 1] !== '--dist');
+const distIdx = process.argv.indexOf('--dist');
+const DIST = path.resolve(distIdx >= 0 ? process.argv[distIdx + 1] : path.join(HERE, 'dist'));
 fs.mkdirSync(OUT, { recursive: true });
 
 /* Serve dist over HTTP so fonts load (file:// blocks them via CORS) */
