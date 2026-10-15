@@ -22,11 +22,12 @@
       : window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const motion = () => (Olivet.motion && typeof Olivet.motion.animate === 'function' ? Olivet.motion : null);
 
-  /* Money in the shop's format; with currency codes when the theme shows them. */
+  /* Money in the shop's format; with currency codes when the theme shows them.
+     Some shops wrap the format in markup: it is written as text, so strip tags. */
   const formatPrice = (cents) => {
-    if (typeof Olivet.formatMoney !== 'function') return null;
+    if (typeof Olivet.formatMoney !== 'function' || cents == null) return null;
     const format = config.currencyCodeEnabled ? config.moneyWithCurrencyFormat : config.moneyFormat;
-    return Olivet.formatMoney(cents, format || undefined);
+    return String(Olivet.formatMoney(cents, format || undefined)).replace(/<[^>]*>/g, '');
   };
 
   const readJson = (root, selector) => {
@@ -69,7 +70,8 @@
           this.groups = Array.from(this.querySelectorAll('fieldset'));
           this.onChange = this.onChange.bind(this);
           this.addEventListener('change', this.onChange);
-          this.markAvailability();
+          // The server already priced every card for the current selection
+          this.markAvailability({ prices: false });
         }
 
         disconnectedCallback() {
@@ -136,7 +138,7 @@
         /* Each card shows the variant it leads to with the other current
            selections: its price, and a struck-through name when that variant
            can't be bought. Purely visual; the radios stay selectable. */
-        markAvailability() {
+        markAvailability({ prices = true } = {}) {
           if (!this.variants.length) return;
           const selected = this.selectedOptions;
           this.groups.forEach((group, index) => {
@@ -150,7 +152,7 @@
               card.classList.toggle('is-unavailable', !available);
               const note = card.querySelector('[data-option-unavailable]');
               if (note) note.hidden = available;
-              const price = card.querySelector('[data-option-price]');
+              const price = prices && card.querySelector('[data-option-price]');
               if (price) {
                 const text = match ? formatPrice(match.price) : '';
                 if (text !== null) {

@@ -1,6 +1,10 @@
 {%- comment -%}
-  Address book. One card per address (default badge, edit / delete), an
-  "add" panel under the header and an inline edit panel inside each card.
+  Address book, Apple style: a "‹ Account" back link, a centred headline
+  with the address count and an "Add a new address" pill, then one flat
+  tile per address (a "Default" tag, the address, and Edit / Delete as
+  small text links). The add form is its own tile under the header; the
+  edit form opens inside its address tile, which then takes the full row.
+
   Panels toggle through customer.js (.is-open + aria-expanded); a panel
   whose form came back with errors stays open (the [data-form-errors]
   rule in CSS covers the moment before JS runs). Without JS every panel
@@ -23,25 +27,25 @@
 <div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-addresses addresses" id="section-{{ section.id }}">
   <div class="page-width page-width--medium">
     <div class="addresses__inner" data-customer-addresses>
-      <a href="{{ routes.account_url }}" class="link link--arrow customer-page__back">
-        {%- render 'icon', name: 'arrow-left', size: 18 -%}
-        {{ 'customer.account.return' | t }}
+      <a href="{{ routes.account_url }}" class="link link--chevron customer-link--back customer-back">
+        {%- render 'icon', name: 'chevron-left', size: 11 -%}
+        {{- 'customer.account.back' | t -}}
       </a>
 
-      <header class="customer-page__head">
-        <div class="customer-page__heading">
-          <h1 class="h1">{{ 'customer.addresses.title' | t }}</h1>
-          <p class="muted">{{ 'customer.addresses.count' | t: count: customer.addresses_count }}</p>
-        </div>
-        <div class="customer-page__actions">
-          <button type="button" class="btn btn--primary btn--sm" data-address-toggle="#AddAddress" aria-controls="AddAddress" aria-expanded="false">
-            {%- render 'icon', name: 'plus', size: 18 -%}
-            {{ 'customer.addresses.add_new' | t }}
-          </button>
-        </div>
+      <header class="customer-hero">
+        <h1 class="h2 customer-hero__title">{{ 'customer.addresses.title' | t }}</h1>
+        <p class="customer-hero__meta">{{ 'customer.addresses.count' | t: count: customer.addresses_count }}</p>
+        {%- if customer.addresses_count > 0 -%}
+          <div class="cta-row customer-hero__cta">
+            <button type="button" class="btn btn--primary" data-address-toggle="#AddAddress" aria-controls="AddAddress" aria-expanded="false">
+              {%- render 'icon', name: 'plus', size: 16 -%}
+              {{ 'customer.addresses.add_new' | t }}
+            </button>
+          </div>
+        {%- endif -%}
       </header>
 
-      <div id="AddAddress" class="address-form addresses__add" data-address-form tabindex="-1">
+      <div id="AddAddress" class="tile address-form addresses__add" data-address-form tabindex="-1">
         <h2 class="h4 address-form__title" id="AddAddressHeading">{{ 'customer.addresses.add_new' | t }}</h2>
         {%- form 'customer_address', customer.new_address, class: 'customer-form', aria-labelledby: 'AddAddressHeading' -%}
           {%- render 'customer-form-errors', form: form, prefix: 'AddressFormNew' -%}
@@ -55,7 +59,7 @@
 
       {%- paginate customer.addresses by 12 -%}
         {%- if customer.addresses.size > 0 -%}
-          <ul class="addresses__list grid grid--2" role="list">
+          <ul class="addresses__list" role="list">
             {%- for address in customer.addresses -%}
               {%- liquid
                 assign is_default = false
@@ -67,17 +71,17 @@
                 assign heading_id = 'EditAddressHeading' | append: suffix
                 assign prefix = 'AddressForm' | append: suffix
               -%}
-              <li class="address-card{% if is_default %} address-card--default{% endif %}" data-address>
+              <li class="tile address-card{% if is_default %} address-card--default{% endif %}" data-address>
                 <div class="address-card__body">
                   {%- if is_default -%}
-                    <span class="badge badge--outline address-card__badge">{{ 'customer.addresses.default' | t }}</span>
+                    <span class="tag address-card__tag">{{ 'customer.addresses.default' | t }}</span>
                   {%- endif -%}
-                  <address class="address-card__address">{{ address | format_address }}</address>
+                  <address class="customer-address address-card__address">{{ address | format_address }}</address>
                 </div>
                 <div class="address-card__actions">
                   <button
                     type="button"
-                    class="btn btn--secondary btn--sm"
+                    class="link address-card__action"
                     data-address-toggle="#{{ panel_id }}"
                     aria-controls="{{ panel_id }}"
                     aria-expanded="false"
@@ -87,7 +91,7 @@
                   </button>
                   <button
                     type="button"
-                    class="btn btn--ghost btn--sm"
+                    class="link address-card__action"
                     data-address-delete="{{ address.url }}"
                     data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}"
                     aria-label="{{ 'customer.addresses.delete_address_label' | t: index: forloop.index }}"
@@ -96,7 +100,7 @@
                   </button>
                 </div>
                 <div id="{{ panel_id }}" class="address-form address-card__form" data-address-form tabindex="-1">
-                  <h2 class="h4 address-form__title" id="{{ heading_id }}">{{ 'customer.addresses.edit_address' | t }}</h2>
+                  <h2 class="h5 address-form__title" id="{{ heading_id }}">{{ 'customer.addresses.edit_address' | t }}</h2>
                   {%- form 'customer_address', address, class: 'customer-form', aria-labelledby: heading_id -%}
                     {%- render 'customer-form-errors', form: form, prefix: prefix -%}
                     {%- render 'customer-address-fields', form: form, suffix: suffix -%}
@@ -111,10 +115,10 @@
           </ul>
           {%- render 'pagination', paginate: paginate -%}
         {%- else -%}
-          <div class="empty-state addresses__empty">
-            {%- render 'icon', name: 'map-pin', size: 36 -%}
-            <h2 class="h4">{{ 'customer.addresses.none' | t }}</h2>
-            <p class="muted text-pretty">{{ 'customer.addresses.none_body' | t }}</p>
+          <div class="tile tile--center customer-empty addresses__empty">
+            {%- render 'icon', name: 'map-pin', size: 32 -%}
+            <h2 class="h5">{{ 'customer.addresses.none' | t }}</h2>
+            <p class="customer-empty__text">{{ 'customer.addresses.none_body' | t }}</p>
             <button type="button" class="btn btn--primary" data-address-toggle="#AddAddress" aria-controls="AddAddress" aria-expanded="false">{{ 'customer.addresses.add_new' | t }}</button>
           </div>
         {%- endif -%}

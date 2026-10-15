@@ -10,7 +10,7 @@
    Motion here: stage crossfade (opacity), presses (transform .97 / .985),
    option-card border colour, buy-bar rise (transform + opacity), lightbox
    scrim/panel fades (opacity; transforms are springs in JS).
-   Every :hover sits behind (hover: hover) and (pointer: fine); reduced
+   Every hover rule sits behind (hover: hover) and (pointer: fine); reduced
    motion keeps fades and drops every transform.
    ========================================================================== */
 
@@ -298,7 +298,7 @@
 
 /* Shopify's dynamic checkout button, restyled as the secondary pill.
    The element-qualified selector outranks Shopify's injected stylesheet,
-   including its ungated :hover, so nothing sticks after a tap. */
+   including its ungated hover rule, so nothing sticks after a tap. */
 product-form.product-form .shopify-payment-button {
   width: 100%;
 }
@@ -395,10 +395,10 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
 }
 
 .product__scripture .scripture__quote {
-  max-width: 28ch;
-  font-size: calc(clamp(1.3125rem, 1.1rem + 0.6vw, 1.75rem) * var(--heading-scale, 1));
-  line-height: 1.17;
-  letter-spacing: 0.007em;
+  max-width: 30ch;
+  font-size: calc(clamp(1.3125rem, 1.1rem + 0.35vw, 1.5rem) * var(--heading-scale, 1));
+  line-height: 1.2;
+  letter-spacing: 0.009em;
 }
 
 .product__scripture .scripture__ref {

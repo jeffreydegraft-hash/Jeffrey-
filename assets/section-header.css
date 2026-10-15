@@ -120,7 +120,8 @@
 
 sticky-header.header-wrapper {
   --material-chrome: rgba(var(--c-bg), 0.72);
-  --material-thick: rgba(var(--c-bg), 0.86);
+  /* flyouts span the full width: a big surface reads thicker (apple-design §12) */
+  --material-thick: rgba(var(--c-bg), 0.92);
   --nav-material: var(--material-chrome);
   --nav-blur: var(--material-blur);
   position: relative;
@@ -937,7 +938,7 @@ h2.menu-drawer__submenu-heading {
 }
 
 .search-drawer__panel {
-  --material-thick: rgba(var(--c-bg), 0.86);
+  --material-thick: rgba(var(--c-bg), 0.92); /* matches the bar while it is open */
   max-height: calc(100% - var(--space-6));
   padding-top: 0;
   overflow-y: auto;
@@ -1174,8 +1175,9 @@ predictive-search.is-loading:not(.has-results) .search-drawer__skeleton {
   flex-direction: column;
 }
 
+.search-drawer__popular[hidden],
 .search-drawer__inner:has(.search-drawer__input:not(:placeholder-shown)) .search-drawer__popular {
-  display: none;
+  display: none; /* predictive-search.js sets [hidden]; :has() covers no-JS / no predictive */
 }
 
 h2.search-drawer__heading,
@@ -1299,6 +1301,11 @@ h3.predictive-search__heading {
 
   .search-drawer__quick-link:hover {
     color: rgb(var(--c-accent));
+  }
+
+  .search-drawer__cancel:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
   }
 }
 
