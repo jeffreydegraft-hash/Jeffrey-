@@ -87,6 +87,14 @@
   max-width: 34ch;
 }
 
+/* A long lead steps down to the 21px intro size (three lines at most) */
+.hero__subheading--long {
+  max-width: 44ch;
+  font-size: clamp(1.0625rem, 0.95rem + 0.4vw, 1.3125rem);
+  line-height: 1.38;
+  letter-spacing: 0.011em;
+}
+
 .hero__actions {
   margin-top: clamp(24px, 3vw, 36px);
 }
@@ -142,7 +150,7 @@
   max-width: 100%;
   height: auto;
   max-height: min(64svh, 680px);
-  object-fit: contain;
+  border-radius: var(--r-media);
 }
 
 /* Photo with its own background: its own shape, corners rounded like a tile */
@@ -202,14 +210,17 @@
   --media-radius: var(--r-tile);
 }
 
-/* The chosen product's photo in the split tile: whole, on white */
-.hero__media--product {
+/* The chosen product's photo in a tile: whole (contain, never cropped),
+   inset on the white it was shot on, so the tile and photo read as one */
+.hero__media--product,
+.image-with-text__media--product {
   background: rgb(var(--c-photo-ground));
 }
 
-.hero__media--product .media__img {
+.hero__media--product .media__img,
+.image-with-text__media--product .media__img {
   object-fit: contain;
-  padding: clamp(20px, 8%, 56px);
+  padding: clamp(20px, 7%, 56px);
 }
 
 /* The product arrives: rises 24px and fades in, one beat after the text */
@@ -472,15 +483,6 @@
 
 .image-with-text__media {
   --media-radius: var(--r-tile);
-}
-
-.image-with-text__media--product {
-  background: rgb(var(--c-photo-ground));
-}
-
-.image-with-text__media--product .media__img {
-  object-fit: contain;
-  padding: clamp(24px, 8%, 64px);
 }
 
 .image-with-text--text-first .image-with-text__content {

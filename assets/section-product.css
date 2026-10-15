@@ -1,10 +1,11 @@
 /* ==========================================================================
    Olivet — section-product.css (product sections, Apple-first)
-   An Apple Store buy flow: a rounded gallery on the tile surface (left,
-   sticky) and a quiet buy column (right): tag, headline, price, option
-   cards, quantity pill, "Add to Bag" pill, trust row, scripture statement
-   card, copy, FAQ-style tabs. Phones: full-bleed snap carousel and a
-   translucent buy bar. Lightbox: centred modal / full screen with
+   An Apple Store buy flow: a rounded gallery on the photos' own white
+   ground (left, sticky) and a quiet buy column (right): tag, headline,
+   price, option cards, quantity pill, "Add to Bag" pill with "Buy it now ›"
+   as a text link beneath it, trust row, overview copy, scripture statement
+   card, meaning / botanical copy, FAQ-style tabs. Phones: full-bleed snap
+   carousel and a translucent buy bar. Lightbox: centred modal / full screen with
    drag-to-dismiss (springs in assets/product.js via Olivet.motion).
 
    Motion here: stage crossfade (opacity), presses (transform .97 / .985),
@@ -30,6 +31,12 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
+}
+
+/* Single column with dots: their 44px touch row already brings air under
+   the gallery, so the tag follows it closely, as on the Store's phone layout. */
+.product__grid:has(.media-gallery__dots) {
+  row-gap: var(--space-3);
 }
 
 .product__media,
@@ -122,6 +129,18 @@
   opacity: 0.5;
 }
 
+/* On sale: the price you pay leads; the old price follows, smaller and muted.
+   (Visual order only: the DOM keeps "regular price" then "sale price" for
+   assistive tech.) */
+.product__price .price__item--sale {
+  order: -1;
+}
+
+.product__price .price__item--compare {
+  font-size: 1.0625rem;
+  letter-spacing: -0.022em;
+}
+
 .product__sku,
 .product__inventory,
 .product__tax-note {
@@ -183,8 +202,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  min-height: 60px;
-  padding: 14px 18px;
+  min-height: 56px;
+  padding: 12px 18px;
   border: 1px solid rgba(var(--c-ink), 0.32);
   border-radius: var(--r-md);
   background: rgb(var(--c-bg));
@@ -296,7 +315,10 @@
   --shopify-accelerated-checkout-row-gap: var(--space-3);
 }
 
-/* Shopify's dynamic checkout button, restyled as the secondary pill.
+/* Shopify's dynamic checkout button. Branded wallets (Shop Pay, Apple Pay…)
+   keep their own look at the pill's size and radius; the unbranded
+   "Buy it now" becomes a quiet text link with a chevron under the one
+   filled pill, the Apple pairing of one primary action and a link.
    The element-qualified selector outranks Shopify's injected stylesheet,
    including its ungated hover rule, so nothing sticks after a tap. */
 product-form.product-form .shopify-payment-button {
@@ -310,12 +332,18 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__butto
   transition: transform var(--dur-press) var(--ease-out);
 }
 
+product-form.product-form .shopify-payment-button .shopify-payment-button__button:active {
+  transform: scale(0.97);
+}
+
 product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 4px;
   width: 100%;
-  padding: 0 28px;
+  min-height: 44px;
+  padding: 0 var(--space-4);
   font-family: var(--font-body);
   font-size: 1.0625rem;
   font-weight: var(--font-body-weight);
@@ -324,18 +352,38 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__butto
   text-decoration: none;
   color: rgb(var(--c-accent));
   background-color: transparent;
-  border: 1px solid rgb(var(--c-accent));
+  border: 0;
   box-shadow: none;
-  transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease;
+  transition: opacity var(--dur-press) var(--ease-out);
 }
 
-product-form.product-form .shopify-payment-button .shopify-payment-button__button:active {
-  transform: scale(0.97);
+/* the 10px chevron of .link--chevron, as a mask so it takes the text colour */
+product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded::after {
+  content: "";
+  flex-shrink: 0;
+  width: 0.75em;
+  height: 0.75em;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+/* a link presses like a link: it dims, it does not shrink */
+product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded:active {
+  transform: none;
+  opacity: 0.7;
+}
+
+product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded[disabled] {
+  color: rgb(var(--c-ink-2));
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded:focus-visible {
   outline: 2px solid rgb(var(--c-accent));
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 product-form.product-form .shopify-payment-button .shopify-payment-button__more-options {
@@ -349,9 +397,23 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
   text-decoration: none;
 }
 
+/* the text link sits close under the pill: one group, not two buttons */
+.product-form__buttons--dynamic {
+  row-gap: var(--space-2);
+}
+
 @media (hover: hover) and (pointer: fine) {
   product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded:hover:not([disabled]) {
-    background-color: rgba(var(--c-accent), 0.06);
+    background-color: transparent;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.16em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded:hover:not([disabled])::after {
+      transform: translateX(2px);
+    }
   }
 
   product-form.product-form .shopify-payment-button .shopify-payment-button__more-options:hover {
@@ -578,7 +640,7 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
 
 .media-gallery__slide--video .media-gallery__video {
   object-fit: contain;
-  background: rgb(var(--c-surface));
+  background: rgb(var(--c-photo-ground));
 }
 
 /* zoom opener fills the slide; the hint shows only for real pointers */
@@ -694,7 +756,18 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
 .media-gallery__thumb-media {
   --ratio: 1 / 1;
   --media-radius: var(--r-md);
-  background: rgb(var(--c-surface));
+  background: rgb(var(--c-photo-ground));
+}
+
+/* the thumbnail's own faint edge, drawn over the photo like the stage's */
+.media-gallery__thumb::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: var(--r-md);
+  box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.06);
+  pointer-events: none;
 }
 
 /* Selected: a 2px accent ring set 2px off the square */
@@ -741,14 +814,26 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
     gap: 0;
   }
 
+  .media-gallery__frame,
   .media-gallery__track,
   .media-gallery__placeholder {
     border-radius: 0;
   }
+
+  .media-gallery__frame::after {
+    content: none;
+  }
 }
 
-/* ---- tablets: rounded carousel inside the page width ---- */
+/* ---- tablets: a rounded carousel on the buy column's measure, so the
+   stage and the copy beneath it share one left edge ---- */
 @media (min-width: 750px) and (max-width: 989px) {
+  .product__media {
+    width: 100%;
+    max-width: var(--text-max);
+    margin-inline: auto;
+  }
+
   .media-gallery__slide {
     max-height: 68svh;
   }
@@ -833,10 +918,25 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
     scroll-snap-type: none;
   }
 
+  /* stacked: each photo is its own white tile with its own edge */
+  .media-gallery--stacked .media-gallery__frame::after {
+    content: none;
+  }
+
   .media-gallery--stacked .media-gallery__slide {
     --media-radius: var(--r-card);
     flex: none;
     scroll-snap-align: none;
+  }
+
+  .media-gallery--stacked .media-gallery__slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.06);
+    pointer-events: none;
   }
 }
 
@@ -1149,6 +1249,10 @@ body:has(.lightbox[open]) {
   .lightbox__close:active,
   product-form.product-form .shopify-payment-button .shopify-payment-button__button:active {
     transform: none;
+  }
+
+  product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded::after {
+    transition: none;
   }
 
   .product-sticky,

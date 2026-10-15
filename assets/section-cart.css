@@ -138,9 +138,11 @@
   text-wrap: pretty;
 }
 
-/* Short viewports (phone landscape, a keyboard open): header stays put and
-   the list, totals and Check Out scroll together, so nothing is starved. */
-@media (max-height: 700px) {
+/* Really short viewports (phone landscape, iPhone SE in Safari, a keyboard
+   open): header stays put and the list, totals and Check Out scroll together,
+   so the list is not starved. Taller phones (Safari's visible viewport is
+   often 620-750px) keep Check Out pinned, the primary action always in reach. */
+@media (max-height: 560px) {
   .cart-drawer__main {
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -201,23 +203,21 @@ cart-items.is-loading .cart-lines {
   width: var(--cart-media);
 }
 
+/* Product photos are shot on white: the tile is the photo's own white ground
+   with a faint edge, like the product tiles, and the photo sits on it
+   untouched (APPLE-SPEC §0.3: no blending, contain, never cropped). The
+   small inset keeps the rounded corners from ever clipping a photo. */
 .cart-line__media-box {
   --media-radius: var(--r-md);
-  background: rgb(var(--c-surface));
+  background: rgb(var(--c-photo-ground, var(--c-bg)));
+  box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.06);
 }
 
-/* Product photography sits on the surface tone, like the product tiles */
 .cart-line__media-box .cart-line__img {
-  inset: 8%;
-  width: 84%;
-  height: 84%;
+  inset: 6%;
+  width: 88%;
+  height: 88%;
   object-fit: contain;
-  mix-blend-mode: multiply;
-}
-
-[class*="color-scheme-3"] .cart-line__img,
-[class*="color-scheme-4"] .cart-line__img {
-  mix-blend-mode: normal;
 }
 
 .cart-line__details {
@@ -245,6 +245,7 @@ cart-items.is-loading .cart-lines {
   text-wrap: pretty;
   text-underline-offset: 0.16em;
   text-decoration-thickness: 1px;
+  transition: opacity var(--dur-press) var(--ease-out);
 }
 
 .cart-line__variant,
@@ -372,6 +373,10 @@ cart-items.is-loading .cart-lines {
 
 .cart-line__remove:active {
   opacity: 0.6;
+}
+
+.cart-line__title:active {
+  opacity: 0.7;
 }
 
 .cart-line__error {
@@ -514,6 +519,12 @@ cart-items.is-loading .cart-lines {
   background: rgba(var(--c-ink), 0.08);
 }
 
+/* Reached: the check line says it; a full olive track would only read as a
+   heavy rule across the sheet. */
+.free-shipping-bar.is-reached .free-shipping-bar__track {
+  display: none;
+}
+
 .free-shipping-bar__fill {
   height: 100%;
   border-radius: inherit;
@@ -556,7 +567,7 @@ cart-items.is-loading .cart-lines {
   align-items: center;
   gap: var(--space-1);
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .cart-totals__value {
@@ -564,6 +575,14 @@ cart-items.is-loading .cart-lines {
   text-align: right;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+}
+
+/* Words ("Calculated at checkout") may wrap; amounts never do */
+.cart-totals__value:not(.money) {
+  flex-shrink: 1;
+  min-width: 0;
+  white-space: normal;
+  text-wrap: balance;
 }
 
 .cart-totals__row--subtotal,
@@ -640,13 +659,8 @@ cart-items.is-loading .cart-lines {
   padding-top: 0;
 }
 
-.cart-items--page .cart-line__title,
-.cart-items--page .cart-line__price {
-  font-size: calc(1.1875rem * var(--heading-scale, 1));
-  line-height: 1.21;
-  letter-spacing: 0.011em;
-}
-
+/* Phones keep the sheet's 17px rows (APPLE-SPEC §5) so a long name wraps to
+   two lines, not three; the page grows to 19px and then 21px with the room. */
 .cart-items--page .cart-line__title {
   -webkit-line-clamp: 3;
 }
@@ -655,17 +669,30 @@ cart-items.is-loading .cart-lines {
   font-weight: var(--font-body-weight-bold);
 }
 
-.cart-items--page .cart-line__variant {
-  font-size: 1.0625rem;
-  line-height: 1.47;
-  letter-spacing: -0.022em;
-}
-
 @media (min-width: 750px) {
   .cart-items--page .cart-line {
     --cart-media: 120px;
     column-gap: var(--space-5);
     padding-block: var(--space-6);
+  }
+
+  .cart-items--page .cart-line__title,
+  .cart-items--page .cart-line__price {
+    font-size: calc(1.1875rem * var(--heading-scale, 1));
+    line-height: 1.21;
+    letter-spacing: 0.011em;
+  }
+
+  .cart-items--page .cart-line__variant {
+    font-size: 1.0625rem;
+    line-height: 1.47;
+    letter-spacing: -0.022em;
+  }
+
+  /* Under a 19-21px price, Remove is a body-size link like Apple's bag */
+  .cart-items--page .cart-line__remove {
+    font-size: 1.0625rem;
+    letter-spacing: -0.022em;
   }
 }
 
@@ -697,10 +724,6 @@ cart-items.is-loading .cart-lines {
   color: rgb(var(--c-ink-2));
 }
 
-.main-cart__shipping.is-reached .free-shipping-bar__text {
-  color: rgb(var(--c-ink));
-}
-
 .cart-totals--summary {
   gap: var(--space-3);
 }
@@ -720,6 +743,12 @@ cart-items.is-loading .cart-lines {
 
 .main-cart__form {
   margin: 0;
+}
+
+/* Helper text under a full-width pill centres on it */
+.main-cart__card .main-cart__login {
+  text-align: center;
+  text-wrap: balance;
 }
 
 .main-cart__dynamic-checkout {
@@ -743,6 +772,15 @@ cart-items.is-loading .cart-lines {
 .main-cart__login a {
   color: rgb(var(--c-accent));
   text-decoration: none;
+}
+
+/* Tablet: one column, but the summary keeps a readable width and sits under
+   the price column, like Apple's right-aligned totals. */
+@media (min-width: 750px) and (max-width: 989px) {
+  .main-cart__summary {
+    justify-self: end;
+    width: min(100%, 440px);
+  }
 }
 
 @media (min-width: 990px) {

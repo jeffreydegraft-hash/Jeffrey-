@@ -12,6 +12,13 @@
    Materials (apple-design §12): text on glass is --c-ink at ≥ .8 opacity.
    Material tokens are re-declared where a colour scheme is applied, so they
    resolve against that scheme's --c-bg instead of :root's.
+   - the resting bar is apple.com's globalnav veil (.8) over a 20px blur;
+   - a flyout or the desktop search panel and the bar above it share one
+     thicker surface (.96): Chromium leaves backdrop content within ~40px of
+     a filter's top edge nearly sharp, so a thinner veil lets the ribbon and
+     hero copy ghost through right under the bar;
+   - the full-screen phone menu and phone search are opaque (as apple.com's
+     are), and the bar turns opaque with them so the two stay one surface.
    ========================================================================== */
 
 /* === section: announcement-bar (Apple ribbon) === */
@@ -119,9 +126,9 @@
 }
 
 sticky-header.header-wrapper {
-  --material-chrome: rgba(var(--c-bg), 0.72);
+  --material-chrome: rgba(var(--c-bg), 0.8);
   /* flyouts span the full width: a big surface reads thicker (apple-design §12) */
-  --material-thick: rgba(var(--c-bg), 0.92);
+  --material-thick: rgba(var(--c-bg), 0.96);
   --nav-material: var(--material-chrome);
   --nav-blur: var(--material-blur);
   position: relative;
@@ -163,10 +170,14 @@ sticky-header.header-wrapper {
 
 /* While a flyout or a panel hangs from the bar, bar and panel are one surface */
 .header-wrapper:has(.header__disclosure > details[open]),
-.section-header:has(> .menu-drawer.is-open) .header-wrapper,
 .section-header:has(> .search-drawer.is-open) .header-wrapper {
   --nav-material: var(--material-thick);
   --nav-blur: var(--material-blur-thick);
+}
+
+.section-header:has(> .menu-drawer.is-open) .header-wrapper {
+  --nav-material: rgb(var(--c-bg));
+  --nav-blur: none;
 }
 
 .header-wrapper:has(.header__disclosure > details[open])::after,
@@ -360,7 +371,9 @@ details[open] > .header__link {
 }
 
 /* Flyout: a full-width translucent panel under the bar (origin: top). The
-   panel fades in; its lists rise 8px and stagger. <details> closes at once. */
+   panel fades in over 300ms; its lists drop 8px and stagger. It fades out in
+   160ms (exits faster than entrances) where ::details-content can keep the
+   closed <details> rendered for that long; elsewhere it closes at once. */
 .header__dropdown {
   position: absolute;
   top: 100%;
@@ -386,6 +399,16 @@ details[open] > .header__link {
   details[open] > .header__dropdown {
     opacity: 0;
   }
+}
+
+.header__disclosure details::details-content {
+  transition: content-visibility var(--dur-fast) allow-discrete;
+}
+
+.header__disclosure details:not([open]) > .header__dropdown {
+  opacity: 0;
+  pointer-events: none;
+  transition-duration: var(--dur-fast);
 }
 
 .header__flyout {
@@ -513,7 +536,7 @@ a.header__flyout-heading:active {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
+  transition: opacity var(--dur-fast) var(--ease-out), visibility 0s linear var(--dur-fast);
 }
 
 .section-header:has(.header__disclosure > details[open]) .header__scrim {
@@ -647,9 +670,6 @@ a.header__flyout-heading:active {
 }
 
 .menu-drawer__panel {
-  /* A full-screen surface reads thicker (apple-design §12): near-solid, so
-     blurred page text never ghosts through at the viewport edges. */
-  --material-thick: rgba(var(--c-bg), 0.97);
   --sheet-closed: translateY(-12px);
   --sheet-axis: y;
   --sheet-dir: -1;
@@ -662,7 +682,11 @@ a.header__flyout-heading:active {
   overflow: hidden; /* clips the submenu while it waits at translateX(100%) */
   border-radius: 0;
   box-shadow: none;
-  background-image: none;
+  /* Opaque, like apple.com's phone menu: a full-screen veil only lets the
+     page ghost through behind 28px type, and costs a full-viewport blur. */
+  background: rgb(var(--c-bg));
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   opacity: 0;
   transition: opacity var(--dur-base) var(--ease-out);
 }
@@ -938,7 +962,7 @@ h2.menu-drawer__submenu-heading {
 }
 
 .search-drawer__panel {
-  --material-thick: rgba(var(--c-bg), 0.92); /* matches the bar while it is open */
+  --material-thick: rgba(var(--c-bg), 0.96); /* matches the bar while it is open */
   max-height: calc(100% - var(--space-6));
   padding-top: 0;
   overflow-y: auto;
@@ -977,6 +1001,7 @@ h2.menu-drawer__submenu-heading {
 }
 
 .search-drawer__field {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-1);
@@ -999,6 +1024,11 @@ h2.menu-drawer__submenu-heading {
   border: 0;
   border-radius: 0;
   box-shadow: none;
+}
+
+/* the clear button floats over the field's end, so it never shortens the placeholder */
+.search-drawer .search-drawer__input:not(:placeholder-shown) {
+  padding-inline-end: 44px;
 }
 
 .search-drawer .search-drawer__input:focus-visible {
@@ -1053,6 +1083,11 @@ h2.menu-drawer__submenu-heading {
 }
 
 .search-drawer__reset {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin-block: auto;
   opacity: 0;
   visibility: hidden;
   transform: scale(0.9);
@@ -1256,8 +1291,10 @@ h3.predictive-search__heading {
   }
 
   .search-drawer__panel {
-    --material-thick: rgba(var(--c-bg), 0.97); /* full screen: near-solid, like the menu */
     --sheet-closed: translateY(-12px);
+    background: rgb(var(--c-bg)); /* full screen: opaque, like the menu */
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     bottom: 0;
     max-height: none;
     padding-top: var(--safe-top);
@@ -1277,13 +1314,40 @@ h3.predictive-search__heading {
     padding-block: var(--space-2) calc(var(--space-8) + var(--safe-bottom));
   }
 
+  /* iOS search bar: a filled, rounded field with the glass inside it and
+     Cancel beside it. 17px text: the iOS size, and ≥ 16px so iOS never zooms. */
+  .search-drawer__field {
+    gap: 0;
+    min-height: 44px;
+    padding-left: 2px;
+    background: rgba(var(--c-ink), 0.06);
+    border-radius: var(--r-input);
+  }
+
+  .search-drawer__submit {
+    width: 36px;
+    margin-left: 0;
+    color: rgba(var(--c-ink), 0.56);
+  }
+
+  .search-drawer__submit .icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
+  }
+
   .search-drawer .search-drawer__input {
-    min-height: 48px;
-    font-size: 1.3125rem;
+    min-height: 44px;
+    padding-block: 0;
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    font-weight: var(--font-body-weight);
+    line-height: 1.24;
+    letter-spacing: -0.022em;
   }
 
   .search-drawer__cancel {
-    margin-top: 2px;
+    margin-top: 0;
   }
 
   /* the panel scrolls; results grow with it */
@@ -1354,21 +1418,19 @@ h3.predictive-search__heading {
   opacity: 0.7;
 }
 
-/* 56px rounded thumbnail; white product shots sit on the tile surface */
+/* 56px rounded thumbnail. The photo is shown untouched (APPLE-SPEC §0.3):
+   contained, never cropped through the label, on the white ground it was
+   shot on; a hairline ring keeps the white tile visible on the light panel. */
 .predictive-search__media {
   --media-radius: var(--r-md);
   width: 56px;
   flex-shrink: 0;
+  background: rgb(var(--c-photo-ground));
+  box-shadow: 0 0 0 1px rgba(var(--c-ink), 0.08);
 }
 
 .predictive-search__media .predictive-search__img {
   object-fit: contain;
-  mix-blend-mode: multiply;
-}
-
-[class*="color-scheme-3"] .predictive-search__media .predictive-search__img,
-[class*="color-scheme-4"] .predictive-search__media .predictive-search__img {
-  mix-blend-mode: normal;
 }
 
 .predictive-search__media .placeholder-svg {

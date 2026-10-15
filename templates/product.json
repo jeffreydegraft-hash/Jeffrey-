@@ -14,6 +14,7 @@
         "price": {
           "type": "price",
           "settings": {
+            "show_sku": false,
             "show_taxes_note": true
           }
         },
@@ -93,9 +94,9 @@
         "quantity",
         "buy_buttons",
         "trust",
+        "description",
         "scripture",
         "botanical",
-        "description",
         "tab_ingredients",
         "tab_how_to_use",
         "tab_shipping",

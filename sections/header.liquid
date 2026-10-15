@@ -25,14 +25,9 @@
   assign menu = section.settings.menu
   assign show_search = section.settings.show_search
   assign logo_width = settings.logo_width | default: 140
-
-  if settings.logo != blank
-    assign logo_height = logo_width | divided_by: settings.logo.aspect_ratio | round
-    assign logo_width_2x = logo_width | times: 2
-    assign logo_widths = logo_width | append: ', ' | append: logo_width_2x
-    assign logo_sizes = logo_width | append: 'px'
-    assign logo_alt = settings.logo.alt | default: shop.name | escape
-  endif
+  # The merchant's own logo, used intact (APPLE-SPEC §0.1): brand-logo falls
+  # back settings.logo → shop.brand.logo → the store name as a wordmark.
+  assign brand_logo = settings.logo | default: shop.brand.logo
 
   assign account_url = routes.account_login_url
   if customer
@@ -67,24 +62,12 @@
 
     <div class="header__logo">
       <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">
-        {%- if settings.logo != blank -%}
+        {%- if brand_logo != blank -%}
           <span class="header__logo-media" style="--logo-width: {{ logo_width }}px;">
-            {{-
-              settings.logo
-              | image_url: width: logo_width_2x
-              | image_tag:
-                class: 'header__logo-img',
-                widths: logo_widths,
-                sizes: logo_sizes,
-                width: logo_width,
-                height: logo_height,
-                alt: logo_alt,
-                loading: 'eager',
-                fetchpriority: 'high'
-            -}}
+            {%- render 'brand-logo', width: logo_width, class: 'header__logo-img', priority: true, alt_empty: true -%}
           </span>
         {%- else -%}
-          <span class="header__wordmark">{{ shop.name }}</span>
+          {%- render 'brand-logo', wordmark_class: 'header__wordmark' -%}
         {%- endif -%}
       </a>
     </div>

@@ -81,7 +81,8 @@
             <div class="tile main-cart__card">
               <h2 class="main-cart__summary-title" id="MainCart-SummaryTitle">{{ 'cart.general.summary' | t }}</h2>
 
-              {%- if show_shipping_bar -%}
+              {%- comment -%} Once reached, the Shipping row says "Free (US)"; the line would repeat it. {%- endcomment -%}
+              {%- if show_shipping_bar and shipping_reached == false -%}
                 <free-shipping-bar
                   class="free-shipping-bar main-cart__shipping{% if shipping_reached %} is-reached{% endif %}"
                   data-total="{{ cart.total_price }}"

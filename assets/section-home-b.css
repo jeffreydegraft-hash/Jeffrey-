@@ -260,36 +260,34 @@
   object-fit: contain;
 }
 
-/* split: left-aligned content beside the image */
-.featured-product--split .featured-product__grid {
-  justify-items: stretch;
-}
-
-.featured-product--split .featured-product__content {
-  align-items: flex-start;
-  text-align: left;
-  max-width: 34rem;
-}
-
-.featured-product--split .featured-product__price .price,
-.featured-product--split .featured-product__price .price__container,
-.featured-product--split .featured-product__actions {
-  justify-content: flex-start;
-}
-
-.featured-product--split .featured-product__form {
-  align-items: flex-start;
-}
-
-.featured-product--split .featured-product__form-wrap .product-form__error {
-  margin-inline: 0;
-}
-
+/* split: from 990px the content sits left-aligned beside the image; below
+   that it stacks centred exactly like the default layout */
 @media (min-width: 990px) {
   .featured-product--split .featured-product__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: center;
+    justify-items: stretch;
     gap: clamp(40px, 6vw, 96px);
+  }
+
+  .featured-product--split .featured-product__content {
+    align-items: flex-start;
+    text-align: left;
+    max-width: 34rem;
+  }
+
+  .featured-product--split .featured-product__price .price,
+  .featured-product--split .featured-product__price .price__container,
+  .featured-product--split .featured-product__actions {
+    justify-content: flex-start;
+  }
+
+  .featured-product--split .featured-product__form {
+    align-items: flex-start;
+  }
+
+  .featured-product--split .featured-product__form-wrap .product-form__error {
+    margin-inline: 0;
   }
 
   .featured-product--split.featured-product--image-left .featured-product__media {
@@ -526,6 +524,22 @@
   margin-top: var(--space-3);
 }
 
+/* "Remove bottom spacing" exists to leave one gap, not two, before a section
+   of the same scheme. The home-a sections already drop their own top padding
+   after a same-scheme section (section-home-a.css), so in that pairing the
+   rich text keeps its bottom padding; otherwise the two would touch. */
+.shopify-section:has(> .rich-text.color-scheme-1.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-1) > .rich-text,
+.shopify-section:has(> .rich-text.color-scheme-2.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-2) > .rich-text,
+.shopify-section:has(> .rich-text.color-scheme-3.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-3) > .rich-text,
+.shopify-section:has(> .rich-text.color-scheme-4.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-4) > .rich-text,
+.shopify-section:has(> .rich-text.color-scheme-5.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-5) > .rich-text {
+  padding-bottom: calc(var(--section-y) * var(--rich-text-pad-scale, 1));
+}
+
+.rich-text.section--tight {
+  --rich-text-pad-scale: 0.6;
+}
+
 .rich-text__button[aria-disabled="true"],
 .rich-text__link[aria-disabled="true"] {
   cursor: default;
@@ -590,13 +604,31 @@
   margin-bottom: var(--space-2);
 }
 
-/* the image bleeds to the tile's edges; the tile's radius clips its corners */
-.multicolumn--cards:not(.multicolumn--ratio-circle) .multicolumn__media {
+/* Fill: the image bleeds to the tile's edges; the tile's radius clips its corners */
+.multicolumn--cards.multicolumn--fit-cover:not(.multicolumn--ratio-circle) .multicolumn__media {
   margin: calc(var(--tile-pad) * -1) calc(var(--tile-pad) * -1) var(--space-3);
 }
 
-.multicolumn--cards:not(.multicolumn--ratio-circle) .multicolumn__figure {
+.multicolumn--cards.multicolumn--fit-cover:not(.multicolumn--ratio-circle) .multicolumn__figure {
   --media-radius: 0;
+}
+
+/* Fit: the whole photo on its own white ground, so an image tile is the
+   photo's white ground (a faint ring keeps its edge on a white band), the
+   same as the product tiles; dark bands keep the dark surface */
+.multicolumn--cards.multicolumn--fit-contain .multicolumn__item--image {
+  background: rgb(var(--c-photo-ground));
+  box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.06);
+}
+
+[class*="color-scheme-3"].multicolumn--fit-contain .multicolumn__item--image,
+[class*="color-scheme-4"].multicolumn--fit-contain .multicolumn__item--image {
+  background: rgb(var(--c-surface));
+  box-shadow: none;
+}
+
+.multicolumn--cards.multicolumn--fit-contain .multicolumn__figure {
+  --media-radius: var(--r-media);
 }
 
 .multicolumn--flat .multicolumn__figure {

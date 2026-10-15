@@ -112,10 +112,12 @@
                   <div class="product__price" id="price-{{ section.id }}" role="status">
                     {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: 'price--large' -%}
                   </div>
-                  <p class="product__sku caption" id="Sku-{{ section.id }}" {% if variant.sku == blank %}hidden{% endif %}>
-                    <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
-                    <span class="product__sku-value">{{ variant.sku }}</span>
-                  </p>
+                  {%- if block.settings.show_sku -%}
+                    <p class="product__sku caption" id="Sku-{{ section.id }}" {% if variant.sku == blank %}hidden{% endif %}>
+                      <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
+                      <span class="product__sku-value">{{ variant.sku }}</span>
+                    </p>
+                  {%- endif -%}
                   <p class="product__inventory small" id="Inventory-{{ section.id }}" role="status" {% unless show_low_stock %}hidden{% endunless %}>
                     {%- if show_low_stock -%}
                       {{ 'products.product.inventory_low_stock_show_count' | t: quantity: variant.inventory_quantity }}
@@ -494,6 +496,13 @@
       "name": "Price",
       "limit": 1,
       "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_sku",
+          "label": "Show SKU",
+          "info": "Off by default: the buy column stays to name, price and options.",
+          "default": false
+        },
         {
           "type": "checkbox",
           "id": "show_taxes_note",

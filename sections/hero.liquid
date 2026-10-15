@@ -134,7 +134,18 @@
     <h1 class="h0 hero__heading enter" style="--i: 1;">{{ section.settings.heading }}</h1>
   {%- endif -%}
   {%- if section.settings.subheading != blank -%}
-    <p class="lead hero__subheading enter" style="--i: 2;">{{ section.settings.subheading | escape }}</p>
+    {%- liquid
+      comment
+        Apple keeps hero leads to a line or two. A longer one steps down to the
+        21px intro size so it still sets in three lines or fewer. A word
+        joiner after each hyphen keeps words like "olive-derived" whole.
+      endcomment
+      assign sub_class = 'lead hero__subheading enter'
+      if section.settings.subheading.size > 100
+        assign sub_class = sub_class | append: ' hero__subheading--long'
+      endif
+    -%}
+    <p class="{{ sub_class }}" style="--i: 2;">{{ section.settings.subheading | escape | replace: '-', '-&#8288;' }}</p>
   {%- endif -%}
   {%- if show_button_1 or show_button_2 -%}
     <div class="{{ cta_class }} hero__actions enter" style="--i: 3;">
