@@ -30,7 +30,30 @@
   assign logo_width = settings.logo_width | default: 140
   # The merchant's own logo, used intact (APPLE-SPEC §0.1): brand-logo falls
   # back settings.logo → shop.brand.logo → the store name as a wordmark.
-  assign brand_logo = settings.logo | default: shop.brand.logo
+  # A dark scheme (background brightness < 128, or scheme-3/4 when the
+  # background is unknown) asks for the merchant's light version instead;
+  # brand_logo mirrors that chain only to pick the image or wordmark markup.
+  assign logo_tone = 'light'
+  assign scheme_bg = section.settings.color_scheme.settings.background
+  if scheme_bg != blank
+    assign scheme_brightness = scheme_bg | color_brightness
+    if scheme_brightness < 128
+      assign logo_tone = 'dark'
+    endif
+  else
+    assign scheme_id = section.settings.color_scheme.id | default: section.settings.color_scheme
+    if scheme_id == 'scheme-3' or scheme_id == 'scheme-4'
+      assign logo_tone = 'dark'
+    endif
+  endif
+  if logo_tone == 'dark'
+    assign brand_logo = settings.logo_inverse
+    if brand_logo == blank and settings.logo_dark_safe
+      assign brand_logo = settings.logo | default: shop.brand.logo
+    endif
+  else
+    assign brand_logo = settings.logo | default: shop.brand.logo
+  endif
 
   assign account_url = routes.account_login_url
   if customer
@@ -67,10 +90,10 @@
       <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">
         {%- if brand_logo != blank -%}
           <span class="header__logo-media" style="--logo-width: {{ logo_width }}px;">
-            {%- render 'brand-logo', width: logo_width, class: 'header__logo-img', priority: true, alt_empty: true -%}
+            {%- render 'brand-logo', tone: logo_tone, width: logo_width, class: 'header__logo-img', priority: true, alt_empty: true -%}
           </span>
         {%- else -%}
-          {%- render 'brand-logo', wordmark_class: 'header__wordmark' -%}
+          {%- render 'brand-logo', tone: logo_tone, wordmark_class: 'header__wordmark' -%}
         {%- endif -%}
       </a>
     </div>

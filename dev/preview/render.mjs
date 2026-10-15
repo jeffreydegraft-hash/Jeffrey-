@@ -195,11 +195,19 @@ engine.registerFilter('img_url', (img) => (img && img.src) || '');
 engine.registerFilter('image_tag', function (src, ...rest) {
   const o = {};
   for (const r of rest) if (Array.isArray(r)) o[r[0]] = r[1];
-  const widths = o.widths ? String(o.widths).split(',').map((w) => w.trim()) : [];
-  const srcset = widths.length ? widths.map((w) => `${src} ${w}w`).join(', ') : undefined;
+  // No srcset: every mock width is the same SVG, and a `w` descriptor would make the
+  // browser divide the SVG's own size by (w / sizes), so width:auto images (hero product
+  // shot, logos) came out a fraction of the size Shopify's real raster widths give.
   const key = path.basename(String(src), '.svg');
   const img = M.images[key];
-  return `<img ${attrs({ src, srcset, sizes: o.sizes, class: o.class, loading: o.loading, alt: o.alt !== undefined ? o.alt : img ? img.alt : '', width: img ? img.width : undefined, height: img ? img.height : undefined, fetchpriority: o.fetchpriority, decoding: 'async' })}>`;
+  // width/height arguments win, as in Shopify; a lone one takes the other from the aspect ratio
+  let width = o.width !== undefined && o.width !== null && o.width !== '' ? Number(o.width) : img ? img.width : undefined;
+  let height = o.height !== undefined && o.height !== null && o.height !== '' ? Number(o.height) : undefined;
+  if (height === undefined && width !== undefined && img) height = Math.round(width / img.aspect_ratio);
+  if (o.width === undefined && o.height !== undefined && img) width = Math.round(height * img.aspect_ratio);
+  // alt is always printed, empty included (alt="" marks a logo inside a labelled link as decorative)
+  const alt = String(o.alt !== undefined && o.alt !== null ? o.alt : img ? img.alt : '').replace(/"/g, '&quot;');
+  return `<img ${attrs({ src, sizes: o.sizes, class: o.class, loading: o.loading })} alt="${alt}" ${attrs({ width, height, fetchpriority: o.fetchpriority, decoding: 'async' })}>`;
 });
 engine.registerFilter('placeholder_svg_tag', (name, cls) => `<svg class="${cls || 'placeholder-svg'}" viewBox="0 0 525 525" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="525" height="525" fill="currentColor" opacity=".08"/><path d="M262 90c-60 0-110 70-110 150 0 95 50 185 110 185s110-90 110-185c0-80-50-150-110-150zm0 40c38 0 70 55 70 110 0 75-32 145-70 145s-70-70-70-145c0-55 32-110 70-110z" fill="currentColor" opacity=".35"/><text x="262" y="470" text-anchor="middle" font-family="sans-serif" font-size="22" fill="currentColor" opacity=".5">${name}</text></svg>`);
 engine.registerFilter('payment_type_svg_tag', (type, ...rest) => {

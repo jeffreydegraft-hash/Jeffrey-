@@ -30,16 +30,17 @@ const PALETTE = {
   '100-squalane': ['#2F3F2A', '#F3EFE6'],
 };
 
-export function bottleSvg(title, [ink, bg], variant = 0) {
+/* Preview stand-ins only (never shipped): the merchant's product photos are shot on
+   white (APPLE-SPEC §0.3), so the mock shots are too; scenes carry no drawn emblems. */
+export function bottleSvg(title, [ink], variant = 0) {
   const label = esc(title.replace(' Anointing Oil', '').replace(' (Unscented)', ''));
   const shift = variant * 18;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${bg}"/><stop offset="1" stop-color="${bg}" stop-opacity=".6"/></linearGradient>
     <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${ink}" stop-opacity=".92"/><stop offset=".5" stop-color="${ink}" stop-opacity=".7"/><stop offset="1" stop-color="${ink}" stop-opacity=".95"/></linearGradient>
   </defs>
-  <rect width="800" height="1000" fill="url(#g)"/>
-  <ellipse cx="400" cy="860" rx="190" ry="26" fill="${ink}" opacity=".15"/>
+  <rect width="800" height="1000" fill="#FFFFFF"/>
+  <ellipse cx="400" cy="860" rx="190" ry="26" fill="${ink}" opacity=".12"/>
   <g transform="translate(${shift} 0)">
     <rect x="330" y="150" width="140" height="70" rx="10" fill="#1F2A1C"/>
     <rect x="345" y="120" width="110" height="40" rx="8" fill="#B08D57"/>
@@ -58,15 +59,6 @@ export function sceneSvg(name, [ink, bg], w = 1600, h = 1200) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
   <defs><radialGradient id="r" cx=".3" cy=".3" r=".9"><stop offset="0" stop-color="${bg}"/><stop offset="1" stop-color="${ink}" stop-opacity=".55"/></radialGradient></defs>
   <rect width="${w}" height="${h}" fill="url(#r)"/>
-  <g fill="none" stroke="#B08D57" stroke-width="3" opacity=".7" transform="translate(${w * 0.55} ${h * 0.25})">
-    <path d="M0 0 C 60 120, 120 220, 90 420"/>
-    <path d="M30 80 c -70 -10 -120 20 -140 70 c 60 10 110 -10 140 -70z"/>
-    <path d="M60 170 c 70 -10 120 20 140 70 c -60 10 -110 -10 -140 -70z"/>
-    <path d="M70 250 c -70 -10 -120 20 -140 70 c 60 10 110 -10 140 -70z"/>
-    <path d="M85 330 c 70 -10 120 20 140 70 c -60 10 -110 -10 -140 -70z"/>
-    <ellipse cx="-20" cy="130" rx="16" ry="24" fill="#2F3F2A"/>
-    <ellipse cx="120" cy="300" rx="16" ry="24" fill="#2F3F2A"/>
-  </g>
   <text x="60" y="${h - 60}" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#F7F3EC" opacity=".8">${esc(name)}</text>
 </svg>`;
 }

@@ -131,11 +131,13 @@ async function capturePieces(page, file, vp) {
 }
 
 /* Desktop (no touch emulation to lose): one fullPage capture, or clipped
-   fullPage pieces when the page passes Chromium's capture height. */
+   fullPage pieces when the page passes the capture height. With SwiftShader the
+   largest texture is 8192 device px: past it a single capture repeats the top of
+   the page, so pieces stay under 8000. */
 async function captureFullPage(page, file, vp) {
   const dpr = vp.deviceScaleFactor || 1;
   const total = await page.evaluate(() => document.documentElement.scrollHeight);
-  const max = Math.floor(15000 / dpr);
+  const max = Math.floor(8000 / dpr);
   if (total <= max) {
     await page.screenshot({ path: file, fullPage: true });
     return { total, pieces: 1 };

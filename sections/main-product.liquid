@@ -178,7 +178,7 @@
                           assign text_key = 'text_' | append: i
                           assign icon_key = 'icon_' | append: i
                           assign trust_text = block.settings[text_key]
-                          assign trust_icon = block.settings[icon_key] | default: 'leaf'
+                          assign trust_icon = block.settings[icon_key] | default: 'shield'
                         -%}
                         {%- if trust_text != blank -%}
                           <li class="product__trust-item">
@@ -482,7 +482,7 @@
       "settings": [
         {
           "type": "paragraph",
-          "content": "Shows the product metafield custom.theme_word (for example “Reverence”), falling back to the built-in copy for the launch products, then the product type."
+          "content": "Shows the product metafield custom.theme_word (for example “Restore”), falling back to the built-in copy for the launch products, then the product type."
         }
       ]
     },
@@ -546,7 +546,6 @@
           "label": "Icon 1",
           "options": [
             { "value": "truck", "label": "Truck" },
-            { "value": "leaf", "label": "Leaf" },
             { "value": "map-pin", "label": "Map pin" },
             { "value": "shield", "label": "Shield" },
             { "value": "drop", "label": "Drop" },
@@ -566,13 +565,12 @@
           "label": "Icon 2",
           "options": [
             { "value": "truck", "label": "Truck" },
-            { "value": "leaf", "label": "Leaf" },
             { "value": "map-pin", "label": "Map pin" },
             { "value": "shield", "label": "Shield" },
             { "value": "drop", "label": "Drop" },
             { "value": "sparkle", "label": "Sparkle" }
           ],
-          "default": "leaf"
+          "default": "shield"
         },
         {
           "type": "text",
@@ -586,7 +584,6 @@
           "label": "Icon 3",
           "options": [
             { "value": "truck", "label": "Truck" },
-            { "value": "leaf", "label": "Leaf" },
             { "value": "map-pin", "label": "Map pin" },
             { "value": "shield", "label": "Shield" },
             { "value": "drop", "label": "Drop" },
