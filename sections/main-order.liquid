@@ -122,7 +122,7 @@
                         {%- endif -%}
                       {%- endfor -%}
                       {%- if line_item.line_level_discount_allocations != blank -%}
-                        <ul class="order-line__discounts" role="list" aria-label="{{ 'customer.order.discount' | t | escape }}">
+                        <ul class="order-line__discounts" role="list" aria-label="{{ 'customer.order.discount' | t }}">
                           {%- for discount_allocation in line_item.line_level_discount_allocations -%}
                             <li class="order-line__discount">{{ discount_allocation.discount_application.title | escape }} (-{{ discount_allocation.amount | money }})</li>
                           {%- endfor -%}
@@ -149,8 +149,8 @@
                     </div>
                   </div>
                 </th>
-                <td role="cell" class="order-table__sku" data-label="{{ 'customer.order.sku' | t | escape }}">{{ line_item.sku | escape }}</td>
-                <td role="cell" class="order-table__price tnum" data-label="{{ 'customer.order.price' | t | escape }}">
+                <td role="cell" class="order-table__sku" data-label="{{ 'customer.order.sku' | t }}">{{ line_item.sku | escape }}</td>
+                <td role="cell" class="order-table__price tnum" data-label="{{ 'customer.order.price' | t }}">
                   {%- if line_item.original_price != line_item.final_price -%}
                     <s class="order-table__compare"><span class="visually-hidden">{{ 'products.product.price.regular_price' | t }} </span>{{ line_item.original_price | money }}</s>
                     <span><span class="visually-hidden">{{ 'products.product.price.sale_price' | t }} </span>{{ line_item.final_price | money }}</span>
@@ -166,8 +166,8 @@
                     </span>
                   {%- endif -%}
                 </td>
-                <td role="cell" class="order-table__quantity tnum" data-label="{{ 'customer.order.quantity' | t | escape }}">{{ line_item.quantity }}</td>
-                <td role="cell" class="order-table__total tnum" data-label="{{ 'customer.order.total' | t | escape }}">
+                <td role="cell" class="order-table__quantity tnum" data-label="{{ 'customer.order.quantity' | t }}">{{ line_item.quantity }}</td>
+                <td role="cell" class="order-table__total tnum" data-label="{{ 'customer.order.total' | t }}">
                   {%- if line_item.original_line_price != line_item.final_line_price -%}
                     <s class="order-table__compare"><span class="visually-hidden">{{ 'products.product.price.regular_price' | t }} </span>{{ line_item.original_line_price | money }}</s>
                     <span><span class="visually-hidden">{{ 'products.product.price.sale_price' | t }} </span>{{ line_item.final_line_price | money }}</span>

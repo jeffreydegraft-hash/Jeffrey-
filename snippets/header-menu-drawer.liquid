@@ -22,7 +22,7 @@
     aria-label="{{ 'header.menu' | t }}"
   >
     <div class="drawer__header">
-      <a href="{{ routes.root_url }}" class="menu-drawer__brand serif" aria-label="{{ 'accessibility.logo' | t: shop: shop.name | escape }}">{{ shop.name }}</a>
+      <a href="{{ routes.root_url }}" class="menu-drawer__brand serif" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">{{ shop.name }}</a>
       <button type="button" class="drawer__close" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
         {%- render 'icon', name: 'close', size: 22 -%}
       </button>

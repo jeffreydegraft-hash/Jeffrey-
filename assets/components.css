@@ -27,7 +27,7 @@
   inset: 0;
   background: rgba(31, 42, 28, 0.45);
   opacity: 0;
-  transition: opacity var(--dur-drawer-exit) ease;
+  transition: opacity var(--dur-drawer-exit) var(--ease-drawer);
 }
 
 [data-drawer].is-open .drawer__backdrop {
@@ -132,7 +132,7 @@
 }
 
 .drawer__close:active {
-  transform: scale(0.92);
+  transform: scale(0.95);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -193,7 +193,6 @@
   flex-direction: column;
   gap: 6px;
   min-width: 0;
-  padding-inline: 2px;
 }
 
 .card__eyebrow {
@@ -237,6 +236,11 @@
   .card:hover .card__img--secondary {
     opacity: 1;
     transform: scale(1.03);
+  }
+
+  /* 0,4,0 beats both 1.03 hover rules, so a mouse press still answers. */
+  .card:hover:active .card__img {
+    transform: scale(1.01);
   }
 
   .card:hover .card__img--secondary + .card__img--primary,
@@ -361,6 +365,8 @@
 
 .pagination__list {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: var(--space-1);
 }
@@ -410,7 +416,7 @@ a.pagination__item:active {
 }
 
 .quantity--sm {
-  height: 38px;
+  height: 44px;
 }
 
 .quantity__button {
@@ -424,11 +430,11 @@ a.pagination__item:active {
 }
 
 .quantity--sm .quantity__button {
-  width: 36px;
+  width: 44px;
 }
 
 .quantity__button:active {
-  transform: scale(0.9);
+  transform: scale(0.97);
 }
 
 .quantity__button[disabled] {
@@ -482,6 +488,7 @@ a.pagination__item:active {
 /* ---------- accordion ----------
    grid-template-rows 0fr → 1fr: the one tolerated layout animation. */
 .accordion {
+  display: block;
   border-top: 1px solid rgb(var(--c-line));
 }
 
@@ -499,7 +506,11 @@ a.pagination__item:active {
   font-weight: var(--font-body-weight-bold);
   color: rgb(var(--c-ink));
   cursor: pointer;
-  transition: color var(--dur-fast) ease;
+  transition: color var(--dur-fast) ease, opacity var(--dur-press) var(--ease-out);
+}
+
+.accordion__summary:active {
+  opacity: 0.7;
 }
 
 .accordion__summary .icon {
@@ -550,6 +561,17 @@ a.pagination__item:active {
 @media (prefers-reduced-motion: reduce) {
   .accordion__content {
     transition: none;
+  }
+
+  .accordion__summary .icon {
+    transition: none;
+  }
+
+  .card:hover .card__img--primary,
+  .card:hover .card__img--secondary,
+  .card:active .card__img,
+  .card:hover:active .card__img {
+    transform: none;
   }
 }
 
@@ -623,7 +645,7 @@ a.pagination__item:active {
 }
 
 .social__link:active {
-  transform: scale(0.92);
+  transform: scale(0.95);
 }
 
 @media (hover: hover) and (pointer: fine) {

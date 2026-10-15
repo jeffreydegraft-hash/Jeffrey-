@@ -19,7 +19,7 @@
   assign step = step | default: 1
 -%}
 <quantity-input class="quantity{% if size == 'sm' %} quantity--sm{% endif %}">
-  <button class="quantity__button" name="minus" type="button" aria-label="{{ 'products.product.quantity.decrease' | t: product: label | escape }}">
+  <button class="quantity__button" name="minus" type="button" aria-label="{{ 'products.product.quantity.decrease' | t: product: label }}">
     {%- render 'icon', name: 'minus', size: 16 -%}
   </button>
   <input
@@ -34,10 +34,10 @@
     {% if max %}max="{{ max }}"{% endif %}
     step="{{ step }}"
     {% if form %}form="{{ form }}"{% endif %}
-    aria-label="{{ 'products.product.quantity.input_label' | t: product: label | escape }}"
+    aria-label="{{ 'products.product.quantity.input_label' | t: product: label }}"
     {{ data_attrs }}
   >
-  <button class="quantity__button" name="plus" type="button" aria-label="{{ 'products.product.quantity.increase' | t: product: label | escape }}">
+  <button class="quantity__button" name="plus" type="button" aria-label="{{ 'products.product.quantity.increase' | t: product: label }}">
     {%- render 'icon', name: 'plus', size: 16 -%}
   </button>
 </quantity-input>

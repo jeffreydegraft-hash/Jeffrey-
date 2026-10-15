@@ -423,10 +423,12 @@
           if (this.details.open) this.details.classList.add('is-open');
           this.summary.addEventListener('click', (e) => {
             e.preventDefault();
-            this.details.open ? this.close() : this.open();
+            this.details.classList.contains('is-open') ? this.close() : this.open();
           });
         }
         open() {
+          // A click mid-close retargets the transition back to 1fr instead of being swallowed
+          this._cancelClose();
           this.details.open = true;
           this.summary.setAttribute('aria-expanded', 'true');
           // next frame so the 0fr → 1fr transition runs
@@ -435,21 +437,26 @@
         close() {
           this.details.classList.remove('is-open');
           this.summary.setAttribute('aria-expanded', 'false');
+          this._cancelClose();
           if (Olivet.prefersReducedMotion()) {
             this.details.open = false;
             return;
           }
-          const onEnd = (event) => {
+          this._onEnd = (event) => {
             if (event.target !== this.content) return;
-            this.content.removeEventListener('transitionend', onEnd);
-            clearTimeout(t);
-            this.details.open = false;
+            this._finishClose();
           };
-          this.content.addEventListener('transitionend', onEnd);
-          const t = setTimeout(() => {
-            this.content.removeEventListener('transitionend', onEnd);
-            this.details.open = false;
-          }, 320);
+          this.content.addEventListener('transitionend', this._onEnd);
+          this._closeTimer = setTimeout(() => this._finishClose(), 320);
+        }
+        _cancelClose() {
+          clearTimeout(this._closeTimer);
+          if (this._onEnd) this.content.removeEventListener('transitionend', this._onEnd);
+          this._onEnd = null;
+        }
+        _finishClose() {
+          this._cancelClose();
+          this.details.open = false;
         }
       }
     );
@@ -552,12 +559,12 @@
         connectedCallback() {
           this.button = this.querySelector('button');
           this.url = this.dataset.url || window.location.href;
-          this.title = this.dataset.title || document.title;
+          this.shareTitle = this.dataset.title || document.title;
           if (!this.button) return;
           this.button.addEventListener('click', async () => {
             try {
               if (navigator.share) {
-                await navigator.share({ title: this.title, url: this.url });
+                await navigator.share({ title: this.shareTitle, url: this.url });
               } else if (navigator.clipboard) {
                 await navigator.clipboard.writeText(this.url);
                 this.flash(this.dataset.copied || 'Link copied');

@@ -47,7 +47,7 @@
     </button>
 
     <div class="header__logo">
-      <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ 'accessibility.logo' | t: shop: shop.name | escape }}">
+      <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">
         {%- if settings.logo != blank -%}
           <span class="header__logo-media" style="--logo-width: {{ logo_width }}px;">
             {{-

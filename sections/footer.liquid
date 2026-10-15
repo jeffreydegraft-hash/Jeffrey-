@@ -57,11 +57,11 @@
       {%- comment -%} Brand column {%- endcomment -%}
       <div class="footer__brand">
         {%- if footer_logo != blank -%}
-          <a href="{{ routes.root_url }}" class="footer__logo" style="--footer-logo-width: {{ logo_width }}px;" aria-label="{{ 'accessibility.logo' | t: shop: shop.name | escape }}">
+          <a href="{{ routes.root_url }}" class="footer__logo" style="--footer-logo-width: {{ logo_width }}px;" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">
             {{ footer_logo | image_url: width: logo_width_2x | image_tag: class: 'footer__logo-img', width: logo_width, alt: shop.name, loading: 'lazy' }}
           </a>
         {%- else -%}
-          <a href="{{ routes.root_url }}" class="footer__wordmark" aria-label="{{ 'accessibility.logo' | t: shop: shop.name | escape }}">{{ shop.name | escape }}</a>
+          <a href="{{ routes.root_url }}" class="footer__wordmark" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">{{ shop.name | escape }}</a>
         {%- endif -%}
 
         {%- if settings.brand_tagline != blank -%}

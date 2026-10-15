@@ -23,7 +23,7 @@
 
     <title>
       {{ page_title -}}
-      {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif -%}
+      {%- if current_tags %}{% assign tag_list = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: tag_list }}{% endif -%}
       {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
       {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
     </title>
@@ -72,6 +72,7 @@
           --c-accent: {{ scheme.settings.accent.red }}, {{ scheme.settings.accent.green }}, {{ scheme.settings.accent.blue }};
           --c-accent-ink: {{ scheme.settings.accent_text.red }}, {{ scheme.settings.accent_text.green }}, {{ scheme.settings.accent_text.blue }};
           --c-gold: {{ scheme.settings.gold.red }}, {{ scheme.settings.gold.green }}, {{ scheme.settings.gold.blue }};
+          --c-gold-ink: color-mix(in oklab, rgb(var(--c-gold)) 60%, rgb(var(--c-ink)));
         }
       {%- endfor %}
 

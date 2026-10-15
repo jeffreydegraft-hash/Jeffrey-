@@ -113,7 +113,7 @@
           <div class="cart-line__controls">
             {%- render 'quantity-input', id: quantity_id, value: item.quantity, min: 1, size: 'sm', label: item.product.title, data_attrs: quantity_attrs -%}
             <cart-remove-button data-index="{{ forloop.index }}">
-              <button type="button" class="cart-line__remove" aria-label="{{ 'cart.general.remove_title' | t: title: item.title | escape }}">
+              <button type="button" class="cart-line__remove" aria-label="{{ 'cart.general.remove_title' | t: title: item.title }}">
                 {%- render 'icon', name: 'close', size: 16 -%}
                 <span class="cart-line__remove-text{% if context == 'drawer' %} visually-hidden{% endif %}">{{ 'cart.general.remove' | t }}</span>
               </button>

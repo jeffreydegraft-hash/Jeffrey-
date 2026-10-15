@@ -2,7 +2,7 @@
   Product card.
   Accepts:
   - product: {Object} product (optional; renders a placeholder card when blank)
-  - index: {Number} position in the grid, used for the reveal stagger (optional)
+  - index: {Number} position in the grid (optional, unused: theme.js sets the reveal stagger --i per batch)
   - sizes: {String} sizes attribute for the image (optional)
   - show_secondary_image: {Boolean} default from settings
   - show_vendor: {Boolean} default from settings
@@ -11,7 +11,6 @@
   Usage: {% render 'card-product', product: product, index: forloop.index0, sizes: '(min-width: 990px) 25vw, 50vw' %}
 {%- endcomment -%}
 {%- liquid
-  assign stagger = index | default: 0 | modulo: 8
   if show_secondary_image == nil
     assign show_secondary_image = settings.card_show_secondary_image
   endif
@@ -39,7 +38,7 @@
 {%- endif -%}
 
 {%- if product != blank -%}
-  <article class="card card--product" {% if reveal != false %}data-reveal style="--i: {{ stagger }}"{% endif %}>
+  <article class="card card--product" {% if reveal != false %}data-reveal{% endif %}>
     <a href="{{ product.url }}" class="card__media-link" aria-label="{{ product.title | escape }}" tabindex="-1">
       <div class="card__media media" style="--ratio: {{ settings.card_image_ratio }};">
         {%- if product.featured_media -%}
@@ -71,7 +70,7 @@
     </div>
   </article>
 {%- else -%}
-  <article class="card card--product card--placeholder" {% if reveal != false %}data-reveal style="--i: {{ stagger }}"{% endif %}>
+  <article class="card card--product card--placeholder" {% if reveal != false %}data-reveal{% endif %}>
     <div class="card__media media" style="--ratio: {{ settings.card_image_ratio }};">
       {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
     </div>

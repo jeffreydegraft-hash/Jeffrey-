@@ -90,7 +90,8 @@
         {%- if show_placeholders -%}
           {%- for i in (1..cols) -%}
             <li class="featured-collection__item">
-              {%- render 'card-product', index: forloop.index0, sizes: card_sizes -%}
+              {%- comment -%} product: nil, or the template's global product leaks into the snippet {%- endcomment -%}
+              {%- render 'card-product', product: nil, index: forloop.index0, sizes: card_sizes -%}
             </li>
           {%- endfor -%}
         {%- else -%}

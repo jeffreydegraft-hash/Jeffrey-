@@ -16,7 +16,7 @@
   endfor
 -%}
 {%- if has_social -%}
-  <ul class="social{% if class != blank %} {{ class }}{% endif %}" role="list" aria-label="{{ 'general.social.label' | t: shop: shop.name | escape }}">
+  <ul class="social{% if class != blank %} {{ class }}{% endif %}" role="list" aria-label="{{ 'general.social.label' | t: shop: shop.name }}">
     {%- for network in networks -%}
       {%- liquid
         assign setting_key = 'social_' | append: network | append: '_link'

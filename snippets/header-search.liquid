@@ -29,7 +29,7 @@
     <div class="search-drawer__inner page-width">
       <div class="search-drawer__top">
         {%- if predictive -%}
-          <predictive-search class="search-drawer__predictive" data-loading-text="{{ 'search.loading' | t | escape }}" data-error-text="{{ 'search.error' | t | escape }}">
+          <predictive-search class="search-drawer__predictive" data-loading-text="{{ 'search.loading' | t }}" data-error-text="{{ 'search.error' | t }}">
         {%- endif -%}
         <form action="{{ routes.search_url }}" method="get" role="search" class="search-drawer__form">
           <label for="SearchDrawer-Input" class="visually-hidden">{{ 'search.search' | t }}</label>

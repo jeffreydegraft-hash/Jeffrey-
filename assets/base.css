@@ -118,8 +118,9 @@ h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol {
   margin: 0;
 }
 
-ul[role="list"],
-ol[role="list"],
+/* :where() keeps the reset at 0,0,0 so component list rules (.footer__links,
+   .product__trust, .facets__list …) set their own margin/padding. */
+:where(ul[role="list"], ol[role="list"]),
 .list-unstyled {
   list-style: none;
   padding: 0;
@@ -166,7 +167,8 @@ summary,
 [role="button"],
 .btn,
 .chip,
-.pill {
+.pill,
+.checkbox {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
@@ -239,7 +241,7 @@ h1, h2, h3, h4, h5 {
   overflow-wrap: anywhere;
 }
 
-.h0, h1.h0 { font-size: calc(clamp(2.75rem, 1.5rem + 5vw, 5.5rem) * var(--heading-scale, 1)); line-height: 1.02; letter-spacing: -0.025em; }
+.h0, h1.h0 { font-size: calc(clamp(2.75rem, 1.5rem + 5vw, 5.5rem) * var(--heading-scale, 1)); line-height: 1.08; letter-spacing: -0.025em; }
 .h1, h1    { font-size: calc(clamp(2.25rem, 1.4rem + 3.4vw, 4rem) * var(--heading-scale, 1)); line-height: 1.06; letter-spacing: -0.02em; }
 .h2, h2    { font-size: calc(clamp(1.75rem, 1.2rem + 2.2vw, 2.875rem) * var(--heading-scale, 1)); line-height: 1.12; letter-spacing: -0.015em; }
 .h3, h3    { font-size: calc(clamp(1.375rem, 1.1rem + 1.1vw, 1.875rem) * var(--heading-scale, 1)); line-height: 1.2; letter-spacing: -0.01em; }
@@ -537,14 +539,11 @@ h1 em, h2 em, h3 em {
   height: auto;
 }
 
-.js .media__img[loading="lazy"] {
-  opacity: 0;
-  transition: opacity var(--dur-slow) ease;
-}
-
-.js .media__img[loading="lazy"].is-loaded {
-  opacity: 1;
-}
+/* Load fade. The transition stays at 0,1,0 so component rules (.card__img,
+   .multicolumn__img) can extend it; the opacity hold only applies until
+   .is-loaded, so components keep their own resting opacity afterwards. */
+.media__img { transition: opacity var(--dur-slow) ease; }
+.js .media__img[loading="lazy"]:not(.is-loaded) { opacity: 0; }
 
 .media .placeholder-svg {
   position: absolute;
@@ -569,7 +568,8 @@ h1 em, h2 em, h3 em {
   justify-content: center;
   gap: var(--space-2);
   min-height: 48px;
-  padding: 0 clamp(20px, 2.4vw, 28px);
+  max-width: 100%;
+  padding: 0.625em clamp(20px, 2.4vw, 28px);
   font-family: var(--font-body);
   font-size: 0.9375rem;
   font-weight: var(--font-body-weight-bold);
@@ -582,7 +582,8 @@ h1 em, h2 em, h3 em {
   border: 1px solid var(--btn-border);
   border-radius: var(--r-btn);
   cursor: pointer;
-  white-space: nowrap;
+  white-space: normal; /* merchant labels can be long: wrap instead of overflowing the gutter */
+  text-wrap: balance;
   transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease, opacity var(--dur-fast) ease;
 }
 
@@ -646,6 +647,11 @@ h1 em, h2 em, h3 em {
   min-height: 44px;
   padding: 0;
   border-radius: var(--r-pill);
+}
+
+.btn--icon,
+.btn--sm {
+  white-space: nowrap;
 }
 
 .btn__icon {
@@ -722,6 +728,7 @@ h1 em, h2 em, h3 em {
 
 @media (hover: hover) and (pointer: fine) {
   .link:hover { color: rgb(var(--c-accent)); }
+  .link:not(.link--arrow):not(.link--underline):hover { text-decoration-line: underline; text-decoration-color: currentColor; }
   .link--underline:hover { text-decoration-color: currentColor; }
   .link--arrow:hover .icon { transform: translateX(3px); }
 }
@@ -1024,6 +1031,14 @@ input[type="search"]::-webkit-search-cancel-button {
 @media (hover: hover) and (pointer: fine) {
   .chip:hover:not(.is-selected):not([aria-checked="true"]) {
     box-shadow: inset 0 0 0 1px rgb(var(--c-ink));
+  }
+}
+
+/* Touch: small buttons and chips are primary targets on phones (≥44px) */
+@media (pointer: coarse) {
+  .btn--sm,
+  .chip {
+    min-height: 44px;
   }
 }
 

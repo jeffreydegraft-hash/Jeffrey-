@@ -81,7 +81,7 @@
                     data-address-toggle="#{{ panel_id }}"
                     aria-controls="{{ panel_id }}"
                     aria-expanded="false"
-                    aria-label="{{ 'customer.addresses.edit_address_label' | t: index: forloop.index | escape }}"
+                    aria-label="{{ 'customer.addresses.edit_address_label' | t: index: forloop.index }}"
                   >
                     {{- 'customer.addresses.edit' | t -}}
                   </button>
@@ -89,8 +89,8 @@
                     type="button"
                     class="btn btn--ghost btn--sm"
                     data-address-delete="{{ address.url }}"
-                    data-confirm-message="{{ 'customer.addresses.delete_confirm' | t | escape }}"
-                    aria-label="{{ 'customer.addresses.delete_address_label' | t: index: forloop.index | escape }}"
+                    data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}"
+                    aria-label="{{ 'customer.addresses.delete_address_label' | t: index: forloop.index }}"
                   >
                     {{- 'customer.addresses.delete' | t -}}
                   </button>

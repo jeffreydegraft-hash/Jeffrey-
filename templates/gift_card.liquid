@@ -36,7 +36,7 @@
     {%- endunless -%}
 
     <title>{{ 'gift_cards.issued.title' | t: value: formatted_balance, shop: shop.name }}</title>
-    <meta name="description" content="{{ 'gift_cards.issued.subtext' | t | escape }}">
+    <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
 
     {%- unless settings.type_body_font.system? -%}
       {{ settings.type_body_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
@@ -144,7 +144,7 @@
             type="button"
             class="btn btn--secondary btn--sm gift-card__copy no-print"
             id="GiftCardCopy"
-            data-copied="{{ 'gift_cards.issued.copy_code_success' | t | escape }}"
+            data-copied="{{ 'gift_cards.issued.copy_code_success' | t }}"
           >
             <span class="btn__content" data-copy-label>{{ 'gift_cards.issued.copy_code' | t }}</span>
           </button>
@@ -152,7 +152,7 @@
         </div>
 
         <div class="gift-card__qr">
-          <div class="gift-card__qr-code" id="QrCode" data-identifier="{{ gift_card.qr_identifier }}" data-alt="{{ 'gift_cards.issued.qr_image_alt' | t | escape }}"></div>
+          <div class="gift-card__qr-code" id="QrCode" data-identifier="{{ gift_card.qr_identifier }}" data-alt="{{ 'gift_cards.issued.qr_image_alt' | t }}"></div>
           <p class="caption gift-card__hint">{{ 'gift_cards.issued.how_to_use_gift_card' | t }}</p>
         </div>
 
@@ -162,7 +162,7 @@
               src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
               width="120"
               height="40"
-              alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t | escape }}"
+              alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}"
               loading="lazy"
             >
           </a>

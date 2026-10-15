@@ -18,7 +18,7 @@
   class="related-products"
   data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limit }}"
   data-section-id="{{ section.id }}"
-  data-empty-text="{{ 'sections.related_products.empty' | t | escape }}"
+  data-empty-text="{{ 'sections.related_products.empty' | t }}"
 >
   {%- if recommendations.performed and recommendations.products_count > 0 -%}
     <section

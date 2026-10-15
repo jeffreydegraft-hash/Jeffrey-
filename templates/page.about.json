@@ -88,8 +88,9 @@
       "settings": {
         "alignment": "center",
         "width": "narrow",
-        "color_scheme": "scheme-1",
-        "padding": "default"
+        "color_scheme": "scheme-2",
+        "padding": "default",
+        "flush_bottom": true
       }
     },
     "values": {

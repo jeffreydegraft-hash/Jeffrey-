@@ -47,15 +47,15 @@
               <tbody role="rowgroup">
                 {%- for order in customer.orders -%}
                   <tr role="row" class="orders-table__row">
-                    <th scope="row" role="rowheader" class="orders-table__order" data-label="{{ 'customer.orders.order_number' | t | escape }}">
-                      <a href="{{ order.customer_url }}" class="link link--underline" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name | escape }}">{{ order.name }}</a>
+                    <th scope="row" role="rowheader" class="orders-table__order" data-label="{{ 'customer.orders.order_number' | t }}">
+                      <a href="{{ order.customer_url }}" class="link link--underline" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}">{{ order.name }}</a>
                     </th>
-                    <td role="cell" class="orders-table__date" data-label="{{ 'customer.orders.date' | t | escape }}">
+                    <td role="cell" class="orders-table__date" data-label="{{ 'customer.orders.date' | t }}">
                       <time datetime="{{ order.created_at | date: '%Y-%m-%d' }}">{{ order.created_at | date: '%B %-d, %Y' }}</time>
                     </td>
-                    <td role="cell" class="orders-table__payment" data-label="{{ 'customer.orders.payment_status' | t | escape }}">{{ order.financial_status_label }}</td>
-                    <td role="cell" class="orders-table__fulfillment" data-label="{{ 'customer.orders.fulfillment_status' | t | escape }}">{{ order.fulfillment_status_label }}</td>
-                    <td role="cell" class="orders-table__total tnum" data-label="{{ 'customer.orders.total' | t | escape }}">{{ order.total_price | money }}</td>
+                    <td role="cell" class="orders-table__payment" data-label="{{ 'customer.orders.payment_status' | t }}">{{ order.financial_status_label }}</td>
+                    <td role="cell" class="orders-table__fulfillment" data-label="{{ 'customer.orders.fulfillment_status' | t }}">{{ order.fulfillment_status_label }}</td>
+                    <td role="cell" class="orders-table__total tnum" data-label="{{ 'customer.orders.total' | t }}">{{ order.total_price | money }}</td>
                   </tr>
                 {%- endfor -%}
               </tbody>

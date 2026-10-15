@@ -72,7 +72,7 @@
                 </summary>
                 <div class="accordion__content" data-accordion-content>
                   <div class="accordion__inner">
-                    <cart-note class="cart-note__field" data-saved-text="{{ 'cart.general.note_saved' | t | escape }}" data-error-text="{{ 'cart.general.error' | t | escape }}">
+                    <cart-note class="cart-note__field" data-saved-text="{{ 'cart.general.note_saved' | t }}" data-error-text="{{ 'cart.general.error' | t }}">
                       <label class="visually-hidden" for="CartDrawer-Note">{{ 'cart.general.note' | t }}</label>
                       <textarea
                         class="field__textarea cart-note__textarea"
@@ -80,7 +80,7 @@
                         name="note"
                         form="CartDrawer-Form"
                         rows="3"
-                        placeholder="{{ 'cart.general.note_placeholder' | t | escape }}"
+                        placeholder="{{ 'cart.general.note_placeholder' | t }}"
                       >{{ cart.note }}</textarea>
                       <p class="cart-note__status caption" aria-live="polite"></p>
                     </cart-note>

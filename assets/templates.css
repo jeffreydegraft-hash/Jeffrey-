@@ -85,19 +85,13 @@
 
 @media (min-width: 750px) {
   .announcement-bar__item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
+    display: block;
   }
 
-  /* small gold dot between announcements */
-  .announcement-bar__item + .announcement-bar__item::before {
-    content: "";
-    flex-shrink: 0;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: rgb(var(--c-gold));
+  /* Wide column gap separates announcements; a separator mark would lead
+     the line whenever the list wraps. */
+  .announcement-bar__list {
+    column-gap: var(--space-8);
   }
 
   .announcement-bar--has-social .announcement-bar__inner {
@@ -183,7 +177,9 @@
 .header {
   display: grid;
   grid-template-areas: "menu logo icons";
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  /* plain 1fr keeps the menu/icon tracks at content width (auto minimum);
+     the logo track gets only what is left and truncates */
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   column-gap: var(--space-3);
   min-height: 60px;
@@ -207,6 +203,7 @@
   grid-area: logo;
   justify-self: center;
   min-width: 0;
+  max-width: 100%;
 }
 
 .header--left .header__logo {
@@ -237,6 +234,10 @@
 
   .header--compact {
     min-height: 60px;
+  }
+
+  .header__logo {
+    max-width: min(32vw, 400px);
   }
 
   .header--center {
@@ -292,7 +293,7 @@
 .header__wordmark {
   display: block;
   font-size: clamp(1.25rem, 0.9rem + 1.6vw, 1.75rem);
-  line-height: 1;
+  line-height: 1.25; /* clip box must cover descenders (overflow: hidden) */
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
@@ -516,7 +517,7 @@ details[open] > .header__link .header__chevron {
   font-size: 0.6875rem;
   font-weight: var(--font-body-weight-bold);
   line-height: 1;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   color: rgb(var(--c-ink));
   color: color-mix(in oklab, rgb(var(--c-gold)) 22%, black);
   background: rgb(var(--c-gold));
@@ -529,15 +530,6 @@ details[open] > .header__link .header__chevron {
   opacity: 0;
   transform: scale(0.6);
   pointer-events: none;
-}
-
-.header__icon--cart .cart-count.is-bumping {
-  animation: header-cart-bump var(--dur-base) var(--ease-out);
-}
-
-@keyframes header-cart-bump {
-  from { transform: scale(1.25); }
-  to { transform: scale(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -575,10 +567,6 @@ details[open] > .header__link .header__chevron {
   .header__icon--cart .cart-count.is-empty {
     transform: none;
   }
-
-  .header__icon--cart .cart-count.is-bumping {
-    animation: none;
-  }
 }
 
 /* === snippet: header-menu-drawer === */
@@ -588,16 +576,20 @@ details[open] > .header__link .header__chevron {
 }
 
 .menu-drawer__brand {
+  display: block; /* ellipsis does not apply to a flex container's text */
+  min-width: 0;
   font-size: 1.25rem;
-  line-height: 1;
+  line-height: 44px;
   letter-spacing: -0.01em;
   color: rgb(var(--c-ink));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
+}
+
+/* a long brand must not squeeze the 44px close target */
+.menu-drawer .drawer__close {
+  flex-shrink: 0;
 }
 
 .menu-drawer__body {
@@ -702,7 +694,7 @@ details[open] > .header__link .header__chevron {
   justify-content: space-between;
   gap: var(--space-3);
   flex-shrink: 0;
-  padding: calc(var(--space-3) + var(--safe-top)) var(--space-5) var(--space-3) var(--space-3);
+  padding: calc(var(--space-4) + var(--safe-top)) var(--space-5) var(--space-4) var(--space-3);
   border-bottom: 1px solid rgb(var(--c-line));
 }
 
@@ -1151,9 +1143,9 @@ predictive-search.is-loading:not(.has-results) .search-drawer__skeleton {
   list-style: none;
 }
 
+/* no transition: the arrow-key selection snaps (keyboard-driven) */
 .predictive-search__item {
   border-radius: var(--r-md);
-  transition: background-color var(--dur-fast) ease;
 }
 
 .predictive-search__item[aria-selected="true"] {
@@ -1651,9 +1643,9 @@ predictive-search.is-loading:not(.has-results) .search-drawer__skeleton {
 /* === section: cart ===
    Cart drawer, cart page, shared line items, totals, free-shipping bar.
    Motion: the drawer itself is the shared [data-drawer] transform/opacity
-   pair from components.css. Here only three things move, each on transform
-   or opacity: the free-shipping fill (state), the line list dimming while a
-   request is in flight (state), and the header count bump (feedback). */
+   pair from components.css. Here only two things move, each on transform
+   or opacity: the free-shipping fill (state) and the line list dimming while
+   a request is in flight (state). */
 
 /* ---------- drawer ---------- */
 .cart-drawer .drawer__panel {
@@ -1676,7 +1668,7 @@ predictive-search.is-loading:not(.has-results) .search-drawer__skeleton {
   font-family: var(--font-body);
   font-weight: var(--font-body-weight);
   letter-spacing: 0;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   color: rgb(var(--c-ink-2));
 }
 
@@ -1725,6 +1717,29 @@ predictive-search.is-loading:not(.has-results) .search-drawer__skeleton {
   align-self: center;
   min-height: 44px;
   padding-inline: var(--space-2);
+}
+
+/* Short viewports (phone landscape, portrait with the keyboard open): the
+   fixed header, shipping strip and footer would starve the line list, so
+   the whole drawer scrolls instead. */
+@media (max-height: 700px) {
+  .cart-drawer__inner {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cart-drawer__body {
+    flex: 1 0 auto; /* fill, never shrink below content: keeps the empty state centred and the footer at the bottom of a short cart */
+    overflow: visible;
+  }
+
+  .cart-drawer__header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: rgb(var(--c-bg)); /* close stays reachable when the full-width panel leaves no backdrop */
+  }
 }
 
 /* ---------- line items ---------- */
@@ -1797,6 +1812,7 @@ cart-items.is-loading .cart-lines {
   font-weight: var(--font-body-weight-bold);
   line-height: 1.35;
   color: rgb(var(--c-ink));
+  overflow-wrap: anywhere;
   text-wrap: pretty;
   transition: color var(--dur-fast) ease;
 }
@@ -1851,6 +1867,10 @@ cart-items.is-loading .cart-lines {
   margin-top: var(--space-2);
 }
 
+.cart-line__controls .quantity {
+  flex-shrink: 0;
+}
+
 .cart-line__remove {
   display: inline-flex;
   align-items: center;
@@ -1887,7 +1907,7 @@ cart-items.is-loading .cart-lines {
   line-height: 1.3;
   text-align: right;
   white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .cart-line__price-compare {
@@ -1899,6 +1919,24 @@ cart-items.is-loading .cart-lines {
 .cart-line__price-final {
   font-weight: var(--font-body-weight-bold);
   color: rgb(var(--c-ink));
+}
+
+/* Very narrow phones: the price drops under the details so the stepper
+   keeps its full width. */
+@media (max-width: 359px) {
+  .cart-line {
+    grid-template-columns: var(--cart-media) minmax(0, 1fr);
+  }
+
+  .cart-line__price {
+    grid-column: 2;
+    grid-row: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px var(--space-2);
+    text-align: left;
+  }
 }
 
 /* ---------- order note ---------- */
@@ -1958,7 +1996,7 @@ cart-items.is-loading .cart-lines {
 .free-shipping-bar__text strong {
   color: rgb(var(--c-ink));
   font-weight: var(--font-body-weight-bold);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .free-shipping-bar__check,
@@ -1979,7 +2017,7 @@ cart-items.is-loading .cart-lines {
   background: rgb(var(--c-gold));
   transform: scaleX(var(--progress, 0));
   transform-origin: left center;
-  transition: transform var(--dur-drawer) var(--ease-out), background-color var(--dur-base) ease;
+  transition: transform var(--dur-slow) var(--ease-out), background-color var(--dur-base) ease;
   will-change: transform;
 }
 
@@ -2024,7 +2062,7 @@ cart-items.is-loading .cart-lines {
 .cart-totals__value {
   flex-shrink: 0;
   white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .cart-totals__row--subtotal {
@@ -2065,7 +2103,7 @@ cart-items.is-loading .cart-lines {
 
 .main-cart__count {
   margin: 0;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .main-cart__continue {
@@ -2122,15 +2160,6 @@ cart-items.is-loading .cart-lines {
   }
 }
 
-/* ---------- header count bump (feedback after add) ---------- */
-#cart-icon-bubble .cart-count {
-  transition: transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast) ease;
-}
-
-#cart-icon-bubble.is-bumping .cart-count {
-  transform: scale(1.3);
-}
-
 /* ---------- hover (real pointers only) ---------- */
 @media (hover: hover) and (pointer: fine) {
   .cart-line__title:hover {
@@ -2151,10 +2180,6 @@ cart-items.is-loading .cart-lines {
 
   .free-shipping-bar__fill {
     transition: background-color var(--dur-base) ease;
-  }
-
-  #cart-icon-bubble.is-bumping .cart-count {
-    transform: none;
   }
 }
 
@@ -2307,7 +2332,7 @@ cart-items.is-loading .cart-lines {
 .variant-picker__pill {
   min-height: 44px;
   padding-inline: 20px;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .variant-picker__input:checked + .variant-picker__pill {
@@ -2499,8 +2524,11 @@ cart-items.is-loading .cart-lines {
 }
 
 /* ---- share ---- */
+/* ghost padding restored over .btn--sm; pull by padding + 1px border so
+   the icon sits on the column edge */
 .product__share-button {
-  margin-left: calc(var(--space-3) * -1);
+  padding-inline: var(--space-3);
+  margin-left: calc((var(--space-3) + 1px) * -1);
 }
 
 /* === component: media-gallery ===
@@ -2524,7 +2552,6 @@ cart-items.is-loading .cart-lines {
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
-  touch-action: pan-y;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -2724,6 +2751,17 @@ cart-items.is-loading .cart-lines {
     flex-direction: column;
     gap: var(--space-2);
     order: -1;
+    /* never taller than the sticky stage, so every thumb stays reachable */
+    max-height: calc(100svh - var(--header-height) - 36px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    padding: 6px; /* room for the 2px + 3px-offset :focus-visible ring */
+    margin: -6px; /* keeps the thumbs aligned with the stage edge */
+  }
+
+  .media-gallery--thumbnails .media-gallery__thumbs::-webkit-scrollbar {
+    display: none;
   }
 
   /* Stage: one box; slides stack on top of each other and crossfade.
@@ -2984,7 +3022,7 @@ body:has(.lightbox[open]) {
 .collection-grid__count {
   margin: 0;
   color: rgb(var(--c-ink-2));
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .collection-grid__controls {
@@ -3027,7 +3065,7 @@ body:has(.lightbox[open]) {
   padding: 0 6px;
   border-radius: var(--r-pill);
   font-size: 0.75rem;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   line-height: 1;
   color: rgb(var(--c-accent-ink));
   background: rgb(var(--c-accent));
@@ -3157,7 +3195,7 @@ body:has(.lightbox[open]) {
   padding: 0 5px;
   border-radius: var(--r-pill);
   font-size: 0.6875rem;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   line-height: 1;
   color: rgb(var(--c-accent-ink));
   background: rgb(var(--c-accent));
@@ -3226,7 +3264,7 @@ body:has(.lightbox[open]) {
 .facets__value-count {
   flex-shrink: 0;
   font-size: 0.8125rem;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   color: rgb(var(--c-ink-2));
 }
 
@@ -3262,7 +3300,7 @@ body:has(.lightbox[open]) {
 
 .facets__price-input input {
   padding-left: 30px;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   -moz-appearance: textfield;
 }
 
@@ -3362,7 +3400,7 @@ body:has(.lightbox[open]) {
 }
 
 .card-collection__count {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -3479,7 +3517,7 @@ body:has(.lightbox[open]) {
 
 .main-search__count {
   margin: 0;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .main-search__group + .main-search__group {
@@ -4100,7 +4138,7 @@ body:has(.lightbox[open]) {
   font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.375rem);
   line-height: 1;
   letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   color: rgb(var(--c-gold));
 }
 
@@ -4219,7 +4257,7 @@ body:has(.lightbox[open]) {
 }
 
 .featured-product__select {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .featured-product__submit {
@@ -4544,6 +4582,12 @@ body:has(.lightbox[open]) {
 
 .featured-blog__item {
   min-width: 0;
+}
+
+/* row gap matches the product and collection grids so stacked cards read apart */
+.featured-blog__grid,
+.main-blog__grid {
+  --grid-gap: clamp(28px, 4vw, 44px) clamp(16px, 2.5vw, 32px);
 }
 
 /* === section: custom-liquid === */
@@ -5047,6 +5091,13 @@ body:has(.lightbox[open]) {
 
 .main-article__share {
   margin-left: auto;
+  /* pull the flex item (not the inner .btn, which would just shrink) by
+     padding + 1px border so the label ends on the column edge */
+  margin-right: calc((var(--space-3) + 1px) * -1);
+}
+
+.main-article__share .btn {
+  padding-inline: var(--space-3);
 }
 
 .main-article__nav {
@@ -5283,7 +5334,7 @@ body:has(.lightbox[open]) {
 }
 
 .gift-card__balance {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .gift-card__code-wrap {
@@ -5924,7 +5975,8 @@ body:has(.lightbox[open]) {
 }
 
 @media (max-width: 989px) {
-  .order-table__sku {
+  /* 0,2,0 so the <750px `.order-table th, td { display: block }` cannot revive it */
+  .order-table .order-table__sku {
     display: none;
   }
 

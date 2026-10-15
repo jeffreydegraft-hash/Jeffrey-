@@ -57,7 +57,7 @@
         <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %-d, %Y' }}</time>
       {%- endif -%}
       {%- if show_author and article.author != blank -%}
-        <span>{{ 'blogs.article.by' | t: author: article.author | escape }}</span>
+        <span>{{ 'blogs.article.by' | t: author: article.author }}</span>
       {%- endif -%}
       <span>{{ 'blogs.article.reading_time' | t: minutes: reading_minutes }}</span>
     </p>
