@@ -29,18 +29,20 @@
           "type": "newsletter",
           "settings": {
             "heading": "Letters from the studio",
-            "text": "<p>New blends, notes from the Anointing Journal, and a word of encouragement now and then. We write only when we have something worth saying.</p>",
+            "text": "<p>New blends, notes from the Anointing Journal, and a word of encouragement now and then.</p>",
             "button_label": "Subscribe"
           }
         }
       },
       "block_order": ["shop", "company", "contact", "newsletter"],
       "settings": {
-        "color_scheme": "scheme-3",
+        "color_scheme": "scheme-2",
+        "collapse_on_mobile": true,
+        "show_brand_line": true,
         "show_social": true,
-        "show_localization": true,
         "show_payment_icons": true,
         "show_policies": true,
+        "show_localization": true,
         "padding": "default"
       }
     }

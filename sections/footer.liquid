@@ -1,8 +1,23 @@
 {%- comment -%}
-  Footer. A brand column (logo or serif wordmark, tagline, social icons) plus
-  up to four block columns, then a bottom bar: country/language selectors,
-  payment icons, copyright, policy links and the brand disclaimer.
-  Dark olive (scheme-3) by default; every colour comes from the scheme tokens.
+  Footer, apple.com global-footer style. Light gray (scheme-2) by default,
+  held to --content-max like the navigation, small type throughout:
+  1. Footnotes first: the brand disclaimer, 12px muted, then a hairline.
+  2. Directory: one column per block (link lists, contact, text, newsletter);
+     12px/600 headings, 12px links with a 24px line pitch. Below 750px the
+     link, contact and text columns become accordions (<olivet-accordion>,
+     12px headings with a plus that turns into ×, 44px rows, hairlines).
+     The newsletter stays open: a compact field with a small pill inside it.
+  3. Brand line: a small wordmark (or logo) and the tagline, with small,
+     muted social and payment icons.
+  4. Legal row: copyright, policy links divided by thin bars, and the
+     country / language selectors as small text buttons.
+  Every colour is a scheme token, so any scheme works.
+
+  Accordion columns: the details are rendered open, so without JS every
+  column is visible at every width. The inline script below closes them
+  below 750px and reopens them above it (the summaries are hidden there and
+  a static heading shows instead), so desktop keeps plain headings and a
+  short tab order.
 {%- endcomment -%}
 {%- liquid
   assign year = 'now' | date: '%Y'
@@ -11,22 +26,22 @@
   if footer_logo == blank
     assign footer_logo = settings.logo
   endif
-  assign logo_width = settings.logo_width | default: 140
-  assign logo_width_2x = logo_width | times: 2
 
   comment
-    One grid track per block. The newsletter column is weighted so the inline
-    form has room; everything else shares equally.
+    One grid track per block from 990px. The newsletter column is weighted
+    so the inline field has room; everything else shares equally.
   endcomment
   assign cols = ''
   for block in section.blocks
     if block.type == 'newsletter'
-      assign cols = cols | append: ' minmax(0, 1.5fr)'
+      assign cols = cols | append: ' minmax(0, 1.6fr)'
     else
       assign cols = cols | append: ' minmax(0, 1fr)'
     endif
   endfor
   assign cols = cols | strip
+
+  assign collapse = section.settings.collapse_on_mobile
 
   assign show_localization = false
   if section.settings.show_localization
@@ -40,6 +55,16 @@
     assign show_payment = true
   endif
 
+  assign show_social = false
+  if section.settings.show_social
+    for network in 'instagram,facebook,tiktok,youtube,pinterest,x' | split: ','
+      assign social_key = 'social_' | append: network | append: '_link'
+      if settings[social_key] != blank
+        assign show_social = true
+      endif
+    endfor
+  endif
+
   assign policy_count = 0
   if section.settings.show_policies
     for policy in shop.policies
@@ -48,116 +73,111 @@
       endif
     endfor
   endif
+
+  assign show_brand = section.settings.show_brand_line
 -%}
 
-<footer class="footer color-{{ section.settings.color_scheme }} footer--padding-{{ section.settings.padding }}" id="footer-{{ section.id }}" role="contentinfo">
-  <div class="page-width">
-    <div class="footer__grid{% if section.blocks.size == 0 %} footer__grid--brand-only{% endif %}"{% if cols != blank %} style="--footer-cols: {{ cols }};"{% endif %}>
+<footer
+  class="footer color-{{ section.settings.color_scheme }} footer--padding-{{ section.settings.padding }}{% if collapse %} footer--collapse{% endif %}"
+  id="footer-{{ section.id }}"
+  role="contentinfo"
+  data-footer
+>
+  <div class="page-width page-width--medium footer__inner">
 
-      {%- comment -%} Brand column {%- endcomment -%}
-      <div class="footer__brand">
-        {%- if footer_logo != blank -%}
-          <a href="{{ routes.root_url }}" class="footer__logo" style="--footer-logo-width: {{ logo_width }}px;" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">
-            {{ footer_logo | image_url: width: logo_width_2x | image_tag: class: 'footer__logo-img', width: logo_width, alt: shop.name, loading: 'lazy' }}
-          </a>
-        {%- else -%}
-          <a href="{{ routes.root_url }}" class="footer__wordmark" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">{{ shop.name | escape }}</a>
-        {%- endif -%}
-
-        {%- if settings.brand_tagline != blank -%}
-          <p class="footer__tagline">{{ settings.brand_tagline | escape }}</p>
-        {%- endif -%}
-
-        {%- if section.settings.show_social -%}
-          {%- render 'social-icons', class: 'footer__social' -%}
-        {%- endif -%}
+    {%- comment -%} 1. Footnotes (apple.com puts them first) {%- endcomment -%}
+    {%- if settings.brand_disclaimer != blank -%}
+      <div class="footer__footnotes">
+        <p class="footer__disclaimer">{{ settings.brand_disclaimer | escape | newline_to_br }}</p>
       </div>
+    {%- endif -%}
 
-      {%- comment -%} Block columns {%- endcomment -%}
-      {%- for block in section.blocks -%}
-        <div class="footer__col footer__col--{{ block.type | replace: '_', '-' }}" {{ block.shopify_attributes }}>
-          {%- case block.type -%}
+    {%- comment -%} 2. Directory {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="footer__directory"{% if cols != blank %} style="--footer-cols: {{ cols }};"{% endif %}>
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign heading = block.settings.heading
+            if block.type == 'link_list' and heading == blank
+              assign heading = block.settings.menu.title
+            endif
 
-            {%- when 'link_list' -%}
-              {%- liquid
-                assign menu = block.settings.menu
-                assign heading = block.settings.heading | default: menu.title
-              -%}
-              {%- if heading != blank -%}
-                <h2 class="footer__heading eyebrow">{{ heading | escape }}</h2>
-              {%- endif -%}
-              {%- if menu.links.size > 0 -%}
-                <ul class="footer__links" role="list">
-                  {%- for link in menu.links -%}
-                    <li>
-                      <a href="{{ link.url }}" class="link footer__link"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              {%- elsif request.design_mode -%}
-                <p class="footer__hint caption">{{ 'footer.menu_hint' | t }}</p>
-              {%- endif -%}
+            assign collapsible = false
+            if collapse and block.type != 'newsletter' and heading != blank
+              assign collapsible = true
+            endif
 
-            {%- when 'text' -%}
-              {%- if block.settings.heading != blank -%}
-                <h2 class="footer__heading eyebrow">{{ block.settings.heading | escape }}</h2>
-              {%- endif -%}
-              {%- if block.settings.text != blank -%}
-                <div class="footer__text">{{ block.settings.text }}</div>
-              {%- endif -%}
+            assign block_class = block.type | replace: '_', '-'
+            assign heading_id = 'FooterHeading-' | append: block.id
+          -%}
 
-            {%- when 'contact' -%}
-              {%- liquid
-                assign phone_href = settings.brand_phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | remove: '.'
-              -%}
-              {%- if block.settings.heading != blank -%}
-                <h2 class="footer__heading eyebrow">{{ block.settings.heading | escape }}</h2>
-              {%- endif -%}
-              {%- if settings.brand_email != blank or settings.brand_phone != blank or settings.brand_address != blank -%}
-                <address class="footer__contact">
-                  {%- if settings.brand_email != blank -%}
-                    <a href="mailto:{{ settings.brand_email | escape }}" class="link footer__link footer__contact-line">{{ settings.brand_email | escape }}</a>
-                  {%- endif -%}
-                  {%- if settings.brand_phone != blank -%}
-                    <a href="tel:{{ phone_href | escape }}" class="link footer__link footer__contact-line">{{ settings.brand_phone | escape }}</a>
-                  {%- endif -%}
-                  {%- if settings.brand_address != blank -%}
-                    <p class="footer__address footer__contact-line">{{ settings.brand_address | escape | newline_to_br }}</p>
-                  {%- endif -%}
-                </address>
-              {%- endif -%}
+          {%- capture column_content -%}
+            {%- case block.type -%}
+              {%- when 'link_list' -%}
+                {%- if block.settings.menu.links.size > 0 -%}
+                  <ul class="footer__links" role="list">
+                    {%- for link in block.settings.menu.links -%}
+                      <li>
+                        <a href="{{ link.url }}" class="footer__link"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- elsif request.design_mode -%}
+                  <p class="footer__hint">{{ 'footer.menu_hint' | t }}</p>
+                {%- endif -%}
 
-            {%- when 'newsletter' -%}
-              {%- liquid
-                assign form_id = 'FooterNewsletter-' | append: section.id | append: '-' | append: block.id
-                assign input_id = form_id | append: '-email'
-                assign button_label = block.settings.button_label
-                if button_label == blank
-                  assign button_label = 'newsletter.button_label' | t
-                endif
-              -%}
-              {%- if block.settings.heading != blank -%}
-                <h2 class="footer__heading eyebrow" id="{{ form_id }}-heading">{{ block.settings.heading | escape }}</h2>
-              {%- endif -%}
-              {%- if block.settings.text != blank -%}
-                <div class="footer__text">{{ block.settings.text }}</div>
-              {%- endif -%}
-              {%- form 'customer', id: form_id, class: 'footer__newsletter-form' -%}
-                <input type="hidden" name="contact[tags]" value="newsletter">
-                {%- if form.posted_successfully? -%}
-                  <p class="form-status form-status--success enter" id="{{ form_id }}-success" role="status" tabindex="-1" autofocus>
-                    {%- render 'icon', name: 'success', size: 18 -%}
-                    <span>{{ 'newsletter.success' | t }}</span>
-                  </p>
-                {%- else -%}
-                  <div class="inline-form">
-                    <div class="field">
-                      <label class="field__label visually-hidden" for="{{ input_id }}">{{ 'newsletter.label' | t }}</label>
+              {%- when 'text' -%}
+                {%- if block.settings.text != blank -%}
+                  <div class="footer__text">{{ block.settings.text }}</div>
+                {%- endif -%}
+
+              {%- when 'contact' -%}
+                {%- liquid
+                  assign phone_href = settings.brand_phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | remove: '.'
+                -%}
+                {%- if settings.brand_email != blank or settings.brand_phone != blank or settings.brand_address != blank -%}
+                  <address class="footer__contact">
+                    <ul class="footer__links" role="list">
+                      {%- if settings.brand_email != blank -%}
+                        <li><a href="mailto:{{ settings.brand_email | escape }}" class="footer__link footer__contact-line">{{ settings.brand_email | escape }}</a></li>
+                      {%- endif -%}
+                      {%- if settings.brand_phone != blank -%}
+                        <li><a href="tel:{{ phone_href | escape }}" class="footer__link footer__contact-line">{{ settings.brand_phone | escape }}</a></li>
+                      {%- endif -%}
+                    </ul>
+                    {%- if settings.brand_address != blank -%}
+                      <p class="footer__address footer__contact-line">{{ settings.brand_address | escape | newline_to_br }}</p>
+                    {%- endif -%}
+                  </address>
+                {%- endif -%}
+
+              {%- when 'newsletter' -%}
+                {%- liquid
+                  assign form_id = 'FooterNewsletter-' | append: section.id | append: '-' | append: block.id
+                  assign input_id = form_id | append: '-email'
+                  assign button_label = block.settings.button_label
+                  if button_label == blank
+                    assign button_label = 'newsletter.button_label' | t
+                  endif
+                -%}
+                {%- if block.settings.text != blank -%}
+                  <div class="footer__text">{{ block.settings.text }}</div>
+                {%- endif -%}
+                {%- form 'customer', id: form_id, class: 'footer__newsletter-form' -%}
+                  <input type="hidden" name="contact[tags]" value="newsletter">
+                  {%- if form.posted_successfully? -%}
+                    <p class="form-status form-status--success footer__status enter" id="{{ form_id }}-success" role="status" tabindex="-1" autofocus>
+                      {%- render 'icon', name: 'success', size: 16 -%}
+                      <span>{{ 'newsletter.success' | t }}</span>
+                    </p>
+                  {%- else -%}
+                    <div class="footer__field{% if form.errors %} footer__field--error{% endif %}">
+                      <label class="visually-hidden" for="{{ input_id }}">{{ 'newsletter.label' | t }}</label>
                       <input
                         id="{{ input_id }}"
                         type="email"
                         name="contact[email]"
-                        class="field__input"
+                        class="footer__field-input"
                         value="{{ form.email | escape }}"
                         placeholder="{{ 'newsletter.placeholder' | t }}"
                         autocomplete="email"
@@ -165,6 +185,7 @@
                         autocapitalize="off"
                         spellcheck="false"
                         inputmode="email"
+                        enterkeyhint="send"
                         required
                         aria-required="true"
                         {% if form.errors %}
@@ -173,72 +194,159 @@
                           autofocus
                         {% endif %}
                       >
+                      <button type="submit" class="btn btn--primary btn--sm footer__field-button" name="commit">{{ button_label | escape }}</button>
                     </div>
-                    <button type="submit" class="btn btn--gold footer__newsletter-button" name="commit">{{ button_label | escape }}</button>
-                  </div>
-                  {%- if form.errors -%}
-                    <p class="form-status form-status--error enter" id="{{ form_id }}-error" role="alert">
-                      {%- render 'icon', name: 'error', size: 18 -%}
-                      <span>{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</span>
-                    </p>
+                    {%- if form.errors -%}
+                      <p class="form-status form-status--error footer__status enter" id="{{ form_id }}-error" role="alert">
+                        {%- render 'icon', name: 'error', size: 16 -%}
+                        <span>{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</span>
+                      </p>
+                    {%- endif -%}
                   {%- endif -%}
-                {%- endif -%}
-              {%- endform -%}
+                {%- endform -%}
+            {%- endcase -%}
+          {%- endcapture -%}
 
-          {%- endcase -%}
-        </div>
-      {%- endfor -%}
-    </div>
-
-    {%- comment -%} Bottom bar {%- endcomment -%}
-    <div class="footer__bottom">
-      {%- if show_localization or show_payment -%}
-        <div class="footer__bottom-row footer__tools">
-          {%- if show_localization -%}
-            <div class="footer__localization">
-              {%- render 'localization-form', id: 'FooterLocalization' -%}
+          {%- if collapsible -%}
+            <olivet-accordion class="accordion footer__col footer__col--{{ block_class }} footer__group" data-footer-group {{ block.shopify_attributes }}>
+              <details id="FooterGroup-{{ block.id }}" open>
+                <summary class="accordion__summary footer__group-summary">
+                  <span class="footer__group-title">{{ heading | escape }}</span>
+                  {%- render 'icon', name: 'plus', size: 14 -%}
+                </summary>
+                <h2 class="footer__heading footer__heading--static" id="{{ heading_id }}">{{ heading | escape }}</h2>
+                <div class="accordion__content footer__group-content" data-accordion-content>
+                  <div class="accordion__inner">
+                    <div class="footer__group-body">{{ column_content }}</div>
+                  </div>
+                </div>
+              </details>
+            </olivet-accordion>
+          {%- else -%}
+            <div class="footer__col footer__col--{{ block_class }}" {{ block.shopify_attributes }}>
+              {%- if heading != blank -%}
+                <h2 class="footer__heading" id="{% if block.type == 'newsletter' %}{{ form_id }}-heading{% else %}{{ heading_id }}{% endif %}">{{ heading | escape }}</h2>
+              {%- endif -%}
+              {{ column_content }}
             </div>
           {%- endif -%}
-          {%- if show_payment -%}
-            <div class="footer__payment">
-              <h2 class="visually-hidden">{{ 'footer.payment_methods' | t }}</h2>
-              <ul class="footer__payment-list" role="list">
-                {%- for type in shop.enabled_payment_types -%}
-                  <li>{{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}</li>
-                {%- endfor -%}
-              </ul>
-            </div>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
 
-      <div class="footer__bottom-row footer__legal">
-        <p class="footer__copyright">{{ 'footer.copyright' | t: year: year, shop: shop.name }}</p>
-        {%- if policy_count > 0 -%}
-          <nav class="footer__policies-nav" aria-label="{{ 'footer.policies' | t }}">
-            <ul class="footer__policies" role="list">
-              {%- for policy in shop.policies -%}
-                {%- if policy != blank -%}
-                  <li><a href="{{ policy.url }}" class="link footer__policy-link">{{ policy.title | escape }}</a></li>
-                {%- endif -%}
-              {%- endfor -%}
-            </ul>
-          </nav>
+    {%- comment -%} 3. Brand line: small wordmark, tagline, social and payment icons {%- endcomment -%}
+    {%- if show_brand or show_social or show_payment -%}
+      <div class="footer__brandline">
+        {%- if show_brand -%}
+          <p class="footer__brand">
+            {%- if footer_logo != blank -%}
+              <a href="{{ routes.root_url }}" class="footer__logo" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">
+                {{- footer_logo | image_url: width: 240 | image_tag: class: 'footer__logo-img', height: 20, alt: shop.name, loading: 'lazy' -}}
+              </a>
+            {%- else -%}
+              <a href="{{ routes.root_url }}" class="footer__wordmark" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">{{ shop.name | escape }}</a>
+            {%- endif -%}
+            {%- if settings.brand_tagline != blank -%}
+              <span class="footer__tagline">{{ settings.brand_tagline | escape }}</span>
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+
+        {%- if show_social or show_payment -%}
+          <div class="footer__marks">
+            {%- if show_social -%}
+              {%- render 'social-icons', class: 'footer__social', size: 16 -%}
+            {%- endif -%}
+            {%- if show_payment -%}
+              <div class="footer__payment">
+                <h2 class="visually-hidden">{{ 'footer.payment_methods' | t }}</h2>
+                <ul class="footer__payment-list" role="list">
+                  {%- for type in shop.enabled_payment_types -%}
+                    <li>{{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}</li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+          </div>
         {%- endif -%}
       </div>
+    {%- endif -%}
 
-      {%- if settings.brand_disclaimer != blank -%}
-        <p class="footer__disclaimer caption">{{ settings.brand_disclaimer | escape | newline_to_br }}</p>
+    {%- comment -%} 4. Legal row {%- endcomment -%}
+    <div class="footer__legal">
+      <p class="footer__copyright">{{ 'footer.copyright' | t: year: year, shop: shop.name }}</p>
+      {%- if policy_count > 0 -%}
+        <nav class="footer__policies-nav" aria-label="{{ 'footer.policies' | t }}">
+          <ul class="footer__policies" role="list">
+            {%- for policy in shop.policies -%}
+              {%- if policy != blank -%}
+                <li class="footer__policy"><a href="{{ policy.url }}" class="footer__policy-link">{{ policy.title | escape }}</a></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+      {%- if show_localization -%}
+        <div class="footer__localization">
+          {%- render 'localization-form', id: 'FooterLocalization', variant: 'text' -%}
+        </div>
       {%- endif -%}
     </div>
   </div>
 </footer>
 
+{%- if collapse -%}
+  <script>
+    (function () {
+      /* Footer columns: accordions below 750px, open columns above it. */
+      if (window.OlivetFooter) {
+        window.OlivetFooter.sync();
+        return;
+      }
+      var mq = window.matchMedia('(max-width: 749px)');
+      var setGroup = function (group, open) {
+        var details = group.querySelector('details');
+        var summary = details && details.querySelector('summary');
+        if (!details || !summary) return;
+        if (open) {
+          if (typeof group.open === 'function') {
+            group.open();
+          } else {
+            details.open = true;
+            details.classList.add('is-open');
+          }
+        } else {
+          details.open = false;
+          details.classList.remove('is-open');
+        }
+        summary.setAttribute('aria-expanded', open ? 'true' : 'false');
+      };
+      var sync = function () {
+        document.querySelectorAll('[data-footer-group]').forEach(function (group) {
+          setGroup(group, !mq.matches);
+        });
+      };
+      window.OlivetFooter = { sync: sync };
+      if (mq.addEventListener) {
+        mq.addEventListener('change', sync);
+      } else if (mq.addListener) {
+        mq.addListener(sync);
+      }
+      document.addEventListener('shopify:section:load', sync);
+      document.addEventListener('shopify:block:select', function (event) {
+        var group = event.target.closest && event.target.closest('[data-footer-group]');
+        if (group && mq.matches) setGroup(group, true);
+      });
+      sync();
+    })();
+  </script>
+{%- endif -%}
+
 {% schema %}
 {
   "name": "Footer",
   "class": "footer-section",
-  "max_blocks": 4,
+  "max_blocks": 6,
   "enabled_on": {
     "groups": ["footer"]
   },
@@ -247,17 +355,38 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-3"
+      "default": "scheme-2"
+    },
+    {
+      "type": "paragraph",
+      "content": "The disclaimer shown first in the footer, the tagline and the contact details are set in Theme settings → Brand."
     },
     {
       "type": "header",
-      "content": "Brand column"
+      "content": "Columns"
+    },
+    {
+      "type": "checkbox",
+      "id": "collapse_on_mobile",
+      "label": "Collapse columns on mobile",
+      "info": "Below 750px, link, contact and text columns with a heading become accordions.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Brand line"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_line",
+      "label": "Show wordmark and tagline",
+      "default": true
     },
     {
       "type": "image_picker",
       "id": "logo",
       "label": "Footer logo",
-      "info": "Optional. Use a light version of the logo for dark color schemes. Falls back to the theme logo, then to the store name as a serif wordmark."
+      "info": "Optional. Shown small (20px tall). Use a light version of the logo for dark color schemes. Falls back to the theme logo, then to the store name."
     },
     {
       "type": "checkbox",
@@ -267,31 +396,27 @@
       "default": true
     },
     {
-      "type": "paragraph",
-      "content": "The tagline, contact details and disclaimer are set in Theme settings → Brand."
-    },
-    {
-      "type": "header",
-      "content": "Bottom bar"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_localization",
-      "label": "Show country and language selectors",
-      "info": "Appears only when more than one country or language is enabled in Markets.",
-      "default": true
-    },
-    {
       "type": "checkbox",
       "id": "show_payment_icons",
       "label": "Show payment icons",
       "default": true
     },
     {
+      "type": "header",
+      "content": "Legal row"
+    },
+    {
       "type": "checkbox",
       "id": "show_policies",
       "label": "Show policy links",
       "info": "Policies are managed in Settings → Policies.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_localization",
+      "label": "Show country and language selectors",
+      "info": "Appears only when more than one country or language is enabled in Markets.",
       "default": true
     },
     {
@@ -378,7 +503,7 @@
           "type": "richtext",
           "id": "text",
           "label": "Text",
-          "default": "<p>New blends, notes from the Anointing Journal, and a word of encouragement now and then. We write only when we have something worth saying.</p>"
+          "default": "<p>New blends, notes from the Anointing Journal, and a word of encouragement now and then.</p>"
         },
         {
           "type": "text",

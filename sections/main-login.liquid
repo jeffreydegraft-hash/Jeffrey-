@@ -18,6 +18,12 @@
     when 'none'
       assign spacing_class = ' section--none'
   endcase
+
+  # A short shop name stays on one line, so the headline breaks before it
+  assign shop_name = shop.name
+  if shop_name.size <= 24
+    assign shop_name = shop_name | replace: ' ', ' '
+  endif
 -%}
 {%- capture recover_panel -%}
   <div id="recover" class="customer-auth__panel login__panel login__panel--recover" data-login-panel="recover" tabindex="-1">
@@ -62,7 +68,7 @@
     <div class="customer-auth login" data-login>
       <div id="login" class="customer-auth__panel login__panel login__panel--login" data-login-panel="login">
         <header class="customer-auth__head">
-          <h1 class="h2 customer-auth__title">{{ 'customer.log_in_page.headline' | t: shop: shop.name }}</h1>
+          <h1 class="h2 customer-auth__title">{{ 'customer.log_in_page.headline' | t: shop: shop_name }}</h1>
           <p class="customer-auth__lead">{{ 'customer.log_in_page.lead' | t }}</p>
         </header>
 

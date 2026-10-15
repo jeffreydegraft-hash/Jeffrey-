@@ -1,7 +1,9 @@
 {%- comment -%}
-  404: a quiet, centered band. "404" eyebrow, serif title, one line of
-  body, a primary button home and a text link to the oils. Above the fold,
-  so it enters with .enter (no JS) and its height is in svh, never vh.
+  404 (apple.com style): a centred band in the visible viewport (svh). A
+  big "Page not found." .h1, one muted lead, the CTA pair (filled pill
+  home + "Browse all oils ›"), then a search field so the visitor can find
+  what they came for (wayfinding: never a dead end). Above the fold, so it
+  enters with .enter (@starting-style, no JS).
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -14,17 +16,32 @@
 -%}
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} main-404" id="section-{{ section.id }}">
   <div class="page-width">
-    <div class="empty-state main-404__inner">
-      <p class="eyebrow main-404__eyebrow enter" style="--i: 0;">{{ 'sections.page_404.eyebrow' | t }}</p>
-      <h1 class="h1 main-404__title enter" style="--i: 1;">{{ 'sections.page_404.title' | t }}</h1>
-      <p class="lead main-404__body enter" style="--i: 2;">{{ 'sections.page_404.body' | t }}</p>
-      <div class="cluster main-404__actions enter" style="--i: 3;">
-        <a href="{{ routes.root_url }}" class="btn btn--primary">{{ 'sections.page_404.cta' | t }}</a>
-        <a href="{{ routes.all_products_collection_url }}" class="link link--arrow">
-          {{ 'sections.page_404.secondary_cta' | t }}
-          {%- render 'icon', name: 'arrow-right', size: 18 -%}
+    <div class="main-404__inner">
+      <h1 class="h1 main-404__title enter" style="--i: 0;">{{ 'sections.page_404.headline' | t }}</h1>
+      <p class="lead lead--muted main-404__body enter" style="--i: 1;">{{ 'sections.page_404.body' | t }}</p>
+      <div class="cta-row main-404__actions enter" style="--i: 2;">
+        <a href="{{ routes.root_url }}" class="btn btn--primary btn--lg">{{ 'sections.page_404.cta' | t }}</a>
+        <a href="{{ routes.all_products_collection_url }}" class="link link--chevron link--lg">
+          {{- 'sections.page_404.secondary_cta' | t -}}
+          {%- render 'icon', name: 'chevron-right', size: 16 -%}
         </a>
       </div>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="main-404__search enter" style="--i: 3;">
+        <label class="visually-hidden" for="NotFoundSearch-{{ section.id }}">{{ 'search.title' | t }}</label>
+        {%- render 'icon', name: 'search', size: 18 -%}
+        <input
+          class="field__input main-404__search-input"
+          type="search"
+          id="NotFoundSearch-{{ section.id }}"
+          name="q"
+          placeholder="{{ 'search.placeholder' | t }}"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          enterkeyhint="search"
+        >
+        <input type="hidden" name="options[prefix]" value="last">
+      </form>
     </div>
   </div>
 </div>

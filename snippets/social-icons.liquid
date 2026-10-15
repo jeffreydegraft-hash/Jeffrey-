@@ -3,9 +3,11 @@
   media link is filled in. Renders nothing at all when no link is set.
   Accepts:
   - class: {String} extra classes for the <ul> (optional)
-  Usage: {% render 'social-icons', class: 'footer__social' %}
+  - size: {Number} glyph size in px (default 20; the hit area stays 44px on touch)
+  Usage: {% render 'social-icons', class: 'footer__social', size: 16 %}
 {%- endcomment -%}
 {%- liquid
+  assign icon_size = size | default: 20
   assign networks = 'instagram,facebook,tiktok,youtube,pinterest,x' | split: ','
   assign has_social = false
   for network in networks
@@ -32,7 +34,7 @@
             aria-label="{{ label_key | t }}"
             aria-describedby="a11y-new-window-message"
           >
-            {%- render 'icon', name: network, size: 20 -%}
+            {%- render 'icon', name: network, size: icon_size -%}
           </a>
         </li>
       {%- endif -%}

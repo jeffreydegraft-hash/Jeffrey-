@@ -1,9 +1,12 @@
 {%- comment -%}
-  Blog index: serif title and lead, then a 3-column grid of article cards
-  (snippets/card-article.liquid). On the first page, without a tag filter,
-  the newest post can span two columns at a 2:1 ratio. Twelve posts per
-  page with the shared pagination; a blog with no posts gets a designed
-  empty state. Cards reveal on scroll with --i stagger; the header stays.
+  Blog index (Apple Newsroom): a centred .h1 (the blog title, "The
+  Anointing Journal") and muted lead, then article tiles
+  (snippets/card-article.liquid): 1-up on phones, 2-up ≥750px, 3-up
+  ≥990px. On page one without a tag filter the newest post can be the
+  "top story": a full-row tile with the image left and the text right
+  (≥750px). Twelve posts per page with the shared pagination; a blog with
+  no posts gets a designed empty state. Tiles reveal on scroll with an --i
+  stagger; the header stays put.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -17,22 +20,25 @@
 {%- paginate blog.articles by 12 -%}
   <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} main-blog" id="section-{{ section.id }}">
     <div class="page-width">
-      <header class="section__header main-blog__header">
-        <h1 class="h1 main-blog__title">{{ blog.title | escape }}</h1>
+      <header class="section__header section__header--center main-blog__header">
+        <h1 class="h1 main-blog__title enter">{{ blog.title | escape }}</h1>
         {%- if section.settings.intro != blank -%}
-          <p class="lead main-blog__intro">{{ section.settings.intro | escape }}</p>
+          <p class="lead lead--muted main-blog__intro enter" style="--i: 1;">{{ section.settings.intro | escape }}</p>
         {%- endif -%}
         {%- if current_tags -%}
           {%- assign tag_list = current_tags | join: ', ' -%}
-          <p class="main-blog__tagged">
-            <span class="badge badge--outline">{{ 'general.meta.tags' | t: tags: tag_list }}</span>
-            <a href="{{ blog.url }}" class="link link--underline small">{{ 'blogs.general.all_posts' | t }}</a>
+          <p class="main-blog__tagged enter" style="--i: 2;">
+            <span class="badge main-blog__tag">{{ 'general.meta.tags' | t: tags: tag_list }}</span>
+            <a href="{{ blog.url }}" class="link link--chevron">
+              {{- 'blogs.general.all_posts' | t -}}
+              {%- render 'icon', name: 'chevron-right', size: 16 -%}
+            </a>
           </p>
         {%- endif -%}
       </header>
 
       {%- if blog.articles.size > 0 -%}
-        <ul class="grid grid--3 main-blog__grid" id="BlogArticles" role="list">
+        <ul class="main-blog__grid" id="BlogArticles" role="list">
           {%- for article in blog.articles -%}
             {%- liquid
               assign featured = false
@@ -60,9 +66,9 @@
           <h2 class="h3">{{ 'blogs.general.empty' | t }}</h2>
           <p class="muted text-pretty">{{ 'blogs.general.empty_body' | t }}</p>
           {%- if current_tags -%}
-            <a href="{{ blog.url }}" class="btn btn--secondary">{{ 'blogs.general.all_posts' | t }}</a>
+            <a href="{{ blog.url }}" class="btn btn--primary">{{ 'blogs.general.all_posts' | t }}</a>
           {%- else -%}
-            <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary">{{ 'general.shop_now' | t }}</a>
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'general.shop_now' | t }}</a>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -84,7 +90,7 @@
       "type": "checkbox",
       "id": "show_featured",
       "label": "Feature the newest post",
-      "info": "The first post on page one spans two columns.",
+      "info": "The first post on page one becomes a full-width top story.",
       "default": true
     },
     {

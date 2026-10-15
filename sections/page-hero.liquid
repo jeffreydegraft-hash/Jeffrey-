@@ -1,10 +1,14 @@
 {%- comment -%}
-  Page hero: a reusable page header for custom page templates (about,
-  science, contact). Ornament, eyebrow, serif title (falls back to the
-  page title), lead intro. It is the first thing on the page, so it enters
-  with .enter (@starting-style in base.css, no JS) and never carries
-  data-reveal. "Remove bottom spacing" lets the next section continue the
-  page without doubling the gap.
+  Page hero (apple.com page header): a centred eyebrow, a big .h1 (falls
+  back to the page title) and a one-line muted lead, on white with
+  generous space above. The olive-branch ornament is retired: the
+  show_ornament setting (id kept for templates) now shows a small leaf
+  glyph in the accent detail colour, like the product glyph above an
+  Apple page title. First thing on the page, so it enters with .enter
+  (@starting-style in base.css, no JS) and never carries data-reveal.
+  A long intro (over 140 characters) left-aligns the hero on phones, so a
+  paragraph is never centred over more than three lines. "Remove bottom
+  spacing" lets the next section continue the page without a double gap.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -21,27 +25,31 @@
     assign heading = page.title | escape
   endif
 
-  assign ornament_class = 'ornament'
-  if section.settings.alignment == 'left'
-    assign ornament_class = 'ornament ornament--left'
+  assign hero_class = 'page-hero page-hero--' | append: section.settings.alignment
+  if section.settings.flush_bottom
+    assign hero_class = hero_class | append: ' page-hero--flush'
+  endif
+  assign intro_length = section.settings.intro | size
+  if intro_length > 140
+    assign hero_class = hero_class | append: ' page-hero--long'
   endif
 -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} page-hero page-hero--{{ section.settings.alignment }}{% if section.settings.flush_bottom %} page-hero--flush{% endif %}" id="section-{{ section.id }}">
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} {{ hero_class }}" id="section-{{ section.id }}">
   <div class="page-width page-width--medium">
     <header class="page-hero__inner">
       {%- if section.settings.show_ornament -%}
-        <div class="{{ ornament_class }} page-hero__ornament enter" style="--i: 0;" aria-hidden="true">
-          {%- render 'icon', name: 'leaf', size: 20 -%}
-        </div>
+        <span class="page-hero__glyph enter" style="--i: 0;" aria-hidden="true">
+          {%- render 'icon', name: 'leaf', size: 28 -%}
+        </span>
       {%- endif -%}
       {%- if section.settings.eyebrow != blank -%}
-        <p class="eyebrow page-hero__eyebrow enter" style="--i: 1;">{{ section.settings.eyebrow | escape }}</p>
+        <p class="eyebrow eyebrow--lg page-hero__eyebrow enter" style="--i: 1;">{{ section.settings.eyebrow | escape }}</p>
       {%- endif -%}
       {%- if heading != blank -%}
         <h1 class="h1 page-hero__heading enter" style="--i: 2;">{{ heading }}</h1>
       {%- endif -%}
       {%- if section.settings.intro != blank -%}
-        <p class="lead page-hero__intro enter" style="--i: 3;">{{ section.settings.intro | escape }}</p>
+        <p class="lead lead--muted page-hero__intro enter" style="--i: 3;">{{ section.settings.intro | escape }}</p>
       {%- endif -%}
     </header>
   </div>
@@ -84,7 +92,8 @@
     {
       "type": "checkbox",
       "id": "show_ornament",
-      "label": "Show olive-branch ornament",
+      "label": "Show leaf glyph",
+      "info": "A small leaf icon in the accent colour above the eyebrow.",
       "default": true
     },
     {

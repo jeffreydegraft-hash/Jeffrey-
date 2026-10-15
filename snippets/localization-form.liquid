@@ -4,13 +4,23 @@
   custom element (assets/theme.js) submits the form when a select changes;
   the selects carry the field names themselves so the form also posts
   correctly from a plain submit.
+
+  Variants:
+  - 'select' (default): boxed selects with a chevron.
+  - 'text': apple.com footer style. Each selector reads as a small text
+    button (globe + "United States (USD $)"); the native select is laid
+    over it, transparent, so a tap opens the platform picker and the 16px
+    select never makes iOS zoom. The focus ring moves to the visible text.
+
   Accepts:
   - id: {String} unique id prefix (default 'LocalizationForm')
+  - variant: {String} 'select' | 'text' (default 'select')
   - class: {String} extra classes for the wrapper (optional)
-  Usage: {% render 'localization-form', id: 'FooterLocalization' %}
+  Usage: {% render 'localization-form', id: 'FooterLocalization', variant: 'text' %}
 {%- endcomment -%}
 {%- liquid
   assign form_id = id | default: 'LocalizationForm'
+  assign variant = variant | default: 'select'
   assign show_country = false
   if localization.available_countries.size > 1
     assign show_country = true
@@ -21,17 +31,23 @@
   endif
 -%}
 {%- if show_country or show_language -%}
-  <localization-form class="localization{% if class != blank %} {{ class }}{% endif %}">
+  <localization-form class="localization localization--{{ variant }}{% if class != blank %} {{ class }}{% endif %}">
     {%- form 'localization', id: form_id, class: 'localization__form' -%}
       {%- if show_country -%}
         <div class="localization__field">
           <label class="field__label visually-hidden" for="{{ form_id }}-country">{{ 'general.localization.country_label' | t }}</label>
-          <div class="select localization__select">
+          <div class="{% if variant == 'text' %}localization__control{% else %}select localization__select{% endif %}">
+            {%- if variant == 'text' -%}
+              {%- render 'icon', name: 'globe', size: 14 -%}
+              <span class="localization__value" aria-hidden="true">
+                {{- localization.country.name }} ({{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol -}})
+              </span>
+            {%- endif -%}
             <select
               id="{{ form_id }}-country"
               name="country_code"
               data-target="country_code"
-              class="field__select"
+              class="field__select{% if variant == 'text' %} localization__native{% endif %}"
               autocomplete="off"
             >
               {%- for country in localization.available_countries -%}
@@ -40,7 +56,9 @@
                 </option>
               {%- endfor -%}
             </select>
-            {%- render 'icon', name: 'chevron-down', size: 16 -%}
+            {%- unless variant == 'text' -%}
+              {%- render 'icon', name: 'chevron-down', size: 16 -%}
+            {%- endunless -%}
           </div>
         </div>
       {%- endif -%}
@@ -48,12 +66,15 @@
       {%- if show_language -%}
         <div class="localization__field">
           <label class="field__label visually-hidden" for="{{ form_id }}-language">{{ 'general.localization.language_label' | t }}</label>
-          <div class="select localization__select">
+          <div class="{% if variant == 'text' %}localization__control{% else %}select localization__select{% endif %}">
+            {%- if variant == 'text' -%}
+              <span class="localization__value" aria-hidden="true">{{ localization.language.endonym_name | capitalize }}</span>
+            {%- endif -%}
             <select
               id="{{ form_id }}-language"
               name="locale_code"
               data-target="locale_code"
-              class="field__select"
+              class="field__select{% if variant == 'text' %} localization__native{% endif %}"
               autocomplete="off"
             >
               {%- for language in localization.available_languages -%}
@@ -62,7 +83,9 @@
                 </option>
               {%- endfor -%}
             </select>
-            {%- render 'icon', name: 'chevron-down', size: 16 -%}
+            {%- unless variant == 'text' -%}
+              {%- render 'icon', name: 'chevron-down', size: 16 -%}
+            {%- endunless -%}
           </div>
         </div>
       {%- endif -%}

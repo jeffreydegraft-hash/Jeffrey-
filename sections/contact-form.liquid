@@ -1,10 +1,12 @@
 {%- comment -%}
-  Contact: heading + intro, then the Shopify contact form. At ≥990px the
-  form takes 7 of 12 columns and a surface panel with the studio's email,
-  phone and address takes 4, with one column of air between. Inputs are
-  16px on 48px rows (base.css). Success and error states render as
-  .form-status blocks that take focus. The details panel hides itself when
-  every brand setting is empty, and the social row hides with no links.
+  Contact (Apple layout): a centred .h2 and muted lead, then one centred
+  column (max 560px): the Shopify contact form with Apple inputs (52px,
+  radius --r-input, 14px/600 labels above, base.css) and a "Send" primary
+  pill, then the studio's details as a flat --c-surface tile of 17px rows
+  (icon, label, value) with inset hairlines between rows. Success and
+  error states render as .form-status blocks that take focus. The details
+  tile hides itself when every brand setting is empty, and the social row
+  hides with no links. Motion: the pill presses (.btn); nothing else moves.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -27,12 +29,12 @@
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} contact-form" id="section-{{ section.id }}">
   <div class="page-width">
     {%- if section.settings.heading != blank or section.settings.intro != blank -%}
-      <header class="section__header contact-form__header">
+      <header class="section__header section__header--center contact-form__header">
         {%- if section.settings.heading != blank -%}
           <h2 class="h2 contact-form__heading">{{ section.settings.heading }}</h2>
         {%- endif -%}
         {%- if section.settings.intro != blank -%}
-          <p class="lead contact-form__intro">{{ section.settings.intro | escape }}</p>
+          <p class="lead lead--muted contact-form__intro">{{ section.settings.intro | escape }}</p>
         {%- endif -%}
       </header>
     {%- else -%}
@@ -137,20 +139,20 @@
             >{{ form.body }}</textarea>
           </div>
 
-          <button type="submit" class="btn btn--primary contact-form__submit">{{ 'contact.form.send' | t }}</button>
+          <button type="submit" class="btn btn--primary btn--lg contact-form__submit">{{ 'contact.form.submit' | t }}</button>
         </div>
       {%- endform -%}
 
       {%- if show_details -%}
         <aside class="contact-form__details" aria-labelledby="ContactDetails-{{ section.id }}">
-          <h3 class="eyebrow contact-form__details-title" id="ContactDetails-{{ section.id }}">{{ 'contact.details.heading' | t }}</h3>
+          <h3 class="h5 contact-form__details-title" id="ContactDetails-{{ section.id }}">{{ 'contact.details.heading' | t }}</h3>
           <ul class="contact-form__list" role="list">
             {%- if settings.brand_email != blank -%}
               <li class="contact-form__item">
                 {%- render 'icon', name: 'mail', size: 20 -%}
                 <div class="contact-form__item-body">
                   <span class="contact-form__item-label">{{ 'contact.details.email' | t }}</span>
-                  <a class="link link--underline contact-form__item-value" href="mailto:{{ settings.brand_email | escape }}">{{ settings.brand_email | escape }}</a>
+                  <a class="contact-form__item-value contact-form__item-link" href="mailto:{{ settings.brand_email | escape }}">{{ settings.brand_email | escape }}</a>
                 </div>
               </li>
             {%- endif -%}
@@ -159,7 +161,7 @@
                 {%- render 'icon', name: 'phone', size: 20 -%}
                 <div class="contact-form__item-body">
                   <span class="contact-form__item-label">{{ 'contact.details.phone' | t }}</span>
-                  <a class="link link--underline contact-form__item-value" href="tel:{{ phone_href | escape }}">{{ settings.brand_phone | escape }}</a>
+                  <a class="contact-form__item-value contact-form__item-link" href="tel:{{ phone_href | escape }}">{{ settings.brand_phone | escape }}</a>
                 </div>
               </li>
             {%- endif -%}
@@ -197,7 +199,7 @@
       "type": "text",
       "id": "intro",
       "label": "Intro",
-      "default": "We are glad to help with orders, ingredients, or choosing an oil. Email info@mountofolives.co or use the form below. Our studio is at 10193 W Grand Pkwy S, Ste. 103-225, Richmond, TX 77407."
+      "default": "We are glad to help with orders, ingredients, or choosing an oil."
     },
     {
       "type": "checkbox",

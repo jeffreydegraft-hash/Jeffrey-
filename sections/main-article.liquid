@@ -1,9 +1,14 @@
 {%- comment -%}
-  Article: an editorial reading page. Centered header (blog link · date ·
-  reading time, serif title, author) enters with .enter. A 16:9 hero at the
-  medium width, eager-loaded; the body at the narrow reading measure in
-  .rte; tags as chips; share; previous / next tiles; the comments list and
-  form when the blog allows comments. BlogPosting JSON-LD at the end.
+  Article (Apple Newsroom): a centred header — eyebrow (blog · date), the
+  title as an h1 at .h2 size, the excerpt as a muted lead and a quiet 14px
+  byline (author · reading time) — enters with .enter. The hero image runs
+  the full content width (--content-max) at 16:9, rounded --r-media
+  (18px), eager-loaded. The body is .rte--article (19px / 1.58 at ≥750px)
+  at the reading measure (--text-max). Then tags as small chips and a
+  quiet "Share" text button, previous / next as quiet links (no tiles),
+  "Back to the journal", and the comments list and form in the same
+  style (hairlines between comments only, Apple inputs, a pill to post).
+  BlogPosting JSON-LD at the end.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -27,29 +32,33 @@
   if article.tags.size > 0 or section.settings.show_share
     assign show_footer = true
   endif
+
+  assign lead = article.excerpt | strip_html | strip_newlines | strip
 -%}
 <article class="section{{ padding_class }} color-{{ section.settings.color_scheme }} main-article" id="section-{{ section.id }}">
-  <header class="page-width page-width--narrow main-article__header">
+  <header class="page-width page-width--medium main-article__header">
     <p class="eyebrow main-article__eyebrow enter" style="--i: 0;">
       <a href="{{ blog.url }}" class="main-article__blog-link">{{ blog.title | escape }}</a>
       {%- if section.settings.show_date -%}
         <span class="main-article__sep" aria-hidden="true">·</span>
         <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %-d, %Y' }}</time>
       {%- endif -%}
-      <span class="main-article__sep" aria-hidden="true">·</span>
+    </p>
+    <h1 class="h2 main-article__title enter" style="--i: 1;">{{ article.title | escape }}</h1>
+    {%- if lead != blank -%}
+      <p class="lead lead--muted main-article__lead enter" style="--i: 2;">{{ lead | truncatewords: 40 }}</p>
+    {%- endif -%}
+    <p class="small main-article__byline enter" style="--i: 3;">
+      {%- if section.settings.show_author and article.author != blank -%}
+        <span>{{ 'blogs.article.written_by' | t }} <span class="main-article__author-name">{{ article.author | escape }}</span></span>
+        <span class="main-article__sep" aria-hidden="true">·</span>
+      {%- endif -%}
       <span>{{ 'blogs.article.reading_time' | t: minutes: reading_minutes }}</span>
     </p>
-    <h1 class="h1 main-article__title enter" style="--i: 1;">{{ article.title | escape }}</h1>
-    {%- if section.settings.show_author and article.author != blank -%}
-      <p class="main-article__author enter" style="--i: 2;">
-        {{ 'blogs.article.written_by' | t }}
-        <span class="main-article__author-name">{{ article.author | escape }}</span>
-      </p>
-    {%- endif -%}
   </header>
 
   {%- if article.image -%}
-    <div class="page-width page-width--medium main-article__hero">
+    <div class="page-width page-width--medium main-article__hero enter" style="--i: 4;">
       {%- render 'image',
         image: article.image,
         sizes: '(min-width: 1060px) 980px, 100vw',
@@ -64,7 +73,7 @@
   {%- endif -%}
 
   <div class="page-width page-width--narrow main-article__body">
-    <div class="rte main-article__content">
+    <div class="rte rte--article main-article__content">
       {{ article.content }}
     </div>
 
@@ -88,7 +97,7 @@
             data-title="{{ article.title | escape }}"
             data-copied="{{ 'general.share.copied' | t }}"
           >
-            <button type="button" class="btn btn--ghost btn--sm">
+            <button type="button" class="main-article__share-button">
               {%- render 'icon', name: 'share', size: 18 -%}
               <span class="btn__content"><span data-share-label>{{ 'blogs.article.share' | t }}</span></span>
             </button>
@@ -102,24 +111,22 @@
         {%- if prev_url != blank -%}
           <a href="{{ prev_url }}" class="main-article__nav-link main-article__nav-link--prev">
             <span class="main-article__nav-label">
-              {%- render 'icon', name: 'arrow-left', size: 16 -%}
-              {{ 'blogs.article.previous_article' | t }}
+              {%- render 'icon', name: 'chevron-left', size: 16 -%}
+              {{- 'blogs.article.previous_article' | t -}}
             </span>
             {%- if prev_article.title != blank -%}
-              <span class="main-article__nav-title h5">{{ prev_article.title | escape }}</span>
+              <span class="main-article__nav-title">{{ prev_article.title | escape }}</span>
             {%- endif -%}
           </a>
-        {%- else -%}
-          <span class="main-article__nav-spacer" aria-hidden="true"></span>
         {%- endif -%}
         {%- if next_url != blank -%}
           <a href="{{ next_url }}" class="main-article__nav-link main-article__nav-link--next">
             <span class="main-article__nav-label">
-              {{ 'blogs.article.next_article' | t }}
-              {%- render 'icon', name: 'arrow-right', size: 16 -%}
+              {{- 'blogs.article.next_article' | t -}}
+              {%- render 'icon', name: 'chevron-right', size: 16 -%}
             </span>
             {%- if next_article.title != blank -%}
-              <span class="main-article__nav-title h5">{{ next_article.title | escape }}</span>
+              <span class="main-article__nav-title">{{ next_article.title | escape }}</span>
             {%- endif -%}
           </a>
         {%- endif -%}
@@ -127,9 +134,9 @@
     {%- endif -%}
 
     <p class="main-article__back">
-      <a href="{{ blog.url }}" class="link link--arrow">
-        {%- render 'icon', name: 'arrow-left', size: 18 -%}
-        {{ 'blogs.article.back_to_blog' | t }}
+      <a href="{{ blog.url }}" class="link link--chevron main-article__back-link">
+        {%- render 'icon', name: 'chevron-left', size: 16 -%}
+        {{- 'blogs.article.back_to_blog' | t -}}
       </a>
     </p>
 
@@ -255,7 +262,7 @@
             <p class="caption main-article__moderated">{{ 'blogs.article.moderated' | t }}</p>
           {%- endif -%}
 
-          <button type="submit" class="btn btn--primary main-article__comment-submit">{{ 'blogs.article.post' | t }}</button>
+          <button type="submit" class="btn btn--primary btn--lg main-article__comment-submit">{{ 'blogs.article.post' | t }}</button>
         {%- endform -%}
       </section>
     {%- endif -%}
