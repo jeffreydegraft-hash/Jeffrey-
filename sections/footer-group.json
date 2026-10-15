@@ -1,0 +1,49 @@
+{
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "shop": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu"
+          }
+        },
+        "company": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Company",
+            "menu": "footer"
+          }
+        },
+        "contact": {
+          "type": "contact",
+          "settings": {
+            "heading": "Contact"
+          }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Letters from the studio",
+            "text": "<p>New blends, notes from the Anointing Journal, and a word of encouragement now and then. We write only when we have something worth saying.</p>",
+            "button_label": "Subscribe"
+          }
+        }
+      },
+      "block_order": ["shop", "company", "contact", "newsletter"],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "show_social": true,
+        "show_localization": true,
+        "show_payment_icons": true,
+        "show_policies": true,
+        "padding": "default"
+      }
+    }
+  },
+  "order": ["footer"]
+}

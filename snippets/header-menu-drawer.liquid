@@ -1,0 +1,148 @@
+{%- comment -%}
+  Mobile navigation drawer (left panel).
+  Accepts:
+  - menu: {Object} linklist (required)
+  Contract: <menu-drawer id="MenuDrawer" data-drawer> from theme.js. Submenus are
+  panels that slide in over the whole drawer: data-submenu-open / data-submenu /
+  data-submenu-back. Top-level links stagger in with --i.
+{%- endcomment -%}
+{%- liquid
+  assign account_url = routes.account_login_url
+  if customer
+    assign account_url = routes.account_url
+  endif
+-%}
+<menu-drawer id="MenuDrawer" data-drawer class="menu-drawer" aria-hidden="true" inert>
+  <div class="drawer__backdrop" data-drawer-backdrop></div>
+  <div
+    class="drawer__panel drawer__panel--left menu-drawer__panel"
+    data-drawer-panel
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ 'header.menu' | t }}"
+  >
+    <div class="drawer__header">
+      <a href="{{ routes.root_url }}" class="menu-drawer__brand serif" aria-label="{{ 'accessibility.logo' | t: shop: shop.name | escape }}">{{ shop.name }}</a>
+      <button type="button" class="drawer__close" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
+        {%- render 'icon', name: 'close', size: 22 -%}
+      </button>
+    </div>
+
+    <div class="drawer__body menu-drawer__body">
+      <nav class="menu-drawer__nav" aria-label="{{ 'accessibility.menu' | t }}">
+        {%- if menu != blank and menu.links.size > 0 -%}
+          <ul class="menu-drawer__list" role="list">
+            {%- for link in menu.links -%}
+              <li class="menu-drawer__item" style="--i: {{ forloop.index0 }};">
+                {%- if link.links != blank -%}
+                  <button
+                    type="button"
+                    class="menu-drawer__link menu-drawer__link--button{% if link.child_active %} is-current{% endif %}"
+                    data-submenu-open="#Submenu-{{ forloop.index }}"
+                    aria-controls="Submenu-{{ forloop.index }}"
+                    aria-expanded="false"
+                  >
+                    <span class="menu-drawer__link-text">{{ link.title | escape }}</span>
+                    {%- render 'icon', name: 'chevron-right', size: 22 -%}
+                  </button>
+                {%- else -%}
+                  <a
+                    href="{{ link.url }}"
+                    class="menu-drawer__link{% if link.current %} is-current{% endif %}"
+                    {% if link.current %}aria-current="page"{% endif %}
+                  >
+                    <span class="menu-drawer__link-text">{{ link.title | escape }}</span>
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- else -%}
+          <div class="empty-state menu-drawer__empty">
+            {%- render 'icon', name: 'leaf' -%}
+            <p class="small muted">{{ 'header.menu_empty' | t }}</p>
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary btn--sm">{{ 'general.shop_now' | t }}</a>
+          </div>
+        {%- endif -%}
+      </nav>
+    </div>
+
+    <div class="drawer__footer menu-drawer__footer">
+      <div class="menu-drawer__footer-links">
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{{ account_url }}" class="menu-drawer__footer-link link">
+            {%- render 'icon', name: 'user', size: 18 -%}
+            <span>
+              {%- if customer -%}
+                {{ 'header.account' | t }}
+              {%- else -%}
+                {{ 'header.log_in' | t }}
+              {%- endif -%}
+            </span>
+          </a>
+        {%- endif -%}
+        {%- if settings.brand_email != blank -%}
+          <a href="mailto:{{ settings.brand_email | escape }}" class="menu-drawer__footer-link link">
+            {%- render 'icon', name: 'mail', size: 18 -%}
+            <span>{{ settings.brand_email | escape }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+      {%- render 'social-icons' -%}
+    </div>
+
+    {%- comment -%} Submenu panels: siblings of the body so they can cover the whole drawer. {%- endcomment -%}
+    {%- if menu != blank -%}
+      {%- for link in menu.links -%}
+        {%- if link.links != blank -%}
+          <div id="Submenu-{{ forloop.index }}" class="menu-drawer__submenu" data-submenu inert>
+            <div class="menu-drawer__submenu-header">
+              <button type="button" class="menu-drawer__back" data-submenu-back>
+                {%- render 'icon', name: 'chevron-left', size: 20 -%}
+                <span>{{ 'general.back' | t }}</span>
+              </button>
+              <button type="button" class="drawer__close" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
+                {%- render 'icon', name: 'close', size: 22 -%}
+              </button>
+            </div>
+            <div class="menu-drawer__submenu-body">
+              <h2 class="menu-drawer__submenu-title">{{ link.title | escape }}</h2>
+              <ul class="menu-drawer__sublist" role="list">
+                {%- if link.url != blank and link.url != '#' -%}
+                  <li>
+                    <a href="{{ link.url }}" class="menu-drawer__sublink menu-drawer__sublink--all{% if link.current %} is-current{% endif %}" {% if link.current %}aria-current="page"{% endif %}>
+                      <span>{{ 'header.submenu_view_all' | t: title: link.title }}</span>
+                      {%- render 'icon', name: 'arrow-right', size: 18 -%}
+                    </a>
+                  </li>
+                {%- endif -%}
+                {%- for childlink in link.links -%}
+                  <li>
+                    <a
+                      href="{{ childlink.url }}"
+                      class="menu-drawer__sublink{% if childlink.current %} is-current{% endif %}"
+                      {% if childlink.current %}aria-current="page"{% endif %}
+                    >{{ childlink.title | escape }}</a>
+                    {%- if childlink.links != blank -%}
+                      <ul class="menu-drawer__sublist menu-drawer__sublist--nested" role="list">
+                        {%- for grandchildlink in childlink.links -%}
+                          <li>
+                            <a
+                              href="{{ grandchildlink.url }}"
+                              class="menu-drawer__sublink menu-drawer__sublink--nested{% if grandchildlink.current %} is-current{% endif %}"
+                              {% if grandchildlink.current %}aria-current="page"{% endif %}
+                            >{{ grandchildlink.title | escape }}</a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</menu-drawer>

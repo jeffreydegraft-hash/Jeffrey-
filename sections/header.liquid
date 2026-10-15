@@ -1,0 +1,315 @@
+{%- comment -%}
+  Header.
+  Grid: [mobile menu button | logo | desktop nav | icons].
+  <sticky-header> (theme.js) toggles .is-scrolled / .is-hidden on itself and
+  keeps --header-height in sync. The section wrapper (.section-header, set via
+  the schema "class") is the sticky element.
+
+  The menu and search drawers are rendered after </sticky-header>, still inside
+  this section, on purpose: the wrapper animates on transform and gets a
+  backdrop-filter when scrolled, and either would turn it into the containing
+  block of a position: fixed drawer inside it.
+{%- endcomment -%}
+{%- liquid
+  assign logo_position = section.settings.logo_position | default: 'left'
+  assign header_padding = section.settings.padding | default: 'default'
+  assign menu = section.settings.menu
+  assign show_search = section.settings.show_search
+  assign logo_width = settings.logo_width | default: 140
+
+  if settings.logo != blank
+    assign logo_height = logo_width | divided_by: settings.logo.aspect_ratio | round
+    assign logo_width_2x = logo_width | times: 2
+    assign logo_widths = logo_width | append: ', ' | append: logo_width_2x
+    assign logo_sizes = logo_width | append: 'px'
+    assign logo_alt = settings.logo.alt | default: shop.name | escape
+  endif
+
+  assign account_url = routes.account_login_url
+  if customer
+    assign account_url = routes.account_url
+  endif
+-%}
+<sticky-header
+  class="header-wrapper color-{{ section.settings.color_scheme }}"
+  data-sticky="{{ section.settings.sticky }}"
+>
+  <header class="header header--{{ logo_position }} header--{{ header_padding }} page-width">
+    <button
+      type="button"
+      class="header__icon header__menu-toggle"
+      data-drawer-open="#MenuDrawer"
+      aria-controls="MenuDrawer"
+      aria-expanded="false"
+      aria-label="{{ 'header.menu' | t }}"
+    >
+      {%- render 'icon', name: 'menu', size: 24 -%}
+    </button>
+
+    <div class="header__logo">
+      <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ 'accessibility.logo' | t: shop: shop.name | escape }}">
+        {%- if settings.logo != blank -%}
+          <span class="header__logo-media" style="--logo-width: {{ logo_width }}px;">
+            {{-
+              settings.logo
+              | image_url: width: logo_width_2x
+              | image_tag:
+                class: 'header__logo-img',
+                widths: logo_widths,
+                sizes: logo_sizes,
+                width: logo_width,
+                height: logo_height,
+                alt: logo_alt,
+                loading: 'eager',
+                fetchpriority: 'high'
+            -}}
+          </span>
+        {%- else -%}
+          <span class="header__wordmark serif">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- if menu != blank and menu.links.size > 0 -%}
+      <nav class="header__nav" aria-label="{{ 'accessibility.menu' | t }}">
+        <ul class="header__menu" role="list">
+          {%- for link in menu.links -%}
+            {%- liquid
+              assign has_grandchildren = false
+              for childlink in link.links
+                if childlink.links != blank
+                  assign has_grandchildren = true
+                endif
+              endfor
+            -%}
+            <li class="header__menu-item">
+              {%- if link.links != blank -%}
+                <details-disclosure class="header__disclosure">
+                  <details id="HeaderDetails-{{ section.id }}-{{ forloop.index }}">
+                    <summary
+                      class="header__link{% if link.child_active %} is-current{% endif %}"
+                      aria-expanded="false"
+                      aria-controls="HeaderMenu-{{ section.id }}-{{ forloop.index }}"
+                    >
+                      <span class="header__link-text">{{ link.title | escape }}</span>
+                      {%- render 'icon', name: 'chevron-down', size: 14, class: 'header__chevron' -%}
+                    </summary>
+                    <div
+                      class="header__dropdown{% if has_grandchildren %} header__dropdown--columns{% endif %}"
+                      id="HeaderMenu-{{ section.id }}-{{ forloop.index }}"
+                    >
+                      {%- if has_grandchildren -%}
+                        {%- liquid
+                          assign has_plain_children = false
+                          for childlink in link.links
+                            if childlink.links == blank
+                              assign has_plain_children = true
+                            endif
+                          endfor
+                        -%}
+                        {%- if has_plain_children -%}
+                          <div class="header__dropdown-group">
+                            <ul class="header__dropdown-list" role="list">
+                              {%- for childlink in link.links -%}
+                                {%- if childlink.links == blank -%}
+                                  <li>
+                                    <a
+                                      href="{{ childlink.url }}"
+                                      class="header__dropdown-link{% if childlink.current %} is-current{% endif %}"
+                                      {% if childlink.current %}aria-current="page"{% endif %}
+                                    >{{ childlink.title | escape }}</a>
+                                  </li>
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </ul>
+                          </div>
+                        {%- endif -%}
+                        {%- for childlink in link.links -%}
+                          {%- if childlink.links != blank -%}
+                            <div class="header__dropdown-group">
+                              <a
+                                href="{{ childlink.url }}"
+                                class="header__dropdown-heading eyebrow eyebrow--ink{% if childlink.current %} is-current{% endif %}"
+                                {% if childlink.current %}aria-current="page"{% endif %}
+                              >{{ childlink.title | escape }}</a>
+                              <ul class="header__dropdown-list" role="list">
+                                {%- for grandchildlink in childlink.links -%}
+                                  <li>
+                                    <a
+                                      href="{{ grandchildlink.url }}"
+                                      class="header__dropdown-link{% if grandchildlink.current %} is-current{% endif %}"
+                                      {% if grandchildlink.current %}aria-current="page"{% endif %}
+                                    >{{ grandchildlink.title | escape }}</a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            </div>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      {%- else -%}
+                        <ul class="header__dropdown-list" role="list">
+                          {%- for childlink in link.links -%}
+                            <li>
+                              <a
+                                href="{{ childlink.url }}"
+                                class="header__dropdown-link{% if childlink.current %} is-current{% endif %}"
+                                {% if childlink.current %}aria-current="page"{% endif %}
+                              >{{ childlink.title | escape }}</a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </div>
+                  </details>
+                </details-disclosure>
+              {%- else -%}
+                <a
+                  href="{{ link.url }}"
+                  class="header__link{% if link.current %} is-current{% endif %}"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >
+                  <span class="header__link-text">{{ link.title | escape }}</span>
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="header__icons">
+      {%- if show_search -%}
+        <button
+          type="button"
+          class="header__icon header__icon--search"
+          data-drawer-open="#SearchDrawer"
+          aria-controls="SearchDrawer"
+          aria-expanded="false"
+          aria-label="{{ 'header.search' | t }}"
+        >
+          {%- render 'icon', name: 'search', size: 22 -%}
+        </button>
+      {%- endif -%}
+
+      {%- if shop.customer_accounts_enabled -%}
+        <a href="{{ account_url }}" class="header__icon header__icon--account">
+          {%- render 'icon', name: 'user', size: 22 -%}
+          <span class="visually-hidden">
+            {%- if customer -%}
+              {{ 'header.account' | t }}
+            {%- else -%}
+              {{ 'header.log_in' | t }}
+            {%- endif -%}
+          </span>
+        </a>
+      {%- endif -%}
+
+      <a href="{{ routes.cart_url }}" id="cart-icon-bubble" class="header__icon header__icon--cart" data-drawer-open="#CartDrawer" aria-expanded="false">{% render 'cart-icon-bubble' %}</a>
+    </div>
+  </header>
+</sticky-header>
+
+{%- render 'header-menu-drawer', menu: menu -%}
+{%- if show_search -%}
+  {%- render 'header-search' -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "logo_position",
+      "label": "Logo position",
+      "info": "On small screens the logo is centred between the menu and the icons.",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Height",
+      "options": [
+        { "value": "compact", "label": "Compact" },
+        { "value": "default", "label": "Default" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "Sticky header",
+      "info": "Slides away on scroll down and returns on scroll up.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Popular searches",
+      "info": "Quick links shown in the search drawer before anything is typed. Leave a label empty to hide it."
+    },
+    {
+      "type": "text",
+      "id": "popular_1_label",
+      "label": "Link 1 label",
+      "default": "Frankincense & Myrrh"
+    },
+    {
+      "type": "url",
+      "id": "popular_1_url",
+      "label": "Link 1"
+    },
+    {
+      "type": "text",
+      "id": "popular_2_label",
+      "label": "Link 2 label",
+      "default": "All oils"
+    },
+    {
+      "type": "url",
+      "id": "popular_2_url",
+      "label": "Link 2"
+    },
+    {
+      "type": "text",
+      "id": "popular_3_label",
+      "label": "Link 3 label",
+      "default": "Our science"
+    },
+    {
+      "type": "url",
+      "id": "popular_3_url",
+      "label": "Link 3"
+    }
+  ]
+}
+{% endschema %}

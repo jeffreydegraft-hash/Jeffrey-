@@ -1,0 +1,108 @@
+{%- comment -%}
+  Announcement bar.
+  Up to three announcements. Below 750px only the first one shows; on wider
+  screens they sit in a centred row separated by a small gold dot. No
+  auto-rotate, no marquee: text wraps, never clips.
+{%- endcomment -%}
+{%- liquid
+  assign has_social = false
+  if section.settings.show_social
+    if settings.social_instagram_link != blank or settings.social_facebook_link != blank or settings.social_tiktok_link != blank or settings.social_youtube_link != blank or settings.social_pinterest_link != blank or settings.social_x_link != blank
+      assign has_social = true
+    endif
+  endif
+
+  assign announcement_count = 0
+  for block in section.blocks
+    if block.settings.text != blank
+      assign announcement_count = announcement_count | plus: 1
+    endif
+  endfor
+-%}
+{%- if announcement_count > 0 or has_social -%}
+  <div
+    class="announcement-bar color-{{ section.settings.color_scheme }}{% if has_social %} announcement-bar--has-social{% endif %}"
+    role="region"
+    aria-label="{{ 'sections.announcements.announcement_bar' | t }}"
+  >
+    <div class="announcement-bar__inner page-width">
+      {%- if announcement_count > 0 -%}
+        <ul class="announcement-bar__list" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.text != blank -%}
+              <li class="announcement-bar__item" {{ block.shopify_attributes }}>
+                {%- if block.settings.link != blank -%}
+                  <a href="{{ block.settings.link }}" class="announcement-bar__link">{{ block.settings.text }}</a>
+                {%- else -%}
+                  <span class="announcement-bar__text">{{ block.settings.text }}</span>
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if has_social -%}
+        <div class="announcement-bar__social">
+          {%- render 'social-icons' -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "class": "section-announcement-bar",
+  "max_blocks": 3,
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social icons",
+      "info": "Desktop only. Uses the links set in Theme settings › Social media; hidden when none are set.",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "info": "Keep it under 90 characters. Only the first announcement shows on small screens.",
+          "default": "Free US shipping on orders $45+. Blended and bottled in Richmond, Texas."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "blocks": [
+        {
+          "type": "announcement"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,41 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement-1": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free US shipping on orders $45+. Blended and bottled in Richmond, Texas.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": ["announcement-1"],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "show_social": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_position": "left",
+        "menu": "main-menu",
+        "padding": "default",
+        "sticky": true,
+        "show_search": true,
+        "color_scheme": "scheme-1",
+        "popular_1_label": "Frankincense & Myrrh",
+        "popular_1_url": "/products/frankincense-myrrh-anointing-oil",
+        "popular_2_label": "All oils",
+        "popular_2_url": "/collections/all",
+        "popular_3_label": "Our science",
+        "popular_3_url": "/pages/our-science"
+      }
+    }
+  },
+  "order": ["announcement-bar", "header"]
+}
