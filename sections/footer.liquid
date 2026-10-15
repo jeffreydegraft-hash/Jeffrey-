@@ -67,9 +67,11 @@
     already shows is dropped (tokens "|block:index|" in keep). A column with
     nothing to show is skipped outside the editor. Grid tracks from 990px:
     one per rendered block, the newsletter weighted so the inline field has
-    room and the contact column so a street address stays on one line.
-    750-989px: the columns share one row (cols_md tracks), the newsletter
-    takes the row below.
+    room and the contact column so a street address stays on one line;
+    with fewer than four blocks, empty tracks fill the row so the columns
+    keep their directory width and pack to the left instead of stretching.
+    750-989px: the columns share one row (cols_md: 3 or 4 tracks), the
+    newsletter takes the row below.
   endcomment
   assign dedupe = section.settings.hide_repeated_links
   assign seen = '|'
@@ -77,6 +79,7 @@
   assign skipped = '|'
   assign cols = ''
   assign cols_md = 0
+  assign n_tracks = 0
   assign has_contact = false
   if settings.brand_email != blank or settings.brand_phone != blank or settings.brand_address != blank
     assign has_contact = true
@@ -112,6 +115,7 @@
       continue
     endunless
 
+    assign n_tracks = n_tracks | plus: 1
     case block.type
       when 'newsletter'
         assign cols = cols | append: ' minmax(0, 1.6fr)'
@@ -123,11 +127,17 @@
         assign cols_md = cols_md | plus: 1
     endcase
   endfor
+  if n_tracks > 0 and n_tracks < 4
+    assign fill = 4 | minus: n_tracks
+    for i in (1..fill)
+      assign cols = cols | append: ' minmax(0, 1fr)'
+    endfor
+  endif
   assign cols = cols | strip
   if cols_md > 4
     assign cols_md = 4
-  elsif cols_md < 1
-    assign cols_md = 1
+  elsif cols_md < 3
+    assign cols_md = 3
   endif
 
   assign collapse = section.settings.collapse_on_mobile
@@ -193,7 +203,7 @@
     {%- endif -%}
 
     {%- comment -%} 2. Directory {%- endcomment -%}
-    {%- if section.blocks.size > 0 -%}
+    {%- if n_tracks > 0 -%}
       <div class="footer__directory" style="--footer-cols-md: {{ cols_md }};{% if cols != blank %} --footer-cols: {{ cols }};{% endif %}">
         {%- for block in section.blocks -%}
           {%- liquid

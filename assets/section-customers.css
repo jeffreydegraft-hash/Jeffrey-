@@ -682,11 +682,13 @@
   gap: var(--space-4);
 }
 
+/* Product shots are photographed on white: the thumbnail is that white
+   ground in every scheme (APPLE-SPEC 0.3), never the page colour */
 .order-line__media {
   --media-radius: var(--r-md);
   width: 72px;
   flex-shrink: 0;
-  background: rgb(var(--c-bg));
+  background: rgb(var(--c-photo-ground));
 }
 
 .order-line__media .order-line__img {
@@ -1009,8 +1011,15 @@
 /* Two up, the card beside the default one keeps a blank line where the
    "Default" tag sits, so both addresses start on the same line. */
 @media (min-width: 750px) {
-  .address-card--default:nth-child(odd):not(:has(.is-open)) + .address-card:not(:has(.is-open)) .address-card__body::before,
-  .address-card:nth-child(odd):not(:has(.is-open)):has(+ .address-card--default:not(:has(.is-open))) .address-card__body::before {
+  /* two rules, not one list: :has() cannot nest, and one invalid selector
+     would void the whole list */
+  .address-card--default:nth-child(odd):not(:has(.is-open)) + .address-card:not(:has(.is-open)) .address-card__body::before {
+    content: "";
+    display: block;
+    height: calc(0.75rem * 1.33);
+  }
+
+  .address-card:nth-child(odd):not(:has(.is-open)):has(+ .address-card--default) .address-card__body::before {
     content: "";
     display: block;
     height: calc(0.75rem * 1.33);

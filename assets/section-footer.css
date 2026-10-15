@@ -259,13 +259,21 @@
   color: rgb(var(--c-ink));
 }
 
+/* Touch: the field text stays 17px (no iOS zoom) and the pill inside
+   matches it, a full 44px target with its corners concentric to the field. */
 @media (pointer: coarse) {
   .footer__field {
-    min-height: 52px;
+    min-height: 54px;
   }
 
   .footer .footer__field-input {
-    height: 42px;
+    height: 44px;
+  }
+
+  .footer__field-button {
+    padding-inline: 20px;
+    font-size: 17px;
+    letter-spacing: -0.022em;
   }
 }
 
@@ -290,7 +298,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 var(--space-3);
+  gap: var(--space-1) var(--space-3);
   min-width: 0;
 }
 
