@@ -154,7 +154,7 @@
 }
 
 .customer-auth__lead {
-  max-width: 480px;
+  max-width: 600px;
   font-size: clamp(1.0625rem, 0.95rem + 0.4vw, 1.3125rem);
   line-height: 1.24;
   letter-spacing: 0.004em;
@@ -427,9 +427,22 @@
   color: rgb(var(--c-ink-2));
 }
 
-.orders-table__total {
+.orders-table .orders-table__total {
   text-align: right;
   white-space: nowrap;
+}
+
+/* Fixed shares keep the four columns evenly spread; the date takes the rest */
+.orders-table .orders-table__order {
+  width: 22%;
+}
+
+.orders-table .orders-table__status {
+  width: 22%;
+}
+
+.orders-table .orders-table__total {
+  width: 18%;
 }
 
 .orders-table__chevron {
@@ -487,6 +500,12 @@
   .orders-table th,
   .orders-table td {
     padding: 0;
+  }
+
+  .orders-table .orders-table__order,
+  .orders-table .orders-table__status,
+  .orders-table .orders-table__total {
+    width: auto;
   }
 
   .orders-table__order {
@@ -726,14 +745,14 @@
     white-space: nowrap;
   }
 
-  /* [image + title ........ total]
-     [        Quantity 2  Price $29.98] */
+  /* [image  title ............ total]
+     [       Quantity 2  Price $29.98] */
   .order-table tbody tr {
     display: grid;
-    grid-template-columns: 64px auto auto minmax(0, 1fr);
+    grid-template-columns: 64px minmax(0, 1fr) auto;
     grid-template-areas:
-      "product product product total"
-      ". quantity price .";
+      "product product total"
+      ". quantity price";
     column-gap: var(--space-4);
     row-gap: var(--space-2);
     padding: var(--space-4) 0;
@@ -772,7 +791,7 @@
 
   .order-table .order-table__price {
     grid-area: price;
-    white-space: normal;
+    text-align: right;
   }
 
   .order-table__quantity::before,
