@@ -1,0 +1,141 @@
+{%- comment -%}
+  Cart line items, shared by the cart drawer and the cart page.
+  Accepts:
+  - context: {String} 'drawer' | 'page' (default 'page'). Sets the media size,
+    prefixes every id so both can live on the same page, and tells cart.js
+    which container to re-render.
+  Usage: {% render 'cart-line-items', context: 'drawer' %}
+{%- endcomment -%}
+{%- liquid
+  assign context = context | default: 'page'
+  if context == 'drawer'
+    assign media_sizes = '72px'
+  else
+    assign media_sizes = '96px'
+  endif
+-%}
+<cart-items class="cart-items cart-items--{{ context }}" data-context="{{ context }}">
+  <ul class="cart-lines" role="list" aria-label="{{ 'cart.title' | t }}">
+    {%- for item in cart.items -%}
+      {%- liquid
+        assign line_id = context | append: '-' | append: forloop.index
+        assign quantity_id = 'Quantity-' | append: line_id
+        assign quantity_attrs = 'data-index="' | append: forloop.index | append: '" data-quantity-variant-id="' | append: item.variant_id | append: '"'
+        assign has_line_discount = false
+        if item.original_line_price != item.final_line_price
+          assign has_line_discount = true
+        endif
+      -%}
+      <li class="cart-line" id="CartLine-{{ line_id }}" data-line="{{ forloop.index }}">
+        <a href="{{ item.url }}" class="cart-line__media" tabindex="-1" aria-hidden="true">
+          {%- if item.image -%}
+            {%- render 'image', image: item.image, sizes: media_sizes, widths: '100, 150, 200, 300', ratio: '1 / 1', wrapper_class: 'cart-line__media-box', class: 'cart-line__img', loading: 'lazy', alt: item.image.alt -%}
+          {%- else -%}
+            <div class="media cart-line__media-box" style="--ratio: 1 / 1;">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+        </a>
+
+        <div class="cart-line__details">
+          {%- if settings.cart_show_vendor and item.product.vendor != blank -%}
+            <p class="cart-line__vendor eyebrow eyebrow--ink">{{ item.product.vendor | escape }}</p>
+          {%- endif -%}
+
+          <a href="{{ item.url }}" class="cart-line__title clamp-2">{{ item.product.title | escape }}</a>
+
+          {%- if item.product.has_only_default_variant == false -%}
+            <p class="cart-line__variant caption">
+              {%- for option in item.options_with_values -%}
+                {{ option.value | escape }}
+                {%- unless forloop.last %} · {% endunless -%}
+              {%- endfor -%}
+            </p>
+          {%- endif -%}
+
+          {%- liquid
+            assign visible_properties = 0
+            for property in item.properties
+              assign first_char = property.first | slice: 0
+              if property.last != blank and first_char != '_'
+                assign visible_properties = visible_properties | plus: 1
+              endif
+            endfor
+          -%}
+          {%- if visible_properties > 0 -%}
+            <dl class="cart-line__properties caption">
+              {%- for property in item.properties -%}
+                {%- assign first_char = property.first | slice: 0 -%}
+                {%- if property.last != blank and first_char != '_' -%}
+                  <div class="cart-line__property">
+                    <dt>{{ property.first | escape }}:</dt>
+                    <dd>
+                      {%- if property.last contains '/uploads/' -%}
+                        <a href="{{ property.last }}" class="link link--underline" target="_blank" rel="noopener">{{ property.last | split: '/' | last | escape }}</a>
+                      {%- else -%}
+                        {{ property.last | escape }}
+                      {%- endif -%}
+                    </dd>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </dl>
+          {%- endif -%}
+
+          {%- if item.selling_plan_allocation != null -%}
+            <p class="cart-line__plan caption">{{ item.selling_plan_allocation.selling_plan.name | escape }}</p>
+          {%- endif -%}
+
+          {%- if item.unit_price_measurement -%}
+            <p class="cart-line__unit caption money">
+              <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+              {{ item.unit_price | money }}
+              <span aria-hidden="true">/</span>
+              <span class="visually-hidden">{{ 'accessibility.unit_price_separator' | t }}</span>
+              {%- if item.unit_price_measurement.reference_value != 1 -%}
+                {{ item.unit_price_measurement.reference_value }}
+              {%- endif -%}
+              {{ item.unit_price_measurement.reference_unit }}
+            </p>
+          {%- endif -%}
+
+          {%- if item.line_level_discount_allocations.size > 0 -%}
+            <ul class="cart-line__discounts caption" role="list" aria-label="{{ 'cart.general.discounts' | t }}">
+              {%- for discount in item.line_level_discount_allocations -%}
+                <li class="cart-line__discount">
+                  {%- render 'icon', name: 'check', size: 14 -%}
+                  <span>{{ discount.discount_application.title | escape }} (−{{ discount.amount | money }})</span>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          <div class="cart-line__controls">
+            {%- render 'quantity-input', id: quantity_id, value: item.quantity, min: 1, size: 'sm', label: item.product.title, data_attrs: quantity_attrs -%}
+            <cart-remove-button data-index="{{ forloop.index }}">
+              <button type="button" class="cart-line__remove" aria-label="{{ 'cart.general.remove_title' | t: title: item.title | escape }}">
+                {%- render 'icon', name: 'close', size: 16 -%}
+                <span class="cart-line__remove-text{% if context == 'drawer' %} visually-hidden{% endif %}">{{ 'cart.general.remove' | t }}</span>
+              </button>
+            </cart-remove-button>
+          </div>
+
+          <p class="cart-line__error field__error" id="Line-error-{{ line_id }}" role="alert" hidden></p>
+        </div>
+
+        <div class="cart-line__price money">
+          {%- if has_line_discount -%}
+            <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+            <s class="cart-line__price-compare">{{ item.original_line_price | money }}</s>
+            <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+          {%- endif -%}
+          <span class="cart-line__price-final">{{ item.final_line_price | money }}</span>
+          {%- if item.quantity > 1 -%}
+            {%- assign each_price = item.final_price | money -%}
+            <span class="cart-line__each caption">{{ 'cart.general.each_html' | t: price: each_price }}</span>
+          {%- endif -%}
+        </div>
+      </li>
+    {%- endfor -%}
+  </ul>
+</cart-items>

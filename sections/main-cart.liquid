@@ -1,0 +1,184 @@
+{%- comment -%}
+  Cart page. Everything that re-renders lives inside #MainCart-Inner, which
+  carries the section id so cart.js can request it from the Section
+  Rendering API and swap it in place.
+{%- endcomment -%}
+{%- liquid
+  assign show_shipping_bar = false
+  if settings.cart_show_free_shipping and settings.cart_free_shipping_threshold > 0 and cart.item_count > 0
+    assign show_shipping_bar = true
+    assign shipping_threshold = settings.cart_free_shipping_threshold | times: 100
+    assign shipping_remaining = shipping_threshold | minus: cart.total_price
+    assign shipping_remaining_money = shipping_remaining | money
+    assign shipping_progress = cart.total_price | times: 1.0 | divided_by: shipping_threshold | at_most: 1.0
+    assign shipping_percent = shipping_progress | times: 100 | round
+  endif
+-%}
+<div class="section section--tight color-{{ section.settings.color_scheme }} main-cart" id="section-{{ section.id }}">
+  <div class="page-width">
+    <div id="MainCart-Inner" class="main-cart__inner{% if cart.item_count == 0 %} is-empty{% endif %}" data-section-id="{{ section.id }}">
+      <div class="main-cart__header">
+        <div class="main-cart__heading">
+          <h1 class="h1" id="MainCart-Title" tabindex="-1">{{ 'cart.title' | t }}</h1>
+          {%- if cart.item_count > 0 -%}
+            <p class="main-cart__count lead">{{ 'cart.general.item_count' | t: count: cart.item_count }}</p>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.show_continue_shopping and cart.item_count > 0 -%}
+          <a href="{{ routes.all_products_collection_url }}" class="link link--arrow main-cart__continue">
+            {{ 'cart.continue_shopping' | t }}
+            {%- render 'icon', name: 'arrow-right', size: 18 -%}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if cart.item_count > 0 -%}
+        <div class="main-cart__layout">
+          <div class="main-cart__items">
+            {%- render 'cart-line-items', context: 'page' -%}
+
+            {%- if settings.cart_show_note -%}
+              <olivet-accordion class="accordion cart-note main-cart__note">
+                <details{% if cart.note != blank %} open{% endif %}>
+                  <summary class="accordion__summary cart-note__summary">
+                    <span>{{ 'cart.general.note' | t }}</span>
+                    {%- render 'icon', name: 'chevron-down', size: 18 -%}
+                  </summary>
+                  <div class="accordion__content" data-accordion-content>
+                    <div class="accordion__inner">
+                      <cart-note class="cart-note__field" data-saved-text="{{ 'cart.general.note_saved' | t | escape }}" data-error-text="{{ 'cart.general.error' | t | escape }}">
+                        <label class="visually-hidden" for="MainCart-Note">{{ 'cart.general.note' | t }}</label>
+                        <textarea
+                          class="field__textarea cart-note__textarea"
+                          id="MainCart-Note"
+                          name="note"
+                          form="Cart"
+                          rows="3"
+                          placeholder="{{ 'cart.general.note_placeholder' | t | escape }}"
+                        >{{ cart.note }}</textarea>
+                        <p class="cart-note__status caption" aria-live="polite"></p>
+                      </cart-note>
+                    </div>
+                  </div>
+                </details>
+              </olivet-accordion>
+            {%- endif -%}
+          </div>
+
+          <aside class="main-cart__summary" aria-labelledby="MainCart-SummaryTitle">
+            <div class="main-cart__card">
+              <h2 class="h4 main-cart__summary-title" id="MainCart-SummaryTitle">{{ 'cart.general.summary' | t }}</h2>
+
+              {%- if show_shipping_bar -%}
+                <free-shipping-bar
+                  class="free-shipping-bar main-cart__shipping{% if shipping_remaining <= 0 %} is-reached{% endif %}"
+                  data-total="{{ cart.total_price }}"
+                  data-threshold="{{ shipping_threshold }}"
+                  style="--progress: {{ shipping_progress }};"
+                >
+                  <p class="free-shipping-bar__text small" aria-live="polite">
+                    {%- if shipping_remaining > 0 -%}
+                      {{ 'cart.free_shipping.away_liquid_html' | t: amount: shipping_remaining_money }}
+                    {%- else -%}
+                      {%- render 'icon', name: 'check', size: 16, class: 'free-shipping-bar__check' -%}
+                      <span>{{ 'cart.free_shipping.reached' | t }}</span>
+                    {%- endif -%}
+                  </p>
+                  <div class="free-shipping-bar__track" role="progressbar" aria-label="{{ 'cart.free_shipping.label' | t }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ shipping_percent }}">
+                    <div class="free-shipping-bar__fill"></div>
+                  </div>
+                </free-shipping-bar>
+              {%- endif -%}
+
+              <div class="cart-totals">
+                {%- if cart.cart_level_discount_applications.size > 0 -%}
+                  <ul class="cart-totals__discounts" role="list" aria-label="{{ 'cart.general.discounts' | t }}">
+                    {%- for discount in cart.cart_level_discount_applications -%}
+                      <li class="cart-totals__row cart-totals__row--discount">
+                        <span class="cart-totals__label">
+                          {%- render 'icon', name: 'check', size: 14 -%}
+                          {{ discount.title | escape }}
+                        </span>
+                        <span class="cart-totals__value money">−{{ discount.total_allocated_amount | money }}</span>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+
+                <div class="cart-totals__row cart-totals__row--subtotal">
+                  <span class="cart-totals__label">{{ 'cart.general.subtotal' | t }}</span>
+                  <span class="cart-totals__value money">{{ cart.total_price | money }}</span>
+                </div>
+
+                <p class="cart-totals__note caption">
+                  {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                    {{ 'cart.general.taxes_included_shipping_at_checkout_with_policy_html' | t: link: shop.shipping_policy.url }}
+                  {%- elsif cart.taxes_included -%}
+                    {{ 'cart.general.taxes_included_and_shipping_at_checkout' | t }}
+                  {%- elsif shop.shipping_policy.body != blank -%}
+                    {{ 'cart.general.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                  {%- else -%}
+                    {{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
+                  {%- endif -%}
+                </p>
+              </div>
+
+              <form action="{{ routes.cart_url }}" method="post" id="Cart" class="main-cart__form">
+                <button type="submit" name="checkout" class="btn btn--primary btn--full btn--lg">
+                  {%- render 'icon', name: 'lock', size: 16 -%}
+                  {{ 'cart.general.checkout' | t }}
+                </button>
+              </form>
+
+              {%- if additional_checkout_buttons -%}
+                <div class="main-cart__dynamic-checkout additional-checkout-buttons">
+                  {{ content_for_additional_checkout_buttons }}
+                </div>
+              {%- endif -%}
+
+              {%- if shop.customer_accounts_enabled and customer == null -%}
+                <p class="caption main-cart__login">
+                  <strong>{{ 'cart.login.title' | t }}</strong>
+                  {{ 'cart.login.paragraph_html' | t: link: routes.account_login_url }}
+                </p>
+              {%- endif -%}
+            </div>
+          </aside>
+        </div>
+      {%- else -%}
+        <div class="empty-state main-cart__empty">
+          {%- render 'icon', name: 'bag', size: 36 -%}
+          <h2 class="h3">{{ 'cart.empty' | t }}</h2>
+          <p class="muted text-pretty">{{ 'cart.empty_body' | t }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'cart.continue_shopping' | t }}</a>
+          {%- if shop.customer_accounts_enabled and customer == null -%}
+            <p class="caption main-cart__login">
+              <strong>{{ 'cart.login.title' | t }}</strong>
+              {{ 'cart.login.paragraph_html' | t: link: routes.account_login_url }}
+            </p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_continue_shopping",
+      "label": "Show “Continue shopping” link",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
