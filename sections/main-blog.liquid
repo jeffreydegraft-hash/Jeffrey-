@@ -23,8 +23,9 @@
           <p class="lead main-blog__intro">{{ section.settings.intro | escape }}</p>
         {%- endif -%}
         {%- if current_tags -%}
+          {%- assign tag_list = current_tags | join: ', ' -%}
           <p class="main-blog__tagged">
-            <span class="badge badge--outline">{{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}</span>
+            <span class="badge badge--outline">{{ 'general.meta.tags' | t: tags: tag_list }}</span>
             <a href="{{ blog.url }}" class="link link--underline small">{{ 'blogs.general.all_posts' | t }}</a>
           </p>
         {%- endif -%}

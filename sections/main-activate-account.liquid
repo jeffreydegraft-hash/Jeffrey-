@@ -1,0 +1,80 @@
+{%- comment -%}
+  Activate account (from an invitation email). Password + confirmation,
+  an activate button and a decline button (name="decline").
+{%- endcomment -%}
+{%- liquid
+  assign spacing_class = ''
+  case section.settings.spacing
+    when 'tight'
+      assign spacing_class = ' section--tight'
+    when 'none'
+      assign spacing_class = ' section--none'
+  endcase
+-%}
+<div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-activate-account" id="section-{{ section.id }}">
+  <div class="page-width page-width--medium">
+    <div class="customer-auth activate-account">
+      <header class="customer-auth__head">
+        <h1 class="h1">{{ 'customer.activate_account.title' | t }}</h1>
+        <p class="muted text-pretty">{{ 'customer.activate_account.subtext' | t }}</p>
+      </header>
+
+      {%- form 'activate_customer_password', class: 'customer-form' -%}
+        {%- render 'customer-form-errors', form: form, prefix: 'ActivateForm' -%}
+        <div class="field">
+          <label class="field__label" for="ActivateForm-password">{{ 'customer.activate_account.password' | t }}</label>
+          <input
+            class="field__input"
+            type="password"
+            id="ActivateForm-password"
+            name="customer[password]"
+            autocomplete="new-password"
+            required
+            {% if form.errors contains 'password' %}aria-invalid="true"{% endif %}
+          >
+        </div>
+        <div class="field">
+          <label class="field__label" for="ActivateForm-password_confirmation">{{ 'customer.activate_account.password_confirm' | t }}</label>
+          <input
+            class="field__input"
+            type="password"
+            id="ActivateForm-password_confirmation"
+            name="customer[password_confirmation]"
+            autocomplete="new-password"
+            required
+            {% if form.errors contains 'password_confirmation' %}aria-invalid="true"{% endif %}
+          >
+        </div>
+        <div class="customer-form__actions">
+          <button type="submit" class="btn btn--primary btn--full">{{ 'customer.activate_account.submit' | t }}</button>
+          <button type="submit" name="decline" class="btn btn--ghost btn--full">{{ 'customer.activate_account.cancel' | t }}</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Activate account",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ]
+}
+{% endschema %}

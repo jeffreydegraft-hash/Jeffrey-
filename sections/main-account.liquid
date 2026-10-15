@@ -1,0 +1,124 @@
+{%- comment -%}
+  Account overview: order history (a table from 750px, stacked cards
+  below, each cell labelled through data-label) and an aside with the
+  customer's name, email and default address.
+{%- endcomment -%}
+{%- liquid
+  assign spacing_class = ''
+  case section.settings.spacing
+    when 'tight'
+      assign spacing_class = ' section--tight'
+    when 'none'
+      assign spacing_class = ' section--none'
+  endcase
+  assign first_name = customer.first_name | escape
+-%}
+<div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-account account" id="section-{{ section.id }}">
+  <div class="page-width page-width--medium">
+    <header class="customer-page__head">
+      <div class="customer-page__heading">
+        <h1 class="h1">{{ 'customer.account.title' | t }}</h1>
+        {%- if first_name != blank -%}
+          <p class="lead">{{ 'customer.account.welcome' | t: name: first_name }}</p>
+        {%- endif -%}
+      </div>
+      <div class="customer-page__actions">
+        <a href="{{ routes.account_logout_url }}" class="btn btn--secondary btn--sm">{{ 'customer.log_out' | t }}</a>
+      </div>
+    </header>
+
+    <div class="account__layout">
+      <section class="account__orders" aria-labelledby="AccountOrders">
+        <h2 class="h3 account__section-title" id="AccountOrders" tabindex="-1">{{ 'customer.orders.title' | t }}</h2>
+
+        {%- paginate customer.orders by 20 -%}
+          {%- if customer.orders.size > 0 -%}
+            <table class="orders-table" role="table">
+              <caption class="visually-hidden">{{ 'customer.orders.title' | t }}</caption>
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th scope="col" role="columnheader" class="orders-table__order">{{ 'customer.orders.order_number' | t }}</th>
+                  <th scope="col" role="columnheader" class="orders-table__date">{{ 'customer.orders.date' | t }}</th>
+                  <th scope="col" role="columnheader" class="orders-table__payment">{{ 'customer.orders.payment_status' | t }}</th>
+                  <th scope="col" role="columnheader" class="orders-table__fulfillment">{{ 'customer.orders.fulfillment_status' | t }}</th>
+                  <th scope="col" role="columnheader" class="orders-table__total">{{ 'customer.orders.total' | t }}</th>
+                </tr>
+              </thead>
+              <tbody role="rowgroup">
+                {%- for order in customer.orders -%}
+                  <tr role="row" class="orders-table__row">
+                    <th scope="row" role="rowheader" class="orders-table__order" data-label="{{ 'customer.orders.order_number' | t | escape }}">
+                      <a href="{{ order.customer_url }}" class="link link--underline" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name | escape }}">{{ order.name }}</a>
+                    </th>
+                    <td role="cell" class="orders-table__date" data-label="{{ 'customer.orders.date' | t | escape }}">
+                      <time datetime="{{ order.created_at | date: '%Y-%m-%d' }}">{{ order.created_at | date: '%B %-d, %Y' }}</time>
+                    </td>
+                    <td role="cell" class="orders-table__payment" data-label="{{ 'customer.orders.payment_status' | t | escape }}">{{ order.financial_status_label }}</td>
+                    <td role="cell" class="orders-table__fulfillment" data-label="{{ 'customer.orders.fulfillment_status' | t | escape }}">{{ order.fulfillment_status_label }}</td>
+                    <td role="cell" class="orders-table__total tnum" data-label="{{ 'customer.orders.total' | t | escape }}">{{ order.total_price | money }}</td>
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+            {%- render 'pagination', paginate: paginate, anchor: '#AccountOrders' -%}
+          {%- else -%}
+            <div class="empty-state account__empty">
+              {%- render 'icon', name: 'bag', size: 36 -%}
+              <h3 class="h4">{{ 'customer.orders.none' | t }}</h3>
+              <p class="muted text-pretty">{{ 'customer.orders.none_body' | t }}</p>
+              <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'customer.orders.shop_cta' | t }}</a>
+            </div>
+          {%- endif -%}
+        {%- endpaginate -%}
+      </section>
+
+      <aside class="account__aside" aria-labelledby="AccountDetails">
+        <h2 class="h4" id="AccountDetails">{{ 'customer.account.details' | t }}</h2>
+        <div class="account__identity">
+          {%- if customer.name != blank -%}
+            <p class="account__name">{{ customer.name | escape }}</p>
+          {%- endif -%}
+          <p class="account__email muted small">{{ customer.email | escape }}</p>
+        </div>
+        <div class="account__address">
+          <h3 class="eyebrow eyebrow--ink">{{ 'customer.account.default_address' | t }}</h3>
+          {%- if customer.default_address != blank -%}
+            <address class="account__address-body">{{ customer.default_address | format_address }}</address>
+          {%- else -%}
+            <p class="muted small">{{ 'customer.account.no_address' | t }}</p>
+          {%- endif -%}
+        </div>
+        <a href="{{ routes.account_addresses_url }}" class="link link--arrow account__addresses-link">
+          {{ 'customer.account.view_addresses' | t }}
+          {%- if customer.addresses_count > 0 %} <span class="muted">({{ customer.addresses_count }})</span>{% endif %}
+          {%- render 'icon', name: 'arrow-right', size: 18 -%}
+        </a>
+      </aside>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Account",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ]
+}
+{% endschema %}

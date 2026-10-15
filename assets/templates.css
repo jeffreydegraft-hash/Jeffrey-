@@ -4560,3 +4560,805 @@ body:has(.lightbox[open]) {
 .apps__inner > * + * {
   margin-top: var(--space-5);
 }
+
+
+/* =========================================================================
+   section group: pages
+   ========================================================================= */
+/* === section: main-page ===
+   A plain page: optional serif title over .rte content at a narrow or
+   medium measure. Nothing moves; the reader is here for the text. */
+.main-page__header {
+  margin-bottom: clamp(24px, 4vw, 40px);
+  padding-bottom: clamp(20px, 3vw, 32px);
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+
+.main-page__title {
+  max-width: 24ch;
+}
+
+.main-page__content {
+  max-width: 68ch;
+}
+
+/* === section: page-hero ===
+   Reusable page header: ornament, eyebrow, serif title, lead. Above the
+   fold, so it enters with .enter (@starting-style, base.css) and never
+   with data-reveal. --flush drops the bottom padding so the next section
+   continues the page without a double gap. */
+.page-hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  max-width: 44rem;
+}
+
+.page-hero--center .page-hero__inner {
+  align-items: center;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.page-hero--flush.section {
+  padding-bottom: 0;
+}
+
+.page-hero__ornament {
+  width: 100%;
+  max-width: 180px;
+  margin-bottom: var(--space-2);
+}
+
+.page-hero--left .page-hero__ornament {
+  max-width: 120px;
+}
+
+.page-hero__heading {
+  max-width: 22ch;
+}
+
+.page-hero__intro {
+  max-width: 60ch;
+}
+
+/* === section: contact-form ===
+   Heading + intro, then a 12-column row at ≥990px: the form takes 7, a
+   surface panel with email / phone / studio address takes 4, and one
+   column of air sits between. Inputs are 16px on 48px rows (base.css).
+   Motion inventory: the submit presses via .btn; nothing else moves. */
+.contact-form__layout {
+  display: grid;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (min-width: 990px) {
+  .contact-form__layout--details {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    column-gap: calc(100% / 12);
+  }
+}
+
+@media (min-width: 990px) {
+  .contact-form__layout:not(.contact-form__layout--details) .contact-form__form {
+    max-width: 44rem;
+  }
+}
+
+.contact-form__form {
+  min-width: 0;
+}
+
+.contact-form__status {
+  margin-bottom: var(--space-5);
+}
+
+.contact-form__status .icon {
+  margin-top: 2px;
+}
+
+.contact-form__status p {
+  margin: 0;
+}
+
+.contact-form__status p + ul {
+  margin-top: var(--space-2);
+}
+
+.contact-form__fields {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.contact-form__row {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 750px) {
+  .contact-form__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.contact-form__submit {
+  justify-self: start;
+  min-width: 200px;
+}
+
+@media (max-width: 749px) {
+  .contact-form__submit {
+    width: 100%;
+  }
+}
+
+.contact-form__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+  padding: clamp(24px, 3vw, 36px);
+  border-radius: var(--r-lg);
+  background: rgb(var(--c-surface));
+}
+
+.contact-form__details-title {
+  color: rgb(var(--c-ink-2));
+}
+
+.contact-form__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.contact-form__item {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.contact-form__item .icon {
+  margin-top: 3px;
+  color: rgb(var(--c-gold));
+}
+
+.contact-form__item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.contact-form__item-label {
+  font-size: 0.75rem;
+  font-weight: var(--font-body-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--c-ink-2));
+}
+
+.contact-form__item-value {
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.contact-form__address {
+  font-style: normal;
+}
+
+.contact-form__social {
+  margin-top: calc(var(--space-2) * -1);
+  margin-left: -12px;
+}
+
+/* === section: main-404 ===
+   A quiet band: "404" eyebrow, serif title, one primary action and one
+   text link. Enters with .enter; height in svh so it reads as a page on
+   a phone (svh, not the viewport-height unit). */
+.main-404__inner {
+  min-height: 56svh;
+  justify-content: center;
+  gap: var(--space-5);
+  max-width: 40rem;
+}
+
+.main-404__eyebrow {
+  font-size: 0.875rem;
+}
+
+.main-404__title {
+  max-width: 16ch;
+}
+
+.main-404__actions {
+  justify-content: center;
+  gap: var(--space-4) var(--space-5);
+  margin-top: var(--space-2);
+}
+
+/* === section: main-password ===
+   Full-height (100svh) centered column on the password layout: logo or
+   wordmark, ornament, eyebrow, serif heading, body, password form,
+   optional newsletter, social icons, owner / Shopify lines. Safe-area
+   padding on every edge. Text enters with .enter. */
+.main-password {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--space-8) + var(--safe-top)) max(var(--gutter), var(--safe-left)) calc(var(--space-7) + var(--safe-bottom)) max(var(--gutter), var(--safe-right));
+}
+
+.main-password__inner {
+  width: 100%;
+  max-width: 34rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(32px, 6vw, 56px);
+}
+
+.main-password__logo img {
+  width: var(--logo-width, 140px);
+  height: auto;
+  margin-inline: auto;
+}
+
+.main-password__wordmark {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.75rem;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.main-password__card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.main-password__ornament {
+  width: 100%;
+  max-width: 160px;
+  margin-bottom: var(--space-2);
+}
+
+.main-password__heading {
+  max-width: 16ch;
+}
+
+.main-password__body {
+  max-width: 46ch;
+}
+
+.main-password__form {
+  width: 100%;
+  max-width: 28rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.main-password__form .btn,
+.main-password__newsletter .btn {
+  flex-shrink: 0;
+}
+
+.main-password__error {
+  justify-content: center;
+}
+
+.main-password__newsletter {
+  width: 100%;
+  max-width: 28rem;
+  margin-top: var(--space-4);
+  padding-top: var(--space-5);
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+.main-password__newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.main-password__newsletter-label {
+  font-size: 0.9375rem;
+  color: rgb(var(--c-ink-2));
+}
+
+.main-password__social {
+  justify-content: center;
+  margin-top: var(--space-2);
+}
+
+.main-password__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  color: rgb(var(--c-ink-2));
+}
+
+.main-password__footer a {
+  color: rgb(var(--c-ink));
+}
+
+/* === section: main-blog ===
+   Blog index: serif title + lead, a 3-column card grid where the newest
+   post may span two columns, pagination. Cards reveal on scroll with --i
+   stagger (base.css); the header does not move. */
+.main-blog__header {
+  max-width: 44rem;
+}
+
+.main-blog__tagged {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  color: rgb(var(--c-ink-2));
+}
+
+@media (min-width: 750px) {
+  .main-blog__item--featured {
+    grid-column: span 2;
+  }
+}
+
+/* === snippet: card-article ===
+   Article card on the shared .card base. A leaf ornament panel stands in
+   for a missing image; the meta row separates its items with a middle
+   dot. Featured: 2:1 media, a larger title and a 3-line excerpt at ≥750px. */
+.card-article__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgb(var(--c-gold));
+  background: rgb(var(--c-surface));
+}
+
+.card-article__placeholder .icon {
+  opacity: 0.7;
+}
+
+.card-article__meta {
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+}
+
+.card-article__meta > * + *::before {
+  content: "·";
+  margin-right: var(--space-2);
+  color: rgb(var(--c-ink-2));
+}
+
+@media (min-width: 750px) {
+  .card-article--featured .card__media {
+    --ratio: 2 / 1;
+  }
+
+  .card-article--featured .card__excerpt {
+    -webkit-line-clamp: 3;
+    font-size: 1rem;
+    max-width: 60ch;
+  }
+}
+
+/* === section: main-article ===
+   Editorial reading page. Centered header (blog · date · reading time,
+   serif title, author) enters with .enter. 16:9 hero at the medium width,
+   body at the narrow measure, tags as chips, share, previous / next tiles,
+   comments. Motion inventory: tiles press to .97 (feedback) and tint on a
+   real pointer's hover; the share button morphs via .btn__content. */
+.main-article__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  margin-bottom: clamp(28px, 5vw, 56px);
+}
+
+.main-article__eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.main-article__blog-link {
+  color: inherit;
+  transition: color var(--dur-fast) ease;
+}
+
+.main-article__sep {
+  opacity: 0.5;
+}
+
+.main-article__title {
+  max-width: 20ch;
+}
+
+.main-article__author {
+  font-size: 0.9375rem;
+  color: rgb(var(--c-ink-2));
+}
+
+.main-article__author-name {
+  font-weight: var(--font-body-weight-bold);
+  color: rgb(var(--c-ink));
+}
+
+.main-article__hero {
+  margin-bottom: clamp(32px, 5vw, 64px);
+}
+
+.main-article__media {
+  --media-radius: var(--r-lg);
+}
+
+.main-article__content {
+  font-size: 1.125rem;
+}
+
+@media (min-width: 750px) {
+  .main-article__content {
+    font-size: 1.1875rem;
+  }
+}
+
+.main-article__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: clamp(32px, 5vw, 56px);
+  padding-top: var(--space-5);
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+.main-article__tags {
+  min-width: 0;
+}
+
+.main-article__tags .cluster {
+  --cluster-gap: var(--space-2);
+}
+
+.main-article__tags .chip {
+  min-height: 36px;
+  padding-inline: 14px;
+  font-size: 0.875rem;
+}
+
+.main-article__share {
+  margin-left: auto;
+}
+
+.main-article__nav {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: clamp(32px, 5vw, 56px);
+}
+
+@media (min-width: 750px) {
+  .main-article__nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.main-article__nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-5);
+  border-radius: var(--r-lg);
+  background: rgb(var(--c-surface));
+  transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease;
+}
+
+.main-article__nav-link--next {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.main-article__nav-link:active {
+  transform: scale(0.97);
+}
+
+.main-article__nav-spacer {
+  display: none;
+}
+
+@media (min-width: 750px) {
+  .main-article__nav-spacer {
+    display: block;
+  }
+}
+
+.main-article__nav-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.75rem;
+  font-weight: var(--font-body-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(var(--c-ink-2));
+}
+
+.main-article__nav-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color var(--dur-fast) ease;
+}
+
+.main-article__back {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+.main-article__comments {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin-top: clamp(40px, 6vw, 72px);
+  padding-top: clamp(32px, 5vw, 56px);
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+.main-article__comment-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-article__comment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) 0;
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+.main-article__comment:last-child {
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+
+.main-article__comment--pending {
+  opacity: 0.75;
+}
+
+.main-article__comment-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  font-size: 0.875rem;
+  color: rgb(var(--c-ink-2));
+}
+
+.main-article__comment-author {
+  font-weight: var(--font-body-weight-bold);
+  color: rgb(var(--c-ink));
+  overflow-wrap: anywhere;
+}
+
+.main-article__comment-body {
+  font-size: 1rem;
+}
+
+.main-article__comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.main-article__form-row {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 750px) {
+  .main-article__form-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.main-article__comment-submit {
+  align-self: flex-start;
+  min-width: 200px;
+}
+
+@media (max-width: 749px) {
+  .main-article__comment-submit {
+    width: 100%;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .main-article__blog-link:hover {
+    color: rgb(var(--c-ink));
+  }
+
+  .main-article__nav-link:hover {
+    background: rgba(var(--c-ink), 0.08);
+  }
+
+  .main-article__nav-link:hover .main-article__nav-title {
+    color: rgb(var(--c-accent));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-article__nav-link {
+    transition: background-color var(--dur-fast) ease;
+  }
+
+  .main-article__nav-link:active {
+    transform: none;
+  }
+}
+
+/* === template: gift_card ===
+   Standalone page (layout none). Surface-colored page, one centered ivory
+   card: brand, balance, code with copy, QR, expiry, wallet, actions. The
+   copy button morphs its label via .btn__content. Print hides the actions
+   and the card's shadow. */
+.gift-card {
+  background-color: rgb(var(--c-surface));
+}
+
+.gift-card__main {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--space-6) + var(--safe-top)) max(var(--gutter), var(--safe-left)) calc(var(--space-6) + var(--safe-bottom)) max(var(--gutter), var(--safe-right));
+}
+
+.gift-card__card {
+  width: 100%;
+  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-5);
+  padding: clamp(28px, 5vw, 48px) clamp(20px, 4vw, 40px);
+  background: rgb(var(--c-bg));
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.gift-card__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.gift-card__logo img {
+  width: var(--logo-width, 140px);
+  height: auto;
+  margin-inline: auto;
+}
+
+.gift-card__wordmark {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.gift-card__ornament {
+  width: 100%;
+  max-width: 160px;
+}
+
+.gift-card__amount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.gift-card__balance {
+  font-variant-numeric: tabular-nums;
+}
+
+.gift-card__code-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--r-md);
+  background: rgb(var(--c-surface));
+}
+
+.gift-card__code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1.25rem;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  -webkit-user-select: all;
+  user-select: all;
+}
+
+.gift-card__qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.gift-card__qr-code {
+  display: grid;
+  place-items: center;
+  min-width: 132px;
+  min-height: 132px;
+  padding: 6px;
+  border-radius: var(--r-md);
+  background: rgb(var(--c-bg));
+  box-shadow: inset 0 0 0 1px rgb(var(--c-line));
+}
+
+.gift-card__qr-code img,
+.gift-card__qr-code canvas {
+  display: block;
+}
+
+.gift-card__hint {
+  max-width: 28ch;
+}
+
+.gift-card__wallet img {
+  width: 120px;
+  height: 40px;
+}
+
+.gift-card__actions {
+  justify-content: center;
+}
+
+@media print {
+  .gift-card {
+    background: none;
+  }
+
+  .gift-card__main {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .gift-card__card {
+    max-width: none;
+    box-shadow: none;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

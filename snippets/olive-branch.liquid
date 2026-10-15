@@ -1,0 +1,42 @@
+{%- comment -%}
+  Olive-branch line drawing, stroked in currentColor. Used as the designed
+  fallback wherever an image has not been chosen yet (hero, image with text).
+  Accepts:
+  - uid: {String} unique id for the leaf symbol (required when rendered more than once per page)
+  - class: {String} extra classes
+  - rotate: {Number} optional rotation in degrees, so stacked panels don't repeat exactly
+  Usage: {% render 'olive-branch', uid: section.id, class: 'hero__branch' %}
+{%- endcomment -%}
+{%- assign uid = uid | default: 'olive' -%}
+<svg class="olive-branch{% if class != blank %} {{ class }}{% endif %}"{% if rotate != blank %} style="transform: rotate({{ rotate }}deg)"{% endif %} viewBox="0 0 400 500" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+  <defs>
+    <g id="leaf-{{ uid }}">
+      <path d="M0 0C-13 -7 -25 -23 -27 -46C-9 -40 2 -21 0 0Z"/>
+      <path d="M-2 -5C-9 -14 -16 -26 -22 -38" opacity=".55"/>
+    </g>
+  </defs>
+  <path d="M214 468C210 452 208 436 206 420S201 388 199 372S196 340 195 324S195 292 196 276S198 244 199 228S200 196 200 180S199 148 199 132S200 104 200 88S199 60 197 44"/>
+  <use href="#leaf-{{ uid }}" transform="translate(206 420) rotate(-15)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(204 406) scale(-1 1) rotate(-10)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(199 372) scale(-1 1) rotate(-22)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(197 358) rotate(4)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(195 324) rotate(-26)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(195 310) scale(-1 1) rotate(2)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(196 276) scale(-1 1) rotate(-16)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(197 262) rotate(10)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(199 228) rotate(-12)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(200 214) scale(-1 1) rotate(-26)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(200 180) scale(-1 1) rotate(-4)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(200 166) rotate(-30)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(199 132) rotate(-2)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(200 118) scale(-1 1) rotate(-16)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(200 88) scale(-1 1) rotate(-30)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(199 74) rotate(-20)"/>
+  <use href="#leaf-{{ uid }}" transform="translate(197 44) rotate(22) scale(.75)"/>
+  <path d="M195 324C189 331 183 337 179 343"/>
+  <ellipse cx="175" cy="352" rx="6.5" ry="9.5" transform="rotate(-28 175 352)"/>
+  <path d="M199 228C205 234 211 240 215 246"/>
+  <ellipse cx="219" cy="255" rx="6.5" ry="9.5" transform="rotate(24 219 255)"/>
+  <path d="M200 132C194 137 189 142 185 147"/>
+  <ellipse cx="181" cy="156" rx="6.5" ry="9.5" transform="rotate(-24 181 156)"/>
+</svg>

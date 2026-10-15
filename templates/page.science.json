@@ -1,0 +1,150 @@
+{
+  "sections": {
+    "hero": {
+      "type": "page-hero",
+      "settings": {
+        "eyebrow": "Our Science",
+        "heading": "What is in the bottle",
+        "intro": "Our oils are built on 100% olive-derived squalane and antioxidant-rich polyphenols from biblical botanicals. This page explains what those ingredients are and why we chose them.",
+        "alignment": "center",
+        "show_ornament": true,
+        "color_scheme": "scheme-1",
+        "padding": "default",
+        "flush_bottom": true
+      }
+    },
+    "pillars": {
+      "type": "multicolumn",
+      "blocks": {
+        "col-1": {
+          "type": "column",
+          "settings": {
+            "icon": "drop",
+            "title": "Olive-derived squalane",
+            "text": "<p>Squalane is a lipid similar to the squalene found in human skin. Ours is 100% olive-derived, sustainable, and vegan.</p><p>It offers hydration from head to toe. It also serves as the delivery vehicle for each botanical extract and enhances its bioavailability.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "col-2": {
+          "type": "column",
+          "settings": {
+            "icon": "olive",
+            "title": "Polyphenols from olive and pomegranate",
+            "text": "<p>Polyphenols are antioxidant compounds that plants make. From the olive we draw hydroxytyrosol, tyrosol, oleuropein-aglycone derivatives, luteolin, and apigenin.</p><p>From the pomegranate we draw ellagitannins and punicalagins. These actives help neutralize free radicals and support the skin's natural barrier function.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "col-3": {
+          "type": "column",
+          "settings": {
+            "icon": "flask",
+            "title": "The Polyphenol Alpha complex",
+            "text": "<p>Polyphenol Alpha (α)™ is our proprietary antioxidant-rich polyphenol complex, derived entirely from natural botanical sources. It blends flavonoids, phenolic acids, stilbenes, and lignans, and includes ferulic acid.</p><p>It is formulated to help neutralize free radicals, support the skin's natural barrier function, and promote cellular vitality. It is the reason we call our oils cosmeceuticals.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "col-1",
+        "col-2",
+        "col-3"
+      ],
+      "settings": {
+        "heading": "",
+        "intro": "",
+        "columns": 3,
+        "image_ratio": "landscape",
+        "background_cards": true,
+        "color_scheme": "scheme-1",
+        "padding": "tight"
+      }
+    },
+    "olive-tree": {
+      "type": "scripture-quote",
+      "settings": {
+        "eyebrow": "From Scripture",
+        "quote": "But I am like a green olive tree in the house of God: I trust in the mercy of God for ever and ever.",
+        "reference": "Psalm 52:8",
+        "alignment": "center",
+        "color_scheme": "scheme-3",
+        "padding": "default"
+      }
+    },
+    "label": {
+      "type": "rich-text",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Reading the label"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "How to read our label",
+            "size": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Ingredients are listed in descending order by weight, so the first name on the label is the largest part of the formula. On our bottles that is olive oil or olive-derived squalane.</p><p>Botanicals appear by their Latin names, with the common name in parentheses: Boswellia serrata (Frankincense), Commiphora myrrha (Myrrh), Nardostachys jatamansi (Spikenard).</p><p>Every oil is natural, paraben-free, and vegan, and for external use only. If a word is unfamiliar, write to us and we will explain it.</p>",
+            "size": "body"
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "alignment": "left",
+        "width": "narrow",
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    },
+    "closing": {
+      "type": "rich-text",
+      "blocks": {
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Mount of Olives oils are cosmetic products for external use only. They are not intended to diagnose, treat, cure, or prevent any disease. If irritation occurs, stop use.</p>",
+            "size": "small"
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "label": "Shop all oils",
+            "link": "shopify://collections/all",
+            "style": "primary"
+          }
+        }
+      },
+      "block_order": [
+        "text",
+        "button"
+      ],
+      "settings": {
+        "alignment": "center",
+        "width": "narrow",
+        "color_scheme": "scheme-2",
+        "padding": "tight"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "pillars",
+    "olive-tree",
+    "label",
+    "closing"
+  ]
+}

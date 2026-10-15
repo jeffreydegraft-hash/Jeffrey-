@@ -659,3 +659,20 @@ a.pagination__item:active {
     animation: none;
   }
 }
+
+/* ---------- ornament panel ----------
+   Designed stand-in for a missing image: a soft gold glow behind the
+   olive-branch line drawing. Static; nothing animates. */
+.ornament-panel {
+  position: absolute;
+  inset: 0;
+  color: rgb(var(--c-gold));
+  background: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(var(--c-gold), 0.22), rgba(var(--c-gold), 0) 70%), rgb(var(--c-surface));
+}
+
+.ornament-panel__branch {
+  position: absolute;
+  inset: 12%;
+  width: 76%;
+  height: 76%;
+}

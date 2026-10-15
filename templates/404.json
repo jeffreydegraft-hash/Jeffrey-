@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    }
+  },
+  "order": ["main"]
+}

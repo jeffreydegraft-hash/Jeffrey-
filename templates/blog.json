@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "intro": "Notes on the botanicals of Scripture, a brief history of anointing oil in the church, and why not all olives are created equal.",
+        "show_featured": true,
+        "show_date": true,
+        "show_author": false,
+        "show_excerpt": true,
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,114 @@
+{%- comment -%}
+  Create account. One centered column (max 420px). Fields keep their values
+  when the form comes back with errors; the error summary links to each.
+{%- endcomment -%}
+{%- liquid
+  assign spacing_class = ''
+  case section.settings.spacing
+    when 'tight'
+      assign spacing_class = ' section--tight'
+    when 'none'
+      assign spacing_class = ' section--none'
+  endcase
+-%}
+<div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-register" id="section-{{ section.id }}">
+  <div class="page-width page-width--medium">
+    <div class="customer-auth register">
+      <header class="customer-auth__head">
+        <h1 class="h1">{{ 'customer.register.title' | t }}</h1>
+        <p class="muted text-pretty">{{ 'customer.register.subtext' | t }}</p>
+      </header>
+
+      {%- form 'create_customer', class: 'customer-form' -%}
+        {%- render 'customer-form-errors', form: form, prefix: 'RegisterForm' -%}
+        <div class="customer-form__row">
+          <div class="field">
+            <label class="field__label" for="RegisterForm-first_name">{{ 'customer.register.first_name' | t }}</label>
+            <input
+              class="field__input"
+              type="text"
+              id="RegisterForm-first_name"
+              name="customer[first_name]"
+              value="{{ form.first_name | escape }}"
+              autocomplete="given-name"
+              {% if form.errors contains 'first_name' %}aria-invalid="true"{% endif %}
+            >
+          </div>
+          <div class="field">
+            <label class="field__label" for="RegisterForm-last_name">{{ 'customer.register.last_name' | t }}</label>
+            <input
+              class="field__input"
+              type="text"
+              id="RegisterForm-last_name"
+              name="customer[last_name]"
+              value="{{ form.last_name | escape }}"
+              autocomplete="family-name"
+              {% if form.errors contains 'last_name' %}aria-invalid="true"{% endif %}
+            >
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="RegisterForm-email">{{ 'customer.register.email' | t }}</label>
+          <input
+            class="field__input"
+            type="email"
+            id="RegisterForm-email"
+            name="customer[email]"
+            value="{{ form.email | escape }}"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            required
+            {% if form.errors contains 'email' %}aria-invalid="true"{% endif %}
+          >
+        </div>
+        <div class="field">
+          <label class="field__label" for="RegisterForm-password">{{ 'customer.register.password' | t }}</label>
+          <input
+            class="field__input"
+            type="password"
+            id="RegisterForm-password"
+            name="customer[password]"
+            autocomplete="new-password"
+            required
+            {% if form.errors contains 'password' %}aria-invalid="true"{% endif %}
+          >
+        </div>
+        <div class="customer-form__actions">
+          <button type="submit" class="btn btn--primary btn--full">{{ 'customer.register.submit' | t }}</button>
+        </div>
+      {%- endform -%}
+
+      <p class="customer-auth__alt">
+        {{ 'customer.register.already_have' | t }}
+        <a href="{{ routes.account_login_url }}" class="link link--underline">{{ 'customer.log_in' | t }}</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Register",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ]
+}
+{% endschema %}

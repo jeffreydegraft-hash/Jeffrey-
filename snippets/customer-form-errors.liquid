@@ -1,0 +1,32 @@
+{%- comment -%}
+  Error summary for customer forms. Render inside a {% form %} block.
+  Accepts:
+  - form: {Object} the form object (required)
+  - prefix: {String} id prefix of the form's inputs, so each error links to
+    its field as #<prefix>-<field> (e.g. 'RegisterForm' → #RegisterForm-email)
+  - plain: {Boolean} list messages without field links (login / recover,
+    where Shopify reports a single generic error)
+  The wrapper carries data-form-errors so customer.js can focus it and keep
+  an address panel open when its form came back with errors.
+{%- endcomment -%}
+{%- if form.errors -%}
+  <div class="form-status form-status--error customer-form__errors" role="alert" tabindex="-1" autofocus data-form-errors>
+    {%- render 'icon', name: 'error', size: 20 -%}
+    <div>
+      <p class="visually-hidden">{{ 'contact.form.error_heading' | t }}</p>
+      <ul>
+        {%- for field in form.errors -%}
+          <li>
+            {%- if field == 'form' -%}
+              {{ form.errors.messages[field] }}
+            {%- elsif plain -%}
+              {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+            {%- else -%}
+              <a href="#{{ prefix }}-{{ field }}">{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}

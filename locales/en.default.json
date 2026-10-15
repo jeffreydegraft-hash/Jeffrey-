@@ -70,7 +70,8 @@
     "next_slide": "Next",
     "of": "of",
     "slide": "Slide {{ index }}",
-    "image_available": "Image {{ index }} is now available in gallery view"
+    "image_available": "Image {{ index }} is now available in gallery view",
+    "error": "Error"
   },
   "header": {
     "menu": "Menu",
@@ -336,7 +337,11 @@
       "by": "by {{ author }}",
       "reading_time": "{{ minutes }} min read",
       "tags": "Tags",
-      "written_by": "Written by"
+      "written_by": "Written by",
+      "previous_article": "Previous",
+      "next_article": "Next",
+      "awaiting_moderation": "Awaiting approval",
+      "email_hint": "Never shown publicly."
     },
     "general": {
       "empty": "No posts yet",
@@ -355,6 +360,12 @@
       "send": "Send message",
       "post_success": "Thank you. We will reply within one business day.",
       "error_heading": "Please adjust the following:"
+    },
+    "details": {
+      "heading": "Reach us directly",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Studio"
     }
   },
   "sections": {
@@ -368,7 +379,9 @@
     "page_404": {
       "title": "Page not found",
       "body": "The page you were looking for has moved or never existed.",
-      "cta": "Go to the homepage"
+      "cta": "Go to the homepage",
+      "eyebrow": "404",
+      "secondary_cta": "Browse all oils"
     },
     "featured_collection": {
       "view_all": "View all",
@@ -395,6 +408,9 @@
     },
     "apps": {
       "empty": "Add app blocks to this section in the theme editor."
+    },
+    "main_page": {
+      "empty": "This page has no content yet. Add it under Online Store › Pages."
     },
     "related_products": {
       "empty": "Recommendations will appear here once Shopify has enough order and collection data for this product."
@@ -524,7 +540,9 @@
       "copy_code_success": "Code copied successfully",
       "how_to_use_gift_card": "Use the gift card code online or QR code in-store",
       "expiration_date": "Expires {{ expires_on }}",
-      "balance": "Balance"
+      "balance": "Balance",
+      "initial_value": "Initial value {{ value }}",
+      "print": "Print"
     }
   },
   "recipient": {

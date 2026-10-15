@@ -1,0 +1,153 @@
+{%- comment -%}
+  Customer login. One centered column (max 420px) with two panels:
+  #login and #recover. The recover panel is captured first so its
+  posted_successfully? state can be shown on the login panel; after a
+  failed recover post Shopify returns to /account/login#recover, which
+  CSS :target paints and customer.js mirrors (classes, aria, focus).
+  Without JS both panels still work through :target.
+{%- endcomment -%}
+{%- liquid
+  assign spacing_class = ''
+  case section.settings.spacing
+    when 'tight'
+      assign spacing_class = ' section--tight'
+    when 'none'
+      assign spacing_class = ' section--none'
+  endcase
+-%}
+{%- capture recover_panel -%}
+  <div id="recover" class="customer-auth__panel login__panel login__panel--recover" data-login-panel="recover" tabindex="-1">
+    <header class="customer-auth__head">
+      <h2 class="h2">{{ 'customer.recover_password.title' | t }}</h2>
+      <p class="muted text-pretty">{{ 'customer.recover_password.subtext' | t }}</p>
+    </header>
+    {%- form 'recover_customer_password', class: 'customer-form' -%}
+      {%- assign recover_success = form.posted_successfully? -%}
+      {%- render 'customer-form-errors', form: form, prefix: 'RecoverForm', plain: true -%}
+      <div class="field">
+        <label class="field__label" for="RecoverForm-email">{{ 'customer.log_in_page.email' | t }}</label>
+        <input
+          class="field__input"
+          type="email"
+          id="RecoverForm-email"
+          name="email"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          required
+          {% if form.errors %}aria-invalid="true"{% endif %}
+        >
+      </div>
+      <div class="customer-form__actions">
+        <button type="submit" class="btn btn--primary btn--full">{{ 'customer.recover_password.submit' | t }}</button>
+        <a href="#login" class="btn btn--ghost btn--full" data-login-toggle="login">{{ 'customer.log_in_page.back_to_login' | t }}</a>
+      </div>
+    {%- endform -%}
+  </div>
+{%- endcapture -%}
+<div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-login" id="section-{{ section.id }}">
+  <div class="page-width page-width--medium">
+    <div class="customer-auth login" data-login>
+      <div id="login" class="customer-auth__panel login__panel login__panel--login" data-login-panel="login">
+        <header class="customer-auth__head">
+          <h1 class="h1">{{ 'customer.log_in_page.title' | t }}</h1>
+          <p class="muted text-pretty">{{ 'customer.log_in_page.subtext' | t }}</p>
+        </header>
+
+        {%- if recover_success -%}
+          <div class="form-status form-status--success customer-form__status" role="status" tabindex="-1" autofocus>
+            {%- render 'icon', name: 'success', size: 20 -%}
+            <p>{{ 'customer.recover_password.success' | t }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- form 'customer_login', class: 'customer-form' -%}
+          {%- render 'customer-form-errors', form: form, prefix: 'LoginForm', plain: true -%}
+          <div class="field">
+            <label class="field__label" for="LoginForm-email">{{ 'customer.log_in_page.email' | t }}</label>
+            <input
+              class="field__input"
+              type="email"
+              id="LoginForm-email"
+              name="customer[email]"
+              autocomplete="email"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              required
+              {% if form.errors %}aria-invalid="true"{% endif %}
+            >
+          </div>
+          {%- if form.password_needed -%}
+            <div class="field">
+              <div class="customer-form__label-row">
+                <label class="field__label" for="LoginForm-password">{{ 'customer.log_in_page.password' | t }}</label>
+                <a href="#recover" class="link link--underline link--muted small" data-login-toggle="recover" aria-controls="recover" aria-expanded="false">{{ 'customer.log_in_page.forgot_password' | t }}</a>
+              </div>
+              <input
+                class="field__input"
+                type="password"
+                id="LoginForm-password"
+                name="customer[password]"
+                autocomplete="current-password"
+                required
+                {% if form.errors %}aria-invalid="true"{% endif %}
+              >
+            </div>
+          {%- endif -%}
+          <div class="customer-form__actions">
+            <button type="submit" class="btn btn--primary btn--full">{{ 'customer.log_in_page.sign_in' | t }}</button>
+          </div>
+        {%- endform -%}
+
+        <p class="customer-auth__alt">
+          {{ 'customer.log_in_page.new_customer' | t }}
+          <a href="{{ routes.account_register_url }}" class="link link--underline">{{ 'customer.log_in_page.create_account' | t }}</a>
+        </p>
+
+        {%- if shop.checkout.guest_login -%}
+          <div class="customer-auth__guest">
+            <p class="customer-auth__divider" aria-hidden="true"><span>{{ 'general.or' | t }}</span></p>
+            <h2 class="h4 text-center">{{ 'customer.log_in_page.guest_title' | t }}</h2>
+            <p class="muted small text-center">{{ 'customer.log_in_page.guest_text' | t }}</p>
+            {%- form 'guest_login' -%}
+              <button type="submit" class="btn btn--secondary btn--full">{{ 'customer.log_in_page.guest_continue' | t }}</button>
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- unless recover_success -%}
+        {{ recover_panel }}
+      {%- endunless -%}
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'customer.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Login",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ]
+}
+{% endschema %}

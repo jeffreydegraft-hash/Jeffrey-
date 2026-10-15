@@ -1,0 +1,190 @@
+{
+  "sections": {
+    "hero": {
+      "type": "page-hero",
+      "settings": {
+        "eyebrow": "About Mount of Olives",
+        "heading": "Anointing oils, made with care",
+        "intro": "Mount of Olives makes biblical anointing oils from 100% olive-derived squalane and antioxidant-rich botanical polyphenols. Every blend is formulated in Richmond, Texas, for prayer, worship, and daily care of the skin.",
+        "alignment": "center",
+        "show_ornament": true,
+        "color_scheme": "scheme-1",
+        "padding": "default",
+        "flush_bottom": true
+      }
+    },
+    "richmond": {
+      "type": "image-with-text",
+      "settings": {
+        "image_ratio": "4 / 5",
+        "layout": "image_first",
+        "vertical_align": "center",
+        "eyebrow": "The studio",
+        "heading": "Made in Richmond, Texas",
+        "text": "<p>Our studio is in Richmond, Texas, just outside Houston. Every Mount of Olives blend is made there, from the first measure of squalane to the last label.</p><p>We make anointing oil for people who pray. That shapes every choice, from the botanicals we source to the way we seal each bottle.</p>",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "link",
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    },
+    "olive": {
+      "type": "image-with-text",
+      "settings": {
+        "image_ratio": "4 / 5",
+        "layout": "text_first",
+        "vertical_align": "center",
+        "eyebrow": "The base",
+        "heading": "Why olive, and why squalane",
+        "text": "<p>The olive runs through Scripture. Its oil anointed kings and priests, lit the lamps of the tabernacle, and gave its name to the hill where Jesus prayed. The psalmist wrote, \"I am like a green olive tree in the house of God\" (Psalm 52:8).</p><p>So our base is 100% olive-derived squalane, a lipid similar to the squalene in human skin. It carries every botanical extract in the blend and enhances its bioavailability.</p>",
+        "button_label": "Read our science",
+        "button_link": "/pages/our-science",
+        "button_style": "link",
+        "color_scheme": "scheme-2",
+        "padding": "default"
+      }
+    },
+    "apothecary": {
+      "type": "scripture-quote",
+      "settings": {
+        "eyebrow": "From Scripture",
+        "quote": "And thou shalt make it an oil of holy ointment, an ointment compound after the art of the apothecary: it shall be an holy anointing oil.",
+        "reference": "Exodus 30:25",
+        "alignment": "center",
+        "color_scheme": "scheme-5",
+        "padding": "default"
+      }
+    },
+    "craft": {
+      "type": "rich-text",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "The craft"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Blended, tested, bottled",
+            "size": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Each oil is carefully blended, tested, and bottled by hand in our Richmond studio. Our formulas are natural, paraben-free, and vegan, and every ingredient is derived from biblical botanicals.</p>",
+            "size": "lead"
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "alignment": "center",
+        "width": "narrow",
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    },
+    "values": {
+      "type": "values-strip",
+      "blocks": {
+        "value-1": {
+          "type": "value",
+          "settings": {
+            "icon": "drop",
+            "title": "Olive-derived squalane base",
+            "body": "Every blend rests on 100% olive-derived squalane, a lipid similar to the squalene in human skin."
+          }
+        },
+        "value-2": {
+          "type": "value",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Polyphenol Alpha complex",
+            "body": "Our proprietary antioxidant-rich complex is derived entirely from natural botanical sources and formulated to support the skin's natural barrier."
+          }
+        },
+        "value-3": {
+          "type": "value",
+          "settings": {
+            "icon": "leaf",
+            "title": "Natural, paraben-free, vegan",
+            "body": "Every ingredient is derived from biblical botanicals, and every bottle is natural, paraben-free, and vegan."
+          }
+        },
+        "value-4": {
+          "type": "value",
+          "settings": {
+            "icon": "map-pin",
+            "title": "Made in Richmond, Texas",
+            "body": "Each oil is carefully blended, tested, and bottled in our studio in Richmond, Texas."
+          }
+        }
+      },
+      "block_order": [
+        "value-1",
+        "value-2",
+        "value-3",
+        "value-4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "padding": "tight"
+      }
+    },
+    "closing": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Choose your oil",
+            "size": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Nine biblical oil blends and a pure olive squalane, formulated for prayer, worship, and daily care. Free US shipping on orders of $45 or more.</p>",
+            "size": "body"
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "label": "Shop all oils",
+            "link": "shopify://collections/all",
+            "style": "primary"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text",
+        "button"
+      ],
+      "settings": {
+        "alignment": "center",
+        "width": "narrow",
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "richmond",
+    "olive",
+    "apothecary",
+    "craft",
+    "values",
+    "closing"
+  ]
+}

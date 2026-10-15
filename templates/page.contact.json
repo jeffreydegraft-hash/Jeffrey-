@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "hero": {
+      "type": "page-hero",
+      "settings": {
+        "eyebrow": "Contact",
+        "heading": "",
+        "intro": "We are glad to help with orders, ingredients, or choosing an oil.",
+        "alignment": "center",
+        "show_ornament": true,
+        "color_scheme": "scheme-1",
+        "padding": "default",
+        "flush_bottom": true
+      }
+    },
+    "contact": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "Write to us",
+        "intro": "",
+        "show_details": true,
+        "color_scheme": "scheme-1",
+        "padding": "tight"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "contact"
+  ]
+}
