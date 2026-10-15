@@ -1,0 +1,12 @@
+{%- comment -%}
+  Favicon and home-screen icon from the merchant's own artwork.
+  Chain: settings.favicon, then the square logo mark, then Settings › Brand square logo.
+  Usage: {% render 'brand-icons' %} inside <head>
+{%- endcomment -%}
+{%- liquid
+  assign icon = settings.favicon | default: settings.logo_mark | default: shop.brand.square_logo
+-%}
+{%- if icon != blank -%}
+  <link rel="icon" type="image/png" href="{{ icon | image_url: width: 32, height: 32 }}">
+  <link rel="apple-touch-icon" href="{{ icon | image_url: width: 180, height: 180 }}">
+{%- endif -%}

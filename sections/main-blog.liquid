@@ -5,7 +5,8 @@
   ≥990px. On page one without a tag filter the newest post can be the
   "top story": a full-row tile with the image left and the text right
   (≥750px). Twelve posts per page with the shared pagination; a blog with
-  no posts gets a designed empty state. Tiles reveal on scroll with an --i
+  no posts gets a designed empty state. A long intro left-aligns the
+  header on phones (never centre more than three lines). Tiles reveal on scroll with an --i
   stagger; the header stays put.
 {%- endcomment -%}
 {%- liquid
@@ -16,11 +17,17 @@
     when 'none'
       assign padding_class = ' section--none'
   endcase
+
+  assign header_class = ''
+  assign intro_length = section.settings.intro | size
+  if intro_length > 100
+    assign header_class = ' main-blog__header--long'
+  endif
 -%}
 {%- paginate blog.articles by 12 -%}
   <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} main-blog" id="section-{{ section.id }}">
     <div class="page-width">
-      <header class="section__header section__header--center main-blog__header">
+      <header class="section__header section__header--center main-blog__header{{ header_class }}">
         <h1 class="h1 main-blog__title enter">{{ blog.title | escape }}</h1>
         {%- if section.settings.intro != blank -%}
           <p class="lead lead--muted main-blog__intro enter" style="--i: 1;">{{ section.settings.intro | escape }}</p>
@@ -45,6 +52,10 @@
               if section.settings.show_featured and forloop.first and paginate.current_page == 1 and current_tags == blank
                 assign featured = true
               endif
+              assign show_excerpt = false
+              if featured and section.settings.show_excerpt
+                assign show_excerpt = true
+              endif
             -%}
             <li class="main-blog__item{% if featured %} main-blog__item--featured{% endif %}">
               {%- render 'card-article',
@@ -52,7 +63,7 @@
                 index: forloop.index0,
                 show_date: section.settings.show_date,
                 show_author: section.settings.show_author,
-                show_excerpt: section.settings.show_excerpt,
+                show_excerpt: show_excerpt,
                 featured: featured
               -%}
             </li>
@@ -108,7 +119,8 @@
     {
       "type": "checkbox",
       "id": "show_excerpt",
-      "label": "Show excerpt",
+      "label": "Show excerpt on the top story",
+      "info": "Other tiles stay title and date only, like Apple Newsroom.",
       "default": true
     },
     {

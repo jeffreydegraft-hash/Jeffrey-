@@ -155,7 +155,12 @@
             {%- else -%}
               <div class="empty-state collection-grid__empty">
                 <h2 class="h3">{{ 'collections.general.empty' | t }}</h2>
-                <p class="collection-grid__empty-body">{{ 'collections.general.empty_body' | t }}</p>
+                {%- comment -%} Only suggest removing a filter when one is on {%- endcomment -%}
+                {%- if active_count > 0 -%}
+                  <p class="collection-grid__empty-body">{{ 'collections.general.empty_body' | t }}</p>
+                {%- else -%}
+                  <p class="collection-grid__empty-body">{{ 'collections.general.empty_collection_body' | t }}</p>
+                {%- endif -%}
                 <div class="cta-row">
                   {%- if active_count > 0 -%}
                     <a href="{{ collection.url }}" class="btn btn--primary" data-facet-remove>{{ 'products.facets.clear_all' | t }}</a>

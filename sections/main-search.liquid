@@ -70,7 +70,7 @@
         <div id="SearchResults" class="main-search__results">
           {%- if search.results_count == 0 -%}
             <div class="empty-state main-search__empty" role="status">
-              <h2 class="h3">{{ 'search.no_results' | t: terms: terms }}</h2>
+              <h2 class="h4">{{ 'search.no_results' | t: terms: terms }}</h2>
               <p class="main-search__empty-body">{{ 'search.no_results_body' | t }}</p>
               <div class="cta-row">
                 <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'collections.general.all' | t }}</a>

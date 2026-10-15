@@ -94,7 +94,7 @@
                   endif
                 endif
               -%}
-              <tr role="row" class="order-table__row">
+              <tr role="row" class="order-table__row{% if line_item.quantity == 1 and line_item.unit_price_measurement == blank %} order-table__row--single{% endif %}">
                 <th scope="row" role="rowheader" class="order-table__product" id="Line-{{ line_item.key }}">
                   <div class="order-line">
                     <div class="order-line__media media" style="--ratio: 1 / 1;">

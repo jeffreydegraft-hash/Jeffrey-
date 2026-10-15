@@ -4,14 +4,14 @@
   else the blog title), an .h4 title (three lines at most) and a 14px
   muted date pinned to the tile's bottom so a row of tiles lines up. The
   title link's ::after covers the whole tile (.card__link, components.css).
-  Featured: the "top story" — at ≥750px the image takes the left 58% of a
+  Featured: the "top story" — at ≥750px the image takes the left 56% of a
   full-row tile and the text sits beside it with an .h3 title.
   Accepts:
   - article: {Object} article (required)
   - index: {Number} position in the grid, for the reveal stagger (optional)
   - show_date: {Boolean} show the published date
   - show_author: {Boolean} show the author
-  - show_excerpt: {Boolean} show a short excerpt (two lines; three on the top story)
+  - show_excerpt: {Boolean} show a short excerpt (main-blog passes it for the top story only)
   - featured: {Boolean} top-story layout
   A post without an image gets a quiet leaf glyph on the tile instead of a
   hole. Motion: tile press (scale .985), a 3% image zoom on a real

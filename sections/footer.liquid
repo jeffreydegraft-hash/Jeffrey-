@@ -29,15 +29,19 @@
 
   comment
     One grid track per block from 990px. The newsletter column is weighted
-    so the inline field has room; everything else shares equally.
+    so the inline field has room and the contact column so a street
+    address stays on one line; link lists share the rest equally.
   endcomment
   assign cols = ''
   for block in section.blocks
-    if block.type == 'newsletter'
-      assign cols = cols | append: ' minmax(0, 1.6fr)'
-    else
-      assign cols = cols | append: ' minmax(0, 1fr)'
-    endif
+    case block.type
+      when 'newsletter'
+        assign cols = cols | append: ' minmax(0, 1.6fr)'
+      when 'contact'
+        assign cols = cols | append: ' minmax(0, 1.2fr)'
+      else
+        assign cols = cols | append: ' minmax(0, 1fr)'
+    endcase
   endfor
   assign cols = cols | strip
 
@@ -57,7 +61,8 @@
 
   assign show_social = false
   if section.settings.show_social
-    for network in 'instagram,facebook,tiktok,youtube,pinterest,x' | split: ','
+    assign networks = 'instagram,facebook,tiktok,youtube,pinterest,x' | split: ','
+    for network in networks
       assign social_key = 'social_' | append: network | append: '_link'
       if settings[social_key] != blank
         assign show_social = true
@@ -239,12 +244,13 @@
       <div class="footer__brandline">
         {%- if show_brand -%}
           <p class="footer__brand">
+            {%- comment -%} Plain text, not a link: the navigation already leads home {%- endcomment -%}
             {%- if footer_logo != blank -%}
-              <a href="{{ routes.root_url }}" class="footer__logo" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">
-                {{- footer_logo | image_url: width: 240 | image_tag: class: 'footer__logo-img', height: 20, alt: shop.name, loading: 'lazy' -}}
-              </a>
+              <span class="footer__logo">
+                {{- footer_logo | image_url: width: 320 | image_tag: class: 'footer__logo-img', alt: shop.name, loading: 'lazy' -}}
+              </span>
             {%- else -%}
-              <a href="{{ routes.root_url }}" class="footer__wordmark" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">{{ shop.name | escape }}</a>
+              <span class="footer__wordmark">{{ shop.name | escape }}</span>
             {%- endif -%}
             {%- if settings.brand_tagline != blank -%}
               <span class="footer__tagline">{{ settings.brand_tagline | escape }}</span>

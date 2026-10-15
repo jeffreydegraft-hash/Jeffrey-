@@ -1,6 +1,8 @@
 {%- comment -%}
-  Collection banner (Apple Store category header): a big centred title, a
-  short muted description, then the collection image as a wide rounded tile.
+  Collection banner (Apple Store category header): a big centred title and a
+  short muted description, then straight into the products (APPLE-SPEC §5).
+  The collection image is optional (off by default): a wide rounded tile
+  under the description when the merchant turns it on.
   The title is above the fold and must be readable the instant the page
   paints, so nothing in this section carries data-reveal.
   Centred paragraphs stay within about three lines (APPLE-SPEC §6): about
@@ -67,8 +69,8 @@
       "type": "checkbox",
       "id": "show_image",
       "label": "Show collection image",
-      "info": "A wide rounded tile under the title, when the collection has an image.",
-      "default": true
+      "info": "A wide rounded tile under the title, when the collection has an image. Off keeps the products near the top of the page.",
+      "default": false
     },
     {
       "type": "checkbox",

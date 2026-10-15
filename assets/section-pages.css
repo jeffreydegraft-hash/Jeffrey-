@@ -1,34 +1,42 @@
 /* ==========================================================================
-   Olivet — section-pages.css (pages sections)
+   Olivet — section-pages.css (Apple-first): content pages
+   page-hero, main-page, contact-form, main-404, main-password, main-blog,
+   card-article, main-article, gift card.
+
+   apple.com content pages: big centred headlines in the system font, one
+   muted lead, generous space, flat light-gray tiles, pill buttons and
+   "Learn more ›" links. Separation comes from space and surfaces, never
+   from rules between sections.
+   Rules: tokens only; every :hover behind (hover: hover) and (pointer:
+   fine); press feedback on :active; only transform / opacity move;
+   reduced motion keeps the fades and drops the movement.
    ========================================================================== */
-/* === section: main-page ===
-   A plain page: optional serif title over .rte content at a narrow or
-   medium measure. Nothing moves; the reader is here for the text. */
-.main-page__header {
-  margin-bottom: clamp(24px, 4vw, 40px);
-  padding-bottom: clamp(20px, 3vw, 32px);
-  border-bottom: 1px solid rgb(var(--c-line));
-}
-
-.main-page__title {
-  max-width: 24ch;
-}
-
-.main-page__content {
-  max-width: 68ch;
-}
 
 /* === section: page-hero ===
-   Reusable page header: ornament, eyebrow, serif title, lead. Above the
-   fold, so it enters with .enter (@starting-style, base.css) and never
-   with data-reveal. --flush drops the bottom padding so the next section
-   continues the page without a double gap. */
+   Centred eyebrow, .h1 and muted lead with generous space above. The
+   leaf glyph (show_ornament) is a small accent mark, not an ornament.
+   Above the fold, so it enters with .enter (@starting-style, base.css).
+   --flush drops the bottom padding so the next section's own top padding
+   is the only gap. --long: a lead over ~3 phone lines left-aligns the
+   hero below 750px (never centre a paragraph longer than three lines). */
+.page-hero.section {
+  padding-top: max(var(--section-y), 96px);
+}
+
+.page-hero.section--tight {
+  padding-top: max(calc(var(--section-y) * 0.6), 64px);
+}
+
+.page-hero--flush.section {
+  padding-bottom: 0;
+}
+
 .page-hero__inner {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-4);
-  max-width: 44rem;
+  gap: var(--space-3);
+  max-width: var(--content-max);
 }
 
 .page-hero--center .page-hero__inner {
@@ -37,50 +45,83 @@
   margin-inline: auto;
 }
 
-.page-hero--flush.section {
-  padding-bottom: 0;
-}
-
-.page-hero__ornament {
-  width: 100%;
-  max-width: 180px;
+.page-hero__glyph {
+  display: inline-flex;
   margin-bottom: var(--space-2);
+  color: rgb(var(--c-gold));
 }
 
-.page-hero--left .page-hero__ornament {
-  max-width: 120px;
+.page-hero__glyph .icon {
+  stroke-width: 1.6;
 }
 
 .page-hero__heading {
-  max-width: 22ch;
+  max-width: 18ch;
 }
 
 .page-hero__intro {
-  max-width: 60ch;
+  max-width: 34em;
+  margin-top: var(--space-2);
+}
+
+/* A long intro: one step smaller so it stays within three lines on a
+   desktop, and left-aligned on phones where it would run longer. */
+.page-hero--long .page-hero__intro {
+  font-size: clamp(1.1875rem, 0.95rem + 0.6vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: 0.004em;
+}
+
+@media (max-width: 749px) {
+  .page-hero--long.page-hero--center .page-hero__inner {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+/* === section: main-page ===
+   Centred .h1 over page.content in .rte--article (19px / 1.58 at ≥750px)
+   at --text-max (or --content-max for the medium width). No rule under
+   the title; space does the separating. */
+.main-page__header {
+  margin-bottom: clamp(40px, 6vw, 80px);
+  text-align: center;
+}
+
+.main-page__title {
+  max-width: 18ch;
+  margin-inline: auto;
+}
+
+.main-page__content > :first-child {
+  margin-top: 0;
 }
 
 /* === section: contact-form ===
-   Heading + intro, then a 12-column row at ≥990px: the form takes 7, a
-   surface panel with email / phone / studio address takes 4, and one
-   column of air sits between. Inputs are 16px on 48px rows (base.css).
-   Motion inventory: the submit presses via .btn; nothing else moves. */
+   Centred .h2 + muted lead, then one centred column (max 560px): the
+   form (Apple inputs from base.css), the "Send" pill, then the studio's
+   details as a flat --c-surface tile of 17px rows (icon, label, value)
+   with inset hairlines between rows, iOS grouped-list style.
+   Motion inventory: the pill presses (.btn); nothing else moves. */
+.contact-form {
+  --contact-column: 560px;
+}
+
+.contact-form__header {
+  max-width: var(--content-max);
+}
+
+.contact-form__intro {
+  max-width: 32em;
+}
+
 .contact-form__layout {
-  display: grid;
-  gap: clamp(32px, 5vw, 64px);
-  align-items: start;
-}
-
-@media (min-width: 990px) {
-  .contact-form__layout--details {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-    column-gap: calc(100% / 12);
-  }
-}
-
-@media (min-width: 990px) {
-  .contact-form__layout:not(.contact-form__layout--details) .contact-form__form {
-    max-width: 44rem;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 7vw, 72px);
+  width: 100%;
+  max-width: var(--contact-column);
+  margin-inline: auto;
 }
 
 .contact-form__form {
@@ -89,6 +130,14 @@
 
 .contact-form__status {
   margin-bottom: var(--space-5);
+}
+
+/* Status blocks take focus for screen readers (tabindex="-1"); they are
+   not controls, so no focus ring. */
+.contact-form__status:focus,
+.main-article__comment-form .form-status:focus,
+.main-password__newsletter .form-status:focus {
+  outline: none;
 }
 
 .contact-form__status .icon {
@@ -116,71 +165,87 @@
 @media (min-width: 750px) {
   .contact-form__row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
   }
 }
 
 .contact-form__submit {
-  justify-self: start;
+  justify-self: center;
   min-width: 200px;
+  margin-top: var(--space-3);
 }
 
 @media (max-width: 749px) {
   .contact-form__submit {
-    width: 100%;
+    justify-self: stretch;
   }
 }
 
 .contact-form__details {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
   min-width: 0;
-  padding: clamp(24px, 3vw, 36px);
-  border-radius: var(--r-lg);
+  padding: clamp(24px, 3vw, 32px) clamp(20px, 3vw, 32px) clamp(16px, 2vw, 24px);
+  border-radius: var(--r-tile);
   background: rgb(var(--c-surface));
 }
 
 .contact-form__details-title {
-  color: rgb(var(--c-ink-2));
+  margin-bottom: var(--space-2);
 }
 
 .contact-form__list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
 }
 
 .contact-form__item {
   display: grid;
-  grid-template-columns: 20px minmax(0, 1fr);
-  gap: var(--space-3);
+  grid-template-columns: 24px minmax(0, 1fr);
+  column-gap: var(--space-4);
   align-items: start;
+  font-size: 1.0625rem;
+  line-height: 1.47;
 }
 
 .contact-form__item .icon {
-  margin-top: 3px;
+  margin-top: 16px;
   color: rgb(var(--c-gold));
 }
 
+/* Inset separators start at the text, never under the icon */
 .contact-form__item-body {
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  padding: 14px 0;
+}
+
+.contact-form__item + .contact-form__item .contact-form__item-body {
+  border-top: 1px solid rgb(var(--c-line));
 }
 
 .contact-form__item-label {
-  font-size: 0.75rem;
   font-weight: var(--font-body-weight-bold);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgb(var(--c-ink-2));
+  color: rgb(var(--c-ink));
 }
 
 .contact-form__item-value {
-  font-size: 1rem;
-  line-height: 1.5;
+  color: rgb(var(--c-ink-2));
   overflow-wrap: anywhere;
+}
+
+.contact-form__item-link {
+  align-self: flex-start;
+  color: rgb(var(--c-accent));
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.contact-form__item-link:active {
+  opacity: 0.7;
 }
 
 .contact-form__address {
@@ -188,40 +253,67 @@
 }
 
 .contact-form__social {
-  margin-top: calc(var(--space-2) * -1);
-  margin-left: -12px;
+  margin: var(--space-2) 0 0 28px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .contact-form__item-link:hover {
+    text-decoration-line: underline;
+  }
 }
 
 /* === section: main-404 ===
-   A quiet band: "404" eyebrow, serif title, one primary action and one
-   text link. Enters with .enter; height in svh so it reads as a page on
-   a phone (svh, not the viewport-height unit). */
+   A centred band in the visible viewport (svh): "Page not found." .h1,
+   muted lead, the CTA pair, then a search field (wayfinding). Enters
+   with .enter. */
 .main-404__inner {
-  min-height: 56svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: var(--space-5);
-  max-width: 40rem;
-}
-
-.main-404__eyebrow {
-  font-size: 0.875rem;
+  gap: var(--space-4);
+  min-height: 56svh;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  text-align: center;
 }
 
 .main-404__title {
-  max-width: 16ch;
+  max-width: 14ch;
+}
+
+.main-404__body {
+  max-width: 28em;
 }
 
 .main-404__actions {
-  justify-content: center;
-  gap: var(--space-4) var(--space-5);
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.main-404__search {
+  position: relative;
+  width: min(100%, 440px);
+  margin-top: clamp(32px, 5vw, 56px);
+}
+
+.main-404__search .icon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: rgb(var(--c-ink-2));
+  pointer-events: none;
+}
+
+.main-404__search .main-404__search-input {
+  padding-left: 46px;
 }
 
 /* === section: main-password ===
-   Full-height (100svh) centered column on the password layout: logo or
-   wordmark, ornament, eyebrow, serif heading, body, password form,
-   optional newsletter, social icons, owner / Shopify lines. Safe-area
-   padding on every edge. Text enters with .enter. */
+   Apple "coming soon": full-height (100svh) centred column. Wordmark,
+   eyebrow, .h1, muted lead, an inline 52px field + primary pill, a
+   compact sign-up (quiet label, field + gray pill), social, owner lines.
+   Safe-area padding on every edge. No dividers. Text enters with .enter. */
 .main-password {
   min-height: 100svh;
   display: flex;
@@ -233,12 +325,12 @@
 
 .main-password__inner {
   width: 100%;
-  max-width: 34rem;
+  max-width: var(--content-max);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: clamp(32px, 6vw, 56px);
+  gap: clamp(48px, 9vw, 96px);
 }
 
 .main-password__logo img {
@@ -250,9 +342,9 @@
 .main-password__wordmark {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: 1.75rem;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
+  font-size: 1.3125rem;
+  line-height: 1.19;
+  letter-spacing: 0.011em;
 }
 
 .main-password__card {
@@ -260,34 +352,42 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
-}
-
-.main-password__ornament {
-  width: 100%;
-  max-width: 160px;
-  margin-bottom: var(--space-2);
+  gap: var(--space-3);
 }
 
 .main-password__heading {
-  max-width: 16ch;
+  max-width: 14ch;
 }
 
 .main-password__body {
-  max-width: 46ch;
+  max-width: 30em;
+  margin-top: var(--space-2);
+}
+
+/* Phones: the splash stays centred, so its lead drops to body size to
+   keep within three lines. */
+@media (max-width: 749px) {
+  .main-password__body {
+    font-size: 1.0625rem;
+    line-height: 1.47;
+    letter-spacing: -0.022em;
+  }
+}
+
+.main-password__form,
+.main-password__newsletter {
+  width: 100%;
+  max-width: 440px;
 }
 
 .main-password__form {
-  width: 100%;
-  max-width: 28rem;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  margin-top: var(--space-3);
+  margin-top: clamp(24px, 4vw, 40px);
 }
 
-.main-password__form .btn,
-.main-password__newsletter .btn {
+.main-password__row .btn {
   flex-shrink: 0;
 }
 
@@ -296,11 +396,7 @@
 }
 
 .main-password__newsletter {
-  width: 100%;
-  max-width: 28rem;
-  margin-top: var(--space-4);
-  padding-top: var(--space-5);
-  border-top: 1px solid rgb(var(--c-line));
+  margin-top: clamp(32px, 5vw, 48px);
 }
 
 .main-password__newsletter-form {
@@ -310,19 +406,20 @@
 }
 
 .main-password__newsletter-label {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
+  letter-spacing: -0.016em;
   color: rgb(var(--c-ink-2));
 }
 
 .main-password__social {
   justify-content: center;
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
 }
 
 .main-password__footer {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
   color: rgb(var(--c-ink-2));
 }
 
@@ -331,80 +428,205 @@
 }
 
 /* === section: main-blog ===
-   Blog index: serif title + lead, a 3-column card grid where the newest
-   post may span two columns, pagination. Cards reveal on scroll with --i
-   stagger (base.css); the header does not move. */
-.main-blog__header {
-  max-width: 44rem;
+   Apple Newsroom index: centred .h1 + muted lead, then article tiles
+   1-up / 2-up (≥750) / 3-up (≥990). The top story spans the full row.
+   Tiles reveal on scroll with an --i stagger (base.css). */
+.main-blog__intro {
+  max-width: 32em;
+}
+
+@media (max-width: 749px) {
+  .main-blog__header--long {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .main-blog__header--long .main-blog__tagged {
+    justify-content: flex-start;
+  }
 }
 
 .main-blog__tagged {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2) var(--space-3);
-  color: rgb(var(--c-ink-2));
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+}
+
+.main-blog__tag {
+  font-size: 0.875rem;
+  font-weight: var(--font-body-weight);
+  padding: 6px 14px;
+  background: rgb(var(--c-surface));
+}
+
+.main-blog__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(16px, 2vw, 24px);
 }
 
 @media (min-width: 750px) {
+  .main-blog__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .main-blog__item--featured {
-    grid-column: span 2;
+    grid-column: 1 / -1;
   }
 }
 
+@media (min-width: 990px) {
+  .main-blog__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.main-blog__item {
+  display: flex;
+  min-width: 0;
+}
+
 /* === snippet: card-article ===
-   Article card on the shared .card base. A leaf ornament panel stands in
-   for a missing image; the meta row separates its items with a middle
-   dot. Featured: 2:1 media, a larger title and a 3-line excerpt at ≥750px. */
+   Newsroom tile: image across the top of a flat --c-surface tile
+   (--r-tile), then .tag, .h4 title (3 lines max), optional excerpt and a
+   14px muted date pinned to the bottom so a row lines up. Builds on the
+   .card base (components.css): the title link's ::after covers the tile,
+   focus ring on the tile, 3% image zoom on a real pointer's hover.
+   Motion inventory: press scale .985 (feedback), hover zoom, reveal. */
+.card-article {
+  width: 100%;
+  gap: 0;
+  overflow: hidden;
+  border-radius: var(--r-tile);
+  background: rgb(var(--c-surface));
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.card-article:active {
+  transform: scale(0.985);
+}
+
+.card-article .card-article__media {
+  --ratio: 3 / 2;
+  --media-radius: 0;
+  border-radius: 0;
+  flex-shrink: 0;
+  background: rgba(var(--c-ink), 0.04);
+}
+
 .card-article__placeholder {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  color: rgb(var(--c-gold));
-  background: rgb(var(--c-surface));
+  color: rgba(var(--c-ink), 0.22);
 }
 
 .card-article__placeholder .icon {
-  opacity: 0.7;
+  stroke-width: 1.25;
+}
+
+.card-article__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: clamp(20px, 2.4vw, 28px) clamp(20px, 2.4vw, 28px) clamp(24px, 2.8vw, 32px);
+}
+
+.card-article__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
+}
+
+.card-article__excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1.0625rem;
+  line-height: 1.47;
+  color: rgb(var(--c-ink-2));
 }
 
 .card-article__meta {
-  align-items: center;
-  gap: var(--space-1) var(--space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-2);
+  color: rgb(var(--c-ink-2));
+  font-variant-numeric: tabular-nums;
 }
 
 .card-article__meta > * + *::before {
   content: "·";
   margin-right: var(--space-2);
-  color: rgb(var(--c-ink-2));
 }
 
+/* Top story: image left (58%), text beside it, vertically centred */
 @media (min-width: 750px) {
-  .card-article--featured .card__media {
-    --ratio: 2 / 1;
+  .card-article--featured {
+    flex-direction: row;
+    align-items: stretch;
   }
 
-  .card-article--featured .card__excerpt {
+  .card-article--featured .card-article__media {
+    --ratio: 4 / 3;
+    flex: 0 0 56%;
+  }
+
+  .card-article--featured .card-article__body {
+    justify-content: center;
+    gap: var(--space-3);
+    padding: clamp(28px, 3.6vw, 52px);
+  }
+
+  .card-article--featured .card-article__title {
+    -webkit-line-clamp: 4;
+  }
+
+  .card-article--featured .card-article__excerpt {
     -webkit-line-clamp: 3;
-    font-size: 1rem;
-    max-width: 60ch;
+  }
+
+  .card-article--featured .card-article__meta {
+    margin-top: var(--space-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-article {
+    transition: none;
+  }
+
+  .card-article:active {
+    transform: none;
   }
 }
 
 /* === section: main-article ===
-   Editorial reading page. Centered header (blog · date · reading time,
-   serif title, author) enters with .enter. 16:9 hero at the medium width,
-   body at the narrow measure, tags as chips, share, previous / next tiles,
-   comments. Motion inventory: tiles press to .97 (feedback) and tint on a
-   real pointer's hover; the share button morphs via .btn__content. */
+   Apple Newsroom article: centred eyebrow (blog · date), h1 at .h2 size,
+   muted lead and a 14px byline; the hero at the full content width (16:9,
+   --r-media); body .rte--article at --text-max; small tag chips and a
+   quiet "Share" text button; previous / next as quiet links; comments in
+   the same type and form style.
+   Motion inventory: links dim to .7 on press (feedback); the share label
+   morphs via .btn__content (theme.js share-button). */
 .main-article__header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: var(--space-3);
+  margin-bottom: clamp(40px, 6vw, 72px);
   text-align: center;
-  gap: var(--space-4);
-  margin-bottom: clamp(28px, 5vw, 56px);
 }
 
 .main-article__eyebrow {
@@ -412,24 +634,69 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: var(--space-2) var(--space-3);
+  gap: var(--space-1) var(--space-2);
 }
 
 .main-article__blog-link {
   color: inherit;
-  transition: color var(--dur-fast) ease;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+.main-article__blog-link:active {
+  opacity: 0.7;
 }
 
 .main-article__sep {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .main-article__title {
-  max-width: 20ch;
+  max-width: 20em;
 }
 
-.main-article__author {
-  font-size: 0.9375rem;
+/* Phones: article titles and leads run several lines, so the header
+   left-aligns (Apple Newsroom on iPhone); centred only where it is short. */
+@media (max-width: 749px) {
+  .main-article__header {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .main-article__byline {
+    justify-content: flex-start;
+  }
+
+  /* blog name, then the date as a quiet second line (no dangling "·") */
+  .main-article__eyebrow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .main-article__eyebrow .main-article__sep {
+    display: none;
+  }
+
+  .main-article__eyebrow time {
+    font-size: 0.875rem;
+    font-weight: var(--font-body-weight);
+    letter-spacing: -0.016em;
+    color: rgb(var(--c-ink-2));
+  }
+}
+
+.main-article__lead {
+  max-width: 32em;
+  margin-top: var(--space-1);
+}
+
+.main-article__byline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1) var(--space-2);
+  margin-top: var(--space-1);
   color: rgb(var(--c-ink-2));
 }
 
@@ -439,21 +706,11 @@
 }
 
 .main-article__hero {
-  margin-bottom: clamp(32px, 5vw, 64px);
+  margin-bottom: clamp(40px, 6vw, 80px);
 }
 
 .main-article__media {
-  --media-radius: var(--r-lg);
-}
-
-.main-article__content {
-  font-size: 1.125rem;
-}
-
-@media (min-width: 750px) {
-  .main-article__content {
-    font-size: 1.1875rem;
-  }
+  --media-radius: var(--r-media);
 }
 
 .main-article__footer {
@@ -462,9 +719,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  margin-top: clamp(32px, 5vw, 56px);
-  padding-top: var(--space-5);
-  border-top: 1px solid rgb(var(--c-line));
+  margin-top: clamp(40px, 6vw, 64px);
 }
 
 .main-article__tags {
@@ -475,32 +730,55 @@
   --cluster-gap: var(--space-2);
 }
 
-.main-article__tags .chip {
-  min-height: 36px;
-  padding-inline: 14px;
-  font-size: 0.875rem;
-}
-
 .main-article__share {
   margin-left: auto;
-  /* pull the flex item (not the inner .btn, which would just shrink) by
-     padding + 1px border so the label ends on the column edge */
-  margin-right: calc((var(--space-3) + 1px) * -1);
 }
 
-.main-article__share .btn {
-  padding-inline: var(--space-3);
+/* A quiet text button in the accent colour; .btn__content carries the
+   "Link copied" morph from theme.js (.is-transitioning). */
+.main-article__share-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  font-size: 1.0625rem;
+  letter-spacing: -0.022em;
+  color: rgb(var(--c-accent));
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+  transition: opacity var(--dur-fast) ease;
 }
 
+.main-article__share-button:active {
+  opacity: 0.7;
+}
+
+.main-article__share-button.is-transitioning .btn__content {
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+/* Previous / next: quiet links, no tiles. One hairline closes the article
+   body above them (inside the section, not between sections). */
 .main-article__nav {
   display: grid;
-  gap: var(--space-3);
-  margin-top: clamp(32px, 5vw, 56px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  margin-top: clamp(40px, 6vw, 64px);
+  padding-top: clamp(24px, 3vw, 32px);
+  border-top: 1px solid rgb(var(--c-line));
 }
 
 @media (min-width: 750px) {
   .main-article__nav {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-8);
+  }
+
+  .main-article__nav-link--next {
+    grid-column: 2;
+    align-items: flex-end;
+    text-align: right;
   }
 }
 
@@ -508,42 +786,23 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-2);
+  gap: var(--space-1);
+  min-width: 0;
   min-height: 44px;
-  padding: var(--space-5);
-  border-radius: var(--r-lg);
-  background: rgb(var(--c-surface));
-  transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease;
-}
-
-.main-article__nav-link--next {
-  align-items: flex-end;
-  text-align: right;
+  transition: opacity var(--dur-fast) ease;
 }
 
 .main-article__nav-link:active {
-  transform: scale(0.97);
-}
-
-.main-article__nav-spacer {
-  display: none;
-}
-
-@media (min-width: 750px) {
-  .main-article__nav-spacer {
-    display: block;
-  }
+  opacity: 0.7;
 }
 
 .main-article__nav-label {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  font-size: 0.75rem;
-  font-weight: var(--font-body-weight-bold);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgb(var(--c-ink-2));
+  gap: 2px;
+  font-size: 0.875rem;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-accent));
 }
 
 .main-article__nav-title {
@@ -551,22 +810,31 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  transition: color var(--dur-fast) ease;
+  font-size: 1.0625rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.29;
+  letter-spacing: -0.01em;
+  color: rgb(var(--c-ink));
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
 }
 
 .main-article__back {
   display: flex;
   justify-content: center;
-  margin-top: var(--space-6);
+  margin-top: clamp(32px, 5vw, 48px);
 }
 
+/* Comments: same type and inputs; hairlines between comments only */
 .main-article__comments {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  margin-top: clamp(40px, 6vw, 72px);
-  padding-top: clamp(32px, 5vw, 56px);
-  border-top: 1px solid rgb(var(--c-line));
+  margin-top: clamp(56px, 8vw, 96px);
+}
+
+.main-article__comments-title {
+  text-align: center;
 }
 
 .main-article__comment-list {
@@ -579,15 +847,14 @@
   flex-direction: column;
   gap: var(--space-2);
   padding: var(--space-5) 0;
+}
+
+.main-article__comment + .main-article__comment {
   border-top: 1px solid rgb(var(--c-line));
 }
 
-.main-article__comment:last-child {
-  border-bottom: 1px solid rgb(var(--c-line));
-}
-
 .main-article__comment--pending {
-  opacity: 0.75;
+  opacity: 0.72;
 }
 
 .main-article__comment-meta {
@@ -596,23 +863,30 @@
   align-items: center;
   gap: var(--space-2) var(--space-3);
   font-size: 0.875rem;
+  letter-spacing: -0.016em;
   color: rgb(var(--c-ink-2));
 }
 
 .main-article__comment-author {
+  font-size: 1.0625rem;
   font-weight: var(--font-body-weight-bold);
+  letter-spacing: -0.022em;
   color: rgb(var(--c-ink));
   overflow-wrap: anywhere;
 }
 
 .main-article__comment-body {
-  font-size: 1rem;
+  font-size: 1.0625rem;
 }
 
 .main-article__comment-form {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+}
+
+.main-article__form-title {
+  text-align: center;
 }
 
 .main-article__form-row {
@@ -623,80 +897,64 @@
 @media (min-width: 750px) {
   .main-article__form-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
   }
 }
 
+.main-article__moderated {
+  text-align: center;
+}
+
 .main-article__comment-submit {
-  align-self: flex-start;
+  align-self: center;
   min-width: 200px;
 }
 
 @media (max-width: 749px) {
   .main-article__comment-submit {
-    width: 100%;
+    align-self: stretch;
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .main-article__blog-link:hover {
-    color: rgb(var(--c-ink));
-  }
-
-  .main-article__nav-link:hover {
-    background: rgba(var(--c-ink), 0.08);
-  }
-
+  .main-article__blog-link:hover,
+  .main-article__share-button:hover,
   .main-article__nav-link:hover .main-article__nav-title {
-    color: rgb(var(--c-accent));
+    text-decoration-line: underline;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .main-article__share-button,
   .main-article__nav-link {
-    transition: background-color var(--dur-fast) ease;
-  }
-
-  .main-article__nav-link:active {
-    transform: none;
+    transition: none;
   }
 }
 
 /* === template: gift_card ===
-   Standalone page (layout none). Surface-colored page, one centered ivory
-   card: brand, balance, code with copy, QR, expiry, wallet, actions. The
-   copy button morphs its label via .btn__content. Print hides the actions
-   and the card's shadow. */
+   Standalone page (layout none): one centred column on white. Wordmark,
+   a big .h0 balance, the code in a --c-surface pill with a quiet copy
+   button (label morphs via .btn__content), the QR on a surface tile,
+   Apple Wallet, primary + secondary pills. Print hides the actions. */
 .gift-card {
-  background-color: rgb(var(--c-surface));
+  background-color: rgb(var(--c-bg));
 }
 
 .gift-card__main {
   min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: calc(var(--space-6) + var(--safe-top)) max(var(--gutter), var(--safe-left)) calc(var(--space-6) + var(--safe-bottom)) max(var(--gutter), var(--safe-right));
+  padding: calc(var(--space-9) + var(--safe-top)) max(var(--gutter), var(--safe-left)) calc(var(--space-9) + var(--safe-bottom)) max(var(--gutter), var(--safe-right));
 }
 
 .gift-card__card {
   width: 100%;
-  max-width: 30rem;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: clamp(32px, 5vw, 48px);
   text-align: center;
-  gap: var(--space-5);
-  padding: clamp(28px, 5vw, 48px) clamp(20px, 4vw, 40px);
-  background: rgb(var(--c-bg));
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg);
-}
-
-.gift-card__brand {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-  width: 100%;
 }
 
 .gift-card__logo img {
@@ -708,14 +966,9 @@
 .gift-card__wordmark {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: 1.5rem;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
-}
-
-.gift-card__ornament {
-  width: 100%;
-  max-width: 160px;
+  font-size: 1.3125rem;
+  line-height: 1.19;
+  letter-spacing: 0.011em;
 }
 
 .gift-card__amount {
@@ -726,7 +979,9 @@
 }
 
 .gift-card__balance {
+  margin-block: var(--space-1);
   font-variant-numeric: lining-nums tabular-nums;
+  overflow-wrap: normal;
 }
 
 .gift-card__code-wrap {
@@ -735,37 +990,46 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-5);
-  border-radius: var(--r-md);
-  background: rgb(var(--c-surface));
 }
 
 .gift-card__code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 1.25rem;
-  letter-spacing: 0.14em;
-  line-height: 1.4;
+  max-width: 100%;
+  padding: 14px 28px;
+  border-radius: var(--r-pill);
+  background: rgb(var(--c-surface));
+  font-size: 1.3125rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
   -webkit-user-select: all;
   user-select: all;
+}
+
+.gift-card__copy {
+  margin-top: calc(var(--space-1) * -1);
 }
 
 .gift-card__qr {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-4);
+  width: 100%;
+  padding: clamp(24px, 4vw, 32px);
+  border-radius: var(--r-tile);
+  background: rgb(var(--c-surface));
 }
 
 .gift-card__qr-code {
   display: grid;
   place-items: center;
-  min-width: 132px;
-  min-height: 132px;
-  padding: 6px;
+  min-width: 140px;
+  min-height: 140px;
+  padding: 10px;
   border-radius: var(--r-md);
   background: rgb(var(--c-bg));
-  box-shadow: inset 0 0 0 1px rgb(var(--c-line));
 }
 
 .gift-card__qr-code img,
@@ -777,20 +1041,36 @@
   max-width: 28ch;
 }
 
+.gift-card__wallet {
+  display: inline-flex;
+  border-radius: var(--r-sm);
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.gift-card__wallet:active {
+  transform: scale(0.97);
+}
+
 .gift-card__wallet img {
   width: 120px;
   height: 40px;
 }
 
 .gift-card__actions {
-  justify-content: center;
+  margin-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gift-card__wallet {
+    transition: none;
+  }
+
+  .gift-card__wallet:active {
+    transform: none;
+  }
 }
 
 @media print {
-  .gift-card {
-    background: none;
-  }
-
   .gift-card__main {
     min-height: 0;
     padding: 0;
@@ -798,7 +1078,6 @@
 
   .gift-card__card {
     max-width: none;
-    box-shadow: none;
   }
 
   .no-print {

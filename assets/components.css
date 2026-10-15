@@ -317,13 +317,22 @@
   min-width: 0;
 }
 
+/* Product photography is shot on white, so the tile is the photo's own white
+   ground and the bottle sits on it untouched (APPLE-SPEC §0.3: no blending). */
 .card--product {
   gap: 0;
   padding: clamp(16px, 2.2vw, 28px) clamp(16px, 2.2vw, 28px) clamp(20px, 2.6vw, 32px);
   border-radius: var(--r-tile);
-  background: rgb(var(--c-surface));
+  background: rgb(var(--c-photo-ground));
+  box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.06);
   text-align: center;
   transition: transform var(--dur-press) var(--ease-out);
+}
+
+[class*="color-scheme-3"] .card--product,
+[class*="color-scheme-4"] .card--product {
+  background: rgb(var(--c-surface));
+  box-shadow: none;
 }
 
 .card__media-link {
@@ -341,15 +350,13 @@
   margin-bottom: clamp(14px, 1.6vw, 20px);
 }
 
-/* Product photography sits on the tile, not in a box */
-.card--product .card__img {
-  object-fit: contain;
-  mix-blend-mode: multiply;
+/* The whole photo, never cropped through a label */
+.card--product .card__media {
+  background: rgb(var(--c-photo-ground));
 }
 
-[class*="color-scheme-3"] .card--product .card__img,
-[class*="color-scheme-4"] .card--product .card__img {
-  mix-blend-mode: normal;
+.card--product .card__img {
+  object-fit: contain;
 }
 
 .card__img {

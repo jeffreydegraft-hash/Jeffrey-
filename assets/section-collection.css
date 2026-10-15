@@ -291,7 +291,36 @@
   padding-inline: var(--space-2);
   font-size: 0.875rem;
   letter-spacing: -0.016em;
+  white-space: nowrap;
   color: rgb(var(--c-accent));
+}
+
+/* Phones: the chips stay one row that scrolls sideways under the toolbar
+   (bleeding to the screen edges), so "Clear all" never drops onto a line of
+   its own, indented. */
+@media (max-width: 749px) {
+  .active-facets__list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    margin-inline: calc(max(var(--gutter), var(--safe-left)) * -1) calc(max(var(--gutter), var(--safe-right)) * -1);
+    padding-inline: max(var(--gutter), var(--safe-left)) max(var(--gutter), var(--safe-right));
+    scroll-padding-inline: max(var(--gutter), var(--safe-left));
+  }
+
+  .active-facets__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .active-facets__list > li {
+    flex-shrink: 0;
+  }
+
+  .active-facets__chip {
+    max-width: none;
+    white-space: nowrap;
+  }
 }
 
 @media (pointer: coarse) {
@@ -373,10 +402,39 @@
   width: 100%;
 }
 
+/* Names wrap instead of truncating mid-word (the Store never clips a
+   product name); three lines covers the longest names in a 2-up phone tile. */
+.product-grid .card__title {
+  -webkit-line-clamp: 3;
+}
+
+/* A sale price keeps its phrases whole and centred: the was-price and
+   "From $16.98" wrap as units in narrow tiles, never mid-phrase. */
+.product-grid .card--product .price__container,
+.product-grid .card--product .price--on-sale .price__sale {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 6px;
+}
+
+.product-grid .card--product .price__item {
+  white-space: nowrap;
+}
+
 @media (max-width: 749px) {
   .product-grid .card__title {
     font-size: 0.9375rem;
     line-height: 1.25;
+  }
+}
+
+/* Small tiles take the card radius: 28px corners on a 170px phone tile
+   read as a pill. Radius scales with the surface, as on iOS. */
+@media (max-width: 749px) {
+  .product-grid,
+  .list-collections__grid,
+  .collection-list__grid {
+    --r-tile: var(--r-card);
   }
 }
 
@@ -394,7 +452,7 @@
 .collection-list__empty-body {
   max-width: 30rem;
   font-size: 1.0625rem;
-  text-wrap: pretty;
+  text-wrap: balance; /* short and centred: even lines, no lone last word */
   color: rgb(var(--c-ink-2));
 }
 
@@ -721,9 +779,10 @@
   --ratio: 1 / 1;
 }
 
+/* Top-aligned so titles share a line across the row even when one wraps */
 .card--collection .card__body {
   flex: 1 1 auto;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 2px;
   padding: clamp(16px, 2vw, 24px) clamp(12px, 2vw, 24px) clamp(20px, 2.4vw, 28px);
 }
@@ -848,6 +907,22 @@
   text-wrap: balance;
 }
 
+/* Results sit in one centred column (the content measure), so the tiles
+   and the rows below share both edges under the centred field. */
+.main-search__results {
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+/* No results: the message belongs to the field, so it sits close under it */
+.main-search--empty .main-search__header {
+  margin-bottom: 0;
+}
+
+.main-search__empty.empty-state {
+  padding-top: clamp(40px, 6vw, 72px);
+}
+
 .main-search__group + .main-search__group {
   margin-top: clamp(56px, 8vw, 96px);
 }
@@ -859,7 +934,6 @@
 .search-results {
   display: flex;
   flex-direction: column;
-  max-width: var(--content-max);
 }
 
 .search-results__item + .search-results__item {
@@ -932,7 +1006,7 @@
 
 /* ---------- hover (real pointers only) ---------- */
 @media (hover: hover) and (pointer: fine) {
-  .collection-grid__select select:hover,
+  .collection-grid__select select:hover:not(:focus-visible),
   .collection-grid__filter-button:hover {
     box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.16);
   }

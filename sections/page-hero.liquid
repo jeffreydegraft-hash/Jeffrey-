@@ -6,8 +6,9 @@
   glyph in the accent detail colour, like the product glyph above an
   Apple page title. First thing on the page, so it enters with .enter
   (@starting-style in base.css, no JS) and never carries data-reveal.
-  A long intro (over 140 characters) left-aligns the hero on phones, so a
-  paragraph is never centred over more than three lines. "Remove bottom
+  A long intro (over 100 characters) is set a step smaller on desktop and
+  left-aligns the hero on phones, so a paragraph is never centred over
+  more than three lines. "Remove bottom
   spacing" lets the next section continue the page without a double gap.
 {%- endcomment -%}
 {%- liquid
@@ -30,7 +31,7 @@
     assign hero_class = hero_class | append: ' page-hero--flush'
   endif
   assign intro_length = section.settings.intro | size
-  if intro_length > 140
+  if intro_length > 100
     assign hero_class = hero_class | append: ' page-hero--long'
   endif
 -%}

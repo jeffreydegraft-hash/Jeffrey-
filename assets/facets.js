@@ -65,7 +65,35 @@
     document.querySelectorAll('#SortBy, facet-filters-form [name="sort_by"]').forEach((el) => {
       if (el !== except) el.value = value;
     });
+    fitSort();
   };
+
+  /* The sort pill hugs the current order ("Featured ⌄"). CSS field-sizing
+     does this where supported; elsewhere a hidden twin measures the label. */
+  const FIELD_SIZING = !!(window.CSS && CSS.supports && CSS.supports('field-sizing', 'content'));
+  function fitSort() {
+    const select = document.getElementById('SortBy');
+    if (FIELD_SIZING || !select || !select.isConnected) return;
+    const option = select.options[select.selectedIndex];
+    if (!option) return;
+    const cs = getComputedStyle(select);
+    const probe = document.createElement('span');
+    probe.textContent = option.text;
+    Object.assign(probe.style, {
+      position: 'absolute',
+      visibility: 'hidden',
+      whiteSpace: 'pre',
+      fontFamily: cs.fontFamily,
+      fontSize: cs.fontSize,
+      fontWeight: cs.fontWeight,
+      letterSpacing: cs.letterSpacing,
+    });
+    document.body.appendChild(probe);
+    const text = probe.getBoundingClientRect().width;
+    probe.remove();
+    const pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    select.style.width = `${Math.ceil(text + pad) + 2}px`;
+  }
 
   const setLoading = (on) => {
     const grid = document.getElementById(GRID_ID);
@@ -163,6 +191,7 @@
     const sortBy = document.getElementById('SortBy');
     const nextSortBy = doc.getElementById('SortBy');
     if (sortBy && nextSortBy && sortBy !== target) sortBy.value = nextSortBy.value;
+    fitSort();
   };
 
   const render = (query, options = {}) => {
@@ -253,6 +282,13 @@
   else document.addEventListener('DOMContentLoaded', defineDrawer);
 
   /* ---------- document-level wiring ---------- */
+  // Sort pill width (no-op where field-sizing is supported): now, once the
+  // font settles, and when touch input changes the pill's type size.
+  fitSort();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSort);
+  const coarse = window.matchMedia('(pointer: coarse)');
+  if (coarse.addEventListener) coarse.addEventListener('change', fitSort);
+
   // Toolbar sort (form-associated through form="", so its events never reach the form element)
   document.addEventListener('change', (event) => {
     const select = event.target;

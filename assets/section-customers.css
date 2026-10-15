@@ -230,6 +230,12 @@
   .customer-form__row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  /* Country takes the whole row while its province field is hidden
+     (Shopify.CountryProvinceSelector toggles an inline display: none) */
+  .customer-form__row > .field:has(+ .field[style*="display: none"]) {
+    grid-column: 1 / -1;
+  }
 }
 
 .customer-form__actions {
@@ -636,7 +642,7 @@
 
 .order-line__title {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-weight: var(--font-body-weight-bold);
@@ -746,15 +752,16 @@
   }
 
   /* [image  title ............ total]
-     [       Quantity 2  Price $29.98] */
+     [       Quantity 2              ]
+     [       Price $29.98            ]  (only when it adds something) */
   .order-table tbody tr {
     display: grid;
     grid-template-columns: 64px minmax(0, 1fr) auto;
     grid-template-areas:
       "product product total"
-      ". quantity price";
+      ". quantity quantity"
+      ". price price";
     column-gap: var(--space-4);
-    row-gap: var(--space-2);
     padding: var(--space-4) 0;
   }
 
@@ -787,11 +794,16 @@
 
   .order-table .order-table__quantity {
     grid-area: quantity;
+    margin-top: var(--space-2);
   }
 
   .order-table .order-table__price {
     grid-area: price;
-    text-align: right;
+  }
+
+  /* One unit, no unit pricing: the price only repeats the line total */
+  .order-table__row--single .order-table__price {
+    display: none;
   }
 
   .order-table__quantity::before,
@@ -973,16 +985,19 @@
     transition: color var(--dur-fast) ease;
   }
 
-  .orders-table__row:hover .orders-table__chevron,
-  .link--chevron.customer-link--back:hover .icon {
-    transform: none;
-  }
-
   @starting-style {
     .login__panel--recover:target,
     .login__panel--recover.is-open,
     .address-form.is-open {
       transform: none;
     }
+  }
+}
+
+/* Reduced motion on a precise pointer: hover still recolours, nothing nudges */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+  .orders-table__row:hover .orders-table__chevron,
+  .link--chevron.customer-link--back:hover .icon {
+    transform: none;
   }
 }

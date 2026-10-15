@@ -1,0 +1,61 @@
+{%- comment -%}
+  The merchant's own logo, used intact: never drawn, traced, recoloured,
+  filtered or blended by the theme.
+
+  Fallback chain, first that exists wins:
+    1. override           a section-level logo (for example the footer's own picker)
+    2. tone 'light'       settings.logo, then Settings › Brand logo (shop.brand.logo)
+       tone 'dark'        settings.logo_inverse (the merchant's light version), then
+                          settings.logo only when settings.logo_dark_safe is on
+    3. the store name as a text wordmark
+
+  Accepts:
+  - tone: {String} 'light' (default) or 'dark', the ground the logo sits on
+  - override: {Image} optional section-level logo
+  - width: {Number} display width in px (default settings.logo_width, then 140)
+  - class: {String} class for the <img> (default 'brand-logo__img')
+  - wordmark_class: {String} class for the text fallback (default 'brand-logo__wordmark')
+  - priority: {Boolean} true for the above-the-fold header logo (eager + high fetch priority)
+  - alt_empty: {Boolean} true when the logo sits inside a link that already has an aria-label
+
+  Usage: {% render 'brand-logo', class: 'header__logo-img', priority: true, alt_empty: true %}
+{%- endcomment -%}
+{%- liquid
+  assign tone = tone | default: 'light'
+  assign logo = override
+  if logo == blank
+    if tone == 'dark'
+      assign logo = settings.logo_inverse
+      if logo == blank and settings.logo_dark_safe
+        assign logo = settings.logo | default: shop.brand.logo
+      endif
+    else
+      assign logo = settings.logo | default: shop.brand.logo
+    endif
+  endif
+
+  assign img_class = class | default: 'brand-logo__img'
+  assign text_class = wordmark_class | default: 'brand-logo__wordmark'
+-%}
+{%- if logo != blank -%}
+  {%- liquid
+    assign w = width | default: settings.logo_width | default: 140
+    assign w2 = w | times: 2
+    assign w3 = w | times: 3
+    assign h = w | divided_by: logo.aspect_ratio | round
+    assign widths = w | append: ', ' | append: w2 | append: ', ' | append: w3
+    assign sizes = w | append: 'px'
+    if alt_empty
+      assign alt = ''
+    else
+      assign alt = logo.alt | default: shop.name | escape
+    endif
+  -%}
+  {%- if priority -%}
+    {{- logo | image_url: width: w3 | image_tag: class: img_class, widths: widths, sizes: sizes, width: w, height: h, alt: alt, loading: 'eager', fetchpriority: 'high' -}}
+  {%- else -%}
+    {{- logo | image_url: width: w3 | image_tag: class: img_class, widths: widths, sizes: sizes, width: w, height: h, alt: alt, loading: 'lazy' -}}
+  {%- endif -%}
+{%- else -%}
+  <span class="{{ text_class }}">{{ shop.name | escape }}</span>
+{%- endif -%}

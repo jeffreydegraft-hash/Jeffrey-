@@ -34,8 +34,8 @@
 
       <header class="customer-hero">
         <h1 class="h2 customer-hero__title">{{ 'customer.addresses.title' | t }}</h1>
-        <p class="customer-hero__meta">{{ 'customer.addresses.count' | t: count: customer.addresses_count }}</p>
         {%- if customer.addresses_count > 0 -%}
+          <p class="customer-hero__meta">{{ 'customer.addresses.count' | t: count: customer.addresses_count }}</p>
           <div class="cta-row customer-hero__cta">
             <button type="button" class="btn btn--primary" data-address-toggle="#AddAddress" aria-controls="AddAddress" aria-expanded="false">
               {%- render 'icon', name: 'plus', size: 16 -%}

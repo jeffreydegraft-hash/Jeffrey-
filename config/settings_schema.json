@@ -14,7 +14,7 @@
         "type": "image_picker",
         "id": "logo",
         "label": "Logo image",
-        "info": "Shown in the header and footer. Leave empty to show the store name as a wordmark."
+        "info": "Your own logo, shown intact in the header, footer, password page and gift card. Falls back to Settings > Brand, then to the store name."
       },
       {
         "type": "range",
@@ -30,7 +30,32 @@
         "type": "image_picker",
         "id": "favicon",
         "label": "Favicon",
-        "info": "Will be scaled down to 32 × 32 px"
+        "info": "Scaled to 32 × 32 px. Falls back to the square logo mark, then to Settings > Brand."
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_inverse",
+        "label": "Logo for dark backgrounds",
+        "info": "Your own light or reversed version, used on dark color schemes. The theme never inverts or recolours your logo."
+      },
+      {
+        "type": "checkbox",
+        "id": "logo_dark_safe",
+        "label": "My main logo reads well on dark backgrounds",
+        "default": false,
+        "info": "Turn on only if your main logo has enough contrast on dark color schemes."
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_mark",
+        "label": "Logo mark (square)",
+        "info": "Optional square version, used for the favicon when none is set and in tight spaces."
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Social sharing image",
+        "info": "Used when a page has no image of its own and Online Store > Preferences has none."
       }
     ]
   },
