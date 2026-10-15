@@ -698,20 +698,26 @@
           this.footerInView = false;
           this.update = this.update.bind(this);
 
-          this.io = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-              if (entry.target === this.main) {
-                const top = entry.rootBounds ? entry.rootBounds.top : 0;
-                this.past = !entry.isIntersecting && entry.boundingClientRect.bottom <= top + 1;
-              } else {
-                this.footerInView = entry.isIntersecting;
-              }
-            });
-            this.update();
-          });
+          // The root reaches far below the viewport, so the button counts as
+          // "intersecting" anywhere from the viewport down. It stops only once
+          // it has scrolled above the top, and a jump straight from below to
+          // above (anchor link, scroll restoration) still crosses that edge.
+          this.io = new IntersectionObserver(
+            ([entry]) => {
+              this.past = !entry.isIntersecting && entry.boundingClientRect.height > 0;
+              this.update();
+            },
+            { rootMargin: '0px 0px 100000px 0px' }
+          );
           this.io.observe(this.main);
           this.footer = document.querySelector('[role="contentinfo"], footer');
-          if (this.footer) this.io.observe(this.footer);
+          if (this.footer) {
+            this.footerIo = new IntersectionObserver(([entry]) => {
+              this.footerInView = entry.isIntersecting;
+              this.update();
+            });
+            this.footerIo.observe(this.footer);
+          }
           if (this.mq.addEventListener) this.mq.addEventListener('change', this.update);
 
           this.mirror = new MutationObserver(() => this.sync());
@@ -727,6 +733,7 @@
 
         disconnectedCallback() {
           if (this.io) this.io.disconnect();
+          if (this.footerIo) this.footerIo.disconnect();
           if (this.mirror) this.mirror.disconnect();
           if (this.unsubscribe) this.unsubscribe();
           if (this.mq && this.mq.removeEventListener) this.mq.removeEventListener('change', this.update);

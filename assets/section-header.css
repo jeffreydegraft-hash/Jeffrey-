@@ -646,7 +646,9 @@ a.header__flyout-heading:active {
 }
 
 .menu-drawer__panel {
-  --material-thick: rgba(var(--c-bg), 0.86);
+  /* A full-screen surface reads thicker (apple-design §12): near-solid, so
+     blurred page text never ghosts through at the viewport edges. */
+  --material-thick: rgba(var(--c-bg), 0.97);
   --sheet-closed: translateY(-12px);
   --sheet-axis: y;
   --sheet-dir: -1;
@@ -991,6 +993,7 @@ h2.menu-drawer__submenu-heading {
   line-height: 1.17;
   letter-spacing: 0.009em;
   color: rgb(var(--c-ink));
+  text-overflow: ellipsis;
   background: transparent;
   border: 0;
   border-radius: 0;
@@ -1062,19 +1065,37 @@ h2.menu-drawer__submenu-heading {
   transition: opacity var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out), visibility 0s linear 0s;
 }
 
-/* Desktop: Escape, the scrim and the bar's search button close the panel;
-   the close button shows only for keyboard focus. Phones show it (below). */
-.search-drawer__close {
+/* "Cancel" (iOS): visible on phones. On desktop, Escape, the scrim and the
+   bar's search button close the panel, so it shows only for keyboard focus. */
+.search-drawer__cancel {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 44px;
   margin-top: 4px;
+  padding: 0 var(--space-1);
+  font-size: 1.0625rem;
+  letter-spacing: -0.022em;
+  white-space: nowrap;
+  color: rgb(var(--c-accent));
+  border-radius: var(--r-sm);
+  transition: opacity var(--dur-press) var(--ease-out);
 }
 
-.search-drawer__close:not(:focus-visible) {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+.search-drawer__cancel:active {
+  opacity: 0.7;
+}
+
+@media (min-width: 750px) {
+  .search-drawer__cancel:not(:focus-visible) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
 }
 
 /* results: enter with opacity + 4px drop (160ms), exit 120ms; dim while a newer query loads */
@@ -1233,6 +1254,7 @@ h3.predictive-search__heading {
   }
 
   .search-drawer__panel {
+    --material-thick: rgba(var(--c-bg), 0.97); /* full screen: near-solid, like the menu */
     --sheet-closed: translateY(-12px);
     bottom: 0;
     max-height: none;
@@ -1258,16 +1280,8 @@ h3.predictive-search__heading {
     font-size: 1.3125rem;
   }
 
-  .search-drawer__close:not(:focus-visible) {
-    position: relative;
-    width: 36px;
-    height: 36px;
-    overflow: visible;
-    clip-path: none;
-  }
-
-  .search-drawer__close {
-    margin-top: 6px;
+  .search-drawer__cancel {
+    margin-top: 2px;
   }
 
   /* the panel scrolls; results grow with it */
@@ -1298,9 +1312,13 @@ h3.predictive-search__heading {
   margin-top: var(--space-6);
 }
 
-.predictive-search__list {
+.predictive-search__list,
+.predictive-search__footer {
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none; /* role="listbox": the base list reset does not reach these */
 }
 
 /* no transition: arrow-key selection snaps (keyboard-driven) */

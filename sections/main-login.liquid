@@ -1,10 +1,14 @@
 {%- comment -%}
-  Customer login. One centered column (max 420px) with two panels:
-  #login and #recover. The recover panel is captured first so its
-  posted_successfully? state can be shown on the login panel; after a
-  failed recover post Shopify returns to /account/login#recover, which
-  CSS :target paints and customer.js mirrors (classes, aria, focus).
-  Without JS both panels still work through :target.
+  Customer login, Apple ID style: one centred column (max 480px), a centred
+  headline and one-line lead, 52px inputs, a full-width primary pill, and
+  secondary actions as "›" text links under the form. Guest checkout sits
+  in a flat tile below.
+
+  Two panels: #login and #recover. The recover panel is captured first so
+  its posted_successfully? state can be shown on the login panel; after a
+  failed recover post Shopify returns to /account/login#recover, which CSS
+  :target paints and customer.js mirrors (classes, aria, focus). Without JS
+  both panels still work through :target.
 {%- endcomment -%}
 {%- liquid
   assign spacing_class = ''
@@ -18,8 +22,8 @@
 {%- capture recover_panel -%}
   <div id="recover" class="customer-auth__panel login__panel login__panel--recover" data-login-panel="recover" tabindex="-1">
     <header class="customer-auth__head">
-      <h2 class="h2">{{ 'customer.recover_password.title' | t }}</h2>
-      <p class="muted text-pretty">{{ 'customer.recover_password.subtext' | t }}</p>
+      <h2 class="h2 customer-auth__title">{{ 'customer.recover_password.headline' | t }}</h2>
+      <p class="customer-auth__lead">{{ 'customer.recover_password.subtext' | t }}</p>
     </header>
     {%- form 'recover_customer_password', class: 'customer-form' -%}
       {%- assign recover_success = form.posted_successfully? -%}
@@ -40,19 +44,26 @@
         >
       </div>
       <div class="customer-form__actions">
-        <button type="submit" class="btn btn--primary btn--full">{{ 'customer.recover_password.submit' | t }}</button>
-        <a href="#login" class="btn btn--ghost btn--full" data-login-toggle="login">{{ 'customer.log_in_page.back_to_login' | t }}</a>
+        <button type="submit" class="btn btn--primary btn--lg btn--full">{{ 'customer.recover_password.submit' | t }}</button>
       </div>
     {%- endform -%}
+    <ul class="customer-auth__links" role="list">
+      <li>
+        <a href="#login" class="link link--chevron customer-link--back" data-login-toggle="login">
+          {%- render 'icon', name: 'chevron-left', size: 11 -%}
+          {{- 'customer.recover_password.back' | t -}}
+        </a>
+      </li>
+    </ul>
   </div>
 {%- endcapture -%}
 <div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-login" id="section-{{ section.id }}">
-  <div class="page-width page-width--medium">
+  <div class="page-width">
     <div class="customer-auth login" data-login>
       <div id="login" class="customer-auth__panel login__panel login__panel--login" data-login-panel="login">
         <header class="customer-auth__head">
-          <h1 class="h1">{{ 'customer.log_in_page.title' | t }}</h1>
-          <p class="muted text-pretty">{{ 'customer.log_in_page.subtext' | t }}</p>
+          <h1 class="h2 customer-auth__title">{{ 'customer.log_in_page.headline' | t: shop: shop.name }}</h1>
+          <p class="customer-auth__lead">{{ 'customer.log_in_page.lead' | t }}</p>
         </header>
 
         {%- if recover_success -%}
@@ -81,10 +92,7 @@
           </div>
           {%- if form.password_needed -%}
             <div class="field">
-              <div class="customer-form__label-row">
-                <label class="field__label" for="LoginForm-password">{{ 'customer.log_in_page.password' | t }}</label>
-                <a href="#recover" class="link link--underline link--muted small" data-login-toggle="recover" aria-controls="recover" aria-expanded="false">{{ 'customer.log_in_page.forgot_password' | t }}</a>
-              </div>
+              <label class="field__label" for="LoginForm-password">{{ 'customer.log_in_page.password' | t }}</label>
               <input
                 class="field__input"
                 type="password"
@@ -97,21 +105,32 @@
             </div>
           {%- endif -%}
           <div class="customer-form__actions">
-            <button type="submit" class="btn btn--primary btn--full">{{ 'customer.log_in_page.sign_in' | t }}</button>
+            <button type="submit" class="btn btn--primary btn--lg btn--full">{{ 'customer.log_in_page.sign_in' | t }}</button>
           </div>
+          <ul class="customer-auth__links" role="list">
+            {%- if form.password_needed -%}
+              <li>
+                <a href="#recover" class="link link--chevron" data-login-toggle="recover" aria-controls="recover" aria-expanded="false">
+                  {{- 'customer.log_in_page.forgot_password' | t -}}
+                  {%- render 'icon', name: 'chevron-right', size: 11 -%}
+                </a>
+              </li>
+            {%- endif -%}
+            <li class="customer-auth__alt">
+              <span>{{ 'customer.log_in_page.new_customer' | t }}</span>
+              <a href="{{ routes.account_register_url }}" class="link link--chevron">
+                {{- 'customer.log_in_page.create_account' | t -}}
+                {%- render 'icon', name: 'chevron-right', size: 11 -%}
+              </a>
+            </li>
+          </ul>
         {%- endform -%}
 
-        <p class="customer-auth__alt">
-          {{ 'customer.log_in_page.new_customer' | t }}
-          <a href="{{ routes.account_register_url }}" class="link link--underline">{{ 'customer.log_in_page.create_account' | t }}</a>
-        </p>
-
         {%- if shop.checkout.guest_login -%}
-          <div class="customer-auth__guest">
-            <p class="customer-auth__divider" aria-hidden="true"><span>{{ 'general.or' | t }}</span></p>
-            <h2 class="h4 text-center">{{ 'customer.log_in_page.guest_title' | t }}</h2>
-            <p class="muted small text-center">{{ 'customer.log_in_page.guest_text' | t }}</p>
-            {%- form 'guest_login' -%}
+          <div class="tile tile--center customer-auth__guest">
+            <h2 class="h5">{{ 'customer.log_in_page.guest_title' | t }}</h2>
+            <p class="customer-auth__guest-text">{{ 'customer.log_in_page.guest_text' | t }}</p>
+            {%- form 'guest_login', class: 'customer-auth__guest-form' -%}
               <button type="submit" class="btn btn--secondary btn--full">{{ 'customer.log_in_page.guest_continue' | t }}</button>
             {%- endform -%}
           </div>

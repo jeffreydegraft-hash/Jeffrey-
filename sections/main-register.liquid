@@ -1,6 +1,8 @@
 {%- comment -%}
-  Create account. One centered column (max 420px). Fields keep their values
-  when the form comes back with errors; the error summary links to each.
+  Create account, Apple ID style: one centred column (max 480px), centred
+  headline and lead, 52px inputs, a full-width primary pill and a "›" text
+  link to sign in. Fields keep their values when the form comes back with
+  errors; the error summary links to each.
 {%- endcomment -%}
 {%- liquid
   assign spacing_class = ''
@@ -12,11 +14,11 @@
   endcase
 -%}
 <div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-register" id="section-{{ section.id }}">
-  <div class="page-width page-width--medium">
+  <div class="page-width">
     <div class="customer-auth register">
       <header class="customer-auth__head">
-        <h1 class="h1">{{ 'customer.register.title' | t }}</h1>
-        <p class="muted text-pretty">{{ 'customer.register.subtext' | t }}</p>
+        <h1 class="h2 customer-auth__title">{{ 'customer.register.headline' | t }}</h1>
+        <p class="customer-auth__lead">{{ 'customer.register.subtext' | t }}</p>
       </header>
 
       {%- form 'create_customer', class: 'customer-form' -%}
@@ -76,14 +78,19 @@
           >
         </div>
         <div class="customer-form__actions">
-          <button type="submit" class="btn btn--primary btn--full">{{ 'customer.register.submit' | t }}</button>
+          <button type="submit" class="btn btn--primary btn--lg btn--full">{{ 'customer.register.submit' | t }}</button>
         </div>
       {%- endform -%}
 
-      <p class="customer-auth__alt">
-        {{ 'customer.register.already_have' | t }}
-        <a href="{{ routes.account_login_url }}" class="link link--underline">{{ 'customer.log_in' | t }}</a>
-      </p>
+      <ul class="customer-auth__links" role="list">
+        <li class="customer-auth__alt">
+          <span>{{ 'customer.register.already_have' | t }}</span>
+          <a href="{{ routes.account_login_url }}" class="link link--chevron">
+            {{- 'customer.register.sign_in' | t -}}
+            {%- render 'icon', name: 'chevron-right', size: 11 -%}
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
