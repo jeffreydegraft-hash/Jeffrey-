@@ -33,6 +33,22 @@
       )
     ).filter((el) => el.offsetParent !== null || el === document.activeElement);
 
+  /* Where the header bar really ends (the announcement ribbon may sit above
+     it). The menu and search panels open from under the bar via
+     var(--header-bottom). Measured on load, resize and every drawer open. */
+  Olivet.setHeaderBottom = (bar = document.querySelector('sticky-header')) => {
+    if (!bar) return;
+    const bottom = Math.max(0, Math.round(bar.getBoundingClientRect().bottom));
+    document.documentElement.style.setProperty('--header-bottom', `${bottom}px`);
+  };
+
+  // CSS time ("0.45", "0.45s", "450ms") → seconds; fallback when unset or invalid
+  const readSeconds = (value, fallback) => {
+    const n = parseFloat(value);
+    if (!Number.isFinite(n) || n <= 0) return fallback;
+    return Math.min(/ms$/i.test(value) ? n / 1000 : n, 1);
+  };
+
   /* ---------- pubsub ---------- */
   const subscribers = {};
   Olivet.pubsub = {
@@ -144,7 +160,8 @@
      opacity. Per-breakpoint geometry comes from CSS custom properties on the
      panel: --sheet-closed (closed transform), --sheet-axis (x|y),
      --sheet-dir (1|-1: dismiss direction), --sheet-drag (1 enables
-     drag-to-dismiss from [data-sheet-handle]). Escape closes. */
+     drag-to-dismiss from [data-sheet-handle]), --sheet-open-duration
+     (optional open spring duration, default 0.5s). Escape closes. */
   class Drawer extends HTMLElement {
     constructor() {
       super();
@@ -188,7 +205,8 @@
       const axis = read('--sheet-axis') || (closed.indexOf('translateY') > -1 ? 'y' : 'x');
       const dir = parseFloat(read('--sheet-dir')) || 1;
       const drag = read('--sheet-drag') === '1';
-      return { closed, axis, dir, drag };
+      const openDuration = readSeconds(read('--sheet-open-duration'), 0.5);
+      return { closed, axis, dir, drag, openDuration };
     }
 
     setBackdropProgress(progress) {
@@ -208,10 +226,11 @@
       this.classList.add('is-open');
       document.body.classList.add('drawer-open');
       document.addEventListener('keydown', this.onKeydown);
+      Olivet.setHeaderBottom(); // panels that hang under the bar read var(--header-bottom)
 
       const motion = Olivet.motion;
       if (motion && !motion.reduced()) {
-        motion.animate(this.panel, { to: 'none' }, { duration: 0.5, bounce: 0 });
+        motion.animate(this.panel, { to: 'none' }, { duration: this.sheetConfig().openDuration, bounce: 0 });
       } else {
         this.panel.style.transform = 'none';
       }
@@ -379,6 +398,7 @@
         measure() {
           const h = this.getBoundingClientRect().height;
           document.documentElement.style.setProperty('--header-height', `${Math.round(h)}px`);
+          Olivet.setHeaderBottom(this);
         }
         onScroll() {
           if (this.ticking) return;

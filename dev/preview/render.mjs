@@ -4,7 +4,7 @@
    Usage: node render.mjs [--out dist] [template ...]   e.g. node render.mjs index product cart */
 import fs from 'node:fs';
 import path from 'node:path';
-import { Liquid, Tag, Value } from 'liquidjs';
+import { Liquid, Tag, Value, Drop } from 'liquidjs';
 import * as M from './mock.mjs';
 
 const ROOT = M.ROOT;
@@ -23,9 +23,32 @@ const rawSettings = typeof settingsData.current === 'string' ? settingsData.pres
 const settingTypes = {};
 for (const group of schema) for (const s of group.settings || []) settingTypes[s.id] = s;
 
+/* A color_scheme setting is an object in Shopify: {{ it }} prints the id,
+   it.settings.background is a colour. valueOf() keeps == 'scheme-3' working. */
+class ColorSchemeDrop extends Drop {
+  constructor(id) {
+    super();
+    this.id = id;
+  }
+  get settings() {
+    const scheme = (settings.color_schemes || []).find((s) => s.id === this.id);
+    return scheme ? scheme.settings : {};
+  }
+  valueOf() {
+    return this.id;
+  }
+  toString() {
+    return this.id;
+  }
+}
+
 function coerceSetting(def, value) {
   if (!def) return value;
   switch (def.type) {
+    case 'color_scheme': {
+      const id = value === undefined || value === null || value === '' ? def.default : value;
+      return id ? new ColorSchemeDrop(id) : null;
+    }
     case 'font_picker':
       return M.fontFromHandle(value || def.default);
     case 'color':
@@ -229,6 +252,7 @@ engine.registerFilter('customer_login_link', (t) => `<a href="/account/login">${
 engine.registerFilter('customer_logout_link', (t) => `<a href="/account/logout">${t}</a>`);
 engine.registerFilter('customer_register_link', (t) => `<a href="/account/register">${t}</a>`);
 engine.registerFilter('default_errors', (e) => '');
+engine.registerFilter('format_code', (c) => String(c || '').replace(/\s+/g, '').replace(/(.{4})(?=.)/g, '$1 '));
 engine.registerFilter('base64_encode', (s) => Buffer.from(String(s)).toString('base64'));
 engine.registerFilter('md5', (s) => 'd41d8cd98f00b204e9800998ecf8427e');
 engine.registerFilter('pluralize', (n, s, p) => (Number(n) === 1 ? s : p));
@@ -285,6 +309,16 @@ class FormTag extends Tag {
     emitter.write(`<form method="${method}" action="${actions[type] || '/'}" accept-charset="UTF-8" ${attrs(kv)}>`);
     emitter.write(`<input type="hidden" name="form_type" value="${type}"><input type="hidden" name="utf8" value="✓">`);
     const form = { errors: null, posted_successfully_q: false, email: '', body: '', author: '', password_needed: type === 'customer_login', name: '', phone: '', address1: '', first_name: '', last_name: '', id: 'new' };
+    // {% form 'customer_address', address %}: Shopify pre-fills the form from the object
+    const objMatch = raw.match(/^\s*(?:'[^']*'|"[^"]*")\s*,\s*([A-Za-z_][\w.]*)\s*(?:,|$)/);
+    const obj = objMatch ? yield new Value(objMatch[1], this.liquid).value(ctx) : null;
+    if (type === 'customer_address') {
+      const fields = ['first_name', 'last_name', 'company', 'address1', 'address2', 'city', 'country', 'province', 'zip', 'phone'];
+      for (const f of fields) form[f] = (obj && obj[f]) || '';
+      form.id = (obj && obj.id) || 'new';
+      const isDefault = obj && M.customer.default_address && obj.id === M.customer.default_address.id;
+      form.set_as_default_checkbox = `<input type="checkbox" id="address_default_address_${form.id}" name="address[default]" value="1"${isDefault ? ' checked' : ''}>`;
+    }
     ctx.push({ form });
     yield this.liquid.renderer.renderTemplates(this.templates, ctx, emitter);
     ctx.pop();
@@ -472,20 +506,29 @@ function globalsFor(pageType, extra = {}) {
     customer: extra.customer === undefined ? null : extra.customer,
     predictive_search: { performed: false, terms: '', resources: { products: [], collections: [], pages: [], articles: [], queries: [] } },
     recommendations: { performed: false, products: [], products_count: 0, intent: 'related' },
+    all_country_option_tags: M.countryOptionTags,
+    country_option_tags: M.countryOptionTags,
     powered_by_link: '<a href="https://www.shopify.com">Powered by Shopify</a>',
     ...extra,
   };
 }
 
+/* "You may also like": the Product Recommendations API's answer for this product.
+   screenshot.mjs answers the section's live fetch with the rendered page. */
+const related = (product) => {
+  const products = M.products.filter((p) => p !== product).slice(0, 4);
+  return { performed: true, products, products_count: products.length, intent: 'related' };
+};
+
 const PAGES = {
   index: () => globalsFor('index', { path: '/', page_title: 'Mount of Olives' }),
   product: () => {
     const product = M.products[0];
-    return globalsFor('product', { product, collection: M.collections.all, path: product.url, page_title: product.title, page_description: product._copy.oneLiner });
+    return globalsFor('product', { product, collection: M.collections.all, recommendations: related(product), path: product.url, page_title: product.title, page_description: product._copy.oneLiner });
   },
   'product-squalane': () => {
     const product = M.products[10];
-    return globalsFor('product', { product, path: product.url, page_title: product.title });
+    return globalsFor('product', { product, recommendations: related(product), path: product.url, page_title: product.title });
   },
   collection: () => globalsFor('collection', { collection: M.collections.all, path: '/collections/all', page_title: 'All anointing oils' }),
   'collection-empty': () => globalsFor('collection', { collection: { ...M.collections.all, products: [], products_count: 0 }, path: '/collections/all', page_title: 'All anointing oils' }),
@@ -502,6 +545,7 @@ const PAGES = {
   article: () => globalsFor('article', { blog: M.blogs['the-anointing-journal'], article: M.articles[0], path: M.articles[0].url, page_title: M.articles[0].title }),
   404: () => globalsFor('404', { path: '/nope', page_title: 'Page not found' }),
   password: () => globalsFor('password', { path: '/password', page_title: 'Mount of Olives' }),
+  gift_card: () => globalsFor('gift_card', { gift_card: M.giftCard, path: `/gift_cards/${M.giftCard.id}`, page_title: 'Your gift card' }),
   'customers/login': () => globalsFor('customers/login', { path: '/account/login', page_title: 'Log in' }),
   'customers/register': () => globalsFor('customers/register', { path: '/account/register', page_title: 'Create account' }),
   'customers/account': () => globalsFor('customers/account', { customer: M.customer, path: '/account', page_title: 'Account' }),
@@ -539,12 +583,13 @@ async function renderTemplate(name) {
     }
   } else if (fs.existsSync(liquidFile)) {
     const { tpl } = parseFile(liquidFile);
-    content = await engine.render(tpl, {}, { globals });
-    if (globals.__layout === 'none') return content;
+    const scope = {}; // {% layout none %} records itself here (LayoutTag → ctx.environments)
+    content = await engine.render(tpl, scope, { globals });
+    if (scope.__layout) layoutName = scope.__layout;
   } else {
     throw new Error(`template ${tplName} not found`);
   }
-  if (layoutName === false || layoutName === 'none') return content;
+  if (layoutName === false || layoutName === 'none') return content.replace('</head>', PREVIEW_FONT + '</head>');
   const { tpl: layoutTpl } = parseFile(path.join(ROOT, 'layout', `${layoutName}.liquid`));
   const page = await engine.render(layoutTpl, { content_for_layout: content }, { globals });
   return page.replace('</head>', PREVIEW_FONT + '</head>');
@@ -555,7 +600,7 @@ let failures = 0;
 for (const name of targets) {
   try {
     const html = await renderTemplate(name);
-    const file = path.join(OUT, `${name.replace('/', '-')}.html`);
+    const file = path.join(OUT, `${name.replace(/\//g, '-')}.html`);
     fs.writeFileSync(file, html);
     console.log(`✓ ${name} → ${path.relative(ROOT, file)} (${(html.length / 1024).toFixed(0)} KB)`);
   } catch (e) {

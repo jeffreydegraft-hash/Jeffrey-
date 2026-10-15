@@ -493,6 +493,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px 16px;
+  min-height: 44px; /* the link's target height: rows match with or without the pill */
   font-size: 0.875rem;
 }
 
@@ -518,9 +519,10 @@
 }
 
 /* Narrow tiles (2-up phones, 4-up at 990px) keep the pill only: the title
-   and photo already open the product page. */
+   and photo already open the product page. A sold-out tile has no pill, so
+   its "Learn more ›" stays and holds the row height. */
 @container card (max-width: 200px) {
-  .card__actions .card__more {
+  .card__actions:has(.card__buy) .card__more {
     display: none;
   }
 }
@@ -889,9 +891,14 @@ olivet-accordion[hidden] {
     transition: opacity var(--dur-slow) ease;
   }
 
-  .card:hover .card__img--primary,
-  .card:hover .card__img--secondary,
   .card--product:active {
+    transform: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+  .card:hover .card__img--primary,
+  .card:hover .card__img--secondary {
     transform: none;
   }
 }

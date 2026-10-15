@@ -475,6 +475,35 @@ export const localization = {
   market: { handle: 'us', id: 1 },
 };
 
+/* all_country_option_tags / country_option_tags: Shopify prints one <option> per
+   country with its provinces as JSON in data-provinces (read by
+   Shopify.CountryProvinceSelector). A short list is enough for previews. */
+const provinceList = (names) => JSON.stringify(names.map((n) => [n, n])).replace(/"/g, '&quot;');
+const countryOptions = [
+  ['United States', ['Alabama', 'California', 'Florida', 'Georgia', 'New York', 'Ohio', 'Texas', 'Washington']],
+  ['Canada', ['Alberta', 'British Columbia', 'Ontario', 'Quebec']],
+  ['United Kingdom', []],
+  ['Israel', []],
+  ['Australia', ['New South Wales', 'Queensland', 'Victoria']],
+];
+export const countryOptionTags = countryOptions.map(([name, provinces]) => `<option value="${name}" data-provinces="${provinceList(provinces)}">${name}</option>`).join('\n');
+
+/* templates/gift_card.liquid ({% layout none %}) */
+export const giftCard = {
+  id: 'f3a9c2d1',
+  balance: 2500,
+  initial_value: 5000,
+  currency: 'USD',
+  code: 'X7KQ4MPL9TRA2WZE',
+  last_four_characters: '2WZE',
+  enabled: true,
+  expired: false,
+  expires_on: '2027-12-31',
+  qr_identifier: 'https://mountofolives.co/gift_cards/f3a9c2d1',
+  pass_url: '/gift_cards/f3a9c2d1.pkpass',
+  url: '/gift_cards/f3a9c2d1',
+};
+
 export const customer = {
   id: 1,
   first_name: 'Aleksandra',
