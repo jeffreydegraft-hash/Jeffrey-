@@ -31,27 +31,29 @@
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
-    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
+    {%- unless settings.use_system_font or settings.type_header_font.system? and settings.type_body_font.system? -%}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
     <title>{{ 'gift_cards.issued.title' | t: value: formatted_balance, shop: shop.name }}</title>
     <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
 
-    {%- unless settings.type_body_font.system? -%}
+    {%- unless settings.use_system_font or settings.type_body_font.system? -%}
       {{ settings.type_body_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
     {%- endunless -%}
-    {%- unless settings.type_header_font.system? -%}
+    {%- unless settings.use_system_font or settings.type_header_font.system? -%}
       {{ settings.type_header_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
     {%- endunless -%}
 
     {% style %}
+      {%- unless settings.use_system_font %}
       {{ settings.type_body_font | font_face: font_display: 'swap' }}
       {{ body_font_bold | font_face: font_display: 'swap' }}
       {{ body_font_italic | font_face: font_display: 'swap' }}
       {{ body_font_bold_italic | font_face: font_display: 'swap' }}
       {{ settings.type_header_font | font_face: font_display: 'swap' }}
       {{ heading_font_italic | font_face: font_display: 'swap' }}
+      {%- endunless %}
 
       {%- for scheme in settings.color_schemes -%}
         {%- if forloop.first %}:root,{% endif %}
@@ -73,6 +75,15 @@
       {%- endfor %}
 
       :root {
+        {%- if settings.use_system_font %}
+        --font-heading: var(--font-system);
+        --font-heading-weight: 600;
+        --font-heading-style: normal;
+        --font-body: var(--font-system);
+        --font-body-weight: 400;
+        --font-body-weight-bold: 600;
+        --font-body-style: normal;
+        {%- else %}
         --font-heading: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
         --font-heading-weight: {{ settings.type_header_font.weight }};
         --font-heading-style: {{ settings.type_header_font.style }};
@@ -80,20 +91,23 @@
         --font-body-weight: {{ settings.type_body_font.weight }};
         --font-body-weight-bold: {{ settings.type_body_font.weight | plus: 300 | at_most: 800 }};
         --font-body-style: {{ settings.type_body_font.style }};
+        {%- endif %}
         --heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
         --body-scale: {{ settings.body_scale | divided_by: 100.0 }};
         --page-max: {{ settings.page_width }}px;
         --r-btn: {{ settings.button_radius }}px;
         --r-input: {{ settings.input_radius }}px;
         --r-card: {{ settings.card_radius }}px;
+        --r-tile: {{ settings.card_radius | plus: 10 }}px;
+        --r-media: {{ settings.card_radius }}px;
         --card-ratio: {{ settings.card_image_ratio }};
-        --section-y: clamp(56px, 8vw, 112px);
+        --section-y: clamp(72px, 10vw, 140px);
       }
     {% endstyle %}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {{ 'components.css' | asset_url | stylesheet_tag }}
-    {{ 'templates.css' | asset_url | stylesheet_tag }}
+    {{ 'section-pages.css' | asset_url | stylesheet_tag }}
 
     <script>document.documentElement.classList.replace('no-js', 'js');</script>
     <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer="defer"></script>

@@ -1,0 +1,373 @@
+/* ==========================================================================
+   Olivet — section-footer.css (footer sections)
+   ========================================================================== */
+/* === section: footer ===
+   Dark olive by default (scheme-3); every colour is a scheme token so any
+   scheme works. Motion here is colour/underline only: the only transforms
+   are the shared .btn / .social__link presses already covered by base.css
+   and components.css (including their reduced-motion variants). */
+.footer {
+  --footer-pad-top: clamp(56px, 7vw, 96px);
+  position: relative;
+  border-top: 1px solid rgb(var(--c-line));
+  padding-top: var(--footer-pad-top);
+  padding-bottom: calc(var(--space-6) + var(--safe-bottom));
+}
+
+.footer--padding-compact { --footer-pad-top: clamp(40px, 5vw, 64px); }
+.footer--padding-airy { --footer-pad-top: clamp(72px, 9vw, 128px); }
+
+/* ---- top grid: 1 col → 2 cols (brand spans) → brand + one track per block ---- */
+.footer__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8) var(--space-6);
+}
+
+@media (min-width: 750px) {
+  .footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-9) var(--space-6);
+  }
+
+  .footer__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 990px) {
+  .footer__grid {
+    /* --footer-cols is set inline by the section: one minmax(0, 1fr) per block,
+       minmax(0, 1.5fr) for the newsletter so its inline form has room. */
+    grid-template-columns: minmax(0, 1.5fr) var(--footer-cols, minmax(0, 1fr));
+    gap: var(--space-10) clamp(24px, 3vw, 48px);
+  }
+
+  .footer__grid--brand-only {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .footer__brand {
+    grid-column: auto;
+    padding-right: clamp(16px, 3vw, 56px);
+  }
+}
+
+/* ---- brand column ---- */
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.footer__logo {
+  display: inline-block;
+}
+
+.footer__logo-img {
+  width: var(--footer-logo-width, 140px);
+  max-width: 100%;
+  height: auto;
+}
+
+.footer__wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-style: var(--font-heading-style);
+  font-size: clamp(1.625rem, 1.3rem + 1vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: rgb(var(--c-ink));
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.footer__wordmark:active {
+  opacity: 0.7;
+}
+
+.footer__tagline {
+  max-width: 34ch;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgb(var(--c-ink-2));
+  text-wrap: pretty;
+}
+
+/* The 44px icon boxes hold a 20px glyph: pull the list left so the first
+   glyph sits on the text edge instead of 12px in. */
+.footer__social {
+  margin-top: var(--space-1);
+  margin-left: -12px;
+}
+
+/* ---- block columns ---- */
+.footer__col {
+  min-width: 0;
+}
+
+.footer__heading {
+  margin-bottom: var(--space-3);
+}
+
+/* Links are 44px tall for the thumb; the list tucks that padding so the
+   visual rhythm stays tight against the heading. */
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  margin-block: -10px;
+}
+
+.footer__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: rgba(var(--c-ink), 0.8);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+  transition: color var(--dur-fast) ease, text-decoration-color var(--dur-fast) ease;
+}
+
+.footer__link[aria-current="page"] {
+  color: rgb(var(--c-ink));
+  text-decoration-color: rgba(var(--c-gold), 0.7);
+}
+
+.footer__hint {
+  font-style: italic;
+}
+
+/* text block (rich text from the editor) */
+.footer__text {
+  max-width: 42ch;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgba(var(--c-ink), 0.8);
+  text-wrap: pretty;
+}
+
+.footer__text > * + * {
+  margin-top: 0.75em;
+}
+
+.footer__text a {
+  color: rgb(var(--c-ink));
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(var(--c-ink), 0.4);
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color var(--dur-fast) ease;
+}
+
+/* contact block */
+.footer__contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-block: -10px;
+  font-style: normal;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgba(var(--c-ink), 0.8);
+}
+
+.footer__contact-line {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.footer__address {
+  margin-top: var(--space-2);
+  margin-bottom: 10px;
+}
+
+/* newsletter block */
+.footer__col--newsletter {
+  container-type: inline-size;
+}
+
+.footer__newsletter-form {
+  margin-top: var(--space-4);
+}
+
+.footer__newsletter-form .field__input {
+  background: rgb(var(--c-surface));
+  border-color: rgba(var(--c-ink), 0.18);
+}
+
+.footer__newsletter-button {
+  flex-shrink: 0;
+}
+
+/* Stack the inline form when the column itself is narrow (not just the viewport). */
+@container (max-width: 330px) {
+  .footer__newsletter-form .inline-form {
+    flex-direction: column;
+  }
+}
+
+.footer__newsletter-form .inline-form + .form-status {
+  margin-top: var(--space-3);
+}
+
+/* base.css tints the status text for light schemes; on the dark footer the
+   ink token keeps it readable while the tinted background still signals state. */
+.footer .form-status--success,
+.footer .form-status--error {
+  color: rgb(var(--c-ink));
+}
+
+.footer .form-status .icon {
+  margin-top: 2px;
+}
+
+/* ---- bottom bar ---- */
+.footer__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-top: clamp(40px, 6vw, 72px);
+  padding-top: var(--space-6);
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+.footer__bottom-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+}
+
+.footer__localization {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+@media (min-width: 750px) {
+  .footer__localization {
+    flex: 0 1 auto;
+  }
+}
+
+.footer__payment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.footer__payment-icon {
+  display: block;
+  width: 38px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.footer__legal {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgb(var(--c-ink-2));
+}
+
+.footer__copyright {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.footer__policies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+}
+
+.footer__policy-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.8125rem;
+  color: rgb(var(--c-ink-2));
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color var(--dur-fast) ease, text-decoration-color var(--dur-fast) ease;
+}
+
+.footer__disclaimer {
+  text-wrap: pretty;
+}
+
+/* ---- localization selects (snippets/localization-form.liquid) ---- */
+.localization__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.localization__field {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.localization .field__select {
+  min-height: 44px;
+  padding-block: 8px;
+  font-size: 16px;
+}
+
+.localization__submit {
+  align-self: center;
+}
+
+@media (min-width: 750px) {
+  .localization__field {
+    flex: 0 1 auto;
+  }
+
+  .localization .field__select {
+    width: auto;
+    max-width: 320px;
+  }
+}
+
+/* ---- hover (real pointers only) ---- */
+@media (hover: hover) and (pointer: fine) {
+  .footer__link:hover {
+    color: rgb(var(--c-ink));
+    text-decoration-color: currentColor;
+  }
+
+  .footer__text a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .footer__policy-link:hover {
+    color: rgb(var(--c-ink));
+    text-decoration-color: currentColor;
+  }
+
+  .footer__wordmark:hover {
+    opacity: 0.8;
+  }
+}
+
+/* ---- reduced motion: nothing here moves; shorten the colour fades ---- */
+@media (prefers-reduced-motion: reduce) {
+  .footer__link,
+  .footer__policy-link,
+  .footer__text a,
+  .footer__wordmark {
+    transition-duration: 0.01ms;
+  }
+}

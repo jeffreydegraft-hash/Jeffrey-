@@ -1,0 +1,463 @@
+/* ==========================================================================
+   Olivet — section-home-a.css (home-a sections)
+   ========================================================================== */
+/* === section: hero ===
+   First screen. Split: text left, a 4:5 media right; full-bleed: media behind
+   a scheme-3 scrim with the text placed over it.
+   Motion inventory (all CSS, no JS, no data-reveal):
+   - text staggers in via .enter + --i (base.css @starting-style): marketing
+     entrance, the heading is readable the instant the page paints
+   - split media wipes in on clip-path from the top (600ms, var(--ease-out))
+     while its image settles from scale(1.04): spatial, "the picture arrives"
+   - full-bleed media fades in on opacity
+   - prefers-reduced-motion: everything becomes a short fade and the video is
+     hidden behind its poster image */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__content {
+  max-width: 40rem;
+}
+
+.hero__content > * + * {
+  margin-top: var(--space-5);
+}
+
+.hero__eyebrow + * {
+  margin-top: var(--space-4);
+}
+
+.hero__subheading {
+  max-width: 34rem;
+}
+
+.hero__actions {
+  --cluster-gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 479px) {
+  .hero__button {
+    flex: 1 1 100%;
+  }
+}
+
+/* split layout */
+.hero--split .hero__inner {
+  display: grid;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+  padding-block: clamp(32px, 6vw, 64px) clamp(40px, 7vw, 96px);
+}
+
+@media (min-width: 990px) {
+  .hero--split .hero__inner {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
+    min-height: min(80svh, 820px);
+  }
+
+  .hero--split.hero--tall .hero__inner {
+    min-height: min(92svh, 960px);
+  }
+}
+
+.hero__media {
+  --ratio: 4 / 5;
+  clip-path: inset(0 round var(--r-card));
+  transition: clip-path calc(var(--dur-reveal) * 1.2) var(--ease-out);
+}
+
+.hero__media .media__img,
+.hero__media .hero__video {
+  transform: none;
+  transition: transform calc(var(--dur-reveal) * 1.2) var(--ease-out);
+}
+
+@starting-style {
+  .hero__media {
+    clip-path: inset(0 0 100% 0 round var(--r-card));
+  }
+
+  .hero__media .media__img,
+  .hero__media .hero__video {
+    transform: scale(1.04);
+  }
+}
+
+/* media pieces shared by both layouts */
+.hero__video {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__video video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__ornament {
+  position: absolute;
+  inset: 0;
+  color: rgb(var(--c-gold));
+  background: radial-gradient(ellipse 70% 60% at 50% 42%, rgba(var(--c-gold), 0.25), rgba(var(--c-gold), 0) 70%);
+}
+
+.hero__branch {
+  position: absolute;
+  inset: 10%;
+  width: 80%;
+  height: 80%;
+}
+
+/* full-bleed layout */
+.hero--full .hero__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: rgb(var(--c-surface));
+  opacity: 1;
+  transition: opacity calc(var(--dur-reveal) * 1.2) ease;
+}
+
+.hero--full .hero__bg .media__img {
+  transform: none;
+  transition: transform calc(var(--dur-reveal) * 1.2) var(--ease-out);
+}
+
+@starting-style {
+  .hero--full .hero__bg {
+    opacity: 0;
+  }
+
+  .hero--full .hero__bg .media__img {
+    transform: scale(1.04);
+  }
+}
+
+.hero--full .hero__overlay {
+  position: relative;
+  background: transparent;
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--c-bg));
+  opacity: var(--hero-overlay, 0.3);
+  pointer-events: none;
+}
+
+.hero--full .hero__inner {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: 70svh;
+  padding-block: clamp(56px, 10vw, 120px);
+}
+
+.hero--full.hero--tall .hero__inner {
+  min-height: 88svh;
+}
+
+.hero--text-center .hero__content {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.hero--text-center .hero__subheading {
+  margin-inline: auto;
+}
+
+.hero--text-center .hero__actions {
+  justify-content: center;
+}
+
+.hero--text-right .hero__content {
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__media {
+    transition: opacity var(--dur-base) ease;
+  }
+
+  .hero__media .media__img,
+  .hero__media .hero__video,
+  .hero--full .hero__bg .media__img {
+    transition: none;
+  }
+
+  .hero--full .hero__bg {
+    transition: opacity var(--dur-base) ease;
+  }
+
+  .hero__video {
+    display: none;
+  }
+
+  @starting-style {
+    .hero__media {
+      clip-path: inset(0 round var(--r-card));
+      opacity: 0;
+    }
+
+    .hero__media .media__img,
+    .hero__media .hero__video,
+    .hero--full .hero__bg .media__img {
+      transform: none;
+    }
+  }
+}
+
+/* === section: featured-collection ===
+   Header row (eyebrow, heading, description | view-all link) over a product
+   grid. Cards and their stagger come from card-product / components.css. */
+.featured-collection__intro {
+  min-width: 0;
+}
+
+.featured-collection__description {
+  max-width: 52ch;
+  font-size: 1.0625rem;
+}
+
+.featured-collection__view-all {
+  flex-shrink: 0;
+  min-height: 44px;
+  font-weight: var(--font-body-weight-bold);
+}
+
+.featured-collection__grid {
+  row-gap: clamp(28px, 4vw, 48px);
+}
+
+.featured-collection__item {
+  min-width: 0;
+}
+
+.featured-collection__empty .h4 {
+  margin: 0;
+}
+
+/* === section: values-strip ===
+   Four small promises: 44px icon disc, .h5 title, .small body. Two columns on
+   phones, four from 990px. Items reveal with a 50ms stagger. */
+.values-strip--divider-top {
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+.values-strip--divider-bottom {
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+
+.values-strip__grid {
+  row-gap: clamp(28px, 4vw, 44px);
+}
+
+.values-strip__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.values-strip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: var(--space-2);
+  border-radius: var(--r-pill);
+  background: rgb(var(--c-surface));
+  color: rgb(var(--c-gold));
+}
+
+.values-strip__title {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.values-strip__body {
+  margin: 0;
+  max-width: 32ch;
+  text-wrap: pretty;
+}
+
+/* === section: image-with-text ===
+   12-column editorial pair from 990px: image 6/12, text 5/12, one empty
+   column between. Stacked below, text first when the layout says so. */
+.image-with-text__grid {
+  display: grid;
+  gap: clamp(28px, 5vw, 56px);
+}
+
+.image-with-text--text-first .image-with-text__content {
+  order: -1;
+}
+
+@media (min-width: 990px) {
+  .image-with-text__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(16px, 2.5vw, 32px);
+    row-gap: 0;
+  }
+
+  .image-with-text__media {
+    grid-column: 1 / 7;
+  }
+
+  .image-with-text__content {
+    grid-column: 8 / 13;
+  }
+
+  .image-with-text--text-first .image-with-text__content {
+    grid-column: 1 / 6;
+  }
+
+  .image-with-text--text-first .image-with-text__media {
+    grid-column: 7 / 13;
+  }
+
+  .image-with-text--align-top .image-with-text__grid {
+    align-items: start;
+  }
+
+  .image-with-text--align-center .image-with-text__grid {
+    align-items: center;
+  }
+
+  .image-with-text--align-bottom .image-with-text__grid {
+    align-items: end;
+  }
+}
+
+.image-with-text__content {
+  min-width: 0;
+}
+
+.image-with-text__content > * + * {
+  margin-top: var(--space-4);
+}
+
+.image-with-text__eyebrow + * {
+  margin-top: var(--space-3);
+}
+
+.image-with-text__text {
+  margin-top: var(--space-5);
+  max-width: 36rem;
+  color: rgb(var(--c-ink-2));
+}
+
+.image-with-text__cta {
+  margin-top: var(--space-6);
+}
+
+.image-with-text__cta .link {
+  min-height: 44px;
+  font-weight: var(--font-body-weight-bold);
+}
+
+/* === section: scripture-quote ===
+   Eyebrow between gold hairlines, a 30ch serif italic verse, gold reference.
+   Sizes override .scripture__quote from components.css. */
+.scripture-quote__figure {
+  gap: var(--space-5);
+  align-items: flex-start;
+}
+
+.scripture-quote--center .scripture-quote__figure {
+  align-items: center;
+  text-align: center;
+}
+
+.scripture-quote__ornament {
+  width: 100%;
+  max-width: 22rem;
+}
+
+.scripture-quote__blockquote {
+  margin: 0;
+  width: 100%;
+}
+
+/* 30ch is measured in the quote's own (large serif) font, so it lives on
+   the text element, not on the blockquote. */
+.scripture-quote__text {
+  max-width: 30ch;
+  font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+  line-height: 1.22;
+}
+
+.scripture-quote--center .scripture-quote__text {
+  margin-inline: auto;
+}
+
+.scripture-quote__ref {
+  margin: 0;
+}
+
+/* === section: steps ===
+   Centred heading and intro, then up to three columns, one on phones. Each
+   step: optional 4:3 image, a 3rem gold serif numeral, a hairline, .h4 title,
+   .small body. The footnote under the grid carries the external-use line. */
+.steps__header {
+  gap: var(--space-4);
+}
+
+.steps__intro {
+  max-width: 40rem;
+}
+
+.steps__grid {
+  row-gap: clamp(32px, 5vw, 48px);
+  column-gap: clamp(24px, 4vw, 56px);
+}
+
+.steps__item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.steps__media {
+  margin-bottom: var(--space-5);
+}
+
+.steps__numeral {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: rgb(var(--c-gold));
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.steps__rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin-block: var(--space-4);
+  background: rgb(var(--c-line));
+}
+
+.steps__title {
+  margin-bottom: var(--space-2);
+}
+
+.steps__body {
+  max-width: 38ch;
+  text-wrap: pretty;
+}
+
+.steps__footnote {
+  margin-top: clamp(28px, 4vw, 48px);
+  text-align: center;
+}

@@ -10,9 +10,28 @@
   {
     "name": "Logo",
     "settings": [
-      { "type": "image_picker", "id": "logo", "label": "Logo image", "info": "Shown in the header and footer. Leave empty to show the store name as a wordmark." },
-      { "type": "range", "id": "logo_width", "min": 60, "max": 260, "step": 10, "unit": "px", "label": "Logo width", "default": 140 },
-      { "type": "image_picker", "id": "favicon", "label": "Favicon", "info": "Will be scaled down to 32 × 32 px" }
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image",
+        "info": "Shown in the header and footer. Leave empty to show the store name as a wordmark."
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 60,
+        "max": 260,
+        "step": 10,
+        "unit": "px",
+        "label": "Logo width",
+        "default": 140
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Will be scaled down to 32 × 32 px"
+      }
     ]
   },
   {
@@ -22,19 +41,69 @@
         "type": "color_scheme_group",
         "id": "color_schemes",
         "definition": [
-          { "type": "color", "id": "background", "label": "Background", "default": "#F7F3EC" },
-          { "type": "color_background", "id": "background_gradient", "label": "Background gradient", "info": "Optional. Replaces the solid background where supported." },
-          { "type": "color", "id": "surface", "label": "Surface", "info": "Cards, input backgrounds and soft panels", "default": "#EFE9DE" },
-          { "type": "color", "id": "text", "label": "Text", "default": "#1F2A1C" },
-          { "type": "color", "id": "text_muted", "label": "Muted text", "default": "#5F6A58" },
-          { "type": "color", "id": "line", "label": "Lines", "default": "#DAD3C5" },
-          { "type": "color", "id": "accent", "label": "Primary button", "default": "#2F3F2A" },
-          { "type": "color", "id": "accent_text", "label": "Primary button text", "default": "#F7F3EC" },
-          { "type": "color", "id": "gold", "label": "Accent detail", "info": "Eyebrows, small ornaments and sale badges", "default": "#B08D57" }
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "Background gradient",
+            "info": "Optional. Replaces the solid background where supported."
+          },
+          {
+            "type": "color",
+            "id": "surface",
+            "label": "Surface",
+            "info": "Tiles and soft panels. Use #F5F5F7 on white for the Apple look.",
+            "default": "#F5F5F7"
+          },
+          {
+            "type": "color",
+            "id": "text",
+            "label": "Text",
+            "default": "#1D1D1F"
+          },
+          {
+            "type": "color",
+            "id": "text_muted",
+            "label": "Muted text",
+            "default": "#6E6E73"
+          },
+          {
+            "type": "color",
+            "id": "line",
+            "label": "Lines",
+            "default": "#D2D2D7"
+          },
+          {
+            "type": "color",
+            "id": "accent",
+            "label": "Accent (buttons and links)",
+            "default": "#4A5A2A"
+          },
+          {
+            "type": "color",
+            "id": "accent_text",
+            "label": "Primary button text",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "gold",
+            "label": "Detail colour",
+            "info": "Eyebrows, small tags and emphasised words in headlines. Use a darker shade of the accent on light schemes.",
+            "default": "#5F7034"
+          }
         ],
         "role": {
           "text": "text",
-          "background": { "solid": "background", "gradient": "background_gradient" },
+          "background": {
+            "solid": "background",
+            "gradient": "background_gradient"
+          },
           "links": "accent",
           "icons": "text",
           "primary_button": "accent",
@@ -50,76 +119,312 @@
   {
     "name": "Typography",
     "settings": [
-      { "type": "header", "content": "Headings" },
-      { "type": "font_picker", "id": "type_header_font", "label": "Heading font", "default": "cormorant_garamond_n5", "info": "A serif with optical sizing suits the brand. Large headings are tracked tighter automatically." },
-      { "type": "range", "id": "heading_scale", "min": 90, "max": 130, "step": 5, "unit": "%", "label": "Heading size", "default": 100 },
-      { "type": "header", "content": "Body" },
-      { "type": "font_picker", "id": "type_body_font", "label": "Body font", "default": "dm_sans_n4" },
-      { "type": "range", "id": "body_scale", "min": 90, "max": 115, "step": 5, "unit": "%", "label": "Body size", "default": 100 }
+      {
+        "type": "checkbox",
+        "id": "use_system_font",
+        "label": "Use the system font",
+        "info": "San Francisco on Apple devices, Segoe UI on Windows, Roboto on Android. Fastest to load and matches the Apple look. Turn off to choose fonts below.",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Custom fonts (used when the system font is off)"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "label": "Heading font",
+        "default": "inter_n6"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "inter_n4"
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "min": 90,
+        "max": 120,
+        "step": 5,
+        "unit": "%",
+        "label": "Heading size",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "body_scale",
+        "min": 90,
+        "max": 115,
+        "step": 5,
+        "unit": "%",
+        "label": "Body size",
+        "default": 100
+      }
     ]
   },
   {
     "name": "Layout",
     "settings": [
-      { "type": "range", "id": "page_width", "min": 1100, "max": 1600, "step": 20, "unit": "px", "label": "Page width", "default": 1320 },
-      { "type": "select", "id": "section_spacing", "label": "Space between sections", "options": [ { "value": "compact", "label": "Compact" }, { "value": "default", "label": "Default" }, { "value": "airy", "label": "Airy" } ], "default": "default" },
-      { "type": "checkbox", "id": "reveal_on_scroll", "label": "Reveal content on scroll", "info": "Subtle fade and lift as sections enter the viewport. Respects the visitor's reduced-motion setting.", "default": true }
+      {
+        "type": "range",
+        "id": "page_width",
+        "min": 980,
+        "max": 1440,
+        "step": 20,
+        "unit": "px",
+        "label": "Page width",
+        "default": 1200
+      },
+      {
+        "type": "select",
+        "id": "section_spacing",
+        "label": "Space between sections",
+        "options": [
+          {
+            "value": "compact",
+            "label": "Compact"
+          },
+          {
+            "value": "default",
+            "label": "Default"
+          },
+          {
+            "value": "airy",
+            "label": "Airy"
+          }
+        ],
+        "default": "default"
+      },
+      {
+        "type": "checkbox",
+        "id": "reveal_on_scroll",
+        "label": "Reveal content on scroll",
+        "info": "A gentle fade-up as sections come into view. Respects the visitor's reduced-motion setting.",
+        "default": true
+      }
     ]
   },
   {
     "name": "Buttons and inputs",
     "settings": [
-      { "type": "range", "id": "button_radius", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Button corner radius", "info": "40 gives a full pill shape.", "default": 40 },
-      { "type": "range", "id": "input_radius", "min": 0, "max": 20, "step": 2, "unit": "px", "label": "Input corner radius", "default": 10 },
-      { "type": "range", "id": "card_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Card and media corner radius", "default": 14 }
+      {
+        "type": "range",
+        "id": "button_radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Button corner radius",
+        "info": "40 gives the full pill shape used throughout.",
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "input_radius",
+        "min": 0,
+        "max": 20,
+        "step": 2,
+        "unit": "px",
+        "label": "Input corner radius",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "card_radius",
+        "min": 0,
+        "max": 32,
+        "step": 2,
+        "unit": "px",
+        "label": "Media corner radius",
+        "default": 18,
+        "info": "Product tiles use this value plus 10px."
+      }
     ]
   },
   {
     "name": "Product cards",
     "settings": [
-      { "type": "select", "id": "card_image_ratio", "label": "Image ratio", "options": [ { "value": "4/5", "label": "Portrait (4:5)" }, { "value": "1/1", "label": "Square" }, { "value": "3/4", "label": "Tall (3:4)" } ], "default": "4/5" },
-      { "type": "checkbox", "id": "card_show_secondary_image", "label": "Show second image on hover", "default": true },
-      { "type": "checkbox", "id": "card_show_vendor", "label": "Show vendor", "default": false },
-      { "type": "checkbox", "id": "card_show_theme_word", "label": "Show the product's theme word", "info": "Reads the product metafield custom.theme_word (for example “Reverence”). Falls back to the product type.", "default": true }
+      {
+        "type": "select",
+        "id": "card_image_ratio",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "1/1",
+            "label": "Square"
+          },
+          {
+            "value": "4/5",
+            "label": "Portrait (4:5)"
+          },
+          {
+            "value": "3/4",
+            "label": "Tall (3:4)"
+          }
+        ],
+        "default": "1/1"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_secondary_image",
+        "label": "Show second image on hover",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "label": "Show vendor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_theme_word",
+        "label": "Show the product's theme word",
+        "info": "Shown as a small label above the title. Reads the metafield custom.theme_word, then the built-in word for launch products, then the product type.",
+        "default": true
+      }
     ]
   },
   {
     "name": "Cart",
     "settings": [
-      { "type": "select", "id": "cart_type", "label": "Cart type", "options": [ { "value": "drawer", "label": "Drawer" }, { "value": "page", "label": "Page" } ], "default": "drawer" },
-      { "type": "checkbox", "id": "cart_show_free_shipping", "label": "Show free-shipping progress", "default": true },
-      { "type": "number", "id": "cart_free_shipping_threshold", "label": "Free-shipping threshold", "info": "In the store's base currency, whole units (for example 45).", "default": 45 },
-      { "type": "checkbox", "id": "cart_show_note", "label": "Allow an order note", "default": true },
-      { "type": "checkbox", "id": "cart_show_vendor", "label": "Show vendor on line items", "default": false }
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_free_shipping",
+        "label": "Show free-shipping progress",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "cart_free_shipping_threshold",
+        "label": "Free-shipping threshold",
+        "info": "In the store's base currency, whole units (for example 45).",
+        "default": 45
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_note",
+        "label": "Allow an order note",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_vendor",
+        "label": "Show vendor on line items",
+        "default": false
+      }
     ]
   },
   {
     "name": "Search",
     "settings": [
-      { "type": "checkbox", "id": "predictive_search_enabled", "label": "Enable predictive search", "default": true },
-      { "type": "checkbox", "id": "predictive_search_show_price", "label": "Show prices in suggestions", "default": true }
+      {
+        "type": "checkbox",
+        "id": "predictive_search_enabled",
+        "label": "Enable predictive search",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_price",
+        "label": "Show prices in suggestions",
+        "default": true
+      }
     ]
   },
   {
     "name": "Brand",
     "settings": [
-      { "type": "text", "id": "brand_tagline", "label": "Tagline", "default": "Anointing oils with cosmeceuticals derived from Biblical botanicals." },
-      { "type": "textarea", "id": "brand_disclaimer", "label": "Footer disclaimer", "default": "For external use only. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease." },
-      { "type": "text", "id": "brand_email", "label": "Contact email", "default": "info@mountofolives.co" },
-      { "type": "text", "id": "brand_phone", "label": "Contact phone", "default": "(713) 364-2010" },
-      { "type": "textarea", "id": "brand_address", "label": "Mailing address", "default": "10193 W Grand Pkwy S, Ste. 103-225\nRichmond, TX 77407" },
-      { "type": "checkbox", "id": "currency_code_enabled", "label": "Show currency code next to prices", "default": false }
+      {
+        "type": "text",
+        "id": "brand_tagline",
+        "label": "Tagline",
+        "default": "Anointing oils with cosmeceuticals derived from Biblical botanicals."
+      },
+      {
+        "type": "textarea",
+        "id": "brand_disclaimer",
+        "label": "Footer disclaimer",
+        "default": "For external use only. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease."
+      },
+      {
+        "type": "text",
+        "id": "brand_email",
+        "label": "Contact email",
+        "default": "info@mountofolives.co"
+      },
+      {
+        "type": "text",
+        "id": "brand_phone",
+        "label": "Contact phone",
+        "default": "(713) 364-2010"
+      },
+      {
+        "type": "textarea",
+        "id": "brand_address",
+        "label": "Mailing address",
+        "default": "10193 W Grand Pkwy S, Ste. 103-225\nRichmond, TX 77407"
+      },
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "Show currency code next to prices",
+        "default": false
+      }
     ]
   },
   {
     "name": "Social media",
     "settings": [
-      { "type": "text", "id": "social_instagram_link", "label": "Instagram", "info": "https://instagram.com/mountofolives" },
-      { "type": "text", "id": "social_facebook_link", "label": "Facebook" },
-      { "type": "text", "id": "social_tiktok_link", "label": "TikTok" },
-      { "type": "text", "id": "social_youtube_link", "label": "YouTube" },
-      { "type": "text", "id": "social_pinterest_link", "label": "Pinterest" },
-      { "type": "text", "id": "social_x_link", "label": "X (Twitter)" }
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://instagram.com/mountofolives"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest"
+      },
+      {
+        "type": "text",
+        "id": "social_x_link",
+        "label": "X (Twitter)"
+      }
     ]
   }
 ]

@@ -4,81 +4,81 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#F7F3EC",
+          "background": "#FFFFFF",
           "background_gradient": "",
-          "surface": "#EFE9DE",
-          "text": "#1F2A1C",
-          "text_muted": "#5F6A58",
-          "line": "#DAD3C5",
-          "accent": "#2F3F2A",
-          "accent_text": "#F7F3EC",
-          "gold": "#B08D57"
+          "surface": "#F5F5F7",
+          "text": "#1D1D1F",
+          "text_muted": "#6E6E73",
+          "line": "#D2D2D7",
+          "accent": "#4A5A2A",
+          "accent_text": "#FFFFFF",
+          "gold": "#5F7034"
         }
       },
       "scheme-2": {
         "settings": {
-          "background": "#E7EBE1",
+          "background": "#F5F5F7",
           "background_gradient": "",
-          "surface": "#DCE2D3",
-          "text": "#1F2A1C",
-          "text_muted": "#56604F",
-          "line": "#C8D0BC",
-          "accent": "#2F3F2A",
-          "accent_text": "#F7F3EC",
-          "gold": "#A98650"
+          "surface": "#FFFFFF",
+          "text": "#1D1D1F",
+          "text_muted": "#6E6E73",
+          "line": "#D2D2D7",
+          "accent": "#4A5A2A",
+          "accent_text": "#FFFFFF",
+          "gold": "#5F7034"
         }
       },
       "scheme-3": {
         "settings": {
-          "background": "#1F2A1C",
+          "background": "#000000",
           "background_gradient": "",
-          "surface": "#2A3726",
-          "text": "#F3EFE6",
-          "text_muted": "#B9C0B0",
-          "line": "#3A4836",
-          "accent": "#E9D9B7",
-          "accent_text": "#1F2A1C",
-          "gold": "#D4B77E"
+          "surface": "#1D1D1F",
+          "text": "#F5F5F7",
+          "text_muted": "#A1A1A6",
+          "line": "#424245",
+          "accent": "#F5F5F7",
+          "accent_text": "#1D1D1F",
+          "gold": "#B7C88A"
         }
       },
       "scheme-4": {
         "settings": {
-          "background": "#FFFFFF",
+          "background": "#1D1D1F",
           "background_gradient": "",
-          "surface": "#F5F2EC",
-          "text": "#1F2A1C",
-          "text_muted": "#5F6A58",
-          "line": "#E4DFD4",
-          "accent": "#2F3F2A",
-          "accent_text": "#FFFFFF",
-          "gold": "#B08D57"
+          "surface": "#2C2C2E",
+          "text": "#F5F5F7",
+          "text_muted": "#A1A1A6",
+          "line": "#424245",
+          "accent": "#F5F5F7",
+          "accent_text": "#1D1D1F",
+          "gold": "#B7C88A"
         }
       },
       "scheme-5": {
         "settings": {
-          "background": "#DCC7A1",
+          "background": "#EFF2E8",
           "background_gradient": "",
-          "surface": "#E6D5B5",
-          "text": "#2A2416",
-          "text_muted": "#5A4D33",
-          "line": "#C2AB7E",
-          "accent": "#1F2A1C",
-          "accent_text": "#F7F3EC",
-          "gold": "#8A6A32"
+          "surface": "#FFFFFF",
+          "text": "#1D1D1F",
+          "text_muted": "#5B6252",
+          "line": "#D6DCCB",
+          "accent": "#4A5A2A",
+          "accent_text": "#FFFFFF",
+          "gold": "#4A5A2A"
         }
       }
     },
-    "type_header_font": "cormorant_garamond_n5",
+    "type_header_font": "inter_n6",
     "heading_scale": 100,
-    "type_body_font": "dm_sans_n4",
+    "type_body_font": "inter_n4",
     "body_scale": 100,
-    "page_width": 1320,
+    "page_width": 1200,
     "section_spacing": "default",
     "reveal_on_scroll": true,
     "button_radius": 40,
-    "input_radius": 10,
-    "card_radius": 14,
-    "card_image_ratio": "4/5",
+    "input_radius": 12,
+    "card_radius": 18,
+    "card_image_ratio": "1/1",
     "card_show_secondary_image": true,
     "card_show_vendor": false,
     "card_show_theme_word": true,
@@ -100,6 +100,7 @@
     "social_tiktok_link": "",
     "social_youtube_link": "",
     "social_pinterest_link": "",
-    "social_x_link": ""
+    "social_x_link": "",
+    "use_system_font": true
   }
 }

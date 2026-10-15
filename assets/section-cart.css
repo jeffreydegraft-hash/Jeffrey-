@@ -1,0 +1,545 @@
+/* ==========================================================================
+   Olivet — section-cart.css (cart sections)
+   ========================================================================== */
+/* === section: cart ===
+   Cart drawer, cart page, shared line items, totals, free-shipping bar.
+   Motion: the drawer itself is the shared [data-drawer] transform/opacity
+   pair from components.css. Here only two things move, each on transform
+   or opacity: the free-shipping fill (state) and the line list dimming while
+   a request is in flight (state). */
+
+/* ---------- drawer ---------- */
+.cart-drawer .drawer__panel {
+  width: min(100%, 460px);
+}
+
+.cart-drawer__inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.cart-drawer__title {
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.cart-drawer__count {
+  font-family: var(--font-body);
+  font-weight: var(--font-body-weight);
+  letter-spacing: 0;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: rgb(var(--c-ink-2));
+}
+
+.cart-drawer__shipping {
+  flex-shrink: 0;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+
+.cart-drawer__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.cart-drawer__body--empty {
+  justify-content: center;
+}
+
+.cart-drawer__empty {
+  padding-block: var(--space-6);
+}
+
+.cart-drawer__login,
+.main-cart__login {
+  max-width: 28rem;
+  margin-top: var(--space-2);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.cart-drawer__login strong,
+.main-cart__login strong {
+  display: block;
+  color: rgb(var(--c-ink));
+  margin-bottom: 2px;
+}
+
+.cart-drawer__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.cart-drawer__view-cart {
+  align-self: center;
+  min-height: 44px;
+  padding-inline: var(--space-2);
+}
+
+/* Short viewports (phone landscape, portrait with the keyboard open): the
+   fixed header, shipping strip and footer would starve the line list, so
+   the whole drawer scrolls instead. */
+@media (max-height: 700px) {
+  .cart-drawer__inner {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cart-drawer__body {
+    flex: 1 0 auto; /* fill, never shrink below content: keeps the empty state centred and the footer at the bottom of a short cart */
+    overflow: visible;
+  }
+
+  .cart-drawer__header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: rgb(var(--c-bg)); /* close stays reachable when the full-width panel leaves no backdrop */
+  }
+}
+
+/* ---------- line items ---------- */
+.cart-items {
+  display: block;
+}
+
+.cart-lines {
+  display: flex;
+  flex-direction: column;
+  transition: opacity var(--dur-fast) ease;
+}
+
+cart-items.is-loading .cart-lines {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.cart-line {
+  --cart-media: 72px;
+  display: grid;
+  grid-template-columns: var(--cart-media) minmax(0, 1fr) auto;
+  gap: var(--space-2) var(--space-4);
+  align-items: start;
+  padding-block: var(--space-4);
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+
+.cart-items--drawer .cart-line:first-child {
+  padding-top: 0;
+}
+
+.cart-items--page .cart-lines {
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+.cart-items--page .cart-line {
+  --cart-media: 96px;
+  padding-block: var(--space-5);
+}
+
+@media (max-width: 479px) {
+  .cart-items--page .cart-line {
+    --cart-media: 80px;
+  }
+}
+
+.cart-line__media {
+  display: block;
+  width: var(--cart-media);
+}
+
+.cart-line__media-box {
+  --media-radius: var(--r-md);
+}
+
+.cart-line__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.cart-line__vendor {
+  font-size: 0.6875rem;
+}
+
+.cart-line__title {
+  font-size: 0.9375rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.35;
+  color: rgb(var(--c-ink));
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+  transition: color var(--dur-fast) ease;
+}
+
+.cart-line__variant,
+.cart-line__plan,
+.cart-line__unit,
+.cart-line__properties {
+  margin: 0;
+  color: rgb(var(--c-ink-2));
+}
+
+.cart-line__properties {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cart-line__property {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.cart-line__property dt {
+  font-weight: var(--font-body-weight-bold);
+}
+
+.cart-line__property dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.cart-line__discounts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: rgb(var(--c-accent));
+}
+
+.cart-line__discount {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.cart-line__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.cart-line__controls .quantity {
+  flex-shrink: 0;
+}
+
+.cart-line__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  border-radius: var(--r-pill);
+  font-size: 0.8125rem;
+  color: rgb(var(--c-ink-2));
+  transition: transform var(--dur-press) var(--ease-out), color var(--dur-fast) ease, background-color var(--dur-fast) ease;
+}
+
+.cart-line__remove:active {
+  transform: scale(0.94);
+}
+
+.cart-line__error {
+  margin-top: var(--space-2);
+}
+
+.cart-line__error[hidden] {
+  display: none;
+}
+
+.cart-line__price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding-top: 2px;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.cart-line__price-compare {
+  font-size: 0.8125rem;
+  color: rgb(var(--c-ink-2));
+  text-decoration-color: rgba(var(--c-ink), 0.5);
+}
+
+.cart-line__price-final {
+  font-weight: var(--font-body-weight-bold);
+  color: rgb(var(--c-ink));
+}
+
+/* Very narrow phones: the price drops under the details so the stepper
+   keeps its full width. */
+@media (max-width: 359px) {
+  .cart-line {
+    grid-template-columns: var(--cart-media) minmax(0, 1fr);
+  }
+
+  .cart-line__price {
+    grid-column: 2;
+    grid-row: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px var(--space-2);
+    text-align: left;
+  }
+}
+
+/* ---------- order note ---------- */
+.cart-note.accordion {
+  border-top: 0;
+}
+
+.cart-drawer__body .cart-note:last-child {
+  border-bottom: 0;
+}
+
+.cart-note__summary {
+  font-size: 0.9375rem;
+}
+
+.cart-note__field {
+  display: block;
+  padding: 2px 2px var(--space-4);
+}
+
+.cart-note__textarea {
+  min-height: 96px;
+}
+
+.cart-note__status {
+  margin: var(--space-2) 0 0;
+  opacity: 0;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.cart-note__status.is-visible {
+  opacity: 1;
+}
+
+.cart-note__status.is-error {
+  color: rgb(var(--c-ink));
+  font-weight: var(--font-body-weight-bold);
+}
+
+/* ---------- free-shipping bar ----------
+   The fill is a 4px track scaled on X from the left. Purpose: state. */
+.free-shipping-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.free-shipping-bar__text {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: rgb(var(--c-ink-2));
+  text-wrap: pretty;
+}
+
+.free-shipping-bar__text strong {
+  color: rgb(var(--c-ink));
+  font-weight: var(--font-body-weight-bold);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.free-shipping-bar__check,
+.free-shipping-bar.is-reached .free-shipping-bar__text {
+  color: rgb(var(--c-accent));
+}
+
+.free-shipping-bar__track {
+  height: 4px;
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  background: rgba(var(--c-ink), 0.1);
+}
+
+.free-shipping-bar__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: rgb(var(--c-gold));
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left center;
+  transition: transform var(--dur-slow) var(--ease-out), background-color var(--dur-base) ease;
+  will-change: transform;
+}
+
+.free-shipping-bar.is-reached .free-shipping-bar__fill {
+  background: rgb(var(--c-accent));
+}
+
+/* ---------- totals ---------- */
+.cart-totals {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cart-totals__discounts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.cart-totals__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: 0.9375rem;
+}
+
+.cart-totals__row--discount {
+  font-size: 0.875rem;
+  color: rgb(var(--c-accent));
+}
+
+.cart-totals__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cart-totals__value {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.cart-totals__row--subtotal {
+  padding-top: var(--space-2);
+  font-weight: var(--font-body-weight-bold);
+  color: rgb(var(--c-ink));
+}
+
+.cart-totals__row--subtotal .cart-totals__value {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.cart-totals__note {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ---------- cart page ---------- */
+.main-cart__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+  margin-bottom: clamp(24px, 4vw, 48px);
+}
+
+.main-cart__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.main-cart__count {
+  margin: 0;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.main-cart__continue {
+  min-height: 44px;
+}
+
+.main-cart__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
+}
+
+.main-cart__items {
+  min-width: 0;
+}
+
+.main-cart__note {
+  margin-top: var(--space-4);
+}
+
+.main-cart__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: clamp(20px, 3vw, 32px);
+  border-radius: var(--r-lg);
+  background: rgb(var(--c-surface));
+}
+
+.main-cart__summary-title {
+  margin: 0;
+}
+
+.main-cart__dynamic-checkout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.main-cart__empty {
+  padding-block: clamp(24px, 6vw, 64px);
+}
+
+@media (min-width: 990px) {
+  .main-cart__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 400px);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .main-cart__summary {
+    position: sticky;
+    top: calc(var(--header-height) + 24px);
+  }
+}
+
+/* ---------- hover (real pointers only) ---------- */
+@media (hover: hover) and (pointer: fine) {
+  .cart-line__title:hover {
+    color: rgb(var(--c-accent));
+  }
+
+  .cart-line__remove:hover {
+    color: rgb(var(--c-ink));
+    background: rgba(var(--c-ink), 0.06);
+  }
+}
+
+/* ---------- reduced motion: drop movement, keep opacity ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .cart-line__remove:active {
+    transform: none;
+  }
+
+  .free-shipping-bar__fill {
+    transition: background-color var(--dur-base) ease;
+  }
+}

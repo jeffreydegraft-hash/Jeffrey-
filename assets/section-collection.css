@@ -1,0 +1,675 @@
+/* ==========================================================================
+   Olivet — section-collection.css (collection sections)
+   ========================================================================== */
+/* === section: collection-banner ===
+   Page header band for a collection: optional wide media, eyebrow, title,
+   description. Nothing here moves — the title must be legible the instant
+   the page paints. The bottom spacing is handed to the grid section below,
+   so stacked sections never double their padding. */
+.collection-banner.section {
+  padding-bottom: 0;
+}
+
+.collection-banner__media {
+  margin-bottom: clamp(24px, 4vw, 48px);
+}
+
+.collection-banner__figure {
+  --ratio: 16 / 9;
+}
+
+@media (min-width: 750px) {
+  .collection-banner__figure {
+    --ratio: 3 / 1;
+  }
+}
+
+.collection-banner__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.collection-banner__title {
+  max-width: 44rem;
+}
+
+.collection-banner__description {
+  max-width: 60ch;
+}
+
+.collection-banner__description > * + * {
+  margin-top: 0.75em;
+}
+
+.collection-banner__description a {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+/* === section: collection-grid (main-collection-product-grid) ===
+   Toolbar (count / sort / mobile filter button), active-filter chips,
+   260px sticky sidebar at ≥990px, product grid, mobile filter drawer.
+   Motion inventory: the grid dims on opacity while a fetch is in flight
+   (state); chips press to .97 via .chip (feedback); everything else is
+   inherited from .accordion / .drawer / .btn. */
+.collection-grid__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px;
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+
+.collection-grid__count {
+  margin: 0;
+  color: rgb(var(--c-ink-2));
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.collection-grid__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.collection-grid__sort {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.collection-grid__sort-label {
+  color: rgb(var(--c-ink-2));
+  white-space: nowrap;
+}
+
+.collection-grid__select select {
+  width: auto;
+  min-width: 200px;
+  min-height: 44px;
+  padding: 8px 44px 8px 14px;
+  background: transparent;
+}
+
+.collection-grid__filter-button {
+  min-height: 44px;
+  gap: var(--space-2);
+}
+
+.collection-grid__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--r-pill);
+  font-size: 0.75rem;
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1;
+  color: rgb(var(--c-accent-ink));
+  background: rgb(var(--c-accent));
+}
+
+.collection-grid__badge.is-empty {
+  display: none;
+}
+
+/* ---------- active filter chips ---------- */
+.active-facets {
+  margin-bottom: var(--space-5);
+}
+
+.active-facets.is-empty {
+  display: none;
+}
+
+.active-facets__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.active-facets__chip {
+  min-height: 44px;
+  padding: 0 10px 0 14px;
+  font-size: 0.875rem;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.active-facets__chip-label {
+  overflow-wrap: anywhere;
+}
+
+.active-facets__chip .icon {
+  color: rgb(var(--c-ink-2));
+  transition: color var(--dur-fast) ease;
+}
+
+.active-facets__clear {
+  min-height: 44px;
+  margin-left: var(--space-2);
+  font-size: 0.875rem;
+}
+
+/* ---------- layout ---------- */
+.collection-grid__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-7);
+  align-items: start;
+}
+
+@media (min-width: 990px) {
+  .collection-grid--has-filters .collection-grid__layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: clamp(32px, 4vw, 56px);
+  }
+}
+
+.collection-grid__sidebar-inner {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-5));
+  max-height: calc(100dvh - var(--header-height) - var(--space-6));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: var(--space-2);
+}
+
+.collection-grid__sidebar-title {
+  margin-bottom: var(--space-3);
+}
+
+.collection-grid__main {
+  min-width: 0;
+}
+
+.collection-grid__container {
+  position: relative;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.collection-grid__container.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.product-grid {
+  --grid-gap: clamp(28px, 4vw, 44px) clamp(12px, 2.5vw, 32px);
+}
+
+.product-grid__item {
+  min-width: 0;
+}
+
+/* ---------- facets form (sidebar and drawer) ---------- */
+.facets__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.facets__sort {
+  margin-bottom: var(--space-5);
+}
+
+.facets__summary {
+  font-size: 0.9375rem;
+}
+
+.facets__summary-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.facets__selected {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--r-pill);
+  font-size: 0.6875rem;
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1;
+  color: rgb(var(--c-accent-ink));
+  background: rgb(var(--c-accent));
+}
+
+.facets__selected.is-empty {
+  display: none;
+}
+
+.facets__fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.facets__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: var(--space-4);
+}
+
+.facets__label {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  align-items: center;
+}
+
+.facets__label.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Native checkboxes do not paint ::before; appearance: none lets the
+   .checkbox check mark from base.css render. */
+.facets__label .facets__checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  border: 1px solid rgba(var(--c-ink), 0.32);
+  background: rgb(var(--c-bg));
+  cursor: pointer;
+  transition: border-color var(--dur-fast) ease;
+}
+
+.facets__label .facets__checkbox:checked {
+  border-color: rgb(var(--c-accent));
+}
+
+.facets__value {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.facets__value-label {
+  overflow-wrap: anywhere;
+  transition: color var(--dur-fast) ease;
+}
+
+.facets__value-count {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: rgb(var(--c-ink-2));
+}
+
+.facets__hint {
+  padding-bottom: var(--space-3);
+}
+
+.facets__price {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  padding-bottom: var(--space-4);
+}
+
+.facets__price-field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.facets__price-input {
+  position: relative;
+}
+
+.facets__currency {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9375rem;
+  color: rgb(var(--c-ink-2));
+  pointer-events: none;
+}
+
+.facets__price-input input {
+  padding-left: 30px;
+  font-variant-numeric: lining-nums tabular-nums;
+  -moz-appearance: textfield;
+}
+
+.facets__price-input input::-webkit-outer-spin-button,
+.facets__price-input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.facets__price-sep {
+  padding-bottom: 14px;
+  color: rgb(var(--c-ink-2));
+}
+
+.facets__apply {
+  margin-top: var(--space-4);
+}
+
+/* ---------- mobile drawer ---------- */
+.facets-drawer .drawer__panel {
+  width: min(100%, 400px);
+}
+
+.facets-drawer__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.facets-drawer__clear {
+  min-height: 44px;
+  flex-shrink: 0;
+}
+
+.facets-drawer__apply {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+@media (min-width: 990px) {
+  .facets-drawer {
+    display: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .facets__label:not(.is-disabled):hover .facets__value-label {
+    color: rgb(var(--c-accent));
+  }
+
+  .facets__label:not(.is-disabled):hover .facets__checkbox {
+    border-color: rgb(var(--c-ink));
+  }
+
+  .active-facets__chip:hover .icon {
+    color: rgb(var(--c-ink));
+  }
+}
+
+/* === section: list-collections + collection-list + card-collection ===
+   Motion: the card's arrow nudges 4px on hover (spatial cue toward the
+   link); the card image scale is inherited from .card. */
+.list-collections__header {
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+
+.list-collections__grid,
+.collection-list__grid {
+  --grid-gap: clamp(28px, 4vw, 44px) clamp(12px, 2.5vw, 32px);
+}
+
+.collection-list__view-all {
+  flex-shrink: 0;
+  min-height: 44px;
+}
+
+.card-collection__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.card--collection .card-collection__title {
+  -webkit-line-clamp: 2;
+  min-width: 0;
+}
+
+.card-collection__arrow {
+  flex-shrink: 0;
+  margin-top: 0.2em;
+  color: rgb(var(--c-ink-2));
+}
+
+.card-collection__arrow .icon {
+  transition: transform var(--dur-base) var(--ease-out), color var(--dur-fast) ease;
+}
+
+.card-collection__count {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card--collection:hover .card-collection__arrow .icon {
+    transform: translateX(4px);
+    color: rgb(var(--c-accent));
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+  .card--collection:hover .card-collection__arrow .icon {
+    transform: none;
+  }
+}
+
+/* === section: main-search ===
+   Large serif search field; results as a product grid plus a plain list
+   for articles and pages. Motion: the clear button fades in once there is
+   text (state); the result arrow nudges on hover (spatial cue). */
+.main-search__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 44rem;
+  margin-bottom: clamp(32px, 5vw, 64px);
+}
+
+.search-form__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid rgba(var(--c-ink), 0.3);
+  transition: border-color var(--dur-fast) ease;
+}
+
+.search-form__field:focus-within {
+  border-bottom-color: rgb(var(--c-accent));
+}
+
+.search-form__icon {
+  flex-shrink: 0;
+  color: rgb(var(--c-ink-2));
+}
+
+.search-form__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 56px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 750px) {
+  .search-form__input {
+    font-size: 2rem;
+  }
+}
+
+.search-form__input:focus-visible {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.search-form__input::placeholder {
+  font-style: italic;
+  color: rgba(var(--c-ink), 0.4);
+}
+
+.search-form__reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--r-pill);
+  color: rgb(var(--c-ink-2));
+  transition: opacity var(--dur-fast) ease, transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease;
+}
+
+.search-form__field:has(.search-form__input:placeholder-shown) .search-form__reset {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.search-form__reset:active {
+  transform: scale(0.92);
+}
+
+.search-form__submit {
+  min-height: 44px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .search-form__field {
+    flex-wrap: wrap;
+  }
+
+  .search-form__submit {
+    width: 100%;
+    margin-top: var(--space-2);
+  }
+}
+
+.main-search__count {
+  margin: 0;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.main-search__group + .main-search__group {
+  margin-top: clamp(40px, 6vw, 72px);
+}
+
+.main-search__group-title {
+  margin-bottom: var(--space-5);
+}
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgb(var(--c-line));
+  max-width: 52rem;
+}
+
+.search-results__item {
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+
+.search-results__link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "meta arrow"
+    "title arrow"
+    "excerpt arrow";
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-5) 0;
+  transition: opacity var(--dur-press) ease;
+}
+
+.search-results__link:active {
+  opacity: 0.7;
+}
+
+.search-results__meta {
+  grid-area: meta;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.search-results__title {
+  grid-area: title;
+  display: block;
+  overflow-wrap: anywhere;
+  transition: color var(--dur-fast) ease;
+}
+
+.search-results__excerpt {
+  grid-area: excerpt;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  color: rgb(var(--c-ink-2));
+}
+
+.search-results__arrow {
+  grid-area: arrow;
+  color: rgb(var(--c-ink-2));
+}
+
+.search-results__arrow .icon {
+  transition: transform var(--dur-base) var(--ease-out), color var(--dur-fast) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .search-results__link:hover .search-results__title {
+    color: rgb(var(--c-accent));
+  }
+
+  .search-results__link:hover .search-results__arrow .icon {
+    transform: translateX(4px);
+    color: rgb(var(--c-accent));
+  }
+
+  .search-form__reset:hover {
+    background: rgba(var(--c-ink), 0.06);
+    color: rgb(var(--c-ink));
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+  .search-results__link:hover .search-results__arrow .icon {
+    transform: none;
+  }
+}
+
+/* ---------- reduced motion (collection group) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .search-form__reset {
+    transition: opacity var(--dur-fast) ease, background-color var(--dur-fast) ease;
+  }
+
+  .search-form__reset:active {
+    transform: none;
+  }
+
+  .card-collection__arrow .icon,
+  .search-results__arrow .icon {
+    transition: color var(--dur-fast) ease;
+  }
+}

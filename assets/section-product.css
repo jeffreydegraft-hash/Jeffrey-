@@ -1,0 +1,766 @@
+/* ==========================================================================
+   Olivet — section-product.css (product sections)
+   ========================================================================== */
+/* === section: main-product ===
+   Media (7/12) + info (5/12) from 990px. Motion here: the stage crossfade
+   (opacity), thumb/dot presses (transform), the lightbox entrance
+   (opacity + scale .98 via @starting-style) and the payment button press.
+   Every hover sits behind the pointer media query; reduced motion keeps
+   fades and drops every transform. */
+.product__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-7);
+}
+
+.product__media,
+.product__info {
+  min-width: 0;
+}
+
+.product__info-inner {
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
+}
+
+@media (min-width: 990px) {
+  .product__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(24px, 4vw, 64px);
+    align-items: start;
+  }
+
+  .product__media {
+    grid-column: span 7;
+  }
+
+  .product__info {
+    grid-column: span 5;
+  }
+
+  /* The shorter column sticks: the stage for the thumbnail layout, the
+     details for the stacked layout (whose media column runs long). */
+  .product__grid--sticky.product__grid--thumbnails .product__media,
+  .product__grid--sticky.product__grid--stacked .product__info {
+    position: sticky;
+    top: calc(var(--header-height) + 24px);
+  }
+}
+
+/* ---- block rhythm ---- */
+.product__block + .product__block {
+  margin-top: var(--space-5);
+}
+
+.product__block--theme-word + .product__block--title {
+  margin-top: var(--space-2);
+}
+
+.product__block--title + .product__block--price {
+  margin-top: var(--space-3);
+}
+
+.product__block--quantity + .product__block--buy-buttons {
+  margin-top: var(--space-4);
+}
+
+.product__block--tab + .product__block--tab {
+  margin-top: 0;
+}
+
+.product__block--scripture + .product__block--botanical,
+.product__block--botanical + .product__block--description {
+  margin-top: var(--space-6);
+}
+
+/* ---- eyebrow + title ---- */
+.product__title {
+  font-size: calc(clamp(2rem, 1.3rem + 2.4vw, 3.25rem) * var(--heading-scale, 1));
+  line-height: 1.08;
+}
+
+/* ---- price ---- */
+.product__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 32px;
+  transition: opacity var(--dur-fast) ease;
+}
+
+/* while the variant's section HTML is in flight (state feedback, opacity only) */
+.product__price.is-loading {
+  opacity: 0.5;
+}
+
+.product__sku,
+.product__inventory,
+.product__tax-note {
+  margin-top: var(--space-2);
+}
+
+.product__sku[hidden],
+.product__inventory[hidden] {
+  display: none;
+}
+
+.product__inventory {
+  color: rgb(var(--c-gold));
+  font-weight: var(--font-body-weight-bold);
+}
+
+/* ---- variant picker ---- */
+.variant-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.variant-picker__group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.variant-picker__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-1);
+  padding: 0;
+  margin-bottom: var(--space-3);
+}
+
+.variant-picker__value {
+  font-weight: var(--font-body-weight);
+  color: rgb(var(--c-ink-2));
+}
+
+.variant-picker__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.variant-picker__pill {
+  min-height: 44px;
+  padding-inline: 20px;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.variant-picker__input:checked + .variant-picker__pill {
+  color: rgb(var(--c-accent-ink));
+  background: rgb(var(--c-accent));
+  box-shadow: inset 0 0 0 1px rgb(var(--c-accent));
+}
+
+.variant-picker__input:checked + .variant-picker__pill.is-unavailable {
+  text-decoration-color: rgba(var(--c-accent-ink), 0.7);
+}
+
+.variant-picker__input:focus-visible + .variant-picker__pill {
+  outline: 2px solid rgb(var(--c-accent));
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .variant-picker__input:checked + .variant-picker__pill:hover {
+    box-shadow: inset 0 0 0 1px rgb(var(--c-accent));
+  }
+}
+
+/* ---- quantity ---- */
+.product__quantity-label {
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+/* ---- buy buttons ---- */
+.product-form__error {
+  margin-bottom: var(--space-3);
+}
+
+.product-form__error[hidden] {
+  display: none;
+}
+
+.product-form__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Shopify's dynamic checkout button, styled to sit as the secondary action */
+.shopify-payment-button {
+  width: 100%;
+}
+
+.shopify-payment-button__button {
+  min-height: 48px;
+  border-radius: var(--r-btn);
+  overflow: hidden;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.shopify-payment-button__button--unbranded {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 clamp(20px, 2.4vw, 28px);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: var(--font-body-weight-bold);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: rgb(var(--c-ink));
+  background: transparent;
+  border: 1px solid rgba(var(--c-ink), 0.28);
+  transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+.shopify-payment-button__button:active {
+  transform: scale(.97);
+}
+
+.shopify-payment-button__button--unbranded:focus-visible {
+  outline: 2px solid rgb(var(--c-accent));
+  outline-offset: 3px;
+}
+
+.shopify-payment-button__more-options {
+  margin-top: var(--space-2);
+  font-size: 0.875rem;
+  color: rgb(var(--c-ink-2));
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shopify-payment-button__button--unbranded:hover {
+    background: rgba(var(--c-ink), 0.04);
+    border-color: rgb(var(--c-ink));
+  }
+}
+
+/* ---- trust points ---- */
+.product__trust {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) 0;
+  border-top: 1px solid rgb(var(--c-line));
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+
+.product__trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgb(var(--c-ink-2));
+  overflow-wrap: anywhere;
+}
+
+.product__trust-item .icon {
+  margin-top: 1px;
+  color: rgb(var(--c-gold));
+}
+
+/* ---- scripture / botanical / description ---- */
+.product__scripture {
+  gap: var(--space-3);
+}
+
+.product__scripture .scripture__quote {
+  font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+}
+
+.product__meaning {
+  margin-top: var(--space-5);
+}
+
+.product__meaning-text,
+.product__botanical-text {
+  margin-top: var(--space-2);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: rgb(var(--c-ink-2));
+  text-wrap: pretty;
+}
+
+.product__description.rte {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.product__description.lead {
+  font-size: 1.0625rem;
+}
+
+/* ---- collapsible tabs ---- */
+.product__accordion {
+  border-top: 0;
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+
+.product__block--tab:first-child .product__accordion,
+.product__block:not(.product__block--tab) + .product__block--tab .product__accordion {
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+.product__accordion .accordion__summary {
+  min-height: 56px;
+}
+
+.product__accordion .accordion__title {
+  overflow-wrap: anywhere;
+}
+
+.product__tab-body {
+  padding-bottom: var(--space-4);
+  font-size: 0.9375rem;
+  color: rgb(var(--c-ink-2));
+}
+
+.product__ingredients {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgb(var(--c-ink));
+}
+
+.product__policy-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+
+/* ---- share ---- */
+/* ghost padding restored over .btn--sm; pull by padding + 1px border so
+   the icon sits on the column edge */
+.product__share-button {
+  padding-inline: var(--space-3);
+  margin-left: calc((var(--space-3) + 1px) * -1);
+}
+
+/* === component: media-gallery ===
+   Mobile: scroll-snap carousel. Desktop thumbnails: 72px column + stage.
+   Desktop stacked: every item in a column. */
+.media-gallery {
+  position: relative;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.media-gallery__stage {
+  min-width: 0;
+}
+
+.media-gallery__track {
+  position: relative;
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.media-gallery__track::-webkit-scrollbar {
+  display: none;
+}
+
+.media-gallery__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.media-gallery__slide > iframe,
+.media-gallery__slide > model-viewer,
+.media-gallery__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.media-gallery__slide--video .media-gallery__video {
+  object-fit: cover;
+  background: rgb(var(--c-surface));
+}
+
+/* zoom opener fills the slide; the hint only shows for real pointers */
+.media-gallery__open {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  cursor: zoom-in;
+  -webkit-touch-callout: none;
+}
+
+.media-gallery__open:focus-visible {
+  outline-offset: -3px;
+}
+
+.media-gallery__zoom-hint {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-pill);
+  color: rgb(var(--c-ink));
+  background: rgba(var(--c-bg), 0.88);
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.media-gallery__open:focus-visible .media-gallery__zoom-hint {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .media-gallery__open:hover .media-gallery__zoom-hint {
+    opacity: 1;
+  }
+}
+
+/* ---- thumbs (desktop only) ---- */
+.media-gallery__thumbs {
+  display: none;
+}
+
+.media-gallery__thumb {
+  position: relative;
+  display: block;
+  width: 72px;
+  border-radius: var(--r-md);
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.media-gallery__thumb:active {
+  transform: scale(.97);
+}
+
+.media-gallery__thumb-media {
+  --media-radius: var(--r-md);
+  opacity: 0.82;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.media-gallery__thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.1);
+  transition: box-shadow var(--dur-fast) ease;
+  pointer-events: none;
+}
+
+.media-gallery__thumb[aria-pressed="true"] .media-gallery__thumb-media {
+  opacity: 1;
+}
+
+.media-gallery__thumb[aria-pressed="true"]::after {
+  box-shadow: inset 0 0 0 1.5px rgb(var(--c-ink));
+}
+
+.media-gallery__thumb-badge {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-pill);
+  color: rgb(var(--c-ink));
+  background: rgba(var(--c-bg), 0.9);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .media-gallery__thumb:hover .media-gallery__thumb-media {
+    opacity: 1;
+  }
+
+  .media-gallery__thumb:hover::after {
+    box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.45);
+  }
+
+  .media-gallery__thumb[aria-pressed="true"]:hover::after {
+    box-shadow: inset 0 0 0 1.5px rgb(var(--c-ink));
+  }
+}
+
+/* ---- dots (mobile only): 44px targets overlapping so the row stays tight ---- */
+.media-gallery__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: calc(var(--space-2) * -1);
+}
+
+.media-gallery__dot {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin-inline: -7px;
+  border-radius: var(--r-pill);
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.media-gallery__dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(var(--c-ink), 0.28);
+  transform: translate(-50%, -50%);
+  transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-fast) ease;
+}
+
+.media-gallery__dot:active {
+  transform: scale(.9);
+}
+
+.media-gallery__dot[aria-current="true"]::before {
+  background: rgb(var(--c-ink));
+  transform: translate(-50%, -50%) scale(1.4);
+}
+
+.media-gallery--single .media-gallery__dots {
+  display: none;
+}
+
+/* ---- desktop layouts ---- */
+@media (min-width: 990px) {
+  .media-gallery--thumbnails {
+    grid-template-columns: 72px minmax(0, 1fr);
+    column-gap: var(--space-4);
+    align-items: start;
+  }
+
+  .media-gallery--thumbnails.media-gallery--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .media-gallery--thumbnails .media-gallery__thumbs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    order: -1;
+    /* never taller than the sticky stage, so every thumb stays reachable */
+    max-height: calc(100svh - var(--header-height) - 36px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    padding: 6px; /* room for the 2px + 3px-offset :focus-visible ring */
+    margin: -6px; /* keeps the thumbs aligned with the stage edge */
+  }
+
+  .media-gallery--thumbnails .media-gallery__thumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Stage: one box; slides stack on top of each other and crossfade.
+     The leaving slide stays opaque beneath the entering one and snaps to
+     hidden once the entrance finishes, so the surface never shows through. */
+  .media-gallery--thumbnails .media-gallery__track {
+    display: block;
+    aspect-ratio: 4 / 5;
+    max-height: calc(100svh - var(--header-height) - 48px);
+    overflow: hidden;
+    border-radius: var(--r-card);
+    background: rgb(var(--c-surface));
+    scroll-snap-type: none;
+  }
+
+  .media-gallery--thumbnails .media-gallery__slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0s linear var(--dur-base), visibility 0s linear var(--dur-base);
+  }
+
+  .media-gallery--thumbnails .media-gallery__slide.is-active {
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--dur-base) ease, visibility 0s;
+  }
+
+  .media-gallery--thumbnails .media-gallery__dots,
+  .media-gallery--stacked .media-gallery__dots {
+    display: none;
+  }
+
+  .media-gallery--stacked .media-gallery__track {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .media-gallery--stacked .media-gallery__slide {
+    flex: none;
+    scroll-snap-align: none;
+  }
+}
+
+/* === component: lightbox (native dialog) ===
+   Enter: opacity + scale(.98) → 1 over --dur-base with @starting-style.
+   Exit: .is-closing (added by JS) fades out faster, then dialog.close(). */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: calc(var(--space-6) + var(--safe-top)) max(var(--space-4), var(--safe-right)) calc(var(--space-6) + var(--safe-bottom)) max(var(--space-4), var(--safe-left));
+  border: 0;
+  background: transparent;
+  color: rgb(var(--c-ink));
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.lightbox[open] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+}
+
+@starting-style {
+  .lightbox[open] {
+    opacity: 0;
+    transform: scale(.98);
+  }
+}
+
+.lightbox.is-closing {
+  opacity: 0;
+  transform: scale(.98);
+  transition-duration: var(--dur-fast);
+}
+
+/* ::backdrop does not inherit custom properties in every engine: literal fallbacks */
+.lightbox::backdrop {
+  background: rgba(31, 42, 28, 0.78);
+  opacity: 1;
+  transition: opacity var(--dur-base, 200ms) ease;
+}
+
+@starting-style {
+  .lightbox[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+.lightbox.is-closing::backdrop {
+  opacity: 0;
+  transition-duration: var(--dur-fast, 160ms);
+}
+
+.lightbox__body {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  min-width: 0;
+}
+
+.lightbox__img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  /* viewport-relative: a percentage against the grid area does not clamp a replaced element reliably */
+  max-height: calc(100dvh - var(--space-9) - var(--safe-top) - var(--safe-bottom));
+  object-fit: contain;
+  border-radius: var(--r-card);
+  background: rgb(var(--c-surface));
+  box-shadow: var(--shadow-lg);
+}
+
+.lightbox__close {
+  position: absolute;
+  top: calc(var(--space-4) + var(--safe-top));
+  right: calc(var(--space-4) + var(--safe-right));
+  z-index: 2;
+}
+
+body:has(.lightbox[open]) {
+  overflow: hidden;
+}
+
+/* === section: related-products === */
+.related-products {
+  display: block;
+}
+
+.related-products__item {
+  min-width: 0;
+}
+
+/* === reduced motion === */
+@media (prefers-reduced-motion: reduce) {
+  .media-gallery__track {
+    scroll-behavior: auto;
+  }
+
+  .media-gallery__thumb,
+  .media-gallery__dot,
+  .shopify-payment-button__button {
+    transition-duration: 0.01ms;
+  }
+
+  .media-gallery__thumb:active,
+  .media-gallery__dot:active,
+  .shopify-payment-button__button:active {
+    transform: none;
+  }
+
+  .media-gallery__dot::before {
+    transition: background-color var(--dur-fast) ease;
+  }
+
+  .media-gallery__dot[aria-current="true"]::before {
+    transform: translate(-50%, -50%);
+  }
+
+  .lightbox[open],
+  .lightbox.is-closing {
+    transform: none;
+    transition: opacity var(--dur-base) ease;
+  }
+
+  @starting-style {
+    .lightbox[open] {
+      transform: none;
+    }
+  }
+}

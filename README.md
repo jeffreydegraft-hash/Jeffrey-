@@ -46,7 +46,7 @@ layout/        theme.liquid, password.liquid
 templates/     JSON templates (index, product, collection, cart, pages, blog, search, 404, password, customers/*)
 sections/      header, footer, cart drawer, product, collection, home sections, pages, blog, customer accounts
 snippets/      shared partials: product card, price, image, icons, quantity input, pagination, cart line items…
-assets/        base.css (tokens, type, buttons, forms, motion), components.css, templates.css, theme.js, cart.js, product.js, predictive-search.js, facets.js, customer.js
+assets/        base.css (tokens, type, buttons, forms, motion), components.css, section-*.css (one per section group), motion.js, theme.js, cart.js, product.js, predictive-search.js, facets.js, customer.js
 config/        settings_schema.json, settings_data.json (brand colours, fonts, cart, search)
 locales/       en.default.json
 dev/preview/   local mock renderer + screenshot tool (not part of the theme)

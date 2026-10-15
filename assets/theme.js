@@ -137,92 +137,137 @@
   };
 
   /* ---------- Drawer base ----------
-     Contract: element has .is-open when open; body gets .drawer-open.
-     Panel animates on transform (var(--ease-drawer)), backdrop on opacity.
-     Enter 400ms, exit 260ms — exits are faster. Escape closes. */
+     Contract: element has .is-open when open (.is-closing while its exit
+     spring runs); body gets .drawer-open. The panel moves with springs from
+     assets/motion.js, always starting from its on-screen position, so an open
+     during a close reverses smoothly (apple-design §3). The backdrop fades on
+     opacity. Per-breakpoint geometry comes from CSS custom properties on the
+     panel: --sheet-closed (closed transform), --sheet-axis (x|y),
+     --sheet-dir (1|-1: dismiss direction), --sheet-drag (1 enables
+     drag-to-dismiss from [data-sheet-handle]). Escape closes. */
   class Drawer extends HTMLElement {
     constructor() {
       super();
       this.onKeydown = this.onKeydown.bind(this);
-      this.onTransitionEnd = this.onTransitionEnd.bind(this);
     }
 
     connectedCallback() {
       this.panel = this.querySelector('[data-drawer-panel]') || this;
       this.backdrop = this.querySelector('[data-drawer-backdrop]');
-      this.closeButtons = this.querySelectorAll('[data-drawer-close]');
-      this.closeButtons.forEach((btn) => btn.addEventListener('click', () => this.close()));
+      // Delegated: close buttons inside re-rendered content keep working
+      this.addEventListener('click', (event) => {
+        const btn = event.target.closest('[data-drawer-close]');
+        if (btn && this.contains(btn)) this.close();
+      });
       if (this.backdrop) this.backdrop.addEventListener('click', () => this.close());
       // The panel is the fallback focus target, so it must accept programmatic focus
       if (this.panel !== this && !this.panel.hasAttribute('tabindex')) this.panel.setAttribute('tabindex', '-1');
       this.setAttribute('aria-hidden', 'true');
+
+      const motion = Olivet.motion;
+      if (motion && motion.SheetGesture && this.panel !== this) {
+        this.gesture = new motion.SheetGesture(this.panel, {
+          axis: () => this.sheetConfig().axis,
+          dismissDirection: () => this.sheetConfig().dir,
+          enabled: () => this.isOpen && this.sheetConfig().drag,
+          onDrag: (progress) => this.setBackdropProgress(progress),
+          onRelease: () => this.setBackdropProgress(0),
+          onDismiss: (info) => this.close(false, info),
+        });
+      }
     }
 
     get isOpen() {
       return this.classList.contains('is-open');
     }
 
+    sheetConfig() {
+      const cs = getComputedStyle(this.panel);
+      const read = (name) => cs.getPropertyValue(name).trim();
+      const closed = read('--sheet-closed') || 'translateX(100%)';
+      const axis = read('--sheet-axis') || (closed.indexOf('translateY') > -1 ? 'y' : 'x');
+      const dir = parseFloat(read('--sheet-dir')) || 1;
+      const drag = read('--sheet-drag') === '1';
+      return { closed, axis, dir, drag };
+    }
+
+    setBackdropProgress(progress) {
+      if (!this.backdrop) return;
+      this.backdrop.style.opacity = progress > 0 ? String(1 - progress) : '';
+    }
+
     open(trigger) {
       if (this.isOpen) return;
-      // Interrupting a close: cancel its pending cleanup so it can't mark this
-      // drawer inert or pull focus back after it has reopened.
-      this.cancelPendingClose();
+      this.closeToken = null; // cancels a pending close cleanup
       this.trigger = trigger || document.activeElement;
-      // Close any other open drawer first (spatial consistency: one surface at a time)
+      // One surface at a time (spatial consistency)
       document.querySelectorAll('[data-drawer].is-open').forEach((d) => d !== this && d.close(true));
       this.removeAttribute('inert');
       this.setAttribute('aria-hidden', 'false');
-      // Force a frame so the transition runs from the closed state
-      this.getBoundingClientRect();
+      this.classList.remove('is-closing');
       this.classList.add('is-open');
       document.body.classList.add('drawer-open');
       document.addEventListener('keydown', this.onKeydown);
+
+      const motion = Olivet.motion;
+      if (motion && !motion.reduced()) {
+        motion.animate(this.panel, { to: 'none' }, { duration: 0.5, bounce: 0 });
+      } else {
+        this.panel.style.transform = 'none';
+      }
+
       const focusTarget = this.querySelector('[data-drawer-focus]') || this.panel;
       Olivet.trapFocus(this.panel, focusTarget);
       if (this.trigger && this.trigger.setAttribute) this.trigger.setAttribute('aria-expanded', 'true');
       Olivet.pubsub.publish(Olivet.EVENTS.drawerOpened, { drawer: this });
     }
 
-    close(silent = false) {
+    /**
+     * @param {boolean} silent  skip returning focus (another drawer is opening)
+     * @param {{velocity:number, offset:number, size:number}} [gesture]  release state from a flick
+     */
+    close(silent = false, gesture) {
       if (!this.isOpen) return;
       this.classList.remove('is-open');
+      this.classList.add('is-closing');
+      this.setBackdropProgress(0);
       document.removeEventListener('keydown', this.onKeydown);
       Olivet.releaseFocus();
       if (!document.querySelector('[data-drawer].is-open')) document.body.classList.remove('drawer-open');
       if (this.trigger && this.trigger.setAttribute) this.trigger.setAttribute('aria-expanded', 'false');
       const trigger = this.trigger;
       this.trigger = null;
+
+      const token = {};
+      this.closeToken = token;
       const finish = () => {
-        this.cancelPendingClose();
+        if (this.closeToken !== token || this.isOpen) return; // reopened meanwhile
+        this.closeToken = null;
+        this.classList.remove('is-closing');
+        this.panel.style.transform = ''; // CSS owns the closed position again
         this.setAttribute('aria-hidden', 'true');
         this.setAttribute('inert', '');
         // Return focus only if nothing else took over (another drawer opened meanwhile)
         const focusFree = !document.querySelector('[data-drawer].is-open') && (document.activeElement === document.body || this.contains(document.activeElement));
         if (!silent && focusFree && trigger && trigger.focus) trigger.focus({ preventScroll: true });
       };
-      this.cancelPendingClose();
-      if (Olivet.prefersReducedMotion()) {
-        finish();
+
+      const motion = Olivet.motion;
+      if (motion && !motion.reduced()) {
+        let velocity = 0;
+        if (gesture && gesture.size) velocity = gesture.velocity / Math.max(1, gesture.size - gesture.offset);
+        motion.animate(this.panel, { to: this.sheetConfig().closed }, { duration: 0.35, bounce: 0, velocity }).then(finish);
+        setTimeout(finish, 900); // safety net if the animation never reports
       } else {
-        // Not { once: true }: child transitions (fading links) bubble here first
-        // and would consume a one-shot listener before the panel's own event.
-        this.finish = finish;
-        this.panel.addEventListener('transitionend', this.onTransitionEnd);
-        this.closeTimeout = setTimeout(finish, 500); // safety if no transition fires
+        this.panel.style.transform = '';
+        setTimeout(finish, 220); // reduced motion: a short opacity fade (CSS)
       }
       Olivet.pubsub.publish(Olivet.EVENTS.drawerClosed, { drawer: this });
     }
 
+    // Kept for subclasses written against the earlier API
     cancelPendingClose() {
-      clearTimeout(this.closeTimeout);
-      this.closeTimeout = null;
-      this.panel.removeEventListener('transitionend', this.onTransitionEnd);
-      this.finish = null;
-    }
-
-    onTransitionEnd(event) {
-      if (event.target !== this.panel || event.propertyName !== 'transform' && event.propertyName !== 'opacity') return;
-      if (this.finish) this.finish();
+      this.closeToken = null;
     }
 
     onKeydown(event) {
@@ -365,30 +410,39 @@
 
   /* ---------- scroll reveal ---------- */
   const initReveal = () => {
+    const root = document.documentElement;
     const nodes = document.querySelectorAll('[data-reveal]');
-    if (!nodes.length) return;
     if (config.revealOnScroll === false || !('IntersectionObserver' in window)) {
-      document.documentElement.classList.add('no-reveal');
+      root.classList.add('no-reveal');
       return;
     }
+    // Stagger by the batch that enters together, not by DOM position, so the
+    // third row of a grid doesn't wait 300ms behind rows already on screen.
+    const reveal = (els) =>
+      els.forEach((el, i) => {
+        el.style.setProperty('--i', Math.min(i, 7));
+        el.classList.add('is-visible');
+      });
     const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        });
+        const entering = entries.filter((e) => e.isIntersecting).map((e) => e.target);
+        entering.forEach((el) => io.unobserve(el));
+        reveal(entering);
       },
       { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
     );
+    const inView = [];
     nodes.forEach((n) => {
       // Elements already in view at load reveal immediately (no waiting for scroll)
       const r = n.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.9) n.classList.add('is-visible');
+      if (r.top < window.innerHeight * 0.9) inView.push(n);
       else io.observe(n);
     });
-    // Theme editor: reveal anything added later
-    Olivet.observeReveal = (root) => root.querySelectorAll('[data-reveal]').forEach((n) => io.observe(n));
+    // Only now hide unrevealed content: if this script never runs, nothing is hidden
+    root.classList.add('reveal-ready');
+    requestAnimationFrame(() => reveal(inView));
+    // Theme editor and re-rendered sections: observe anything added later
+    Olivet.observeReveal = (container) => container.querySelectorAll('[data-reveal]:not(.is-visible)').forEach((n) => io.observe(n));
   };
 
   /* ---------- image load state ---------- */

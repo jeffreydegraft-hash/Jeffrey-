@@ -1,0 +1,510 @@
+/* ==========================================================================
+   Olivet — section-home-b.css (home-b sections)
+   ========================================================================== */
+/* === section: science-pillars ===
+   Dark editorial band. Header at 44rem, then numbered pillars under thin
+   hairlines. Motion inventory: the staggered scroll reveal from base.css
+   (marketing explanation) and the .btn press. Nothing else moves. */
+.science-pillars__intro {
+  max-width: 40rem;
+}
+
+.science-pillars__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 56px);
+}
+
+@media (min-width: 750px) {
+  .science-pillars__grid {
+    grid-template-columns: repeat(var(--pillars-cols-tablet, 2), minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 990px) {
+  .science-pillars__grid {
+    grid-template-columns: repeat(var(--pillars-cols, 3), minmax(0, 1fr));
+  }
+}
+
+.science-pillars__pillar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding-top: var(--space-5);
+  border-top: 1px solid rgba(var(--c-ink), 0.18);
+}
+
+.science-pillars__numeral {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.375rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: rgb(var(--c-gold));
+}
+
+.science-pillars__title {
+  margin-top: var(--space-1);
+  text-wrap: pretty;
+}
+
+.science-pillars__body {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: rgb(var(--c-ink-2));
+  text-wrap: pretty;
+}
+
+.science-pillars__body > * + * {
+  margin-top: 0.75em;
+}
+
+.science-pillars__body a {
+  color: rgb(var(--c-ink));
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+.science-pillars__cta {
+  margin-top: clamp(32px, 5vw, 56px);
+}
+
+.science-pillars__empty + .science-pillars__cta {
+  margin-top: 0;
+}
+
+/* === section: featured-product ===
+   Two columns from 990px: media (4:5) and a 34rem content column centered on
+   it. Variant choice is a native select so it works without JS; the add
+   button is full width on phones and a 260px minimum on larger screens.
+   Motion inventory: the reveal pair (media, then content) and the .btn /
+   .link press and arrow nudge from base.css. */
+.featured-product__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 80px);
+  align-items: center;
+}
+
+@media (min-width: 990px) {
+  .featured-product__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .featured-product--image-right .featured-product__media {
+    order: 2;
+  }
+}
+
+.featured-product__media {
+  min-width: 0;
+}
+
+.featured-product__media-link {
+  display: block;
+  border-radius: var(--r-card);
+}
+
+.featured-product__figure {
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+@media (min-width: 990px) {
+  .featured-product__figure {
+    max-width: none;
+    margin-inline: 0;
+  }
+}
+
+.featured-product__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 34rem;
+  min-width: 0;
+}
+
+.featured-product__heading {
+  text-wrap: pretty;
+}
+
+.featured-product__text {
+  color: rgb(var(--c-ink-2));
+}
+
+.featured-product__form-wrap {
+  display: block;
+  margin-top: var(--space-2);
+}
+
+.featured-product__form-wrap .product-form__error {
+  margin-bottom: var(--space-3);
+}
+
+.featured-product__form-wrap .product-form__error[hidden] {
+  display: none;
+}
+
+.featured-product__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.featured-product__field {
+  max-width: 24rem;
+}
+
+.featured-product__select {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.featured-product__submit {
+  width: 100%;
+}
+
+@media (min-width: 750px) {
+  .featured-product__submit {
+    width: auto;
+    min-width: 260px;
+    align-self: flex-start;
+  }
+}
+
+.featured-product__details {
+  align-self: flex-start;
+  margin-top: var(--space-1);
+}
+
+.featured-product__hint {
+  margin-top: var(--space-1);
+}
+
+/* === section: faq ===
+   One column holds a 46rem measure; two columns pin the header on the left
+   from 990px while the questions scroll on the right. Questions are set in
+   the serif. Motion inventory: the accordion 0fr→1fr transition and the
+   plus-icon rotate, both owned by components.css; the staggered reveal. */
+.faq__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 48px);
+}
+
+.faq--one-column .faq__layout {
+  max-width: 46rem;
+}
+
+.faq__header {
+  margin-bottom: 0;
+}
+
+@media (min-width: 990px) {
+  .faq--two-column .faq__layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+
+  .faq--two-column .faq__header {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-6));
+  }
+}
+
+.faq__item {
+  display: block;
+}
+
+.faq__question {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.faq__item .accordion__summary {
+  padding-block: var(--space-5);
+}
+
+/* === section: newsletter ===
+   Centered 40rem column by default; "split" puts words left and the form
+   right from 990px. The form reuses .inline-form (stacks under 480px).
+   Motion inventory: status messages enter with .enter (@starting-style
+   fade/lift, no JS) and the .btn press. */
+.newsletter__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 40px);
+}
+
+.newsletter--center .newsletter__inner {
+  max-width: 40rem;
+  margin-inline: auto;
+  justify-items: center;
+  text-align: center;
+}
+
+@media (min-width: 990px) {
+  .newsletter--split .newsletter__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+  }
+}
+
+.newsletter__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 36rem;
+}
+
+.newsletter--center .newsletter__header {
+  align-items: center;
+}
+
+.newsletter__rule {
+  display: block;
+  width: 40px;
+  height: 1px;
+  margin-bottom: var(--space-2);
+  background: rgb(var(--c-gold));
+}
+
+.newsletter__heading {
+  text-wrap: balance;
+}
+
+.newsletter__form-wrap {
+  width: 100%;
+  max-width: 32rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.newsletter--split .newsletter__form-wrap {
+  justify-self: end;
+}
+
+.newsletter__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.newsletter__button {
+  flex-shrink: 0;
+}
+
+.newsletter__status {
+  width: 100%;
+  text-align: left;
+}
+
+.newsletter__note {
+  text-wrap: pretty;
+}
+
+/* === section: rich-text ===
+   A column of blocks at a chosen measure. Each block carries its own reveal
+   index, so the column staggers in top to bottom. */
+.rich-text__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.rich-text--center .rich-text__inner {
+  align-items: center;
+  text-align: center;
+}
+
+.rich-text__heading {
+  text-wrap: balance;
+}
+
+.rich-text__text {
+  width: 100%;
+}
+
+.rich-text__text--lead {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: rgb(var(--c-ink-2));
+}
+
+@media (min-width: 750px) {
+  .rich-text__text--lead {
+    font-size: 1.25rem;
+  }
+}
+
+.rich-text__text--small {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgb(var(--c-ink-2));
+}
+
+.rich-text__buttons {
+  margin-top: var(--space-2);
+}
+
+.rich-text--center .rich-text__buttons {
+  justify-content: center;
+}
+
+.rich-text__button[aria-disabled="true"],
+.rich-text__link[aria-disabled="true"] {
+  cursor: default;
+}
+
+/* === section: multicolumn ===
+   2–4 columns of image-or-icon, title, text, link. "Cards" puts each column
+   on a surface panel. Motion inventory: the staggered reveal and, on real
+   pointers, a 3% image zoom when the column carries a link. */
+.multicolumn__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 40px);
+}
+
+@media (min-width: 750px) {
+  .multicolumn__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 990px) {
+  .multicolumn__grid {
+    grid-template-columns: repeat(var(--multicolumn-cols, 3), minmax(0, 1fr));
+  }
+}
+
+.multicolumn__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.multicolumn--cards .multicolumn__grid {
+  gap: clamp(16px, 2.5vw, 28px);
+}
+
+.multicolumn--cards .multicolumn__item {
+  padding: clamp(20px, 3vw, 32px);
+  background: rgb(var(--c-surface));
+  border-radius: var(--r-card);
+}
+
+.multicolumn__media {
+  width: 100%;
+}
+
+.multicolumn--cards .multicolumn__figure {
+  --media-radius: var(--r-md);
+}
+
+.multicolumn--ratio-circle .multicolumn__figure {
+  --media-radius: 50%;
+  max-width: 220px;
+}
+
+.multicolumn__img {
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.multicolumn__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-pill);
+  color: rgb(var(--c-gold));
+  background: rgba(var(--c-gold), 0.12);
+}
+
+.multicolumn__title {
+  text-wrap: pretty;
+}
+
+.multicolumn__text {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgb(var(--c-ink-2));
+}
+
+.multicolumn__text > * + * {
+  margin-top: 0.75em;
+}
+
+.multicolumn__link {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .multicolumn__item:has(.multicolumn__link):hover .multicolumn__img {
+    transform: scale(1.03);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .multicolumn__item:has(.multicolumn__link):hover .multicolumn__img {
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .multicolumn__img {
+    transition: none;
+  }
+}
+
+/* === section: featured-blog ===
+   Header row (heading, intro, "All posts") and a grid of article cards from
+   snippets/card-article.liquid. Column count follows the posts setting. */
+.featured-blog__intro {
+  max-width: 40rem;
+}
+
+.featured-blog__view-all {
+  flex-shrink: 0;
+  min-height: 44px;
+}
+
+.featured-blog__item {
+  min-width: 0;
+}
+
+/* row gap matches the product and collection grids so stacked cards read apart */
+.featured-blog__grid,
+.main-blog__grid {
+  --grid-gap: clamp(28px, 4vw, 44px) clamp(16px, 2.5vw, 32px);
+}
+
+/* === section: custom-liquid === */
+.custom-liquid__inner > * + * {
+  margin-top: var(--space-4);
+}
+
+/* === section: apps ===
+   Without margins the app blocks own the full width and their own spacing. */
+.apps__inner {
+  min-width: 0;
+}
+
+.apps__inner > * + * {
+  margin-top: var(--space-5);
+}
