@@ -7,7 +7,7 @@
         "heading": "What is in the bottle",
         "intro": "Our oils are built on 100% olive-derived squalane and antioxidant-rich polyphenols from biblical botanicals. This page explains what those ingredients are and why we chose them.",
         "alignment": "center",
-        "show_ornament": true,
+        "show_ornament": false,
         "color_scheme": "scheme-1",
         "padding": "default",
         "flush_bottom": true
@@ -29,7 +29,7 @@
         "col-2": {
           "type": "column",
           "settings": {
-            "icon": "olive",
+            "icon": "sparkle",
             "title": "Polyphenols from olive and pomegranate",
             "text": "<p>Polyphenols are antioxidant compounds that plants make. From the olive we draw hydroxytyrosol, tyrosol, oleuropein-aglycone derivatives, luteolin, and apigenin.</p><p>From the pomegranate we draw ellagitannins and punicalagins. These actives help neutralize free radicals and support the skin's natural barrier function.</p>",
             "link_label": "",

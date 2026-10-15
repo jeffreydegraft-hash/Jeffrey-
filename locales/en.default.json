@@ -76,7 +76,7 @@
   "header": {
     "menu": "Menu",
     "search": "Search",
-    "cart": "Cart",
+    "cart": "Bag",
     "cart_count": {
       "one": "{{ count }} item",
       "other": "{{ count }} items"
@@ -98,7 +98,8 @@
     "payment_methods": "Payment methods",
     "policies": "Policies",
     "quick_links": "Quick links",
-    "menu_hint": "Choose a menu for this column."
+    "menu_hint": "Choose a menu for this column.",
+    "repeated_hint": "Every link in this menu already appears in an earlier column, so this column is hidden on the storefront. Choose another menu, or turn off “Hide repeated links”."
   },
   "newsletter": {
     "label": "Email",
@@ -107,10 +108,10 @@
     "success": "Thank you. You are on the list."
   },
   "cart": {
-    "title": "Your cart",
-    "empty": "Your cart is empty.",
+    "title": "Your Bag",
+    "empty": "Your bag is empty.",
     "empty_body": "The nine blends, the squalane, the journal. Start wherever you like.",
-    "continue_shopping": "Continue shopping",
+    "continue_shopping": "Continue Shopping",
     "login": {
       "title": "Have an account?",
       "paragraph_html": "<a href=\"{{ link }}\" class=\"link link--underline\">Log in</a> to check out faster."
@@ -128,43 +129,50 @@
       "taxes_included_and_shipping_at_checkout": "Taxes included. Shipping calculated at checkout.",
       "taxes_included_shipping_at_checkout_with_policy_html": "Taxes included. <a href=\"{{ link }}\" class=\"link link--underline\">Shipping</a> calculated at checkout.",
       "shipping_policy_html": "Taxes and <a href=\"{{ link }}\" class=\"link link--underline\">shipping</a> calculated at checkout.",
-      "checkout": "Check out",
-      "view_cart": "View cart",
+      "checkout": "Check Out",
+      "view_cart": "View Bag",
       "update": "Update",
       "remove": "Remove",
       "remove_title": "Remove {{ title }}",
       "note": "Order note",
       "note_placeholder": "Gift message, delivery instructions…",
-      "error": "There was an error while updating your cart. Please try again.",
-      "quantity_error_html": "You can only add [quantity] of this item to your cart.",
-      "quantity_error_message_html": "You can only add {{ quantity }} of this item to your cart.",
+      "error": "There was a problem updating your bag. Please try again.",
+      "quantity_error_html": "You can only add [quantity] of this item to your bag.",
+      "quantity_error_message_html": "You can only add {{ quantity }} of this item to your bag.",
       "decrease_quantity_label": "Decrease quantity for {{ product }}",
       "increase_quantity_label": "Increase quantity for {{ product }}",
       "item_count": {
         "one": "{{ count }} item",
         "other": "{{ count }} items"
       },
-      "close": "Close cart",
+      "close": "Close bag",
       "bundle_hint": "Add three or more items and save 10%.",
       "summary": "Order summary",
       "each_html": "{{ price }} each",
-      "note_saved": "Note saved"
+      "note_saved": "Note saved",
+      "shipping": "Shipping",
+      "shipping_free": "Free (US)",
+      "shipping_at_checkout": "Calculated at checkout",
+      "taxes_included": "Taxes included.",
+      "taxes_at_checkout": "Taxes calculated at checkout."
     },
     "free_shipping": {
-      "away_html": "You are <strong>[amount]</strong> away from free US shipping",
-      "away_liquid_html": "You are <strong>{{ amount }}</strong> away from free US shipping",
-      "reached": "You have unlocked free US shipping",
-      "label": "Free shipping progress"
+      "away_html": "Add <strong>[amount]</strong> more for free US shipping.",
+      "away_liquid_html": "Add <strong>{{ amount }}</strong> more for free US shipping.",
+      "reached": "Your order ships free in the US.",
+      "label": "Free shipping progress",
+      "lead": "Free US shipping on orders {{ amount }}+."
     },
     "added": {
-      "title": "Added to your cart",
-      "view": "View cart"
-    }
+      "title": "Added to your bag",
+      "view": "View Bag"
+    },
+    "page_title": "Review your bag."
   },
   "products": {
     "product": {
-      "add_to_cart": "Add to cart",
-      "added": "Added",
+      "add_to_cart": "Add to Bag",
+      "added": "Added to Bag",
       "sold_out": "Sold out",
       "unavailable": "Unavailable",
       "on_sale": "Sale",
@@ -278,7 +286,8 @@
       "use_fewer_filters_html": "Use fewer filters or <a class=\"link link--underline\" href=\"{{ link }}\">remove all</a>",
       "view_all": "View all",
       "no_matches": "No matches",
-      "collection_label": "Collection"
+      "collection_label": "Collection",
+      "empty_collection_body": "There’s nothing in this collection yet. Browse every oil instead."
     },
     "list": {
       "title": "Collections",
@@ -288,7 +297,7 @@
   },
   "search": {
     "title": "Search",
-    "placeholder": "Search oils, ingredients, scripture…",
+    "placeholder": "Search oils and botanicals",
     "search": "Search",
     "clear": "Clear search",
     "loading": "Searching…",
@@ -313,7 +322,8 @@
     "article": "Article",
     "popular": "Popular",
     "also_found": "Also found",
-    "error": "Something went wrong while searching. Please try again."
+    "error": "Something went wrong while searching. Please try again.",
+    "cancel": "Cancel"
   },
   "blogs": {
     "article": {
@@ -359,7 +369,8 @@
       "comment": "Message",
       "send": "Send message",
       "post_success": "Thank you. We will reply within one business day.",
-      "error_heading": "Please adjust the following:"
+      "error_heading": "Please adjust the following:",
+      "submit": "Send"
     },
     "details": {
       "heading": "Reach us directly",
@@ -381,7 +392,8 @@
       "body": "The page you were looking for has moved or never existed.",
       "cta": "Go to the homepage",
       "eyebrow": "404",
-      "secondary_cta": "Browse all oils"
+      "secondary_cta": "Browse all oils",
+      "headline": "Page not found."
     },
     "featured_collection": {
       "view_all": "View all",
@@ -401,7 +413,8 @@
     },
     "featured_product": {
       "placeholder_title": "Example product",
-      "no_product": "Choose a product in the theme editor."
+      "no_product": "Choose a product in the theme editor.",
+      "buy": "Buy"
     },
     "custom_liquid": {
       "empty": "Add Liquid code to this section in the theme editor."
@@ -424,7 +437,12 @@
       "return": "Return to Account details",
       "welcome": "Welcome back, {{ name }}.",
       "default_address": "Default address",
-      "no_address": "No address saved yet."
+      "no_address": "No address saved yet.",
+      "greeting": "Hi, {{ name }}.",
+      "greeting_fallback": "Your account.",
+      "lead": "Track your orders and manage your addresses.",
+      "back": "Account",
+      "sign_out": "Sign out"
     },
     "account_fallback": "Account",
     "log_in": "Log in",
@@ -435,7 +453,9 @@
       "password": "Password",
       "password_confirm": "Confirm password",
       "submit": "Activate account",
-      "cancel": "Decline invitation"
+      "cancel": "Decline invitation",
+      "headline": "Activate your account.",
+      "lead": "Choose a password to get started."
     },
     "addresses": {
       "title": "Addresses",
@@ -480,7 +500,9 @@
       "guest_continue": "Continue",
       "subtext": "Sign in to see your orders and saved addresses.",
       "back_to_login": "Back to log in",
-      "guest_text": "Check out without creating an account."
+      "guest_text": "Check out without creating an account.",
+      "headline": "Sign in to {{ shop }}.",
+      "lead": "Track your orders and check out faster."
     },
     "orders": {
       "title": "Order history",
@@ -490,9 +512,16 @@
       "payment_status": "Payment status",
       "fulfillment_status": "Fulfillment status",
       "total": "Total",
-      "none": "You haven't placed any orders yet.",
+      "none": "You haven’t placed any orders yet.",
       "none_body": "When you place an order, it will appear here.",
-      "shop_cta": "Shop the oils"
+      "shop_cta": "Shop the oils",
+      "heading": "Orders",
+      "status": "Status",
+      "cancelled": "Cancelled",
+      "count": {
+        "one": "{{ count }} order",
+        "other": "{{ count }} orders"
+      }
     },
     "order": {
       "title": "Order {{ name }}",
@@ -529,8 +558,11 @@
     "recover_password": {
       "title": "Reset your password",
       "subtext": "We will send you an email to reset your password.",
-      "success": "We've sent you an email with a link to update your password.",
-      "submit": "Send reset link"
+      "success": "We’ve sent you an email with a link to update your password.",
+      "submit": "Send reset link",
+      "headline": "Reset your password.",
+      "back": "Back to sign in",
+      "lead": "Enter your email and we’ll send you a reset link."
     },
     "register": {
       "title": "Create account",
@@ -540,14 +572,18 @@
       "password": "Password",
       "submit": "Create account",
       "already_have": "Already have an account?",
-      "subtext": "Save your addresses and keep track of your orders."
+      "subtext": "Save your addresses and keep track of your orders.",
+      "headline": "Create your account.",
+      "sign_in": "Sign in"
     },
     "reset_password": {
       "title": "Reset account password",
       "subtext": "Enter a new password",
       "password": "Password",
       "password_confirm": "Confirm password",
-      "submit": "Reset password"
+      "submit": "Reset password",
+      "headline": "Choose a new password.",
+      "lead": "You’ll use it the next time you sign in."
     }
   },
   "gift_cards": {

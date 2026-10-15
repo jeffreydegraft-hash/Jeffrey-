@@ -5,14 +5,31 @@
       "settings": {
         "eyebrow": "Handcrafted biblical anointing oils",
         "heading": "Anointing oils for <em>prayer</em> and skin.",
-        "subheading": "Nine biblical oil blends, each on a base of 100% olive-derived squalane and our Polyphenol Alpha complex. Carefully blended, tested, and bottled in Richmond, Texas.",
+        "subheading": "Carefully blended, tested, and bottled in Richmond, Texas.",
         "button_label_1": "Shop the oils",
         "button_link_1": "shopify://collections/all",
-        "button_label_2": "Read our science",
+        "button_label_2": "Learn about the science",
         "button_link_2": "/pages/our-science",
-        "layout": "split",
-        "height": "tall",
+        "image_style": "product",
+        "product": "frankincense-myrrh-anointing-oil",
+        "layout": "centered",
+        "height": "auto",
         "color_scheme": "scheme-1"
+      }
+    },
+    "collection": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Nine biblical blends.",
+        "description": "One olive base.",
+        "collection": "all",
+        "products_to_show": 9,
+        "columns_desktop": 3,
+        "show_view_all": true,
+        "view_all_label": "Shop all oils",
+        "color_scheme": "scheme-2",
+        "padding": "default"
       }
     },
     "values": {
@@ -37,7 +54,7 @@
         "value-3": {
           "type": "value",
           "settings": {
-            "icon": "leaf",
+            "icon": "shield",
             "title": "Natural, paraben-free, vegan",
             "body": "Every ingredient is derived from biblical botanicals, and every bottle is natural, paraben-free, and vegan."
           }
@@ -58,28 +75,14 @@
         "value-4"
       ],
       "settings": {
-        "color_scheme": "scheme-2",
-        "padding": "tight"
-      }
-    },
-    "collection": {
-      "type": "featured-collection",
-      "settings": {
-        "eyebrow": "The collection",
-        "heading": "Nine biblical blends, one olive base.",
-        "description": "From Frankincense & Myrrh to Spikenard and Hyssop, each oil carries a botanical named in Scripture and a meaning of its own.",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "show_view_all": true,
-        "view_all_label": "Shop all oils",
         "color_scheme": "scheme-1",
-        "padding": "default"
+        "padding": "tight"
       }
     },
     "story": {
       "type": "image-with-text",
       "settings": {
+        "product": "gethsemane-anointing-oil-unscented",
         "image_ratio": "4 / 5",
         "layout": "image_first",
         "vertical_align": "center",
@@ -140,7 +143,7 @@
         "quote": "Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over.",
         "reference": "Psalm 23:5",
         "alignment": "center",
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-1",
         "padding": "default"
       }
     },
@@ -177,7 +180,7 @@
       "settings": {
         "heading": "How to use anointing oil",
         "intro": "",
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "padding": "default"
       }
     },
@@ -190,8 +193,9 @@
         "text": "<p>Our 100% Squalane Oil is sustainable, vegan, derived from olives, and steeped in biblical tradition. One ingredient and nothing else, in a 4 oz bottle.</p>",
         "show_price": true,
         "button_label": "",
+        "layout": "stacked",
         "image_position": "right",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "padding": "default"
       }
     },
@@ -203,9 +207,9 @@
         "blog": "the-anointing-journal",
         "posts_to_show": 3,
         "show_date": true,
-        "show_excerpt": true,
+        "show_excerpt": false,
         "show_view_all": true,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "padding": "default"
       }
     },
@@ -266,7 +270,7 @@
       "settings": {
         "heading": "Questions, answered.",
         "intro": "",
-        "layout": "two_column",
+        "layout": "one_column",
         "color_scheme": "scheme-1",
         "padding": "default"
       }
@@ -274,8 +278,8 @@
   },
   "order": [
     "hero",
-    "values",
     "collection",
+    "values",
     "story",
     "science",
     "scripture",

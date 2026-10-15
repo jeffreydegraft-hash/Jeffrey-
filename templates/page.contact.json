@@ -3,11 +3,11 @@
     "hero": {
       "type": "page-hero",
       "settings": {
-        "eyebrow": "Contact",
+        "eyebrow": "",
         "heading": "",
         "intro": "We are glad to help with orders, ingredients, or choosing an oil.",
         "alignment": "center",
-        "show_ornament": true,
+        "show_ornament": false,
         "color_scheme": "scheme-1",
         "padding": "default",
         "flush_bottom": true

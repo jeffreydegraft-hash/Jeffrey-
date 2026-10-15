@@ -7,7 +7,7 @@
         "heading": "Anointing oils, made with care",
         "intro": "Mount of Olives makes biblical anointing oils from 100% olive-derived squalane and antioxidant-rich botanical polyphenols. Every blend is formulated in Richmond, Texas, for prayer, worship, and daily care of the skin.",
         "alignment": "center",
-        "show_ornament": true,
+        "show_ornament": false,
         "color_scheme": "scheme-1",
         "padding": "default",
         "flush_bottom": true
@@ -115,7 +115,7 @@
         "value-3": {
           "type": "value",
           "settings": {
-            "icon": "leaf",
+            "icon": "shield",
             "title": "Natural, paraben-free, vegan",
             "body": "Every ingredient is derived from biblical botanicals, and every bottle is natural, paraben-free, and vegan."
           }
