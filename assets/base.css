@@ -462,14 +462,19 @@ h1 em, h2 em, h3 em {
   white-space: nowrap;
 }
 
+/* .btn.skip-link: must beat .btn's position: relative, or the link joins the
+   flex-column body, stretches to full width and overflows by its left offset. */
+.btn.skip-link,
 .skip-link {
   position: absolute;
   top: var(--space-3);
   left: var(--space-3);
   z-index: 1000;
+  width: auto;
   transform: translateY(-200%);
 }
 
+.btn.skip-link:focus-visible,
 .skip-link:focus-visible {
   transform: none;
 }

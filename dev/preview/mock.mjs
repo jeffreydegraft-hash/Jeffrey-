@@ -167,7 +167,8 @@ export const products = copy.products.products.map((p, i) => {
     url: `/products/${handle}`,
     type: 'Anointing oil',
     vendor: 'Mount of Olives',
-    description: `<p>${esc(p.meaning)}</p><p>${esc(p.botanical)}</p><p><strong>Ingredients:</strong> ${esc(p.ingredientsLine)}.</p>`,
+    // A stand-in for the merchant's own description (kept distinct from the meaning/botanical blocks)
+    description: `<p>${esc(p.oneLiner)}</p><p>Each bottle is blended, tested, and bottled by hand in Richmond, Texas. Apply a few drops after the shower or at the pulse points during prayer.</p>`,
     content: '',
     featured_media: media[0],
     featured_image: media[0],

@@ -48,7 +48,8 @@
       "country_label": "Country/region",
       "language_label": "Language",
       "update_language": "Update language",
-      "update_country": "Update country/region"
+      "update_country": "Update country/region",
+      "update": "Update"
     }
   },
   "accessibility": {
@@ -80,7 +81,9 @@
       "other": "{{ count }} items"
     },
     "account": "Account",
-    "log_in": "Log in"
+    "log_in": "Log in",
+    "submenu_view_all": "All {{ title }}",
+    "menu_empty": "No menu has been assigned yet. Add one in the theme editor."
   },
   "footer": {
     "newsletter_heading": "Join the journal",
@@ -93,7 +96,8 @@
     "powered_by": "Powered by Shopify",
     "payment_methods": "Payment methods",
     "policies": "Policies",
-    "quick_links": "Quick links"
+    "quick_links": "Quick links",
+    "menu_hint": "Choose a menu for this column."
   },
   "newsletter": {
     "label": "Email",
@@ -140,7 +144,10 @@
         "other": "{{ count }} items"
       },
       "close": "Close cart",
-      "bundle_hint": "Add three or more items and save 10%."
+      "bundle_hint": "Add three or more items and save 10%.",
+      "summary": "Order summary",
+      "each_html": "{{ price }} each",
+      "note_saved": "Note saved"
     },
     "free_shipping": {
       "away_html": "You are <strong>[amount]</strong> away from free US shipping",
@@ -196,7 +203,8 @@
         "load_model": "Load 3D model {{ index }} in gallery view",
         "load_video": "Play video {{ index }} in gallery view",
         "image_available": "Image {{ index }} is now available in gallery view",
-        "play_video": "Play video"
+        "play_video": "Play video",
+        "carousel_label": "Product images"
       },
       "share": "Share this product",
       "pickup_availability": {
@@ -250,7 +258,12 @@
       "filter_selected_accessibility": "{{ type }} ({{ count }} filters selected)",
       "show_more_label": "Show more",
       "show_less_label": "Show less",
-      "clear_filter": "Remove filter"
+      "clear_filter": "Remove filter",
+      "active_filters": "Active filters",
+      "show_results": {
+        "one": "Show {{ count }} product",
+        "other": "Show {{ count }} products"
+      }
     },
     "modal": {
       "label": "Media gallery"
@@ -263,11 +276,13 @@
       "empty_body": "Try removing a filter, or browse the full collection.",
       "use_fewer_filters_html": "Use fewer filters or <a class=\"link link--underline\" href=\"{{ link }}\">remove all</a>",
       "view_all": "View all",
-      "no_matches": "No matches"
+      "no_matches": "No matches",
+      "collection_label": "Collection"
     },
     "list": {
       "title": "Collections",
-      "empty": "No collections yet"
+      "empty": "No collections yet",
+      "empty_body": "Collections will appear here once they are published."
     }
   },
   "search": {
@@ -295,7 +310,9 @@
     "see_all_results": "See all results",
     "page": "Page",
     "article": "Article",
-    "popular": "Popular"
+    "popular": "Popular",
+    "also_found": "Also found",
+    "error": "Something went wrong while searching. Please try again."
   },
   "blogs": {
     "article": {
@@ -355,6 +372,12 @@
     },
     "featured_collection": {
       "view_all": "View all"
+    },
+    "collection_list": {
+      "empty": "Add collections to this section in the theme editor."
+    },
+    "related_products": {
+      "empty": "Recommendations will appear here once Shopify has enough order and collection data for this product."
     }
   },
   "customer": {

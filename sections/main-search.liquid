@@ -1,0 +1,171 @@
+{%- comment -%}
+  Search page: a large serif search field, then results. Products fill a
+  card grid; articles and pages follow as a plain list under "Also found".
+  Pagination covers the whole result set (Shopify paginates search.results
+  as one list, so a page may hold any mix of types).
+{%- endcomment -%}
+{%- liquid
+  assign terms = search.terms | escape
+
+  assign spacing_class = ''
+  case section.settings.spacing
+    when 'tight'
+      assign spacing_class = ' section--tight'
+    when 'none'
+      assign spacing_class = ' section--none'
+  endcase
+-%}
+<div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-search{% if search.performed and search.results_count == 0 %} main-search--empty{% endif %}" id="section-{{ section.id }}">
+  <div class="page-width">
+    <header class="main-search__header">
+      <h1 class="h1 main-search__title">{{ 'search.title' | t }}</h1>
+
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-form main-search__form">
+        <label for="MainSearch-Input" class="visually-hidden">{{ 'search.search' | t }}</label>
+        <div class="search-form__field">
+          <span class="search-form__icon" aria-hidden="true">{% render 'icon', name: 'search', size: 22 %}</span>
+          <input
+            id="MainSearch-Input"
+            class="search-form__input"
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'search.placeholder' | t | escape }}"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+          >
+          <input type="hidden" name="options[prefix]" value="last">
+          <button type="button" class="search-form__reset" data-search-reset aria-label="{{ 'search.clear' | t }}">
+            {%- render 'icon', name: 'close', size: 18 -%}
+          </button>
+          <button type="submit" class="btn btn--primary btn--sm search-form__submit">{{ 'search.search' | t }}</button>
+        </div>
+      </form>
+
+      {%- if search.performed and search.results_count > 0 -%}
+        <p class="main-search__count lead" role="status">
+          {{- 'search.results_with_count' | t: count: search.results_count, terms: terms -}}
+        </p>
+      {%- endif -%}
+    </header>
+
+    {%- if search.performed -%}
+      {%- paginate search.results by section.settings.products_per_page -%}
+        {%- liquid
+          assign product_count = 0
+          assign other_count = 0
+          for item in search.results
+            if item.object_type == 'product'
+              assign product_count = product_count | plus: 1
+            else
+              assign other_count = other_count | plus: 1
+            endif
+          endfor
+        -%}
+
+        <div id="SearchResults" class="main-search__results">
+          {%- if search.results_count == 0 -%}
+            <div class="empty-state main-search__empty" role="status">
+              {%- render 'icon', name: 'search', size: 36 -%}
+              <h2 class="h3">{{ 'search.no_results' | t: terms: terms }}</h2>
+              <p class="muted text-pretty">{{ 'search.no_results_body' | t }}</p>
+              <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary">{{ 'collections.general.all' | t }}</a>
+            </div>
+          {%- else -%}
+            {%- if product_count > 0 -%}
+              <section class="main-search__group" aria-labelledby="MainSearch-Products">
+                <h2 class="eyebrow eyebrow--ink main-search__group-title" id="MainSearch-Products">{{ 'search.products' | t }}</h2>
+                <ul class="grid grid--4 grid--mobile-2 product-grid main-search__grid" role="list">
+                  {%- for item in search.results -%}
+                    {%- if item.object_type == 'product' -%}
+                      <li class="product-grid__item">
+                        {%- render 'card-product', product: item, index: forloop.index0, sizes: '(min-width: 990px) 25vw, 50vw' -%}
+                      </li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              </section>
+            {%- endif -%}
+
+            {%- if other_count > 0 -%}
+              <section class="main-search__group main-search__group--other" aria-labelledby="MainSearch-Other">
+                <h2 class="eyebrow eyebrow--ink main-search__group-title" id="MainSearch-Other">{{ 'search.also_found' | t }}</h2>
+                <ul class="search-results" role="list">
+                  {%- for item in search.results -%}
+                    {%- unless item.object_type == 'product' -%}
+                      {%- liquid
+                        assign stagger = forloop.index0 | modulo: 8
+                        if item.object_type == 'article'
+                          assign type_label = 'search.article' | t
+                          assign excerpt = item.excerpt_or_content | strip_html | truncatewords: 30
+                        else
+                          assign type_label = 'search.page' | t
+                          assign excerpt = item.content | strip_html | truncatewords: 30
+                        endif
+                      -%}
+                      <li class="search-results__item" data-reveal style="--i: {{ stagger }}">
+                        <a href="{{ item.url }}" class="search-results__link">
+                          <span class="search-results__meta">
+                            <span class="badge badge--outline">{{ type_label }}</span>
+                            {%- if item.object_type == 'article' and item.published_at -%}
+                              <time class="caption" datetime="{{ item.published_at | date: '%Y-%m-%d' }}">{{ item.published_at | date: '%b %-d, %Y' }}</time>
+                            {%- endif -%}
+                          </span>
+                          <span class="search-results__title h4">{{ item.title | escape }}</span>
+                          {%- if excerpt != blank -%}
+                            <span class="search-results__excerpt">{{ excerpt }}</span>
+                          {%- endif -%}
+                          <span class="search-results__arrow" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
+                        </a>
+                      </li>
+                    {%- endunless -%}
+                  {%- endfor -%}
+                </ul>
+              </section>
+            {%- endif -%}
+
+            {%- render 'pagination', paginate: paginate, anchor: '#SearchResults' -%}
+          {%- endif -%}
+        </div>
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</div>
+
+<script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Search results",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Results per page",
+      "default": 24
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ]
+}
+{% endschema %}

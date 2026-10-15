@@ -1,0 +1,190 @@
+{%- comment -%}
+  Filter and sort form, driven by assets/facets.js through the Section
+  Rendering API. Rendered twice by main-collection-product-grid: once in the
+  desktop sidebar and once inside <facets-drawer> for small screens.
+
+  Accepts:
+  - results: {Object} collection or search object (required)
+  - enable_filtering: {Boolean}
+  - enable_sorting: {Boolean}
+  - context: {String} 'sidebar' | 'drawer' (changes form id and input ids)
+  - section_id: {String} id of the section that owns #ProductGridContainer
+
+  Markup contract (facets.js):
+  - <form data-section> ids: #FacetFiltersForm (sidebar) / #FacetFiltersFormMobile (drawer)
+  - each filter group: [data-facet-group="n"] with [data-facet-selected] in the
+    summary and a [data-facet-values] fieldset that can be re-rendered
+  - drawer sort select: [data-sort-select]; the desktop toolbar select #SortBy
+    is associated with the primary form through its form attribute
+{%- endcomment -%}
+{%- liquid
+  assign sort_by = results.sort_by | default: results.default_sort_by
+  assign prefix = 'Filter'
+  assign form_id = 'FacetFiltersForm'
+  if context == 'drawer'
+    assign prefix = 'FilterDrawer'
+    assign form_id = 'FacetFiltersFormMobile'
+  endif
+  if results.url
+    assign form_action = results.url
+  else
+    assign form_action = routes.search_url
+  endif
+  assign has_filters = false
+  if enable_filtering and results.filters.size > 0
+    assign has_filters = true
+  endif
+-%}
+<facet-filters-form class="facets facets--{{ context }}">
+  <form id="{{ form_id }}" class="facets__form" action="{{ form_action }}" method="get" data-section="{{ section_id }}">
+    {%- if results.terms -%}
+      <input type="hidden" name="q" value="{{ results.terms | escape }}">
+      <input type="hidden" name="options[prefix]" value="last">
+    {%- endif -%}
+    {%- if results.current_vendor or results.current_type -%}
+      <input type="hidden" name="q" value="{{ results.current_vendor }}{{ results.current_type }}">
+    {%- endif -%}
+
+    {%- if enable_sorting and context == 'drawer' -%}
+      <div class="field facets__sort">
+        <label class="field__label" for="SortByDrawer">{{ 'products.facets.sort_by_label' | t }}</label>
+        <div class="select">
+          <select id="SortByDrawer" name="sort_by" class="field__select" data-sort-select>
+            {%- for option in results.sort_options -%}
+              <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name | escape }}</option>
+            {%- endfor -%}
+          </select>
+          {%- render 'icon', name: 'chevron-down', size: 18 -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if has_filters -%}
+      <div class="facets__groups" role="group" aria-label="{{ 'products.facets.filter_by_label' | t }}">
+        {%- for filter in results.filters -%}
+          {%- liquid
+            assign group_index = forloop.index
+            assign active_count = filter.active_values.size
+            if filter.type == 'price_range'
+              if filter.min_value.value != blank or filter.max_value.value != blank
+                assign active_count = 1
+              endif
+            endif
+            assign is_open = false
+            if forloop.index <= 2 or active_count > 0
+              assign is_open = true
+            endif
+          -%}
+          <olivet-accordion class="accordion facets__group" data-facet-group="{{ group_index }}">
+            <details{% if is_open %} open{% endif %}>
+              <summary class="accordion__summary facets__summary">
+                <span class="facets__summary-label">
+                  <span>{{ filter.label | escape }}</span>
+                  <span class="facets__selected{% if active_count == 0 %} is-empty{% endif %}" data-facet-selected>
+                    <span aria-hidden="true">{{ active_count }}</span>
+                    <span class="visually-hidden">{{ 'products.facets.filters_selected' | t: count: active_count }}</span>
+                  </span>
+                </span>
+                {%- render 'icon', name: 'chevron-down', size: 18 -%}
+              </summary>
+              <div class="accordion__content" data-accordion-content>
+                <div class="accordion__inner">
+                  {%- case filter.type -%}
+                    {%- when 'list', 'boolean' -%}
+                      <fieldset class="facets__fieldset" data-facet-values>
+                        <legend class="visually-hidden">{{ filter.label | escape }}</legend>
+                        <ul class="facets__list" role="list">
+                          {%- for value in filter.values -%}
+                            {%- liquid
+                              assign input_id = prefix | append: '-' | append: filter.param_name | append: '-' | append: forloop.index | append: '-' | append: section_id | escape
+                              assign is_disabled = false
+                              if value.count == 0 and value.active == false
+                                assign is_disabled = true
+                              endif
+                            -%}
+                            <li class="facets__item">
+                              <label class="checkbox facets__label{% if is_disabled %} is-disabled{% endif %}" for="{{ input_id }}">
+                                <input
+                                  type="checkbox"
+                                  class="facets__checkbox"
+                                  name="{{ value.param_name }}"
+                                  value="{{ value.value | escape }}"
+                                  id="{{ input_id }}"
+                                  {% if value.active %}checked{% endif %}
+                                  {% if is_disabled %}disabled{% endif %}
+                                >
+                                <span class="facets__value">
+                                  <span class="facets__value-label">{{ value.label | escape }}</span>
+                                  <span class="facets__value-count" data-facet-count aria-hidden="true">{{ value.count }}</span>
+                                  <span class="visually-hidden">({{ 'products.facets.product_count_simple' | t: count: value.count }})</span>
+                                </span>
+                              </label>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </fieldset>
+
+                    {%- when 'price_range' -%}
+                      {%- liquid
+                        assign range_max_major = filter.range_max | divided_by: 100.0 | ceil
+                        assign max_price_money = filter.range_max | money | strip_html
+                        assign min_id = prefix | append: '-price-min-' | append: section_id
+                        assign max_id = prefix | append: '-price-max-' | append: section_id
+                      -%}
+                      <fieldset class="facets__fieldset facets__fieldset--price" data-facet-values>
+                        <legend class="visually-hidden">{{ filter.label | escape }}</legend>
+                        <p class="facets__hint caption">{{ 'products.facets.max_price' | t: price: max_price_money }}</p>
+                        <div class="facets__price">
+                          <div class="field facets__price-field">
+                            <label class="field__label" for="{{ min_id }}">{{ 'products.facets.from' | t }}</label>
+                            <div class="facets__price-input">
+                              <span class="facets__currency" aria-hidden="true">{{ cart.currency.symbol }}</span>
+                              <input
+                                class="field__input"
+                                type="number"
+                                inputmode="decimal"
+                                name="{{ filter.min_value.param_name }}"
+                                id="{{ min_id }}"
+                                min="0"
+                                max="{{ range_max_major }}"
+                                step="any"
+                                placeholder="0"
+                                {% if filter.min_value.value != blank %}value="{{ filter.min_value.value | divided_by: 100.0 }}"{% endif %}
+                              >
+                            </div>
+                          </div>
+                          <span class="facets__price-sep" aria-hidden="true">&ndash;</span>
+                          <div class="field facets__price-field">
+                            <label class="field__label" for="{{ max_id }}">{{ 'products.facets.to' | t }}</label>
+                            <div class="facets__price-input">
+                              <span class="facets__currency" aria-hidden="true">{{ cart.currency.symbol }}</span>
+                              <input
+                                class="field__input"
+                                type="number"
+                                inputmode="decimal"
+                                name="{{ filter.max_value.param_name }}"
+                                id="{{ max_id }}"
+                                min="0"
+                                max="{{ range_max_major }}"
+                                step="any"
+                                placeholder="{{ range_max_major }}"
+                                {% if filter.max_value.value != blank %}value="{{ filter.max_value.value | divided_by: 100.0 }}"{% endif %}
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </fieldset>
+                  {%- endcase -%}
+                </div>
+              </div>
+            </details>
+          </olivet-accordion>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <noscript>
+      <button type="submit" class="btn btn--secondary btn--sm facets__apply">{{ 'products.facets.apply' | t }}</button>
+    </noscript>
+  </form>
+</facet-filters-form>

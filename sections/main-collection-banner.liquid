@@ -1,0 +1,79 @@
+{%- comment -%}
+  Collection banner: optional soft media band, eyebrow, title, description.
+  The title is above the fold and must be readable the instant the page
+  paints, so nothing in this section carries data-reveal.
+{%- endcomment -%}
+{%- liquid
+  assign show_image = false
+  if section.settings.show_image and collection.image != blank
+    assign show_image = true
+  endif
+
+  assign show_description = false
+  if section.settings.show_description and collection.description != blank
+    assign show_description = true
+  endif
+
+  assign spacing_class = ''
+  case section.settings.spacing
+    when 'tight'
+      assign spacing_class = ' section--tight'
+    when 'none'
+      assign spacing_class = ' section--none'
+  endcase
+-%}
+<div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} collection-banner{% if show_image %} collection-banner--has-image{% endif %}" id="section-{{ section.id }}">
+  {%- if show_image -%}
+    <div class="collection-banner__media page-width">
+      <div class="media collection-banner__figure">
+        {%- render 'image', image: collection.image, sizes: '(min-width: 1400px) 1320px, 100vw', widths: '600, 900, 1200, 1600, 2000', loading: 'eager', fetchpriority: 'high', class: 'collection-banner__img', alt: collection.title -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <header class="collection-banner__header page-width">
+    <p class="eyebrow collection-banner__eyebrow">{{ 'collections.general.collection_label' | t }}</p>
+    <h1 class="h1 collection-banner__title">{{ collection.title | escape }}</h1>
+    {%- if show_description -%}
+      <div class="lead collection-banner__description">{{ collection.description }}</div>
+    {%- endif -%}
+  </header>
+</div>
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show collection image",
+      "info": "A wide band above the title, when the collection has an image.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "tight"
+    }
+  ]
+}
+{% endschema %}

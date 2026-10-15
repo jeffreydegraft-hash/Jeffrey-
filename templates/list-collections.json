@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-list-collections",
+      "settings": {
+        "title": "Collections",
+        "sort": "alphabetical",
+        "columns_desktop": 3,
+        "color_scheme": "scheme-1",
+        "spacing": "default"
+      }
+    }
+  },
+  "order": ["main"]
+}

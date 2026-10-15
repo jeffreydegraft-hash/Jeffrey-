@@ -136,6 +136,18 @@ engine.registerFilter('t', function (key, ...rest) {
   for (const r of rest) if (Array.isArray(r)) params[r[0]] = r[1];
   return translate(key, params);
 });
+// Cycle-safe json (mock images reference themselves via preview_image)
+engine.registerFilter('json', (v) => {
+  const seen = new WeakSet();
+  return JSON.stringify(v, (k, val) => {
+    if (k === '_svg' || k === '_copy') return undefined;
+    if (val && typeof val === 'object') {
+      if (seen.has(val)) return undefined;
+      seen.add(val);
+    }
+    return val;
+  });
+});
 engine.registerFilter('money', (v) => formatMoney(v));
 engine.registerFilter('money_with_currency', (v) => formatMoney(v, M.shop.money_with_currency_format));
 engine.registerFilter('money_without_currency', (v) => (Number(v || 0) / 100).toFixed(2));

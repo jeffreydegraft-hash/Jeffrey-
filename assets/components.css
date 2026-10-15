@@ -430,7 +430,9 @@ a.pagination__item:active {
   transform: none;
 }
 
-.quantity__input {
+/* .quantity scope beats base.css input[type="number"] (0,1,1), whose
+   padding and min-height would otherwise crush the 36–44px field. */
+.quantity .quantity__input {
   width: 44px;
   min-height: 0;
   height: 100%;
@@ -454,7 +456,7 @@ a.pagination__item:active {
   margin: 0;
 }
 
-.quantity__input:focus-visible {
+.quantity .quantity__input:focus-visible {
   box-shadow: none;
   outline: none;
 }

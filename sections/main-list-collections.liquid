@@ -1,0 +1,101 @@
+{%- comment -%}
+  Collections list page (/collections). Cards reveal on scroll; the title
+  does not.
+{%- endcomment -%}
+{%- liquid
+  case section.settings.sort
+    when 'products_high'
+      assign collections = collections | sort: 'all_products_count' | reverse
+    when 'date'
+      assign collections = collections | sort: 'published_at' | reverse
+  endcase
+
+  assign col_vw = 100 | divided_by: section.settings.columns_desktop
+  assign card_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, (min-width: 750px) 50vw, 50vw'
+
+  assign spacing_class = ''
+  case section.settings.spacing
+    when 'tight'
+      assign spacing_class = ' section--tight'
+    when 'none'
+      assign spacing_class = ' section--none'
+  endcase
+-%}
+<div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} list-collections" id="section-{{ section.id }}">
+  <div class="page-width">
+    <header class="section__header list-collections__header">
+      <h1 class="h1">{{ section.settings.title | escape }}</h1>
+    </header>
+
+    {%- paginate collections by 24 -%}
+      {%- if collections.size > 0 -%}
+        <ul class="grid grid--3 grid--mobile-2 list-collections__grid" role="list" style="--cols-desktop: {{ section.settings.columns_desktop }};">
+          {%- for collection in collections -%}
+            <li>
+              {%- render 'card-collection', collection: collection, index: forloop.index0, sizes: card_sizes -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+        {%- render 'pagination', paginate: paginate -%}
+      {%- else -%}
+        <div class="empty-state list-collections__empty">
+          {%- render 'icon', name: 'leaf', size: 36 -%}
+          <h2 class="h3">{{ 'collections.list.empty' | t }}</h2>
+          <p class="muted text-pretty">{{ 'collections.list.empty_body' | t }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary">{{ 'collections.general.all' | t }}</a>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collections"
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "label": "Sort collections by",
+      "options": [
+        { "value": "alphabetical", "label": "Alphabetically, A–Z" },
+        { "value": "products_high", "label": "Product count, high to low" },
+        { "value": "date", "label": "Date, new to old" }
+      ],
+      "default": "alphabetical"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 3
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ]
+}
+{% endschema %}
