@@ -21,7 +21,8 @@ const server = http.createServer((req, res) => {
 await new Promise((r) => server.listen(0, '127.0.0.1', r));
 const BASE = `http://127.0.0.1:${server.address().port}`;
 const exe = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const browser = await chromium.launch({ executablePath: exe, args: ['--no-sandbox'] });
+// SwiftShader keeps backdrop-filter honest in the drawer shots (text behind glass sheets stays blurred)
+const browser = await chromium.launch({ executablePath: exe, args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 
 const results = [];
 const check = (name, ok, detail = '') => { results.push({ name, ok, detail }); console.log(`${ok ? '✓' : '✗'} ${name}${detail ? ' — ' + detail : ''}`); };
@@ -97,9 +98,10 @@ for (const vp of [{ n: 'phone', w: 390, h: 844, m: true }, { n: 'desktop', w: 14
     await page.waitForTimeout(350);
     check('product: accordion opens', (await summary.getAttribute('aria-expanded')) === 'true');
   }
-  // tap targets under 44px among visible interactive elements
-  // Touch needs 40px+ (44px design target); fine pointers accept Apple's 36px desktop pills
-  const minH = vp.m ? 40 : 32;
+  // tap targets among visible interactive elements
+  // Touch (pointer: coarse) needs Apple's 44px; fine pointers need 32px (36px desktop pills,
+  // and the footer's dense link rows give each link a 32px hit area)
+  const minH = vp.m ? 44 : 32;
   const small = await page.evaluate((minH) => {
     const out = [];
     for (const el of document.querySelectorAll('a, button, summary, input, select, [role="button"], label.chip')) {
