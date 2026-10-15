@@ -77,7 +77,7 @@
   {%- endif -%}
   {%- if video != blank -%}
     <div class="hero__video" aria-hidden="true">
-      {{ video | video_tag: image_size: '1500x', autoplay: true, loop: true, muted: true, controls: false, preload: 'metadata' }}
+      {{ video | video_tag: image_size: '1500x', autoplay: true, loop: true, muted: true, controls: false }}
     </div>
   {%- endif -%}
   {%- unless has_media -%}
@@ -142,7 +142,7 @@
 
 {%- if layout == 'full-bleed' -%}
   <div
-    class="section section--none color-{{ scheme }} hero hero--full hero--{{ height }} hero--text-{{ text_position }}{% if video != blank %} hero--has-video{% endif %}"
+    class="section section--none color-{{ scheme }} hero hero--full hero--{{ height }} hero--text-{{ text_position }}"
     id="section-{{ section.id }}"
     style="--hero-overlay: {{ overlay }};"
   >
@@ -160,7 +160,7 @@
   </div>
 {%- else -%}
   <div
-    class="section section--none color-{{ scheme }} hero hero--split hero--{{ height }}{% if video != blank %} hero--has-video{% endif %}"
+    class="section section--none color-{{ scheme }} hero hero--split hero--{{ height }}"
     id="section-{{ section.id }}"
   >
     <div class="page-width hero__inner">

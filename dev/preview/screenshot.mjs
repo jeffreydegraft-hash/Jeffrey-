@@ -47,8 +47,14 @@ for (const vp of viewports) {
     await page.evaluate(() => document.fonts && document.fonts.ready);
     // Let @starting-style entrances and reveal observers settle; reveal everything for the full-page capture
     await page.waitForTimeout(400);
+    // Scroll through so lazy images load, then back to the top for the capture
+    await page.evaluate(async () => {
+      const step = window.innerHeight * 0.8;
+      for (let y = 0; y < document.documentElement.scrollHeight; y += step) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); }
+      await Promise.all([...document.images].filter((i) => !i.complete).map((i) => new Promise((r) => { i.onload = i.onerror = r; setTimeout(r, 1500); })));
+    });
     await page.evaluate(() => { document.querySelectorAll('[data-reveal]').forEach((n) => n.classList.add('is-visible')); window.scrollTo(0, 0); });
-    await page.waitForTimeout(250);
+    await page.waitForTimeout(900); // reveal is 500ms + up to 350ms stagger
     const file = path.join(OUT, `${name}--${vp.name}.png`);
     await page.screenshot({ path: file, fullPage: true });
     const h = await page.evaluate(() => document.documentElement.scrollHeight);

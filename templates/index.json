@@ -1,0 +1,287 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Handcrafted biblical anointing oils",
+        "heading": "Anointing oils for <em>prayer</em> and skin.",
+        "subheading": "Nine biblical oil blends, each on a base of 100% olive-derived squalane and our Polyphenol Alpha complex. Carefully blended, tested, and bottled in Richmond, Texas.",
+        "button_label_1": "Shop the oils",
+        "button_link_1": "shopify://collections/all",
+        "button_label_2": "Read our science",
+        "button_link_2": "/pages/our-science",
+        "layout": "split",
+        "height": "tall",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "values": {
+      "type": "values-strip",
+      "blocks": {
+        "value-1": {
+          "type": "value",
+          "settings": {
+            "icon": "drop",
+            "title": "Olive-derived squalane base",
+            "body": "Every blend rests on 100% olive-derived squalane, a lipid similar to the squalene in human skin."
+          }
+        },
+        "value-2": {
+          "type": "value",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Polyphenol Alpha complex",
+            "body": "Our proprietary antioxidant-rich complex is derived entirely from natural botanical sources and formulated to support the skin's natural barrier."
+          }
+        },
+        "value-3": {
+          "type": "value",
+          "settings": {
+            "icon": "leaf",
+            "title": "Natural, paraben-free, vegan",
+            "body": "Every ingredient is derived from biblical botanicals, and every bottle is natural, paraben-free, and vegan."
+          }
+        },
+        "value-4": {
+          "type": "value",
+          "settings": {
+            "icon": "map-pin",
+            "title": "Made in Richmond, Texas",
+            "body": "Each oil is carefully blended, tested, and bottled in our studio in Richmond, Texas."
+          }
+        }
+      },
+      "block_order": [
+        "value-1",
+        "value-2",
+        "value-3",
+        "value-4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "padding": "tight"
+      }
+    },
+    "collection": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "The collection",
+        "heading": "Nine biblical blends, one olive base.",
+        "description": "From Frankincense & Myrrh to Spikenard and Hyssop, each oil carries a botanical named in Scripture and a meaning of its own.",
+        "collection": "all",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "show_view_all": true,
+        "view_all_label": "Shop all oils",
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "image_ratio": "4 / 5",
+        "layout": "image_first",
+        "vertical_align": "center",
+        "eyebrow": "Our story",
+        "heading": "Rooted in Scripture. Made in Texas.",
+        "text": "<p>Anointing oil runs through Scripture, from the tabernacle in Exodus to the house at Bethany. We make oils faithful to that tradition, from the botanicals the Bible names.</p><p>Each blend is carefully blended, tested, and bottled in Richmond, Texas, on a base of olive-derived squalane. Natural, paraben-free, and vegan, made for prayer and made for skin.</p>",
+        "button_label": "Read our story",
+        "button_link": "/pages/about-us",
+        "button_style": "link",
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    },
+    "science": {
+      "type": "science-pillars",
+      "blocks": {
+        "pillar-1": {
+          "type": "pillar",
+          "settings": {
+            "title": "Squalane, the delivery vehicle",
+            "body": "<p>Our base is 100% olive-derived squalane, a lipid similar to the squalene in human skin. It serves as a delivery vehicle, enhancing the bioavailability of every botanical extract in the blend.</p>"
+          }
+        },
+        "pillar-2": {
+          "type": "pillar",
+          "settings": {
+            "title": "Polyphenols from olive and pomegranate",
+            "body": "<p>From the olive come hydroxytyrosol, tyrosol, oleuropein-aglycone derivatives, luteolin, and apigenin. From the pomegranate come ellagitannins and punicalagins. Together they make each oil antioxidant-rich.</p>"
+          }
+        },
+        "pillar-3": {
+          "type": "pillar",
+          "settings": {
+            "title": "The Polyphenol Alpha complex",
+            "body": "<p>Polyphenol Alpha (α) is our proprietary antioxidant-rich complex, derived entirely from natural botanical sources. It blends flavonoids, phenolic acids, stilbenes, and lignans, including ferulic acid, to help neutralize free radicals and support the skin's natural barrier function.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "pillar-1",
+        "pillar-2",
+        "pillar-3"
+      ],
+      "settings": {
+        "eyebrow": "Our science",
+        "heading": "Cosmeceuticals from biblical botanicals.",
+        "intro": "Every Mount of Olives oil is built on three things: a squalane base, polyphenols drawn from the olive and the pomegranate, and our Polyphenol Alpha complex.",
+        "button_label": "Learn more about our science",
+        "button_link": "/pages/our-science",
+        "color_scheme": "scheme-3",
+        "padding": "default"
+      }
+    },
+    "scripture": {
+      "type": "scripture-quote",
+      "settings": {
+        "eyebrow": "From Scripture",
+        "quote": "Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over.",
+        "reference": "Psalm 23:5",
+        "alignment": "center",
+        "color_scheme": "scheme-5",
+        "padding": "default"
+      }
+    },
+    "how-to-use": {
+      "type": "steps",
+      "blocks": {
+        "step-1": {
+          "type": "step",
+          "settings": {
+            "title": "After the shower",
+            "body": "Apply a few drops after showering and towel-drying, and smooth over the skin."
+          }
+        },
+        "step-2": {
+          "type": "step",
+          "settings": {
+            "title": "At the pulse points",
+            "body": "For prayer or daily wear, apply to pulse points such as the wrist."
+          }
+        },
+        "step-3": {
+          "type": "step",
+          "settings": {
+            "title": "In the bath",
+            "body": "Pour a small amount under warm running bath water."
+          }
+        }
+      },
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3"
+      ],
+      "settings": {
+        "heading": "How to use anointing oil",
+        "intro": "",
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    },
+    "squalane": {
+      "type": "featured-product",
+      "settings": {
+        "product": "100-squalane",
+        "eyebrow": "100% Squalane Oil",
+        "heading": "Hydration from head to toe.",
+        "text": "<p>Our 100% Squalane Oil is sustainable, vegan, derived from olives, and steeped in biblical tradition. One ingredient and nothing else, in a 4 oz bottle.</p>",
+        "show_price": true,
+        "button_label": "",
+        "image_position": "right",
+        "color_scheme": "scheme-2",
+        "padding": "default"
+      }
+    },
+    "journal": {
+      "type": "featured-blog",
+      "settings": {
+        "heading": "The Anointing Journal",
+        "intro": "Notes on the botanicals of Scripture, a brief history of anointing oil in the church, and why not all olives are created equal.",
+        "blog": "the-anointing-journal",
+        "posts_to_show": 3,
+        "show_date": true,
+        "show_excerpt": true,
+        "show_view_all": true,
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q-1": {
+          "type": "question",
+          "settings": {
+            "question": "What is anointing oil?",
+            "answer": "<p>Anointing oil is oil set apart for prayer, worship, and consecration, a practice that runs through Scripture from Exodus onward. Ours are blended from botanicals the Bible names, on a base of olive-derived squalane.</p>"
+          }
+        },
+        "q-2": {
+          "type": "question",
+          "settings": {
+            "question": "How do I use it?",
+            "answer": "<p>Apply after showering and towel-drying, or at pulse points such as the wrist. You can also pour a small amount under warm running bath water. For external use only.</p>"
+          }
+        },
+        "q-3": {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe for skin?",
+            "answer": "<p>Our oils are made for the skin. The base is 100% olive-derived squalane, a lipid similar to the squalene in human skin, and every blend is natural, paraben-free, and vegan. They are for external use only, so please read the ingredient list if you have a known sensitivity.</p>"
+          }
+        },
+        "q-4": {
+          "type": "question",
+          "settings": {
+            "question": "What is in the oils, and are they vegan?",
+            "answer": "<p>Every ingredient is derived from biblical botanicals: olive oil, olive-derived squalane, the named botanical such as frankincense or spikenard, and our Polyphenol Alpha complex. All of our oils are natural, paraben-free, and vegan.</p>"
+          }
+        },
+        "q-5": {
+          "type": "question",
+          "settings": {
+            "question": "What sizes do you offer, and how does shipping work?",
+            "answer": "<p>Most blends come in 1 oz (30 mL), 2 oz (60 mL), and 4 oz (118 mL) bottles. Our 100% Squalane Oil comes in 4 oz. US shipping is free on orders of $45 or more.</p>"
+          }
+        },
+        "q-6": {
+          "type": "question",
+          "settings": {
+            "question": "Where are the oils made?",
+            "answer": "<p>Every oil is carefully blended, tested, and bottled in our studio in Richmond, Texas.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q-1",
+        "q-2",
+        "q-3",
+        "q-4",
+        "q-5",
+        "q-6"
+      ],
+      "settings": {
+        "heading": "Questions, answered.",
+        "intro": "",
+        "layout": "two_column",
+        "color_scheme": "scheme-1",
+        "padding": "default"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "values",
+    "collection",
+    "story",
+    "science",
+    "scripture",
+    "how-to-use",
+    "squalane",
+    "journal",
+    "faq"
+  ]
+}

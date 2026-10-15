@@ -51,6 +51,7 @@ function coerceSetting(def, value) {
     case 'page':
       return M.pages[value] || null;
     case 'url':
+      if (value === undefined || value === null) value = def.default;
       return typeof value === 'string' ? value.replace('shopify://collections/', '/collections/').replace('shopify://products/', '/products/').replace('shopify://pages/', '/pages/').replace('shopify://blogs/', '/blogs/') : value;
     case 'range':
     case 'number':
