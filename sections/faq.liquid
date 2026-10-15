@@ -1,0 +1,236 @@
+{%- comment -%}
+  FAQ: a heading and a list of <olivet-accordion> questions (assets/theme.js
+  animates grid-template-rows 0fr → 1fr, the one tolerated layout animation).
+  One column keeps everything in a 46rem measure; two columns pin the heading
+  on the left from 990px while the questions scroll on the right. Emits
+  FAQPage JSON-LD for the questions that have text.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign layout_class = ' faq--one-column'
+  if section.settings.layout == 'two_column'
+    assign layout_class = ' faq--two-column'
+  endif
+
+  assign question_count = 0
+  for block in section.blocks
+    if block.settings.question != blank
+      assign question_count = question_count | plus: 1
+    endif
+  endfor
+
+  assign has_header = false
+  if section.settings.heading != blank or section.settings.intro != blank
+    assign has_header = true
+  endif
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} faq{{ layout_class }}" id="section-{{ section.id }}">
+  <div class="page-width">
+    <div class="faq__layout">
+      {%- if has_header -%}
+        <header class="section__header faq__header" data-reveal>
+          {%- if section.settings.heading != blank -%}
+            <h2 class="h2 faq__heading" id="FaqHeading-{{ section.id }}">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.intro != blank -%}
+            <p class="lead faq__intro">{{ section.settings.intro | escape }}</p>
+          {%- endif -%}
+        </header>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="faq__list">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.question != blank or request.design_mode -%}
+              <olivet-accordion class="accordion faq__item" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>
+                <details id="faq-{{ block.id }}">
+                  <summary class="accordion__summary">
+                    <span class="faq__question">{{ block.settings.question | escape }}</span>
+                    {%- render 'icon', name: 'plus', size: 18 -%}
+                  </summary>
+                  <div class="accordion__content" data-accordion-content>
+                    <div class="accordion__inner">
+                      <div class="rte">{{ block.settings.answer }}</div>
+                    </div>
+                  </div>
+                </details>
+              </olivet-accordion>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- elsif request.design_mode -%}
+        <div class="empty-state faq__empty">
+          {%- render 'icon', name: 'info', size: 36 -%}
+          <p class="muted text-pretty">{{ 'sections.general.add_blocks' | t }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- if question_count > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- assign emitted = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.question != blank -%}
+            {%- if emitted > 0 -%},{%- endif -%}
+            {
+              "@type": "Question",
+              "name": {{ block.settings.question | json }},
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ block.settings.answer | strip_html | strip | json }}
+              }
+            }
+            {%- assign emitted = emitted | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{%- if request.design_mode -%}
+  <script>
+    /* Theme editor: selecting a question block opens it; deselecting closes it. */
+    document.addEventListener('shopify:block:select', (event) => {
+      const item = event.target.closest('.faq__item');
+      if (item && typeof item.open === 'function') item.open();
+    });
+    document.addEventListener('shopify:block:deselect', (event) => {
+      const item = event.target.closest('.faq__item');
+      if (item && typeof item.close === 'function') item.close();
+    });
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Questions, answered."
+    },
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro",
+      "default": "What anointing oil is, how to use it, and what goes into every bottle."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "one_column", "label": "One column" },
+        { "value": "two_column", "label": "Heading beside questions" }
+      ],
+      "default": "two_column"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is anointing oil?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Anointing oil is oil set apart for prayer, worship, and consecration, a practice that runs through Scripture from Exodus onward. Ours are blended from botanicals the Bible names, on a base of olive-derived squalane.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "What is anointing oil?",
+            "answer": "<p>Anointing oil is oil set apart for prayer, worship, and consecration, a practice that runs through Scripture from Exodus onward. Ours are blended from botanicals the Bible names, on a base of olive-derived squalane.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How do I use it?",
+            "answer": "<p>Apply after showering and towel-drying, or at pulse points such as the wrist. You can also pour a small amount under warm running bath water. For external use only.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe for skin?",
+            "answer": "<p>Our oils are made for the skin. The base is 100% olive-derived squalane, a lipid similar to the squalene in human skin, and every blend is natural, paraben-free, and vegan. They are for external use only, so please read the ingredient list if you have a known sensitivity.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "What is in the oils, and are they vegan?",
+            "answer": "<p>Every ingredient is derived from biblical botanicals: olive oil, olive-derived squalane, the named botanical such as frankincense or spikenard, and our Polyphenol Alpha complex. All of our oils are natural, paraben-free, and vegan.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "What sizes do you offer, and how does shipping work?",
+            "answer": "<p>Most blends come in 1 oz (30 mL), 2 oz (60 mL), and 4 oz (118 mL) bottles. Our 100% Squalane Oil comes in 4 oz. US shipping is free on orders of $45 or more.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Where are the oils made?",
+            "answer": "<p>Every oil is carefully blended, tested, and bottled in our studio in Richmond, Texas.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

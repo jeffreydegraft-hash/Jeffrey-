@@ -1,0 +1,243 @@
+{%- comment -%}
+  Multicolumn: a heading and 2–4 columns, each with an optional image or
+  icon, a title, text and a link. Columns can sit flat on the section
+  background or become soft surface cards. Columns stagger in with their
+  own reveal index.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  case section.settings.image_ratio
+    when 'square' or 'circle'
+      assign ratio = '1 / 1'
+    when 'landscape'
+      assign ratio = '3 / 2'
+    else
+      assign ratio = '4 / 5'
+  endcase
+
+  assign col_vw = 100 | divided_by: section.settings.columns
+  assign image_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, (min-width: 750px) 50vw, 100vw'
+
+  assign has_header = false
+  if section.settings.heading != blank or section.settings.intro != blank
+    assign has_header = true
+  endif
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} multicolumn{% if section.settings.background_cards %} multicolumn--cards{% endif %} multicolumn--ratio-{{ section.settings.image_ratio }}" id="section-{{ section.id }}">
+  <div class="page-width">
+    {%- if has_header -%}
+      <header class="section__header multicolumn__header" data-reveal>
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2 multicolumn__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.intro != blank -%}
+          <p class="lead multicolumn__intro">{{ section.settings.intro | escape }}</p>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="multicolumn__grid" role="list" style="--multicolumn-cols: {{ section.settings.columns }};">
+        {%- for block in section.blocks -%}
+          <li class="multicolumn__item" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <div class="multicolumn__media">
+                {%- render 'image', image: block.settings.image, sizes: image_sizes, widths: '300, 400, 500, 600, 800, 1000', class: 'multicolumn__img', loading: 'lazy', ratio: ratio, wrapper_class: 'multicolumn__figure' -%}
+              </div>
+            {%- elsif block.settings.icon != blank and block.settings.icon != 'none' -%}
+              <span class="multicolumn__icon" aria-hidden="true">
+                {%- render 'icon', name: block.settings.icon, size: 22 -%}
+              </span>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h3 class="h4 multicolumn__title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <div class="rte multicolumn__text">{{ block.settings.text }}</div>
+            {%- endif -%}
+            {%- if block.settings.link_label != blank and block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}" class="link link--arrow multicolumn__link">
+                {{ block.settings.link_label | escape }}
+                {%- render 'icon', name: 'arrow-right', size: 18 -%}
+              </a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- elsif request.design_mode -%}
+      <div class="empty-state multicolumn__empty">
+        {%- render 'icon', name: 'info', size: 36 -%}
+        <p class="muted text-pretty">{{ 'sections.general.add_blocks' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Multicolumn",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made with care, from the ground up."
+    },
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "portrait", "label": "Portrait (4:5)" },
+        { "value": "square", "label": "Square" },
+        { "value": "landscape", "label": "Landscape (3:2)" },
+        { "value": "circle", "label": "Circle" }
+      ],
+      "default": "landscape"
+    },
+    {
+      "type": "checkbox",
+      "id": "background_cards",
+      "label": "Show columns as cards",
+      "info": "Soft surface panels with rounded corners.",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Optional. When set, it replaces the icon."
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "drop", "label": "Drop" },
+            { "value": "flask", "label": "Flask" },
+            { "value": "olive", "label": "Olive" },
+            { "value": "sparkle", "label": "Sparkle" },
+            { "value": "star", "label": "Star" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "map-pin", "label": "Map pin" },
+            { "value": "mail", "label": "Mail" },
+            { "value": "phone", "label": "Phone" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "calendar", "label": "Calendar" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "check", "label": "Check" },
+            { "value": "info", "label": "Info" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "quote", "label": "Quote" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Olive-derived squalane base"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Every blend rests on 100% olive-derived squalane, a lipid similar to the squalene in human skin.</p>"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Multicolumn",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "icon": "drop",
+            "title": "Olive-derived squalane base",
+            "text": "<p>Every blend rests on 100% olive-derived squalane, a lipid similar to the squalene in human skin.</p>"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "icon": "flask",
+            "title": "Polyphenol Alpha complex",
+            "text": "<p>Our proprietary antioxidant-rich complex is derived entirely from natural botanical sources and formulated to support the skin's natural barrier.</p>"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "icon": "leaf",
+            "title": "Natural, paraben-free, vegan",
+            "text": "<p>Every ingredient is derived from biblical botanicals, and every bottle is natural, paraben-free, and vegan.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

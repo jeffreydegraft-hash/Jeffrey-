@@ -1,0 +1,186 @@
+{%- comment -%}
+  Science pillars: a dark editorial band. Eyebrow, serif heading and intro on
+  the left (44rem), then a row of numbered pillars (01, 02, 03…) each set
+  under a thin hairline, lifting into view with a staggered reveal. The gold
+  serif numerals do the decorating; nothing else moves.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign pillar_count = section.blocks.size
+  assign cols_desktop = pillar_count | at_most: 4 | at_least: 1
+  if pillar_count == 3
+    assign cols_tablet = 3
+  else
+    assign cols_tablet = pillar_count | at_most: 2 | at_least: 1
+  endif
+
+  assign has_header = false
+  if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.intro != blank
+    assign has_header = true
+  endif
+
+  assign has_cta = false
+  if section.settings.button_label != blank and section.settings.button_link != blank
+    assign has_cta = true
+  endif
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} science-pillars" id="section-{{ section.id }}">
+  <div class="page-width">
+    {%- if has_header -%}
+      <header class="section__header science-pillars__header" data-reveal>
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2 science-pillars__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.intro != blank -%}
+          <p class="lead science-pillars__intro">{{ section.settings.intro | escape }}</p>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- if pillar_count > 0 -%}
+      <ol class="science-pillars__grid" role="list" style="--pillars-cols: {{ cols_desktop }}; --pillars-cols-tablet: {{ cols_tablet }};">
+        {%- for block in section.blocks -%}
+          <li class="science-pillars__pillar" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>
+            <span class="science-pillars__numeral" aria-hidden="true">
+              {%- if forloop.index < 10 -%}0{%- endif -%}{{ forloop.index }}
+            </span>
+            {%- if block.settings.title != blank -%}
+              <h3 class="h4 science-pillars__title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <div class="science-pillars__body">{{ block.settings.body }}</div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- elsif request.design_mode -%}
+      <div class="empty-state science-pillars__empty">
+        {%- render 'icon', name: 'info', size: 36 -%}
+        <p class="muted text-pretty">{{ 'sections.general.add_blocks' | t }}</p>
+      </div>
+    {%- endif -%}
+
+    {%- if has_cta -%}
+      <div class="science-pillars__cta" data-reveal>
+        <a href="{{ section.settings.button_link }}" class="btn btn--primary">{{ section.settings.button_label | escape }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Science pillars",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Our science"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Cosmeceuticals from biblical botanicals."
+    },
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Every Mount of Olives oil is built on three things: a squalane base, polyphenols drawn from the olive and the pomegranate, and our Polyphenol Alpha complex."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Learn more about our science"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "default": "/pages/our-science"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pillar",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Squalane, the delivery vehicle"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body",
+          "default": "<p>Our base is 100% olive-derived squalane, a lipid similar to the squalene in human skin. It serves as a delivery vehicle, enhancing the bioavailability of every botanical extract in the blend.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Science pillars",
+      "blocks": [
+        {
+          "type": "pillar",
+          "settings": {
+            "title": "Squalane, the delivery vehicle",
+            "body": "<p>Our base is 100% olive-derived squalane, a lipid similar to the squalene in human skin. It serves as a delivery vehicle, enhancing the bioavailability of every botanical extract in the blend.</p>"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "title": "Polyphenols from olive and pomegranate",
+            "body": "<p>From the olive come hydroxytyrosol, tyrosol, oleuropein-aglycone derivatives, luteolin, and apigenin. From the pomegranate come ellagitannins and punicalagins. Together they make each oil antioxidant-rich.</p>"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "title": "The Polyphenol Alpha complex",
+            "body": "<p>Polyphenol Alpha (α) is our proprietary antioxidant-rich complex, derived entirely from natural botanical sources. It blends flavonoids, phenolic acids, stilbenes, and lignans, including ferulic acid, to help neutralize free radicals and support the skin's natural barrier function.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

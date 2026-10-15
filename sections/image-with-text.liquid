@@ -1,0 +1,176 @@
+{%- comment -%}
+  Image with text: a 12-column editorial pair at 990px and up (image 6/12,
+  text 5/12, one empty column between), stacked below. The image can lead or
+  follow the text; the text block can sit at the top, middle or bottom of the
+  image's height.
+  Motion: media and text reveal on scroll (data-reveal), text one step later.
+{%- endcomment -%}
+{%- liquid
+  assign layout = section.settings.layout | default: 'image_first'
+  assign layout_class = layout | replace: '_', '-'
+  assign ratio = section.settings.image_ratio | default: '4 / 5'
+  assign vertical_align = section.settings.vertical_align | default: 'center'
+  assign button_style = section.settings.button_style | default: 'link'
+
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign show_button = false
+  if section.settings.button_label != blank and section.settings.button_link != blank
+    assign show_button = true
+  endif
+-%}
+<div
+  class="section{{ padding_class }} color-{{ section.settings.color_scheme }} image-with-text image-with-text--{{ layout_class }} image-with-text--align-{{ vertical_align }}"
+  id="section-{{ section.id }}"
+>
+  <div class="page-width">
+    <div class="image-with-text__grid">
+      <div class="image-with-text__media media" data-reveal style="--ratio: {{ ratio }}; --i: 0;">
+        {%- if section.settings.image != blank -%}
+          {%- render 'image', image: section.settings.image, sizes: '(min-width: 990px) 50vw, 100vw', widths: '400, 600, 800, 1200, 1600', loading: 'lazy', class: 'image-with-text__img' -%}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+      <div class="image-with-text__content" data-reveal style="--i: 1;">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow image-with-text__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2 image-with-text__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="rte image-with-text__text">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if show_button -%}
+          <div class="image-with-text__cta">
+            {%- if button_style == 'button' -%}
+              <a href="{{ section.settings.button_link }}" class="btn btn--secondary">{{ section.settings.button_label | escape }}</a>
+            {%- else -%}
+              <a href="{{ section.settings.button_link }}" class="link link--arrow">
+                {{ section.settings.button_label | escape }}
+                {%- render 'icon', name: 'arrow-right', size: 18 -%}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "4 / 5", "label": "Portrait (4:5)" },
+        { "value": "1 / 1", "label": "Square" },
+        { "value": "3 / 2", "label": "Landscape (3:2)" }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "image_first", "label": "Image first" },
+        { "value": "text_first", "label": "Text first" }
+      ],
+      "default": "image_first"
+    },
+    {
+      "type": "select",
+      "id": "vertical_align",
+      "label": "Text alignment",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Middle" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Our story"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Rooted in Scripture. Made in Texas."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Anointing oil runs through Scripture, from the tabernacle in Exodus to the house at Bethany. We make oils faithful to that tradition, from the botanicals the Bible names.</p><p>Each blend is carefully blended, tested, and bottled in Richmond, Texas, on a base of olive-derived squalane. Natural, paraben-free, and vegan, made for prayer and made for skin.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Read our story"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "default": "/pages/about-us"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "link", "label": "Arrow link" },
+        { "value": "button", "label": "Button" }
+      ],
+      "default": "link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text"
+    }
+  ]
+}
+{% endschema %}

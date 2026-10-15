@@ -1,0 +1,161 @@
+{%- comment -%}
+  Newsletter: a serif heading, a line of text and a customer form. Centered
+  by default; "split" puts the words on the left and the form on the right
+  from 990px. Subscribers are added as customers tagged "newsletter". After
+  a post the form is replaced by a success status (or shows the email error
+  inline). Status messages enter with the no-JS @starting-style fade.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign form_id = 'Newsletter-' | append: section.id
+  assign input_id = form_id | append: '-email'
+  assign button_label = section.settings.button_label
+  if button_label == blank
+    assign button_label = 'newsletter.button_label' | t
+  endif
+
+  assign has_header = false
+  if section.settings.heading != blank or section.settings.text != blank
+    assign has_header = true
+  endif
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} newsletter newsletter--{{ section.settings.layout }}" id="section-{{ section.id }}">
+  <div class="page-width">
+    <div class="newsletter__inner">
+      {%- if has_header -%}
+        <header class="newsletter__header" data-reveal>
+          <span class="newsletter__rule" aria-hidden="true"></span>
+          {%- if section.settings.heading != blank -%}
+            <h2 class="h2 newsletter__heading" id="{{ form_id }}-heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.text != blank -%}
+            <p class="lead newsletter__text">{{ section.settings.text | escape }}</p>
+          {%- endif -%}
+        </header>
+      {%- endif -%}
+
+      <div class="newsletter__form-wrap" data-reveal style="--i: 1">
+        {%- form 'customer', id: form_id, class: 'newsletter__form', novalidate: 'novalidate' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="form-status form-status--success newsletter__status enter" id="{{ form_id }}-success" role="status" tabindex="-1" autofocus>
+              {%- render 'icon', name: 'success', size: 18 -%}
+              <span>{{ 'newsletter.success' | t }}</span>
+            </p>
+          {%- else -%}
+            <div class="inline-form newsletter__row">
+              <div class="field">
+                <label class="field__label visually-hidden" for="{{ input_id }}">{{ 'newsletter.label' | t }}</label>
+                <input
+                  id="{{ input_id }}"
+                  type="email"
+                  name="contact[email]"
+                  class="field__input newsletter__input"
+                  value="{{ form.email | escape }}"
+                  placeholder="{{ 'newsletter.placeholder' | t }}"
+                  autocomplete="email"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  inputmode="email"
+                  required
+                  aria-required="true"
+                  {% if form.errors %}
+                    aria-invalid="true"
+                    aria-describedby="{{ form_id }}-error"
+                    autofocus
+                  {% endif %}
+                >
+              </div>
+              <button type="submit" class="btn btn--primary newsletter__button" name="commit">{{ button_label | escape }}</button>
+            </div>
+            {%- if form.errors -%}
+              <p class="form-status form-status--error newsletter__status enter" id="{{ form_id }}-error" role="alert">
+                {%- render 'icon', name: 'error', size: 18 -%}
+                <span>{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</span>
+              </p>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
+        {%- if section.settings.privacy_note != blank -%}
+          <p class="caption newsletter__note">{{ section.settings.privacy_note | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Letters from the studio"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "New blends, notes from the Anointing Journal, and a word of encouragement now and then. We write only when we have something worth saying."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "privacy_note",
+      "label": "Small print",
+      "info": "One line under the form, for example a privacy note. Optional.",
+      "default": "No noise, and you can leave at any time."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "center", "label": "Centered" },
+        { "value": "split", "label": "Heading beside form" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-5"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

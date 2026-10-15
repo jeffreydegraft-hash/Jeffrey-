@@ -1,0 +1,164 @@
+{%- comment -%}
+  Steps ("How to use"): a centred heading and intro, then up to three columns
+  (one on phones). Each step: optional image, a big gold serif numeral
+  (01, 02, 03), a hairline, the title and a short body. A footnote under the
+  grid carries the external-use line.
+  Motion: steps reveal with a 50ms stagger (data-reveal + --i).
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign cols = section.blocks.size | at_most: 3 | at_least: 1
+
+  assign has_header = false
+  if section.settings.heading != blank or section.settings.intro != blank
+    assign has_header = true
+  endif
+-%}
+{%- if section.blocks.size > 0 or request.design_mode -%}
+  <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} steps" id="section-{{ section.id }}">
+    <div class="page-width">
+      {%- if has_header -%}
+        <header class="section__header section__header--center steps__header" data-reveal>
+          {%- if section.settings.heading != blank -%}
+            <h2 class="h2 steps__heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.intro != blank -%}
+            <p class="lead steps__intro">{{ section.settings.intro | escape }}</p>
+          {%- endif -%}
+        </header>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ol class="grid steps__grid" role="list" style="--cols-desktop: {{ cols }}; --cols-tablet: {{ cols }};">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign numeral = forloop.index | prepend: '0' | slice: -2, 2
+            -%}
+            <li class="steps__item" data-reveal style="--i: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                <div class="media steps__media" style="--ratio: 4 / 3;">
+                  {%- render 'image', image: block.settings.image, sizes: '(min-width: 990px) 33vw, 100vw', widths: '400, 600, 800, 1200', loading: 'lazy', class: 'steps__img' -%}
+                </div>
+              {%- endif -%}
+              <span class="steps__numeral" aria-hidden="true">{{ numeral }}</span>
+              <span class="steps__rule" aria-hidden="true"></span>
+              {%- if block.settings.title != blank -%}
+                <h3 class="h4 steps__title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+              {%- if block.settings.body != blank -%}
+                <p class="small muted steps__body">{{ block.settings.body | escape }}</p>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ol>
+        <p class="caption steps__footnote">{{ 'products.product.external_use' | t }}</p>
+      {%- else -%}
+        <div class="empty-state steps__empty">
+          {%- render 'icon', name: 'info', size: 36 -%}
+          <p class="muted text-pretty">{{ 'sections.steps.empty' | t }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Steps",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "How to use anointing oil"
+    },
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "After the shower"
+        },
+        {
+          "type": "text",
+          "id": "body",
+          "label": "Body",
+          "default": "Apply a few drops after showering and towel-drying, and smooth over the skin."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Optional. Shown above the numeral at 4:3."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Steps",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "After the shower",
+            "body": "Apply a few drops after showering and towel-drying, and smooth over the skin."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "At the pulse points",
+            "body": "For prayer or daily wear, apply to pulse points such as the wrist."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "In the bath",
+            "body": "Pour a small amount under warm running bath water. For external use only."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

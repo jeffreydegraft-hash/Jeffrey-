@@ -1,0 +1,160 @@
+{%- comment -%}
+  Featured blog: a heading, intro and the latest posts from one blog as
+  article cards (snippets/card-article.liquid, pages group). With no blog
+  chosen it falls back to "the-anointing-journal"; a missing or empty blog
+  keeps the heading and shows a designed empty state instead of a hole.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign blog = section.settings.blog
+  if blog == blank
+    assign blog = blogs['the-anointing-journal']
+  endif
+
+  assign limit = section.settings.posts_to_show | default: 3
+  assign has_posts = false
+  if blog != blank and blog.articles_count > 0
+    assign has_posts = true
+  endif
+
+  assign cols = 3
+  if limit == 2
+    assign cols = 2
+  elsif limit == 4
+    assign cols = 4
+  endif
+
+  assign show_view_all = false
+  if section.settings.show_view_all and has_posts and blog.articles_count > limit
+    assign show_view_all = true
+  endif
+
+  assign has_header = false
+  if section.settings.heading != blank or section.settings.intro != blank or show_view_all
+    assign has_header = true
+  endif
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-blog" id="section-{{ section.id }}">
+  <div class="page-width">
+    {%- if has_header -%}
+      <header class="section__header section__header--row featured-blog__header" data-reveal>
+        <div class="stack stack--sm">
+          {%- if section.settings.heading != blank -%}
+            <h2 class="h2 featured-blog__heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.intro != blank -%}
+            <p class="lead featured-blog__intro">{{ section.settings.intro | escape }}</p>
+          {%- endif -%}
+        </div>
+        {%- if show_view_all -%}
+          <a href="{{ blog.url }}" class="link link--arrow featured-blog__view-all">
+            {{ 'blogs.general.all_posts' | t }}
+            {%- render 'icon', name: 'arrow-right', size: 18 -%}
+          </a>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- if has_posts -%}
+      <ul class="grid featured-blog__grid" role="list" style="--cols-desktop: {{ cols }}; --cols-tablet: 2;">
+        {%- for article in blog.articles limit: limit -%}
+          <li class="featured-blog__item">
+            {%- render 'card-article', article: article, index: forloop.index0, show_date: section.settings.show_date, show_excerpt: section.settings.show_excerpt -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <div class="empty-state featured-blog__empty">
+        {%- render 'icon', name: 'quote', size: 36 -%}
+        <h3 class="h4">{{ 'blogs.general.empty' | t }}</h3>
+        <p class="muted text-pretty">{{ 'blogs.general.empty_body' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured blog",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Anointing Journal"
+    },
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Notes on the botanicals of Scripture, a brief history of anointing oil in the church, and why not all olives are created equal."
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog",
+      "info": "Leave empty to show “The Anointing Journal”."
+    },
+    {
+      "type": "range",
+      "id": "posts_to_show",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Posts to show",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show “All posts” link",
+      "info": "Shown when the blog has more posts than the section displays.",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured blog"
+    }
+  ]
+}
+{% endschema %}

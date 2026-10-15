@@ -1,0 +1,318 @@
+{%- comment -%}
+  Hero: the first screen of the homepage.
+
+  Two layouts:
+  - split: page-width grid, text left, a tall 4:5 media right.
+  - full-bleed: media as the background, a dark scrim (scheme-3) over it, text
+    placed by text_position.
+
+  Motion (all CSS, no JS, named purposes):
+  - Text staggers in with .enter + --i (@starting-style, base.css): marketing
+    entrance; the heading is readable the instant the page paints.
+  - Split media wipes in with a clip-path from the top; full-bleed media fades.
+  - Video autoplays muted and looped; with prefers-reduced-motion the video is
+    hidden and its poster (or the image) shows instead.
+  Nothing here carries data-reveal.
+{%- endcomment -%}
+{%- liquid
+  assign layout = section.settings.layout | default: 'split'
+  assign height = section.settings.height | default: 'auto'
+  assign text_position = section.settings.text_position | default: 'left'
+  assign video = section.settings.video
+  assign image = section.settings.image
+  assign image_mobile = section.settings.image_mobile
+
+  if image == blank and video != blank
+    assign image = video.preview_image
+  endif
+
+  assign has_media = false
+  if image != blank or video != blank
+    assign has_media = true
+  endif
+
+  comment
+    Full-bleed with nothing to show: the dark scheme carries the gold ornament
+    so the scrim and the light text still read.
+  endcomment
+  assign scheme = section.settings.color_scheme
+  if layout == 'full-bleed' and has_media == false
+    assign scheme = 'scheme-3'
+  endif
+
+  assign overlay = section.settings.overlay_opacity | divided_by: 100.0
+
+  if layout == 'full-bleed'
+    assign image_sizes = '100vw'
+    assign image_widths = '750, 1000, 1500, 2000'
+  else
+    assign image_sizes = '(min-width: 990px) 50vw, 100vw'
+    assign image_widths = '400, 600, 800, 1200, 1600'
+  endif
+
+  assign show_button_1 = false
+  if section.settings.button_label_1 != blank and section.settings.button_link_1 != blank
+    assign show_button_1 = true
+  endif
+  assign show_button_2 = false
+  if section.settings.button_label_2 != blank and section.settings.button_link_2 != blank
+    assign show_button_2 = true
+  endif
+-%}
+
+{%- capture hero_media -%}
+  {%- if image != blank -%}
+    {%- if image_mobile != blank -%}
+      <picture>
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ image_mobile | image_url: width: 480 }} 480w, {{ image_mobile | image_url: width: 750 }} 750w, {{ image_mobile | image_url: width: 1000 }} 1000w, {{ image_mobile | image_url: width: 1500 }} 1500w"
+          sizes="100vw"
+        >
+        {%- render 'image', image: image, sizes: image_sizes, widths: image_widths, loading: 'eager', fetchpriority: 'high', class: 'hero__img' -%}
+      </picture>
+    {%- else -%}
+      {%- render 'image', image: image, sizes: image_sizes, widths: image_widths, loading: 'eager', fetchpriority: 'high', class: 'hero__img', preload: true -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- if video != blank -%}
+    <div class="hero__video" aria-hidden="true">
+      {{ video | video_tag: image_size: '1500x', autoplay: true, loop: true, muted: true, controls: false, preload: 'metadata' }}
+    </div>
+  {%- endif -%}
+  {%- unless has_media -%}
+    <div class="hero__ornament" aria-hidden="true">
+      <svg class="hero__branch" viewBox="0 0 400 500" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+        <defs>
+          <g id="hero-leaf-{{ section.id }}">
+            <path d="M0 0C-13 -7 -25 -23 -27 -46C-9 -40 2 -21 0 0Z"/>
+            <path d="M-2 -5C-9 -14 -16 -26 -22 -38" opacity=".55"/>
+          </g>
+        </defs>
+        <path d="M214 468C210 452 208 436 206 420S201 388 199 372S196 340 195 324S195 292 196 276S198 244 199 228S200 196 200 180S199 148 199 132S200 104 200 88S199 60 197 44"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(206 420) rotate(-15)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(204 406) scale(-1 1) rotate(-10)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(199 372) scale(-1 1) rotate(-22)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(197 358) rotate(4)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(195 324) rotate(-26)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(195 310) scale(-1 1) rotate(2)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(196 276) scale(-1 1) rotate(-16)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(197 262) rotate(10)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(199 228) rotate(-12)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(200 214) scale(-1 1) rotate(-26)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(200 180) scale(-1 1) rotate(-4)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(200 166) rotate(-30)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(199 132) rotate(-2)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(200 118) scale(-1 1) rotate(-16)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(200 88) scale(-1 1) rotate(-30)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(199 74) rotate(-20)"/>
+        <use href="#hero-leaf-{{ section.id }}" transform="translate(197 44) rotate(22) scale(.75)"/>
+        <path d="M195 324C189 331 183 337 179 343"/>
+        <ellipse cx="175" cy="352" rx="6.5" ry="9.5" transform="rotate(-28 175 352)"/>
+        <path d="M199 228C205 234 211 240 215 246"/>
+        <ellipse cx="219" cy="255" rx="6.5" ry="9.5" transform="rotate(24 219 255)"/>
+        <path d="M200 132C194 137 189 142 185 147"/>
+        <ellipse cx="181" cy="156" rx="6.5" ry="9.5" transform="rotate(-24 181 156)"/>
+      </svg>
+    </div>
+  {%- endunless -%}
+{%- endcapture -%}
+
+{%- capture hero_content -%}
+  {%- if section.settings.eyebrow != blank -%}
+    <p class="eyebrow hero__eyebrow enter" style="--i: 0;">{{ section.settings.eyebrow | escape }}</p>
+  {%- endif -%}
+  {%- if section.settings.heading != blank -%}
+    <h1 class="h0 hero__heading enter" style="--i: 1;">{{ section.settings.heading }}</h1>
+  {%- endif -%}
+  {%- if section.settings.subheading != blank -%}
+    <p class="lead hero__subheading enter" style="--i: 2;">{{ section.settings.subheading | escape }}</p>
+  {%- endif -%}
+  {%- if show_button_1 or show_button_2 -%}
+    <div class="cluster hero__actions enter" style="--i: 3;">
+      {%- if show_button_1 -%}
+        <a href="{{ section.settings.button_link_1 }}" class="btn btn--primary btn--lg hero__button">{{ section.settings.button_label_1 | escape }}</a>
+      {%- endif -%}
+      {%- if show_button_2 -%}
+        <a href="{{ section.settings.button_link_2 }}" class="btn btn--secondary btn--lg hero__button">{{ section.settings.button_label_2 | escape }}</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if layout == 'full-bleed' -%}
+  <div
+    class="section section--none color-{{ scheme }} hero hero--full hero--{{ height }} hero--text-{{ text_position }}{% if video != blank %} hero--has-video{% endif %}"
+    id="section-{{ section.id }}"
+    style="--hero-overlay: {{ overlay }};"
+  >
+    <div class="hero__bg">
+      {{ hero_media }}
+    </div>
+    <div class="hero__overlay color-scheme-3">
+      <div class="hero__scrim" aria-hidden="true"></div>
+      <div class="page-width hero__inner">
+        <div class="hero__content">
+          {{ hero_content }}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- else -%}
+  <div
+    class="section section--none color-{{ scheme }} hero hero--split hero--{{ height }}{% if video != blank %} hero--has-video{% endif %}"
+    id="section-{{ section.id }}"
+  >
+    <div class="page-width hero__inner">
+      <div class="hero__content">
+        {{ hero_content }}
+      </div>
+      <div class="hero__media media" style="--ratio: 4 / 5;">
+        {{ hero_media }}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Hero",
+  "class": "section-hero",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Handcrafted biblical anointing oils"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Italicise a word for emphasis.",
+      "default": "Anointing oils for prayer and skin."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Nine biblical oil blends, each on a base of 100% olive-derived squalane and our Polyphenol Alpha complex. Carefully blended, tested, and bottled in Richmond, Texas."
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "label": "First button label",
+      "default": "Shop the oils"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "First button link",
+      "default": "shopify://collections/all"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Second button label",
+      "default": "Read our science"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Second button link",
+      "default": "/pages/our-science"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Portrait (4:5) for the split layout, landscape for full-bleed. Without an image an olive-branch ornament is drawn in its place."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image",
+      "info": "Optional. Shown below 750px instead of the image above."
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Optional. Plays muted and looped; its poster shows for visitors who prefer reduced motion."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "split", "label": "Split (text and media side by side)" },
+        { "value": "full-bleed", "label": "Full-bleed (text over media)" }
+      ],
+      "default": "split"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "options": [
+        { "value": "auto", "label": "Standard" },
+        { "value": "tall", "label": "Tall" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position",
+      "info": "Full-bleed layout only.",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "info": "Full-bleed layout only. Darkens the media so the text stays legible.",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}

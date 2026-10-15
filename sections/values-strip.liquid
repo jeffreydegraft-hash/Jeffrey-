@@ -1,0 +1,164 @@
+{%- comment -%}
+  Values strip: up to four short brand promises, each an icon in a soft
+  circle, a title and a line of body text. A description list, so the items
+  stay semantic without claiming a heading level between the hero and the
+  first real h2.
+  Motion: items reveal with a 50ms stagger (data-reveal + --i).
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign strip_class = ''
+  if section.settings.divider_top
+    assign strip_class = strip_class | append: ' values-strip--divider-top'
+  endif
+  if section.settings.divider_bottom
+    assign strip_class = strip_class | append: ' values-strip--divider-bottom'
+  endif
+-%}
+{%- if section.blocks.size > 0 or request.design_mode -%}
+  <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} values-strip{{ strip_class }}" id="section-{{ section.id }}">
+    <div class="page-width">
+      {%- if section.blocks.size > 0 -%}
+        <dl class="grid grid--4 grid--mobile-2 values-strip__grid">
+          {%- for block in section.blocks -%}
+            <div class="values-strip__item" data-reveal style="--i: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
+              <span class="values-strip__icon" aria-hidden="true">
+                {%- render 'icon', name: block.settings.icon, size: 20 -%}
+              </span>
+              <dt class="h5 values-strip__title">{{ block.settings.title | escape }}</dt>
+              <dd class="small muted values-strip__body">{{ block.settings.body | escape }}</dd>
+            </div>
+          {%- endfor -%}
+        </dl>
+      {%- else -%}
+        <div class="empty-state values-strip__empty">
+          {%- render 'icon', name: 'info', size: 36 -%}
+          <p class="muted text-pretty">{{ 'sections.values_strip.empty' | t }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Values strip",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "checkbox",
+      "id": "divider_top",
+      "label": "Show top divider",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "divider_bottom",
+      "label": "Show bottom divider",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "tight"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "drop", "label": "Drop" },
+            { "value": "sparkle", "label": "Sparkle" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "map-pin", "label": "Map pin" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "flask", "label": "Flask" },
+            { "value": "olive", "label": "Olive" },
+            { "value": "truck", "label": "Truck" }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Natural, paraben-free, vegan"
+        },
+        {
+          "type": "text",
+          "id": "body",
+          "label": "Body",
+          "default": "Every ingredient is derived from biblical botanicals, and every bottle is natural, paraben-free, and vegan."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Values strip",
+      "blocks": [
+        {
+          "type": "value",
+          "settings": {
+            "icon": "drop",
+            "title": "Olive-derived squalane base",
+            "body": "Every blend rests on 100% olive-derived squalane, a lipid similar to the squalene in human skin."
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Polyphenol Alpha complex",
+            "body": "Our proprietary antioxidant-rich complex is derived entirely from natural botanical sources and formulated to support the skin's natural barrier."
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "icon": "leaf",
+            "title": "Natural, paraben-free, vegan",
+            "body": "Every ingredient is derived from biblical botanicals, and every bottle is natural, paraben-free, and vegan."
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "icon": "map-pin",
+            "title": "Made in Richmond, Texas",
+            "body": "Each oil is carefully blended, tested, and bottled in our studio in Richmond, Texas."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,231 @@
+{%- comment -%}
+  Featured product: one product, two columns. Media on one side; on the
+  other an eyebrow, serif heading, price, short text and an add-to-cart form
+  handled by <product-form> (assets/cart.js, cart group). Products with
+  variants get a native <select name="id"> listing each variant with its
+  price; single-variant products post a hidden id. With no product chosen
+  the section renders a placeholder so the editor never shows a hole.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign product = section.settings.product
+  assign form_id = 'FeaturedProduct-' | append: section.id
+  assign select_id = form_id | append: '-variant'
+  assign variant = product.selected_or_first_available_variant
+
+  assign heading = section.settings.heading
+  if heading == blank and product != blank
+    assign heading = product.title | escape
+  endif
+
+  assign media_alt = ''
+  if product != blank
+    assign media_alt = product.featured_media.alt | default: product.title
+  endif
+
+  assign unavailable = false
+  if product == blank or variant == null or variant.available == false
+    assign unavailable = true
+  endif
+
+  if product != blank and variant == null
+    assign add_label = 'products.product.unavailable' | t
+  elsif product != blank and variant.available == false
+    assign add_label = 'products.product.sold_out' | t
+  elsif section.settings.button_label != blank
+    assign add_label = section.settings.button_label
+  else
+    assign add_label = 'products.product.add_to_cart' | t
+  endif
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-product featured-product--image-{{ section.settings.image_position }}" id="section-{{ section.id }}">
+  <div class="page-width">
+    <div class="featured-product__grid">
+      <div class="featured-product__media" data-reveal>
+        {%- if product != blank and product.featured_media != blank -%}
+          <a href="{{ product.url }}" class="featured-product__media-link" aria-label="{{ product.title | escape }}" tabindex="-1">
+            {%- render 'image', image: product.featured_media, sizes: '(min-width: 990px) 50vw, 100vw', widths: '400, 600, 800, 1000, 1200, 1600', class: 'featured-product__img', loading: 'lazy', ratio: '4 / 5', wrapper_class: 'featured-product__figure', alt: media_alt -%}
+          </a>
+        {%- else -%}
+          <div class="media featured-product__figure" style="--ratio: 4 / 5;">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="featured-product__content" data-reveal style="--i: 1">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow featured-product__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        <h2 class="h2 featured-product__heading">
+          {%- if heading != blank -%}
+            {{ heading }}
+          {%- else -%}
+            {{ 'sections.featured_product.placeholder_title' | t }}
+          {%- endif -%}
+        </h2>
+
+        {%- if section.settings.show_price -%}
+          <div class="featured-product__price">
+            {%- if product != blank -%}
+              {%- render 'price', product: product, show_badges: true, price_class: 'price--large' -%}
+            {%- else -%}
+              <div class="price price--large">
+                <div class="price__container">
+                  <div class="price__regular">
+                    <span class="price__item price__item--regular money">{{ 2398 | money }}</span>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <div class="rte featured-product__text">{{ section.settings.text }}</div>
+        {%- endif -%}
+
+        {%- if product != blank -%}
+          <product-form class="product-form featured-product__form-wrap" data-section-id="{{ section.id }}">
+            <p class="product-form__error form-status form-status--error" role="alert" hidden></p>
+            {%- form 'product', product, id: form_id, class: 'featured-product__form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              {%- if product.has_only_default_variant -%}
+                <input type="hidden" name="id" value="{{ variant.id }}"{% if unavailable %} disabled{% endif %}>
+              {%- else -%}
+                <div class="field featured-product__field">
+                  <label class="field__label" for="{{ select_id }}">{{ product.options | join: ' / ' | escape }}</label>
+                  <div class="select">
+                    <select id="{{ select_id }}" name="id" class="field__select featured-product__select">
+                      {%- for option_variant in product.variants -%}
+                        <option
+                          value="{{ option_variant.id }}"
+                          {% if option_variant.id == variant.id %}selected{% endif %}
+                          {% unless option_variant.available %}disabled{% endunless %}
+                        >
+                          {{ option_variant.title | escape }} &mdash; {{ option_variant.price | money }}
+                          {%- unless option_variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless -%}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                    {%- render 'icon', name: 'chevron-down', size: 18 -%}
+                  </div>
+                </div>
+              {%- endif -%}
+              <button
+                type="submit"
+                name="add"
+                class="btn btn--primary btn--lg featured-product__submit"
+                {% if unavailable %}disabled{% endif %}
+                {% if settings.cart_type == 'drawer' %}aria-haspopup="dialog"{% endif %}
+              >
+                <span class="btn__content"><span data-add-label>{{ add_label | escape }}</span></span>
+                {%- render 'loading-spinner' -%}
+              </button>
+            {%- endform -%}
+          </product-form>
+          <a href="{{ product.url }}" class="link link--arrow featured-product__details">
+            {{ 'products.product.view_full_details' | t }}
+            {%- render 'icon', name: 'arrow-right', size: 18 -%}
+          </a>
+        {%- else -%}
+          <div class="featured-product__form">
+            <button type="button" class="btn btn--primary btn--lg featured-product__submit" disabled>
+              <span class="btn__content"><span>{{ add_label | escape }}</span></span>
+            </button>
+          </div>
+          {%- if request.design_mode -%}
+            <p class="caption featured-product__hint">{{ 'sections.featured_product.no_product' | t }}</p>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured product",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "100% Squalane Oil"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave empty to use the product title.",
+      "default": "Hydration from head to toe."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Our 100% Squalane Oil is sustainable, vegan, derived from olives, and steeped in biblical tradition. One ingredient and nothing else, in a 4 oz bottle.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Add-to-cart button label",
+      "info": "Leave empty to use “Add to cart”. Sold-out products always read “Sold out”.",
+      "default": "Shop 100% Squalane"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured product"
+    }
+  ]
+}
+{% endschema %}

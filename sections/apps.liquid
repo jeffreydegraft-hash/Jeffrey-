@@ -1,0 +1,52 @@
+{%- comment -%}
+  Apps: a container for app blocks. "Include margins" wraps the blocks in
+  the page width with section spacing; off, apps get the full width and
+  manage their own spacing. In the editor an empty section shows a hint.
+{%- endcomment -%}
+<div class="apps color-{{ section.settings.color_scheme }}{% if section.settings.include_margins %} section apps--margins{% endif %}" id="section-{{ section.id }}">
+  <div class="apps__inner{% if section.settings.include_margins %} page-width{% endif %}">
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        {%- render block -%}
+      {%- endfor -%}
+    {%- elsif request.design_mode -%}
+      <div class="empty-state apps__empty">
+        {%- render 'icon', name: 'info', size: 36 -%}
+        <p class="muted text-pretty">{{ 'sections.apps.empty' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Apps",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "include_margins",
+      "label": "Make section margins the same as theme",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Apps"
+    }
+  ]
+}
+{% endschema %}

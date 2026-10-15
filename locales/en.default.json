@@ -371,10 +371,30 @@
       "cta": "Go to the homepage"
     },
     "featured_collection": {
-      "view_all": "View all"
+      "view_all": "View all",
+      "empty": "Products will appear here as soon as this collection has some."
     },
     "collection_list": {
       "empty": "Add collections to this section in the theme editor."
+    },
+    "values_strip": {
+      "empty": "Add a value block to fill this strip."
+    },
+    "steps": {
+      "empty": "Add a step block to fill this section."
+    },
+    "general": {
+      "add_blocks": "Add blocks to this section in the theme editor."
+    },
+    "featured_product": {
+      "placeholder_title": "Example product",
+      "no_product": "Choose a product in the theme editor."
+    },
+    "custom_liquid": {
+      "empty": "Add Liquid code to this section in the theme editor."
+    },
+    "apps": {
+      "empty": "Add app blocks to this section in the theme editor."
     },
     "related_products": {
       "empty": "Recommendations will appear here once Shopify has enough order and collection data for this product."

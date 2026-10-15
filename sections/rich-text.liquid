@@ -1,0 +1,233 @@
+{%- comment -%}
+  Rich text: a column of blocks (eyebrow, heading, text, buttons) at a chosen
+  measure and alignment. Every block carries data-reveal with its own index,
+  so the column staggers in. Button blocks always render last, together in
+  one row, so two buttons sit side by side instead of stacking.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign width_class = ''
+  case section.settings.width
+    when 'narrow'
+      assign width_class = ' page-width--narrow'
+    when 'medium'
+      assign width_class = ' page-width--medium'
+  endcase
+
+  assign buttons = section.blocks | where: 'type', 'button'
+  assign content_count = section.blocks.size | minus: buttons.size
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} rich-text rich-text--{{ section.settings.alignment }}" id="section-{{ section.id }}">
+  <div class="page-width{{ width_class }}">
+    {%- if section.blocks.size > 0 -%}
+      <div class="rich-text__inner">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'eyebrow' -%}
+              {%- if block.settings.text != blank -%}
+                <p class="eyebrow rich-text__eyebrow" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
+              {%- endif -%}
+            {%- when 'heading' -%}
+              {%- if block.settings.heading != blank -%}
+                <h2 class="{{ block.settings.size }} rich-text__heading" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+              {%- endif -%}
+            {%- when 'text' -%}
+              {%- if block.settings.text != blank -%}
+                <div class="rte rich-text__text rich-text__text--{{ block.settings.size }}" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+              {%- endif -%}
+          {%- endcase -%}
+        {%- endfor -%}
+
+        {%- if buttons.size > 0 -%}
+          <div class="cluster rich-text__buttons" data-reveal style="--i: {{ content_count | modulo: 8 }}">
+            {%- for block in buttons -%}
+              {%- if block.settings.label != blank -%}
+                {%- if block.settings.style == 'link' -%}
+                  <a
+                    class="link link--arrow rich-text__link"
+                    {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.label | escape }}
+                    {%- render 'icon', name: 'arrow-right', size: 18 -%}
+                  </a>
+                {%- else -%}
+                  <a
+                    class="btn btn--{{ block.settings.style }} rich-text__button"
+                    {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+                    {{ block.shopify_attributes }}
+                  >{{ block.settings.label | escape }}</a>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- elsif request.design_mode -%}
+      <div class="empty-state rich-text__empty">
+        {%- render 'icon', name: 'info', size: 36 -%}
+        <p class="muted text-pretty">{{ 'sections.general.add_blocks' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "full", "label": "Full" }
+      ],
+      "default": "narrow"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Our story"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Rooted in Scripture. Made in Texas."
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Size",
+          "options": [
+            { "value": "h1", "label": "Large" },
+            { "value": "h2", "label": "Medium" },
+            { "value": "h3", "label": "Small" }
+          ],
+          "default": "h2"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Anointing oil runs through Scripture, from the tabernacle in Exodus to the house at Bethany. We make oils faithful to that tradition, from the botanicals the Bible names.</p><p>Each blend is carefully blended, tested, and bottled in Richmond, Texas, on a base of olive-derived squalane. Natural, paraben-free, and vegan, made for prayer and made for skin.</p>"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Size",
+          "options": [
+            { "value": "lead", "label": "Large" },
+            { "value": "body", "label": "Regular" },
+            { "value": "small", "label": "Small" }
+          ],
+          "default": "body"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Read our story"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "default": "/pages/about-us"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "options": [
+            { "value": "primary", "label": "Primary button" },
+            { "value": "secondary", "label": "Outline button" },
+            { "value": "link", "label": "Text link with arrow" }
+          ],
+          "default": "primary"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text",
+      "blocks": [
+        { "type": "eyebrow" },
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "button" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,195 @@
+{%- comment -%}
+  Featured collection: a header row (eyebrow, heading, description left; a
+  "view all" arrow link right) over a product grid.
+
+  Empty cases:
+  - no collection chosen: placeholder cards (design-mode preview and a
+    graceful default on the storefront)
+  - a chosen collection with no products: placeholders in the editor, a
+    designed empty state on the storefront (never fake products to customers)
+{%- endcomment -%}
+{%- liquid
+  assign featured = section.settings.collection
+  assign limit = section.settings.products_to_show | default: 8
+  assign cols = section.settings.columns_desktop | default: 4
+  assign cols_tablet = cols | at_most: 3
+  assign col_vw = 100 | divided_by: cols
+  assign card_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, (min-width: 750px) 33vw, 50vw'
+
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign show_placeholders = false
+  assign show_empty = false
+  if featured == blank
+    assign show_placeholders = true
+  elsif featured.products_count == 0
+    if request.design_mode
+      assign show_placeholders = true
+    else
+      assign show_empty = true
+    endif
+  endif
+
+  assign view_all_url = routes.all_products_collection_url
+  if featured != blank
+    assign view_all_url = featured.url
+  endif
+  assign view_all_label = section.settings.view_all_label
+  if view_all_label == blank
+    assign view_all_label = 'sections.featured_collection.view_all' | t
+  endif
+
+  assign has_header = false
+  if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.description != blank or section.settings.show_view_all
+    assign has_header = true
+  endif
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-collection" id="section-{{ section.id }}">
+  <div class="page-width">
+    {%- if has_header -%}
+      <header class="section__header section__header--row featured-collection__header" data-reveal>
+        <div class="stack stack--sm featured-collection__intro">
+          {%- if section.settings.eyebrow != blank -%}
+            <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="h2 featured-collection__heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.description != blank -%}
+            <p class="muted text-pretty featured-collection__description">{{ section.settings.description | escape }}</p>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.show_view_all -%}
+          <a href="{{ view_all_url }}" class="link link--arrow featured-collection__view-all">
+            {{ view_all_label | escape }}
+            {%- render 'icon', name: 'arrow-right', size: 18 -%}
+          </a>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- if show_empty -%}
+      <div class="empty-state featured-collection__empty">
+        {%- render 'icon', name: 'olive', size: 36 -%}
+        <p class="h4">{{ 'collections.general.empty' | t }}</p>
+        <p class="muted text-pretty">{{ 'sections.featured_collection.empty' | t }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary">{{ 'general.shop_now' | t }}</a>
+      </div>
+    {%- else -%}
+      <ul
+        class="grid grid--mobile-2 featured-collection__grid"
+        role="list"
+        style="--cols-desktop: {{ cols }}; --cols-tablet: {{ cols_tablet }};"
+      >
+        {%- if show_placeholders -%}
+          {%- for i in (1..cols) -%}
+            <li class="featured-collection__item">
+              {%- render 'card-product', index: forloop.index0, sizes: card_sizes -%}
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for product in featured.products limit: limit -%}
+            <li class="featured-collection__item">
+              {%- render 'card-product', product: product, index: forloop.index0, sizes: card_sizes -%}
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The collection"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Nine biblical blends, one olive base."
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "From Frankincense & Myrrh to Spikenard and Hyssop, each oil carries a botanical named in Scripture and a meaning of its own."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show “View all” link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "“View all” label",
+      "default": "Shop all oils"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection",
+      "settings": {
+        "collection": "all"
+      }
+    }
+  ]
+}
+{% endschema %}
