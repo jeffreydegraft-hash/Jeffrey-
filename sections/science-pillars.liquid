@@ -4,10 +4,13 @@
   tiles (--c-surface on --c-bg, radius --r-tile). Each tile opens with a big
   numeral in the accent detail colour, then an .h4 title and muted body.
   A centred "Learn more ›" link (or a pill, per setting) closes the band.
-  Columns: 1–3 tiles sit in one row from 990px (4 make a 2×2 grid); on
-  tablets two tiles share a row and an odd last tile spans the full width;
-  phones stack. Motion inventory: the shared scroll reveal (fade-up, batch
-  stagger from theme.js) and the link/pill press from base.css.
+  Columns: 1–3 tiles sit in one row from 990px (4 make a 2×2 grid, 5–6
+  wrap at three with a short last row centred); on tablets two tiles share
+  a row and an odd last tile spans the full width; phones stack. A single
+  pillar is one centred tile at the content measure. Outside the editor a
+  section with nothing to show renders nothing. Motion inventory: the
+  shared scroll reveal (fade-up, batch stagger from theme.js) and the
+  link/pill press from base.css.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -35,13 +38,19 @@
   if section.settings.button_label != blank and section.settings.button_link != blank
     assign has_cta = true
   endif
+
+  assign has_content = false
+  if has_header or has_cta or pillar_count > 0 or request.design_mode
+    assign has_content = true
+  endif
 -%}
+{%- if has_content -%}
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} science-pillars" id="section-{{ section.id }}">
   <div class="page-width">
     {%- if has_header -%}
       <header class="section__header section__header--center science-pillars__header" data-reveal>
         {%- if section.settings.eyebrow != blank -%}
-          <p class="eyebrow eyebrow--lg science-pillars__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          <p class="eyebrow science-pillars__eyebrow">{{ section.settings.eyebrow | escape }}</p>
         {%- endif -%}
         {%- if section.settings.heading != blank -%}
           <h2 class="h2 science-pillars__heading">{{ section.settings.heading }}</h2>
@@ -87,6 +96,7 @@
     {%- endif -%}
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {

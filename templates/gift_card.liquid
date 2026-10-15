@@ -3,7 +3,8 @@
   Gift card (standalone, no layout). The head repeats the font faces and
   color-scheme variables from layout/theme.liquid so base.css,
   components.css and section-pages.css render the same tokens. An Apple
-  "wallet" page: one centred column on white — wordmark or logo, a big
+  "wallet" page: one centred column on white — the merchant's own logo
+  (snippets/brand-logo.liquid, intact; store-name wordmark fallback), a big
   .h0 balance (initial value and expiry beneath, 14px muted), the code in
   a --c-surface pill with a quiet copy button, the QR code on a surface
   tile for in-store use, Apple Wallet, then the primary pill "Visit online
@@ -13,8 +14,6 @@
   assign scheme = settings.color_schemes | first
   assign formatted_balance = gift_card.balance | money_without_trailing_zeros | strip_html
   assign formatted_initial = gift_card.initial_value | money
-  assign logo_alt = settings.logo.alt | default: shop.name | escape
-  assign logo_width_2x = settings.logo_width | times: 2
 
   assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
   assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
@@ -121,13 +120,7 @@
     <main class="gift-card__main" id="MainContent" role="main">
       <div class="gift-card__card">
         <header class="gift-card__brand enter" style="--i: 0;">
-          {%- if settings.logo != blank -%}
-            <div class="gift-card__logo" style="--logo-width: {{ settings.logo_width }}px;">
-              {{ settings.logo | image_url: width: logo_width_2x | image_tag: width: settings.logo_width, alt: logo_alt, loading: 'eager' }}
-            </div>
-          {%- else -%}
-            <p class="gift-card__wordmark">{{ shop.name }}</p>
-          {%- endif -%}
+          {%- render 'brand-logo', class: 'gift-card__logo', wordmark_class: 'gift-card__wordmark', priority: true -%}
         </header>
 
         <div class="gift-card__amount enter" style="--i: 1;">

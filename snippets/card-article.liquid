@@ -13,8 +13,8 @@
   - show_author: {Boolean} show the author
   - show_excerpt: {Boolean} show a short excerpt (main-blog passes it for the top story only)
   - featured: {Boolean} top-story layout
-  A post without an image gets a quiet leaf glyph on the tile instead of a
-  hole. Motion: tile press (scale .985), a 3% image zoom on a real
+  A post without an image becomes a text-only tile (no drawn placeholder,
+  APPLE-SPEC §0.2) with a larger title. Motion: tile press (scale .985), a 3% image zoom on a real
   pointer's hover (components.css .card), scroll reveal.
   Usage: {% render 'card-article', article: article, index: forloop.index0, show_date: true %}
 {%- endcomment -%}
@@ -40,16 +40,12 @@
     assign show_meta = true
   endif
 -%}
-<article class="card card--article card-article{% if featured %} card-article--featured{% endif %}" data-reveal style="--i: {{ stagger }};">
-  <div class="card__media media card-article__media">
-    {%- if article.image -%}
+<article class="card card--article card-article{% if featured %} card-article--featured{% endif %}{% unless article.image %} card-article--text{% endunless %}" data-reveal style="--i: {{ stagger }};">
+  {%- if article.image -%}
+    <div class="card__media media card-article__media">
       {%- render 'image', image: article.image, sizes: sizes, loading: 'lazy', class: 'card__img card__img--primary', widths: '400, 600, 800, 1000, 1200, 1600' -%}
-    {%- else -%}
-      <span class="card-article__placeholder" aria-hidden="true">
-        {%- render 'icon', name: 'leaf', size: 40 -%}
-      </span>
-    {%- endif -%}
-  </div>
+    </div>
+  {%- endif -%}
   <div class="card-article__body">
     {%- if tag != blank -%}
       <p class="tag card-article__tag">{{ tag | escape }}</p>

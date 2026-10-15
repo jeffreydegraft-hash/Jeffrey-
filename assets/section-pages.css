@@ -13,9 +13,8 @@
    ========================================================================== */
 
 /* === section: page-hero ===
-   Centred eyebrow, .h1 and muted lead with generous space above. The
-   leaf glyph (show_ornament) is a small accent mark, not an ornament.
-   Above the fold, so it enters with .enter (@starting-style, base.css).
+   Centred eyebrow, .h1 and muted lead with generous space above. No
+   ornament or invented mark (APPLE-SPEC §0.1). Above the fold, so it enters with .enter (@starting-style, base.css).
    --flush drops the bottom padding so the next section's own top padding
    is the only gap. --long: a lead over ~3 phone lines left-aligns the
    hero below 750px (never centre a paragraph longer than three lines). */
@@ -43,16 +42,6 @@
   align-items: center;
   text-align: center;
   margin-inline: auto;
-}
-
-.page-hero__glyph {
-  display: inline-flex;
-  margin-bottom: var(--space-2);
-  color: rgb(var(--c-gold));
-}
-
-.page-hero__glyph .icon {
-  stroke-width: 1.6;
 }
 
 .page-hero__heading {
@@ -333,8 +322,9 @@
   gap: clamp(48px, 9vw, 96px);
 }
 
-.main-password__logo img {
-  width: var(--logo-width, 140px);
+.main-password__logo {
+  display: block;
+  max-width: min(100%, 320px);
   height: auto;
   margin-inline: auto;
 }
@@ -508,24 +498,27 @@
   transform: scale(0.985);
 }
 
+/* Editorial photos fill the top of the tile untouched (no blend, no
+   filter), on the photo ground while they load. */
 .card-article .card-article__media {
   --ratio: 3 / 2;
   --media-radius: 0;
   border-radius: 0;
   flex-shrink: 0;
-  background: rgba(var(--c-ink), 0.04);
+  background: rgb(var(--c-photo-ground, var(--c-bg)));
 }
 
-.card-article__placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: rgba(var(--c-ink), 0.22);
+/* No image: a text-only tile, the title a step larger (never a drawn
+   placeholder, APPLE-SPEC §0.2) */
+.card-article--text .card-article__body {
+  padding-top: clamp(28px, 3.2vw, 40px);
 }
 
-.card-article__placeholder .icon {
-  stroke-width: 1.25;
+@media (min-width: 750px) {
+  .card-article--text:not(.card-article--featured) .card-article__title {
+    font-size: calc(clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem) * var(--heading-scale, 1) * 0.8);
+    -webkit-line-clamp: 5;
+  }
 }
 
 .card-article__body {
@@ -711,6 +704,7 @@
 
 .main-article__media {
   --media-radius: var(--r-media);
+  background: rgb(var(--c-photo-ground, var(--c-bg)));
 }
 
 .main-article__footer {
@@ -957,8 +951,9 @@
   text-align: center;
 }
 
-.gift-card__logo img {
-  width: var(--logo-width, 140px);
+.gift-card__logo {
+  display: block;
+  max-width: min(100%, 320px);
   height: auto;
   margin-inline: auto;
 }
