@@ -89,9 +89,7 @@
             </predictive-search>
           {%- endif -%}
 
-          <button type="button" class="drawer__close search-drawer__close" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
-            {%- render 'icon', name: 'close', size: 16 -%}
-          </button>
+          <button type="button" class="search-drawer__cancel" data-drawer-close>{{ 'search.cancel' | t }}</button>
         </div>
 
         {%- if quick_count > 0 -%}
