@@ -4,7 +4,7 @@
   - paginate: {Object}
   - anchor: {String} optional e.g. '#products'
 {%- endcomment -%}
-{%- if paginate.parts.size > 0 -%}
+{%- if paginate.pages > 1 -%}
   <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
     <ul class="pagination__list" role="list">
       {%- if paginate.previous -%}

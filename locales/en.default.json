@@ -421,7 +421,10 @@
       "title": "Account",
       "details": "Account details",
       "view_addresses": "View addresses",
-      "return": "Return to Account details"
+      "return": "Return to Account details",
+      "welcome": "Welcome back, {{ name }}.",
+      "default_address": "Default address",
+      "no_address": "No address saved yet."
     },
     "account_fallback": "Account",
     "log_in": "Log in",
@@ -456,7 +459,14 @@
       "edit": "Edit",
       "delete": "Delete",
       "delete_confirm": "Are you sure you wish to delete this address?",
-      "none": "You have no saved addresses yet."
+      "none": "You have no saved addresses yet.",
+      "count": {
+        "one": "{{ count }} saved address",
+        "other": "{{ count }} saved addresses"
+      },
+      "none_body": "Save an address to check out faster next time.",
+      "edit_address_label": "Edit address {{ index }}",
+      "delete_address_label": "Delete address {{ index }}"
     },
     "log_in_page": {
       "title": "Log in",
@@ -467,7 +477,10 @@
       "new_customer": "New customer?",
       "create_account": "Create account",
       "guest_title": "Continue as a guest",
-      "guest_continue": "Continue"
+      "guest_continue": "Continue",
+      "subtext": "Sign in to see your orders and saved addresses.",
+      "back_to_login": "Back to log in",
+      "guest_text": "Check out without creating an account."
     },
     "orders": {
       "title": "Order history",
@@ -477,7 +490,9 @@
       "payment_status": "Payment status",
       "fulfillment_status": "Fulfillment status",
       "total": "Total",
-      "none": "You haven't placed any orders yet."
+      "none": "You haven't placed any orders yet.",
+      "none_body": "When you place an order, it will appear here.",
+      "shop_cta": "Shop the oils"
     },
     "order": {
       "title": "Order {{ name }}",
@@ -503,12 +518,19 @@
       "tracking_number": "Tracking number",
       "subtotal": "Subtotal",
       "total_duties": "Duties",
-      "total_refunded": "Refunded"
+      "total_refunded": "Refunded",
+      "items": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} items"
+      },
+      "no_address": "No billing address on file.",
+      "no_shipping_address": "No shipping address on file."
     },
     "recover_password": {
       "title": "Reset your password",
       "subtext": "We will send you an email to reset your password.",
-      "success": "We've sent you an email with a link to update your password."
+      "success": "We've sent you an email with a link to update your password.",
+      "submit": "Send reset link"
     },
     "register": {
       "title": "Create account",
@@ -517,7 +539,8 @@
       "email": "Email",
       "password": "Password",
       "submit": "Create account",
-      "already_have": "Already have an account?"
+      "already_have": "Already have an account?",
+      "subtext": "Save your addresses and keep track of your orders."
     },
     "reset_password": {
       "title": "Reset account password",
