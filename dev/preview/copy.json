@@ -1,0 +1,458 @@
+{
+ "home": {
+  "announcement": "Free US shipping on orders $45+. Blended and bottled in Richmond, Texas.",
+  "hero": {
+   "eyebrow": "Handcrafted biblical anointing oils",
+   "heading": "Anointing oils for prayer and skin.",
+   "subheading": "Nine biblical oil blends, each on a base of 100% olive-derived squalane and our Polyphenol Alpha complex. Carefully blended, tested, and bottled in Richmond, Texas.",
+   "primaryCta": "Shop the oils",
+   "secondaryCta": "Read our science"
+  },
+  "values": [
+   {
+    "title": "Olive-derived squalane base",
+    "body": "Every blend rests on 100% olive-derived squalane, a lipid similar to the squalene in human skin."
+   },
+   {
+    "title": "Polyphenol Alpha complex",
+    "body": "Our proprietary antioxidant-rich complex is derived entirely from natural botanical sources and formulated to support the skin's natural barrier."
+   },
+   {
+    "title": "Natural, paraben-free, vegan",
+    "body": "Every ingredient is derived from biblical botanicals, and every bottle is natural, paraben-free, and vegan."
+   },
+   {
+    "title": "Made in Richmond, Texas",
+    "body": "Each oil is carefully blended, tested, and bottled in our studio in Richmond, Texas."
+   }
+  ],
+  "collection": {
+   "eyebrow": "The collection",
+   "heading": "Nine biblical blends, one olive base.",
+   "body": "From Frankincense & Myrrh to Spikenard and Hyssop, each oil carries a botanical named in Scripture and a meaning of its own.",
+   "cta": "Shop all oils"
+  },
+  "story": {
+   "eyebrow": "Our story",
+   "heading": "Rooted in Scripture. Made in Texas.",
+   "body": [
+    "Anointing oil runs through Scripture, from the tabernacle in Exodus to the house at Bethany. We make oils faithful to that tradition, from the botanicals the Bible names.",
+    "Each blend is carefully blended, tested, and bottled in Richmond, Texas, on a base of olive-derived squalane. Natural, paraben-free, and vegan, made for prayer and made for skin."
+   ],
+   "cta": "Read our story"
+  },
+  "science": {
+   "eyebrow": "Our science",
+   "heading": "Cosmeceuticals from biblical botanicals.",
+   "intro": "Every Mount of Olives oil is built on three things: a squalane base, polyphenols drawn from the olive and the pomegranate, and our Polyphenol Alpha complex.",
+   "pillars": [
+    {
+     "title": "Squalane, the delivery vehicle",
+     "body": "Our base is 100% olive-derived squalane, a lipid similar to the squalene in human skin. It serves as a delivery vehicle, enhancing the bioavailability of every botanical extract in the blend."
+    },
+    {
+     "title": "Polyphenols from olive and pomegranate",
+     "body": "From the olive come hydroxytyrosol, tyrosol, oleuropein-aglycone derivatives, luteolin, and apigenin. From the pomegranate come ellagitannins and punicalagins. Together they make each oil antioxidant-rich."
+    },
+    {
+     "title": "The Polyphenol Alpha complex",
+     "body": "Polyphenol Alpha (α) is our proprietary antioxidant-rich complex, derived entirely from natural botanical sources. It blends flavonoids, phenolic acids, stilbenes, and lignans, including ferulic acid, to help neutralize free radicals and support the skin's natural barrier function."
+    }
+   ],
+   "cta": "Learn more about our science"
+  },
+  "scripture": {
+   "quote": "Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over.",
+   "reference": "Psalm 23:5"
+  },
+  "howToUse": {
+   "heading": "How to use anointing oil",
+   "steps": [
+    {
+     "title": "After the shower",
+     "body": "Apply a few drops after showering and towel-drying, and smooth over the skin."
+    },
+    {
+     "title": "At the pulse points",
+     "body": "For prayer or daily wear, apply to pulse points such as the wrist."
+    },
+    {
+     "title": "In the bath",
+     "body": "Pour a small amount under warm running bath water. For external use only."
+    }
+   ]
+  },
+  "squalane": {
+   "eyebrow": "100% Squalane Oil",
+   "heading": "Hydration from head to toe.",
+   "body": "Our 100% Squalane Oil is sustainable, vegan, derived from olives, and steeped in biblical tradition. One ingredient and nothing else, in a 4 oz bottle.",
+   "cta": "Shop 100% Squalane"
+  },
+  "journal": {
+   "heading": "The Anointing Journal",
+   "body": "Notes on the botanicals of Scripture, a brief history of anointing oil in the church, and why not all olives are created equal."
+  },
+  "faq": [
+   {
+    "q": "What is anointing oil?",
+    "a": "Anointing oil is oil set apart for prayer, worship, and consecration, a practice that runs through Scripture from Exodus onward. Ours are blended from botanicals the Bible names, on a base of olive-derived squalane."
+   },
+   {
+    "q": "How do I use it?",
+    "a": "Apply after showering and towel-drying, or at pulse points such as the wrist. You can also pour a small amount under warm running bath water. For external use only."
+   },
+   {
+    "q": "Is it safe for skin?",
+    "a": "Our oils are made for the skin. The base is 100% olive-derived squalane, a lipid similar to the squalene in human skin, and every blend is natural, paraben-free, and vegan. They are for external use only, so please read the ingredient list if you have a known sensitivity."
+   },
+   {
+    "q": "What is in the oils, and are they vegan?",
+    "a": "Every ingredient is derived from biblical botanicals: olive oil, olive-derived squalane, the named botanical such as frankincense or spikenard, and our Polyphenol Alpha complex. All of our oils are natural, paraben-free, and vegan."
+   },
+   {
+    "q": "What sizes do you offer, and how does shipping work?",
+    "a": "Most blends come in 1 oz (30 mL), 2 oz (60 mL), and 4 oz (118 mL) bottles. Our 100% Squalane Oil comes in 4 oz. US shipping is free on orders of $45 or more."
+   },
+   {
+    "q": "Where are the oils made?",
+    "a": "Every oil is carefully blended, tested, and bottled in our studio in Richmond, Texas."
+   }
+  ],
+  "newsletter": {
+   "heading": "Letters from the studio",
+   "body": "New blends, notes from the Anointing Journal, and a word of encouragement now and then. We write only when we have something worth saying.",
+   "buttonLabel": "Subscribe"
+  },
+  "footer": {
+   "tagline": "Handcrafted biblical anointing oils. Made in Richmond, Texas.",
+   "disclaimer": "For external use only; these products are not intended to diagnose, treat, cure, or prevent any disease."
+  }
+ },
+ "products": {
+  "products": [
+   {
+    "handle": "frankincense-myrrh-anointing-oil",
+    "title": "Frankincense & Myrrh Anointing Oil",
+    "themeWord": "Reverence",
+    "oneLiner": "Two gifts of the Magi, blended in olive squalane for prayer and skin.",
+    "scripture": {
+     "quote": "Then, opening their treasures, they offered him gifts, gold and frankincense and myrrh.",
+     "reference": "Matthew 2:11"
+    },
+    "meaning": "Frankincense and myrrh were laid before the infant Christ by the Magi, beside gold. Frankincense rose from the altar as a sign of God's presence. Myrrh, bitter and costly, pointed ahead to his sacrifice.",
+    "botanical": "Resins of Boswellia serrata and Commiphora myrrha, blended into olive oil and olive-derived squalane with olive polyphenols. Warm and resinous, it nourishes the skin as it scents it.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, Boswellia serrata (Frankincense), Commiphora myrrha (Myrrh), olive polyphenols"
+   },
+   {
+    "handle": "frankincense",
+    "title": "Frankincense Anointing Oil",
+    "themeWord": "Presence",
+    "oneLiner": "Pure frankincense in olive squalane, for sacred moments and glowing skin.",
+    "scripture": {
+     "quote": "They shall bring gold and frankincense, and shall bring good news, the praises of the LORD.",
+     "reference": "Isaiah 60:6"
+    },
+    "meaning": "Pure frankincense was set apart for the holy incense and laid on the grain offering before the Lord. Its smoke filled the tabernacle as a sign of God's nearness. Isaiah saw the nations bringing it as praise.",
+    "botanical": "Resin of Boswellia serrata in olive oil and olive-derived squalane, with olive polyphenols. Clear and resinous, it nourishes the skin and is made for sacred rituals.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, Boswellia serrata (Frankincense), olive polyphenols"
+   },
+   {
+    "handle": "myrrh-anointing-oil-1",
+    "title": "Myrrh Anointing Oil",
+    "themeWord": "Purification",
+    "oneLiner": "Myrrh in olive squalane, a quiet oil for purification and remembrance.",
+    "scripture": {
+     "quote": "All thy garments smell of myrrh, and aloes, and cassia, out of the ivory palaces, whereby they have made thee glad.",
+     "reference": "Psalm 45:8"
+    },
+    "meaning": "Myrrh was the first ingredient God named for the holy anointing oil. It perfumed the garments of the king and was brought by Nicodemus to prepare the body of Jesus. It speaks of what is costly, set apart, and given.",
+    "botanical": "Resin of Commiphora myrrha in olive oil and olive-derived squalane, with olive polyphenols. Deep, earthy, and antioxidant-rich, it nourishes the skin and supports the skin barrier.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, Commiphora myrrha (Myrrh), olive polyphenols"
+   },
+   {
+    "handle": "gethsemane-anointing-oil-unscented",
+    "title": "Gethsemane Anointing Oil (Unscented)",
+    "themeWord": "Intercession",
+    "oneLiner": "Unscented anointing oil of olive and squalane, for prayer and intercession.",
+    "scripture": {
+     "quote": "Then cometh Jesus with them unto a place called Gethsemane, and saith unto the disciples, Sit ye here, while I go and pray yonder.",
+     "reference": "Matthew 26:36"
+    },
+    "meaning": "Gethsemane means oil press. It was the garden on the Mount of Olives where Jesus prayed before the cross. We named our unscented oil for that place of prayer, intercession, and surrender.",
+    "botanical": "Olive oil, olive-derived squalane, and olive polyphenols, with no added fragrance. Squalane is a lipid similar to the squalene in human skin, so it hydrates and nourishes without a scent of its own.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, olive polyphenols"
+   },
+   {
+    "handle": "spikenard-anointing-oil",
+    "title": "Spikenard Anointing Oil",
+    "themeWord": "Devotion",
+    "oneLiner": "The costly oil Mary poured out, for worship and devotion.",
+    "scripture": {
+     "quote": "Then took Mary a pound of ointment of spikenard, very costly, and anointed the feet of Jesus, and wiped his feet with her hair: and the house was filled with the odour of the ointment.",
+     "reference": "John 12:3"
+    },
+    "meaning": "Mary of Bethany took a pound of costly spikenard and anointed the feet of Jesus, and the house was filled with its fragrance. Some called it waste. Jesus called it a good work, and said it would be remembered wherever the gospel is preached.",
+    "botanical": "Nardostachys jatamansi, a root from the high Himalayas, in olive oil and olive-derived squalane with olive polyphenols. Earthy and sweet, it nourishes the skin.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, Nardostachys jatamansi (Spikenard), olive polyphenols"
+   },
+   {
+    "handle": "pomegranate-anointing-oil",
+    "title": "Pomegranate Anointing Oil",
+    "themeWord": "Revitalize",
+    "oneLiner": "Antioxidant-rich pomegranate in olive squalane, a sign of fruitfulness and blessing.",
+    "scripture": {
+     "quote": "Thy plants are an orchard of pomegranates, with pleasant fruits.",
+     "reference": "Song of Solomon 4:13"
+    },
+    "meaning": "Pomegranates hung from the hem of the high priest's robe and were carved into the pillars of Solomon's temple. They were among the fruits that proved the goodness of the promised land. Scripture uses them as a picture of fruitfulness, abundance, and covenant blessing.",
+    "botanical": "Punica granatum, rich in ellagitannins and punicalagins, in olive oil and olive-derived squalane with olive polyphenols. Antioxidant-rich, it nourishes the skin and supports the skin barrier.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, Punica granatum (Pomegranate), olive polyphenols"
+   },
+   {
+    "handle": "lily-of-the-valley",
+    "title": "Lily of the Valley Anointing Oil",
+    "themeWord": "Purity",
+    "oneLiner": "A gentle floral oil for purity, peace, and consecrated prayer.",
+    "scripture": {
+     "quote": "I am the rose of Sharon, and the lily of the valleys.",
+     "reference": "Song of Solomon 2:1"
+    },
+    "meaning": "The Beloved of the Song of Solomon calls himself the lily of the valleys, and the church has long heard in that name the voice of Christ. Jesus told his followers to consider the lilies, which neither toil nor spin, yet are clothed by God. It is a name for purity and peace.",
+    "botanical": "A soft floral blend in olive oil and olive-derived squalane with olive polyphenols. Light and clean, it nourishes the skin and is made for prayer, worship, and consecration.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, lily of the valley floral blend, olive polyphenols"
+   },
+   {
+    "handle": "hyssop",
+    "title": "Hyssop Anointing Oil",
+    "themeWord": "Cleansing",
+    "oneLiner": "The herb of cleansing, blended in olive squalane for purification.",
+    "scripture": {
+     "quote": "Purge me with hyssop, and I shall be clean: wash me, and I shall be whiter than snow.",
+     "reference": "Psalm 51:7"
+    },
+    "meaning": "A bunch of hyssop spread the blood of the Passover lamb on the doorposts in Egypt. The priests used it in the rites of cleansing, and David asked to be purged with it. At the cross, a sponge on hyssop was lifted to the lips of Jesus.",
+    "botanical": "Hyssopus officinalis, a hardy herb of the mint family, in olive oil and olive-derived squalane with olive polyphenols. Green and herbal, it nourishes the skin.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, Hyssopus officinalis (Hyssop), olive polyphenols"
+   },
+   {
+    "handle": "rose-of-sharon",
+    "title": "Rose of Sharon Anointing Oil",
+    "themeWord": "Radiance",
+    "oneLiner": "A radiant floral oil in olive squalane, named for the Beloved.",
+    "scripture": {
+     "quote": "I am the rose of Sharon, and the lily of the valleys.",
+     "reference": "Song of Solomon 2:1"
+    },
+    "meaning": "Sharon was the fertile plain along the coast of Israel, known for its beauty. The Beloved of the Song of Solomon calls himself the rose of Sharon, and believers have long taken the name as a title for Christ. It speaks of beauty that God brings up from ordinary ground.",
+    "botanical": "A rose of Sharon floral blend in olive oil and olive-derived squalane with olive polyphenols. Soft and floral, it nourishes and hydrates the skin.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, rose of Sharon floral blend, olive polyphenols"
+   },
+   {
+    "handle": "latter-rain-anointing-oil",
+    "title": "Latter Rain Anointing Oil",
+    "themeWord": "Revitalize",
+    "oneLiner": "An oil of renewal, named for the rain that brings the harvest.",
+    "scripture": {
+     "quote": "That I will give you the rain of your land in his due season, the first rain and the latter rain, that thou mayest gather in thy corn, and thy wine, and thine oil.",
+     "reference": "Deuteronomy 11:14"
+    },
+    "meaning": "In the land of Israel the latter rain fell in spring, just before the harvest. God promised it to his people as a sign of his provision, so they could gather their grain, wine, and oil. The prophets used it as a picture of renewal and the outpouring of his Spirit.",
+    "botanical": "A fresh blend of biblical botanicals in olive oil and olive-derived squalane with olive polyphenols. Made to hydrate and nourish the skin.",
+    "ingredientsLine": "Olive oil, olive-derived squalane, biblical botanical blend, olive polyphenols"
+   },
+   {
+    "handle": "100-squalane",
+    "title": "100% Olive Squalane Oil",
+    "themeWord": "Hydration",
+    "oneLiner": "Pure olive-derived squalane, vegan and sustainable, hydration from head to toe.",
+    "scripture": {
+     "quote": "But I am like a green olive tree in the house of God: I trust in the mercy of God for ever and ever.",
+     "reference": "Psalm 52:8"
+    },
+    "meaning": "The olive tree runs through Scripture from the dove's branch to the garden where Jesus prayed. Its oil lit the lamps of the tabernacle and anointed kings and priests. The psalmist called himself a green olive tree in the house of God.",
+    "botanical": "100% olive-derived squalane, a lipid similar to the squalene in human skin. Sustainable and vegan, it offers hydration from head to toe.",
+    "ingredientsLine": "100% olive-derived squalane"
+   }
+  ],
+  "sharedAccordions": {
+   "ingredientsScience": {
+    "title": "Ingredients and Science",
+    "body": "Each blend begins with olive oil and 100% olive-derived squalane, a lipid similar to the squalene in human skin that carries each botanical extract. We add Polyphenol Alpha (α)™, our antioxidant-rich polyphenol complex drawn entirely from natural botanical sources, to help neutralize free radicals and support the skin's natural barrier function. Natural, paraben-free, and vegan."
+   },
+   "howToUse": {
+    "title": "How to Use",
+    "body": "Apply a few drops after showering and towel-drying, or at pulse points such as the wrist. For a bath, pour a small amount under warm running water. For external use only."
+   },
+   "shippingReturns": {
+    "title": "Shipping and Returns",
+    "body": "Free US shipping on orders of $45 or more. Every order ships from our studio in Richmond, Texas. For returns, see our refund policy."
+   }
+  },
+  "collections": {
+   "all": {
+    "title": "All Anointing Oils",
+    "description": "Biblical anointing oils formulated with olive-derived squalane and botanical polyphenols, blended and bottled in Richmond, Texas. Natural, paraben-free, and vegan."
+   },
+   "nineBlends": {
+    "title": "Nine Biblical Oil Blends",
+    "description": "Nine anointing oils, each named for a botanical or a place in Scripture and carried in olive-derived squalane. For prayer, worship, consecration, and the skin."
+   }
+  },
+  "sizes": {
+   "note": "Most oils come in 1 oz (30 mL), 2 oz (60 mL), and 4 oz (118 mL) bottles, so you can begin with a small bottle or keep a larger one at home. Our 100% Squalane Oil comes in 4 oz."
+  }
+ },
+ "pages": {
+  "about": {
+   "hero": {
+    "eyebrow": "About Mount of Olives",
+    "heading": "Anointing oils, made with care",
+    "intro": "Mount of Olives makes biblical anointing oils from 100% olive-derived squalane and antioxidant-rich botanical polyphenols. Every blend is formulated in Richmond, Texas, for prayer, worship, and daily care of the skin."
+   },
+   "sections": [
+    {
+     "heading": "Made in Richmond, Texas",
+     "body": [
+      "Our studio is in Richmond, Texas, just outside Houston. Every Mount of Olives blend is made there, from the first measure of squalane to the last label.",
+      "We make anointing oil for people who pray. That shapes every choice, from the botanicals we source to the way we seal each bottle."
+     ]
+    },
+    {
+     "heading": "Why olive, and why squalane",
+     "body": [
+      "The olive runs through Scripture. Its oil anointed kings and priests, lit the lamps of the tabernacle, and gave its name to the hill where Jesus prayed. The psalmist wrote, \"I am like a green olive tree in the house of God\" (Psalm 52:8).",
+      "So our base is 100% olive-derived squalane, a lipid similar to the squalene in human skin. It carries every botanical extract in the blend and enhances its bioavailability."
+     ]
+    },
+    {
+     "heading": "Blended, tested, bottled",
+     "body": [
+      "Each oil is carefully blended, tested, and bottled by hand in our Richmond studio. Our formulas are natural, paraben-free, and vegan, and every ingredient is derived from biblical botanicals.",
+      "Exodus calls the holy anointing oil \"an ointment compound after the art of the apothecary\" (Exodus 30:25). We hold ourselves to that standard."
+     ]
+    }
+   ],
+   "closingCta": {
+    "heading": "Choose your oil",
+    "body": "Nine biblical oil blends and a pure olive squalane, formulated for prayer, worship, and daily care. Free US shipping on orders of $45 or more.",
+    "cta": "Shop all oils"
+   }
+  },
+  "science": {
+   "hero": {
+    "eyebrow": "Our Science",
+    "heading": "What is in the bottle",
+    "intro": "Our oils are built on 100% olive-derived squalane and antioxidant-rich polyphenols from biblical botanicals. This page explains what those ingredients are and why we chose them."
+   },
+   "sections": [
+    {
+     "heading": "Olive-derived squalane",
+     "body": [
+      "Squalane is a lipid similar to the squalene found in human skin. Ours is 100% olive-derived, sustainable, and vegan.",
+      "It offers hydration from head to toe. It also serves as the delivery vehicle for each botanical extract and enhances its bioavailability."
+     ]
+    },
+    {
+     "heading": "Polyphenols from olive and pomegranate",
+     "body": [
+      "Polyphenols are antioxidant compounds that plants make. From the olive we draw hydroxytyrosol, tyrosol, oleuropein-aglycone derivatives, luteolin, and apigenin.",
+      "From the pomegranate we draw ellagitannins and punicalagins. These actives help neutralize free radicals and support the skin's natural barrier function."
+     ]
+    },
+    {
+     "heading": "The Polyphenol Alpha complex",
+     "body": [
+      "Polyphenol Alpha (α)™ is our proprietary antioxidant-rich polyphenol complex, derived entirely from natural botanical sources. It blends flavonoids, phenolic acids, stilbenes, and lignans, and includes ferulic acid.",
+      "It is formulated to help neutralize free radicals, support the skin's natural barrier function, and promote cellular vitality. It is the reason we call our oils cosmeceuticals."
+     ]
+    },
+    {
+     "heading": "How to read our label",
+     "body": [
+      "Ingredients are listed in descending order by weight, so the first name on the label is the largest part of the formula. On our bottles that is olive oil or olive-derived squalane.",
+      "Botanicals appear by their Latin names, with the common name in parentheses: Boswellia serrata (Frankincense), Commiphora myrrha (Myrrh), Nardostachys jatamansi (Spikenard).",
+      "Every oil is natural, paraben-free, and vegan, and for external use only. If a word is unfamiliar, write to us and we will explain it."
+     ]
+    }
+   ],
+   "disclaimer": "Mount of Olives oils are cosmetic products for external use only. They are not intended to diagnose, treat, cure, or prevent any disease. If irritation occurs, stop use."
+  },
+  "contact": {
+   "heading": "Write to us",
+   "intro": "We are glad to help with orders, ingredients, or choosing an oil. Email info@mountofolives.co or use the form below. Our studio is at 10193 W Grand Pkwy S, Ste. 103-225, Richmond, TX 77407.",
+   "formLabels": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone (optional)",
+    "message": "Message",
+    "submit": "Send message",
+    "success": "Thank you. We have your message and will reply soon."
+   }
+  },
+  "microcopy": {
+   "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "emptyCta": "Shop all oils",
+    "subtotal": "Subtotal",
+    "shippingNote": "Free US shipping on orders of $45 or more. Taxes and shipping calculated at checkout.",
+    "checkout": "Check out",
+    "continueShopping": "Continue shopping",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "orderNote": "Add a note to your order",
+    "freeShippingProgress": "You are {{ amount }} away from free US shipping.",
+    "freeShippingReached": "Your order qualifies for free US shipping."
+   },
+   "product": {
+    "addToCart": "Add to cart",
+    "added": "Added to cart",
+    "soldOut": "Sold out",
+    "unavailable": "Unavailable",
+    "chooseSize": "Choose a size",
+    "viewFull": "View full details",
+    "scriptureLabel": "In Scripture",
+    "meaningLabel": "Meaning"
+   },
+   "search": {
+    "placeholder": "Search oils and botanicals",
+    "noResults": "No results for \"{{ terms }}\". Try a botanical name, like frankincense or hyssop.",
+    "resultsCount": "Showing {{ count }} results for \"{{ terms }}\"",
+    "suggestions": "Suggestions"
+   },
+   "notFound": {
+    "heading": "Page not found",
+    "body": "The link may be old or mistyped. The shop is one step away.",
+    "cta": "Back to the shop"
+   },
+   "password": {
+    "heading": "We will open soon",
+    "body": "The shop is being prepared. If you have a password, enter it below. Otherwise leave your email and we will write when we open.",
+    "placeholder": "Enter store password",
+    "button": "Enter",
+    "adminLink": "Store owner? Log in here."
+   },
+   "newsletter": {
+    "placeholder": "Your email",
+    "success": "Thank you. You are on the list.",
+    "error": "Please enter a valid email address."
+   },
+   "accounts": {
+    "login": "Log in",
+    "register": "Create account",
+    "account": "Account",
+    "orders": "Orders",
+    "addresses": "Addresses",
+    "logout": "Log out",
+    "forgotPassword": "Forgot your password?"
+   },
+   "footer": {
+    "navHeading": "Shop",
+    "policiesHeading": "Policies",
+    "contactHeading": "Contact",
+    "newsletterHeading": "Stay in touch",
+    "copyright": "© {{ year }} {{ shop }}. All rights reserved."
+   }
+  }
+ }
+}

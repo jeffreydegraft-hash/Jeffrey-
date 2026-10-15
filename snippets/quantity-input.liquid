@@ -1,0 +1,43 @@
+{%- comment -%}
+  Quantity stepper.
+  Accepts:
+  - id: {String} input id (required)
+  - name: {String} input name, default 'quantity'
+  - value: {Number} default 1
+  - min: {Number} default 1
+  - max: {Number} optional
+  - step: {Number} default 1
+  - form: {String} optional form id
+  - label: {String} accessible label text
+  - size: {String} 'sm' for compact (cart lines)
+  - data_attrs: {String} raw extra attributes for the input (e.g. data-index="2")
+{%- endcomment -%}
+{%- liquid
+  assign name = name | default: 'quantity'
+  assign value = value | default: 1
+  assign min = min | default: 1
+  assign step = step | default: 1
+-%}
+<quantity-input class="quantity{% if size == 'sm' %} quantity--sm{% endif %}">
+  <button class="quantity__button" name="minus" type="button" aria-label="{{ 'products.product.quantity.decrease' | t: product: label | escape }}">
+    {%- render 'icon', name: 'minus', size: 16 -%}
+  </button>
+  <input
+    class="quantity__input"
+    type="number"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    name="{{ name }}"
+    id="{{ id }}"
+    value="{{ value }}"
+    min="{{ min }}"
+    {% if max %}max="{{ max }}"{% endif %}
+    step="{{ step }}"
+    {% if form %}form="{{ form }}"{% endif %}
+    aria-label="{{ 'products.product.quantity.input_label' | t: product: label | escape }}"
+    {{ data_attrs }}
+  >
+  <button class="quantity__button" name="plus" type="button" aria-label="{{ 'products.product.quantity.increase' | t: product: label | escape }}">
+    {%- render 'icon', name: 'plus', size: 16 -%}
+  </button>
+</quantity-input>

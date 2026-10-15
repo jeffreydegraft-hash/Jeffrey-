@@ -1,0 +1,8 @@
+{%- comment -%}
+  Inner markup of the header cart link. Rendered in the header and by the
+  cart-icon-bubble section (used by the Section Rendering API to refresh it).
+{%- endcomment -%}
+{%- render 'icon', name: 'bag', size: 22, class: 'header__icon-svg' -%}
+<span class="visually-hidden">{{ 'header.cart' | t }}</span>
+<span class="cart-count{% if cart.item_count == 0 %} is-empty{% endif %}" aria-hidden="true">{{ cart.item_count | at_most: 99 }}</span>
+<span class="visually-hidden">{{ 'header.cart_count' | t: count: cart.item_count }}</span>

@@ -1,0 +1,78 @@
+{%- comment -%}
+  Product card.
+  Accepts:
+  - product: {Object} product (optional; renders a placeholder card when blank)
+  - index: {Number} position in the grid, used for the reveal stagger (optional)
+  - sizes: {String} sizes attribute for the image (optional)
+  - show_secondary_image: {Boolean} default from settings
+  - show_vendor: {Boolean} default from settings
+  - lazy: {Boolean} lazy-load the image, default true
+  - reveal: {Boolean} add data-reveal, default true
+  Usage: {% render 'card-product', product: product, index: forloop.index0, sizes: '(min-width: 990px) 25vw, 50vw' %}
+{%- endcomment -%}
+{%- liquid
+  assign stagger = index | default: 0 | modulo: 8
+  if show_secondary_image == nil
+    assign show_secondary_image = settings.card_show_secondary_image
+  endif
+  if show_vendor == nil
+    assign show_vendor = settings.card_show_vendor
+  endif
+  if lazy == nil
+    assign lazy = true
+  endif
+  if lazy
+    assign loading = 'lazy'
+  else
+    assign loading = 'eager'
+  endif
+  assign sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
+  assign theme_word = blank
+  if settings.card_show_theme_word
+    assign theme_word = product.metafields.custom.theme_word.value | default: product.type
+  endif
+-%}
+{%- if product != blank -%}
+  <article class="card card--product" {% if reveal != false %}data-reveal style="--i: {{ stagger }}"{% endif %}>
+    <a href="{{ product.url }}" class="card__media-link" aria-label="{{ product.title | escape }}" tabindex="-1">
+      <div class="card__media media" style="--ratio: {{ settings.card_image_ratio }};">
+        {%- if product.featured_media -%}
+          {%- render 'image', image: product.featured_media, sizes: sizes, loading: loading, class: 'card__img card__img--primary', widths: '300, 400, 500, 600, 800, 1000' -%}
+          {%- if show_secondary_image and product.media.size > 1 -%}
+            {%- assign second = product.media[1] -%}
+            {%- render 'image', image: second, sizes: sizes, loading: 'lazy', class: 'card__img card__img--secondary', widths: '300, 400, 500, 600, 800, 1000' -%}
+          {%- endif -%}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+        {%- if product.available == false -%}
+          <span class="badge badge--sold-out card__badge">{{ 'products.product.sold_out' | t }}</span>
+        {%- elsif product.compare_at_price > product.price -%}
+          <span class="badge badge--sale card__badge">{{ 'products.product.on_sale' | t }}</span>
+        {%- endif -%}
+      </div>
+    </a>
+    <div class="card__body">
+      {%- if theme_word != blank -%}
+        <p class="card__eyebrow eyebrow">{{ theme_word | escape }}</p>
+      {%- elsif show_vendor and product.vendor != blank -%}
+        <p class="card__eyebrow eyebrow">{{ product.vendor | escape }}</p>
+      {%- endif -%}
+      <h3 class="card__title h5">
+        <a href="{{ product.url }}" class="card__link">{{ product.title | escape }}</a>
+      </h3>
+      {%- render 'price', product: product, price_class: 'price--card' -%}
+    </div>
+  </article>
+{%- else -%}
+  <article class="card card--product card--placeholder" {% if reveal != false %}data-reveal style="--i: {{ stagger }}"{% endif %}>
+    <div class="card__media media" style="--ratio: {{ settings.card_image_ratio }};">
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    </div>
+    <div class="card__body">
+      <p class="card__eyebrow eyebrow">Reverence</p>
+      <h3 class="card__title h5">Example product title</h3>
+      <div class="price"><div class="price__container"><div class="price__regular"><span class="price__item price__item--regular money">{{ 1998 | money }}</span></div></div></div>
+    </div>
+  </article>
+{%- endif -%}

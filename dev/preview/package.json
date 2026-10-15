@@ -1,0 +1,17 @@
+{
+  "name": "olivet-preview",
+  "private": true,
+  "type": "module",
+  "description": "Local mock renderer for the Olivet Shopify theme: renders templates with liquidjs + sample store data and screenshots them with Playwright. Not a substitute for `shopify theme dev`.",
+  "scripts": {
+    "render": "node render.mjs",
+    "shots": "node screenshot.mjs",
+    "preview": "node render.mjs && node screenshot.mjs"
+  },
+  "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.0.0",
+    "@fontsource/dm-sans": "^5.0.0",
+    "liquidjs": "^10.30.0",
+    "playwright-core": "^1.64.1"
+  }
+}

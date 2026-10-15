@@ -1,0 +1,41 @@
+{%- comment -%}
+  Responsive image helper.
+  Accepts:
+  - image: {Object} image / media object (required)
+  - sizes: {String} sizes attribute, default '100vw'
+  - widths: {String} comma list, default '320, 480, 640, 800, 1000, 1200, 1600, 2000'
+  - class: {String} extra classes for the <img>
+  - loading: {String} 'lazy' (default) | 'eager'
+  - fetchpriority: {String} optional 'high'
+  - ratio: {String} e.g. '4 / 5' — wraps the image in a .media box with that aspect ratio
+  - wrapper_class: {String} extra classes for the wrapper when ratio is set
+  - alt: {String} override alt text
+  - preload: {Boolean} emit a preload hint (hero images only)
+  Usage: {% render 'image', image: product.featured_image, sizes: '(min-width: 990px) 50vw, 100vw', ratio: '4 / 5' %}
+{%- endcomment -%}
+{%- liquid
+  assign widths = widths | default: '320, 480, 640, 800, 1000, 1200, 1600, 2000'
+  assign sizes = sizes | default: '100vw'
+  assign loading = loading | default: 'lazy'
+  assign img_class = 'media__img ' | append: class
+  assign alt_text = alt | default: image.alt | default: ''
+  assign max_width = 2000
+  if image.width < max_width
+    assign max_width = image.width
+  endif
+-%}
+{%- if ratio != blank -%}
+  <div class="media {{ wrapper_class }}" style="--ratio: {{ ratio }};">
+{%- endif -%}
+{%- if image != blank -%}
+  {%- if fetchpriority == 'high' -%}
+    {{ image | image_url: width: max_width | image_tag: widths: widths, sizes: sizes, class: img_class, loading: loading, alt: alt_text, fetchpriority: 'high', preload: preload }}
+  {%- else -%}
+    {{ image | image_url: width: max_width | image_tag: widths: widths, sizes: sizes, class: img_class, loading: loading, alt: alt_text }}
+  {%- endif -%}
+{%- else -%}
+  {{ placeholder | default: 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+{%- endif -%}
+{%- if ratio != blank -%}
+  </div>
+{%- endif -%}

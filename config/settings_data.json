@@ -1,0 +1,105 @@
+{
+  "current": {
+    "logo_width": 140,
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#F7F3EC",
+          "background_gradient": "",
+          "surface": "#EFE9DE",
+          "text": "#1F2A1C",
+          "text_muted": "#5F6A58",
+          "line": "#DAD3C5",
+          "accent": "#2F3F2A",
+          "accent_text": "#F7F3EC",
+          "gold": "#B08D57"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#E7EBE1",
+          "background_gradient": "",
+          "surface": "#DCE2D3",
+          "text": "#1F2A1C",
+          "text_muted": "#56604F",
+          "line": "#C8D0BC",
+          "accent": "#2F3F2A",
+          "accent_text": "#F7F3EC",
+          "gold": "#A98650"
+        }
+      },
+      "scheme-3": {
+        "settings": {
+          "background": "#1F2A1C",
+          "background_gradient": "",
+          "surface": "#2A3726",
+          "text": "#F3EFE6",
+          "text_muted": "#B9C0B0",
+          "line": "#3A4836",
+          "accent": "#E9D9B7",
+          "accent_text": "#1F2A1C",
+          "gold": "#D4B77E"
+        }
+      },
+      "scheme-4": {
+        "settings": {
+          "background": "#FFFFFF",
+          "background_gradient": "",
+          "surface": "#F5F2EC",
+          "text": "#1F2A1C",
+          "text_muted": "#5F6A58",
+          "line": "#E4DFD4",
+          "accent": "#2F3F2A",
+          "accent_text": "#FFFFFF",
+          "gold": "#B08D57"
+        }
+      },
+      "scheme-5": {
+        "settings": {
+          "background": "#DCC7A1",
+          "background_gradient": "",
+          "surface": "#E6D5B5",
+          "text": "#2A2416",
+          "text_muted": "#5A4D33",
+          "line": "#C2AB7E",
+          "accent": "#1F2A1C",
+          "accent_text": "#F7F3EC",
+          "gold": "#8A6A32"
+        }
+      }
+    },
+    "type_header_font": "cormorant_garamond_n5",
+    "heading_scale": 100,
+    "type_body_font": "dm_sans_n4",
+    "body_scale": 100,
+    "page_width": 1320,
+    "section_spacing": "default",
+    "reveal_on_scroll": true,
+    "button_radius": 40,
+    "input_radius": 10,
+    "card_radius": 14,
+    "card_image_ratio": "4/5",
+    "card_show_secondary_image": true,
+    "card_show_vendor": false,
+    "card_show_theme_word": true,
+    "cart_type": "drawer",
+    "cart_show_free_shipping": true,
+    "cart_free_shipping_threshold": 45,
+    "cart_show_note": true,
+    "cart_show_vendor": false,
+    "predictive_search_enabled": true,
+    "predictive_search_show_price": true,
+    "brand_tagline": "Anointing oils with cosmeceuticals derived from Biblical botanicals.",
+    "brand_disclaimer": "For external use only. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+    "brand_email": "info@mountofolives.co",
+    "brand_phone": "(713) 364-2010",
+    "brand_address": "10193 W Grand Pkwy S, Ste. 103-225\nRichmond, TX 77407",
+    "currency_code_enabled": false,
+    "social_instagram_link": "",
+    "social_facebook_link": "",
+    "social_tiktok_link": "",
+    "social_youtube_link": "",
+    "social_pinterest_link": "",
+    "social_x_link": ""
+  }
+}

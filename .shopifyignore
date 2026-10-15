@@ -1,0 +1,6 @@
+# Files that are not part of the theme
+marketing-skills-report.md
+README.md
+dev/
+.github/
+.theme-check.yml

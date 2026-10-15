@@ -1,0 +1,32 @@
+name: Theme check
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  theme-check:
+    name: Shopify theme check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@latest
+      - name: Run theme check
+        run: shopify theme check --path . --fail-level error
+      - name: Validate JSON
+        run: |
+          node -e '
+            const fs = require("fs"); const path = require("path");
+            const walk = (d) => fs.readdirSync(d).flatMap((f) => { const p = path.join(d, f); return fs.statSync(p).isDirectory() ? walk(p) : [p]; });
+            let bad = 0;
+            for (const f of [...walk("templates"), ...walk("config"), ...walk("locales"), ...walk("sections").filter((f) => f.endsWith(".json"))]) {
+              if (!f.endsWith(".json")) continue;
+              try { JSON.parse(fs.readFileSync(f, "utf8")); } catch (e) { console.error(f, e.message); bad++; }
+            }
+            if (bad) process.exit(1); else console.log("JSON ok");
+          '
