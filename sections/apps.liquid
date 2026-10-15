@@ -1,8 +1,10 @@
 {%- comment -%}
   Apps: a container for app blocks. "Include margins" wraps the blocks in
   the page width with section spacing; off, apps get the full width and
-  manage their own spacing. In the editor an empty section shows a hint.
+  manage their own spacing. In the editor an empty section shows a hint;
+  on the live store it renders nothing, so no empty band is left behind.
 {%- endcomment -%}
+{%- if section.blocks.size > 0 or request.design_mode -%}
 <div class="apps color-{{ section.settings.color_scheme }}{% if section.settings.include_margins %} section apps--margins{% endif %}" id="section-{{ section.id }}">
   <div class="apps__inner{% if section.settings.include_margins %} page-width{% endif %}">
     {%- if section.blocks.size > 0 -%}
@@ -17,6 +19,7 @@
     {%- endif -%}
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {

@@ -8,7 +8,6 @@
   full-row tile and the text sits beside it with an .h3 title.
   Accepts:
   - article: {Object} article (required)
-  - index: {Number} position in the grid, for the reveal stagger (optional)
   - show_date: {Boolean} show the published date
   - show_author: {Boolean} show the author
   - show_excerpt: {Boolean} show a short excerpt (main-blog passes it for the top story only)
@@ -16,11 +15,11 @@
   A post without an image becomes a text-only tile (no drawn placeholder,
   APPLE-SPEC §0.2) with a larger title. Motion: tile press (scale .985), a 3% image zoom on a real
   pointer's hover (components.css .card), scroll reveal.
-  Usage: {% render 'card-article', article: article, index: forloop.index0, show_date: true %}
+  The scroll reveal (data-reveal + --i) belongs on the caller's wrapper,
+  so the tile's own press transform is never overridden by the reveal.
+  Usage: {% render 'card-article', article: article, show_date: true %}
 {%- endcomment -%}
 {%- liquid
-  assign stagger = index | default: 0 | modulo: 8
-
   assign tag = article.tags | first
   if tag == blank
     assign blog_handle = article.url | split: '/blogs/' | last | split: '/' | first
@@ -28,7 +27,7 @@
   endif
 
   if featured
-    assign sizes = '(min-width: 1260px) 700px, (min-width: 750px) 58vw, 100vw'
+    assign sizes = '(min-width: 1260px) 700px, (min-width: 750px) 56vw, 100vw'
     assign title_class = 'h3'
   else
     assign sizes = '(min-width: 1260px) 400px, (min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw'
@@ -40,7 +39,7 @@
     assign show_meta = true
   endif
 -%}
-<article class="card card--article card-article{% if featured %} card-article--featured{% endif %}{% unless article.image %} card-article--text{% endunless %}" data-reveal style="--i: {{ stagger }};">
+<article class="card card--article card-article{% if featured %} card-article--featured{% endif %}{% unless article.image %} card-article--text{% endunless %}">
   {%- if article.image -%}
     <div class="card__media media card-article__media">
       {%- render 'image', image: article.image, sizes: sizes, loading: 'lazy', class: 'card__img card__img--primary', widths: '400, 600, 800, 1000, 1200, 1600' -%}

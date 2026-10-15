@@ -3,37 +3,40 @@
    hero, featured-collection, values-strip, image-with-text, scripture-quote,
    steps. Tokens, type scale, .btn / .link--chevron / .tile / .card--product
    come from base.css and components.css; this file only lays them out.
+   Brand integrity (APPLE-SPEC §0): nothing here draws products, labels or
+   emblems, and merchant photos are never blended, filtered or cropped
+   through a label. Product shots sit on --c-photo-ground (the white they
+   were shot on).
    ========================================================================== */
 
-/* === shared: bottle illustration ===
-   The no-image fallback for the hero and image-with-text: an olive-oil bottle
-   drawn with scheme tokens only, so it follows every colour scheme. Static. */
-.bottle {
-  display: block;
-  overflow: visible;
+/* === shared: one gap between same-surface sections ===
+   When one of these sections follows a padded section (or a centered/split
+   hero) on the same colour scheme, its top padding goes, so the page reads
+   as one continuous surface with a single section gap instead of two. */
+.shopify-section:has(> .color-scheme-1:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-1,
+.shopify-section:has(> .color-scheme-2:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-2,
+.shopify-section:has(> .color-scheme-3:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-3,
+.shopify-section:has(> .color-scheme-4:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-4,
+.shopify-section:has(> .color-scheme-5:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-5 {
+  padding-top: 0;
 }
 
-.bottle__shadow { fill: rgba(var(--c-ink), 0.08); }
-.bottle__stop--glass-edge { stop-color: rgb(var(--c-ink)); stop-opacity: 0.13; }
-.bottle__stop--glass-mid { stop-color: rgb(var(--c-ink)); stop-opacity: 0.045; }
-.bottle__stop--oil-edge { stop-color: rgb(var(--c-gold)); stop-opacity: 0.5; }
-.bottle__stop--oil-mid { stop-color: rgb(var(--c-gold)); stop-opacity: 0.26; }
-.bottle__shine { fill: rgb(var(--c-bg)); opacity: 0.55; }
-.bottle__shine--soft { opacity: 0.3; }
-.bottle__label { fill: rgb(var(--c-bg)); }
-.bottle__mark { fill: rgb(var(--c-gold)); }
-.bottle__line { fill: rgba(var(--c-ink), 0.2); }
-.bottle__line--strong { fill: rgba(var(--c-ink), 0.62); }
-.bottle__rule { fill: rgba(var(--c-ink), 0.1); }
-.bottle__collar { fill: rgba(var(--c-ink), 0.16); }
-.bottle__cap { fill: rgb(var(--c-ink)); opacity: 0.9; }
-.bottle__cap-shine { fill: rgb(var(--c-bg)); opacity: 0.14; }
+/* === shared: centred rows ===
+   Tiles flow in rows that centre, so a short last row (an odd tile on a
+   phone, two of three on desktop) sits under the middle of the full rows,
+   in line with the centred header and "Shop all ›" link. */
+.featured-collection__grid,
+.steps__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-/* Neutral variant: a placeholder, not a product. Gray oil, gray mark. */
-.bottle--neutral .bottle__stop--oil-edge { stop-color: rgb(var(--c-ink)); stop-opacity: 0.1; }
-.bottle--neutral .bottle__stop--oil-mid { stop-color: rgb(var(--c-ink)); stop-opacity: 0.05; }
-.bottle--neutral .bottle__mark { fill: rgba(var(--c-ink), 0.28); }
-.bottle--neutral .bottle__cap { opacity: 0.72; }
+.featured-collection__item,
+.steps__item {
+  flex: 0 0 calc((100% - (var(--row-cols) - 1) * var(--grid-gap)) / var(--row-cols));
+  min-width: 0;
+}
 
 /* === shared: "Learn more ›" chevron sizing ===
    The icon snippet sets --icon-size inline; size the box from the text so the
@@ -48,12 +51,13 @@
 
 /* === section: hero ===
    centered (default): eyebrow, h0, one-line lead, CTA pair, then the product
-   large and centred below. split: text left, a rounded 4:5 tile right.
-   full-bleed: media behind a scheme-3 scrim with the text over it.
+   large and centred below, whole, on its white ground. split: text left, a
+   rounded 4:5 tile right. full-bleed: media behind a scheme-3 scrim with the
+   text over it. No media: text only (the editor shows a neutral placeholder).
    Motion inventory (all CSS, no JS, no data-reveal):
    - text staggers in via .enter + --i (base.css @starting-style): marketing
      entrance, the heading is readable the instant the page paints
-   - the product image / media tile rises 24px while it fades in, one beat
+   - the product stage / media tile rises 24px while it fades in, one beat
      after the text (600ms, var(--ease-out)): "the product arrives"
    - full-bleed media fades in on opacity only
    - prefers-reduced-motion: fades only; the video is hidden behind its
@@ -103,6 +107,12 @@
 
 .hero--centered .hero__subheading {
   max-width: var(--text-max);
+  text-wrap: balance;
+}
+
+/* Text only: no product to show, so the headline block gets the room */
+.hero--text-only .hero__inner {
+  padding-block: clamp(72px, 11vw, 160px);
 }
 
 .hero__stage {
@@ -113,48 +123,55 @@
   margin-inline: auto;
 }
 
-/* Product shot: shown whole, no frame, no border, no radius */
-.hero__stage--product .media__img,
-.hero__stage--photo .media__img {
+/* Product shot: whole (never cropped), on the white it was shot on. On a
+   white section the ground is invisible and the product floats; on gray or
+   dark sections it reads as an Apple Store white tile. */
+.hero__stage--product {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(32px, 4.5vw, 56px);
+  padding: clamp(20px, 3.5vw, 48px);
+  border-radius: var(--r-tile);
+  background: rgb(var(--c-photo-ground));
+}
+
+.hero__stage--product .media__img {
   position: static;
   display: block;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   height: auto;
-  max-height: min(72svh, 760px);
+  max-height: min(64svh, 680px);
   object-fit: contain;
 }
 
-/* Photo with its own background: rounded like a tile */
+/* Photo with its own background: its own shape, corners rounded like a tile */
 .hero__stage--photo {
-  overflow: hidden;
-  border-radius: var(--r-tile);
-}
-
-.hero__stage--photo .media__img {
-  object-fit: cover;
-}
-
-.hero--tall .hero__stage--product .media__img,
-.hero--tall .hero__stage--photo .media__img {
-  max-height: min(84svh, 900px);
-}
-
-.hero__stage--video {
-  --media-radius: var(--r-tile);
-}
-
-.hero__stage--illustration {
   display: flex;
   justify-content: center;
 }
 
-.hero__stage--illustration .hero__bottle {
+.hero__stage--photo .media__img {
+  position: static;
+  display: block;
   width: auto;
-  height: clamp(300px, 22vw + 180px, 500px);
+  max-width: 100%;
+  height: auto;
+  max-height: min(72svh, 760px);
+  border-radius: var(--r-tile);
 }
 
-.hero--tall .hero__stage--illustration .hero__bottle {
-  height: clamp(340px, 28vw + 180px, 600px);
+.hero--tall .hero__stage--product .media__img {
+  max-height: min(76svh, 820px);
+}
+
+.hero--tall .hero__stage--photo .media__img {
+  max-height: min(84svh, 900px);
+}
+
+.hero__stage--video,
+.hero__stage--placeholder {
+  --media-radius: var(--r-tile);
 }
 
 /* split: text left, rounded media tile right */
@@ -185,11 +202,14 @@
   --media-radius: var(--r-tile);
 }
 
-.hero__media--illustration .hero__bottle {
-  position: absolute;
-  inset: 14% 0;
-  width: 100%;
-  height: 72%;
+/* The chosen product's photo in the split tile: whole, on white */
+.hero__media--product {
+  background: rgb(var(--c-photo-ground));
+}
+
+.hero__media--product .media__img {
+  object-fit: contain;
+  padding: clamp(20px, 8%, 56px);
 }
 
 /* The product arrives: rises 24px and fades in, one beat after the text */
@@ -230,7 +250,7 @@
   overflow: hidden;
   background: rgb(var(--c-surface));
   opacity: 1;
-  transition: opacity var(--dur-reveal) ease;
+  transition: opacity var(--dur-reveal) var(--ease-out);
 }
 
 @starting-style {
@@ -300,34 +320,31 @@
 }
 
 /* === section: featured-collection ===
-   Centred header (eyebrow, h2, muted lead) over product tiles: 3-up desktop
-   (columns setting), 2-up tablet and phone, then a centred "Shop all ›".
-   Tiles and their reveal come from card-product / components.css; phones
-   get compact tiles (16px padding, 15px titles). */
+   Centred header (eyebrow, h2, muted lead) over product tiles in centred
+   rows: the columns setting from 990px, 2-up below, then a centred
+   "Shop all ›". Tiles and their reveal come from card-product /
+   components.css; phones get compact tiles (16px padding, 15px titles). */
 .featured-collection__description {
   max-width: var(--text-max);
 }
 
 .featured-collection__grid {
   --grid-gap: clamp(12px, 1.6vw, 24px);
+  --row-cols: 2;
+}
+
+@media (min-width: 990px) {
+  .featured-collection__grid {
+    --row-cols: var(--cols-desktop, 3);
+  }
 }
 
 .featured-collection__item {
   display: flex;
-  min-width: 0;
 }
 
 .featured-collection__item > .card {
   flex: 1 1 auto;
-}
-
-/* 2-up below 990px: an odd last tile sits centred, not stranded at the left */
-@media (max-width: 989px) {
-  .featured-collection__item:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: calc((100% - var(--grid-gap)) / 2);
-  }
 }
 
 .featured-collection__footer {
@@ -340,10 +357,6 @@
   margin: 0;
 }
 
-.featured-collection__empty .icon {
-  color: rgb(var(--c-gold));
-}
-
 @media (max-width: 749px) {
   .featured-collection__grid {
     --grid-gap: 12px;
@@ -351,7 +364,7 @@
 
   .featured-collection .card--product {
     padding: 16px 16px 20px;
-    border-radius: var(--r-lg);
+    border-radius: var(--r-card);
   }
 
   .featured-collection .card--product .card__media {
@@ -384,15 +397,8 @@
 /* === section: values-strip ===
    An apple.com feature row: centred items, a 40px line icon in the accent
    detail colour (no disc), .h5 title, muted .small body. Four across from
-   990px, two on tablets, one on phones (centred lines stay short). */
-.values-strip--divider-top {
-  border-top: 1px solid rgb(var(--c-line));
-}
-
-.values-strip--divider-bottom {
-  border-bottom: 1px solid rgb(var(--c-line));
-}
-
+   990px, two on tablets, one on phones (centred lines stay short). No rules
+   between sections: the neighbouring surfaces separate it. */
 .values-strip__grid {
   row-gap: clamp(40px, 5vw, 56px);
   column-gap: clamp(16px, 3vw, 40px);
@@ -407,9 +413,16 @@
   text-align: center;
 }
 
+.values-strip__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
 .values-strip__icon {
   display: inline-flex;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-5);
   color: rgb(var(--c-gold));
 }
 
@@ -417,9 +430,8 @@
   stroke-width: 1.3;
 }
 
-.values-strip__title {
-  margin: 0;
-  max-width: 14em;
+.values-strip__title-text {
+  max-width: 16em;
   text-wrap: balance;
 }
 
@@ -437,6 +449,10 @@
 }
 
 @media (max-width: 749px) {
+  .values-strip__icon {
+    margin-bottom: var(--space-4);
+  }
+
   .values-strip__icon .icon {
     width: 36px;
     height: 36px;
@@ -444,9 +460,11 @@
 }
 
 /* === section: image-with-text ===
-   Big rounded media (--r-tile) and a short text column. From 1200px the
-   media takes 7 of 12 columns and the text 5, inset from the media; 990-1199px
-   splits evenly. Stacked below, text first when the layout says so. */
+   Big rounded media (--r-tile) and a short text column, side by side from
+   750px: an even split up to 1199px, then media 7 of 12 columns and text 5,
+   inset from the media. Stacked on phones. A chosen product's photo sits
+   whole on its white ground. With no media the text stands alone in a
+   centred reading column (left-aligned, so the body never centres). */
 .image-with-text__grid {
   display: grid;
   gap: clamp(32px, 5vw, 56px);
@@ -456,11 +474,20 @@
   --media-radius: var(--r-tile);
 }
 
+.image-with-text__media--product {
+  background: rgb(var(--c-photo-ground));
+}
+
+.image-with-text__media--product .media__img {
+  object-fit: contain;
+  padding: clamp(24px, 8%, 64px);
+}
+
 .image-with-text--text-first .image-with-text__content {
   order: -1;
 }
 
-@media (min-width: 990px) {
+@media (min-width: 750px) {
   .image-with-text__grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: clamp(16px, 2.5vw, 32px);
@@ -468,21 +495,21 @@
   }
 
   .image-with-text__media {
-    grid-column: 1 / 8;
+    grid-column: 1 / 7;
   }
 
   .image-with-text__content {
-    grid-column: 8 / 13;
-    padding-inline-start: clamp(16px, 3vw, 48px);
+    grid-column: 7 / 13;
+    padding-inline-start: clamp(8px, 2.5vw, 48px);
   }
 
   .image-with-text--text-first .image-with-text__content {
-    grid-column: 1 / 6;
-    padding-inline: 0 clamp(16px, 3vw, 48px);
+    grid-column: 1 / 7;
+    padding-inline: 0 clamp(8px, 2.5vw, 48px);
   }
 
   .image-with-text--text-first .image-with-text__media {
-    grid-column: 6 / 13;
+    grid-column: 7 / 13;
   }
 
   .image-with-text--align-top .image-with-text__grid {
@@ -498,30 +525,34 @@
   }
 }
 
-/* Small laptops: an even split keeps the h2 to three lines */
-@media (min-width: 990px) and (max-width: 1199px) {
+/* Large screens: the media takes the larger share */
+@media (min-width: 1200px) {
   .image-with-text__media {
-    grid-column: 1 / 7;
+    grid-column: 1 / 8;
   }
 
   .image-with-text__content {
-    grid-column: 7 / 13;
+    grid-column: 8 / 13;
   }
 
   .image-with-text--text-first .image-with-text__content {
-    grid-column: 1 / 7;
+    grid-column: 1 / 6;
   }
 
   .image-with-text--text-first .image-with-text__media {
-    grid-column: 7 / 13;
+    grid-column: 6 / 13;
   }
 }
 
-.image-with-text__media--illustration .image-with-text__bottle {
-  position: absolute;
-  inset: 16% 0;
-  width: 100%;
-  height: 68%;
+/* No media: one centred reading column */
+.image-with-text--text-only .image-with-text__grid {
+  display: block;
+}
+
+.image-with-text--text-only .image-with-text__content {
+  max-width: var(--text-max);
+  margin-inline: auto;
+  padding-inline: 0;
 }
 
 .image-with-text__content {
@@ -547,7 +578,9 @@
 /* === section: scripture-quote ===
    An Apple "statement": optional eyebrow, the verse as a semibold headline
    with curly quotes (.scripture__quote), the reference below as a quiet
-   eyebrow. No ornaments. Extra breathing room at the default spacing. */
+   eyebrow. No ornaments. Extra breathing room at the default spacing.
+   Left-aligned verses hang the opening quote so the letters line up with
+   the eyebrow and reference. */
 .scripture-quote:not(.section--tight):not(.section--none) {
   padding-block: calc(var(--section-y) * 1.25);
 }
@@ -582,24 +615,41 @@
   margin-inline: auto;
 }
 
+.scripture-quote--left .scripture-quote__text {
+  text-indent: -0.42em;
+}
+
 .scripture-quote__ref {
   margin: clamp(20px, 2.4vw, 32px) 0 0;
 }
 
 /* === section: steps ===
    Centred heading and intro, then flat tiles (--c-surface): a large numeral
-   in the accent detail colour, .h4 title, muted body. Three across from
-   750px, stacked on phones; the external-use caption sits centred below. */
+   in the accent detail colour, .h4 title, muted body. Up to three across
+   from 990px, two on tablets, stacked on phones, in centred rows; the
+   external-use caption sits centred below. */
 .steps__intro {
   max-width: var(--text-max);
 }
 
 .steps__grid {
   --grid-gap: clamp(12px, 1.6vw, 24px);
+  --row-cols: 1;
+}
+
+@media (min-width: 750px) {
+  .steps__grid {
+    --row-cols: min(var(--cols-desktop, 3), 2);
+  }
+}
+
+@media (min-width: 990px) {
+  .steps__grid {
+    --row-cols: var(--cols-desktop, 3);
+  }
 }
 
 .steps__item {
-  min-width: 0;
   padding-block: clamp(32px, 4vw, 56px);
 }
 

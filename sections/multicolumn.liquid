@@ -6,8 +6,13 @@
   Then an .h4 title, muted text and an optional "Learn more ›" link pinned
   to the bottom. Text is left- or centre-aligned per setting. With tiles off
   the columns sit flat on the section background with rounded images.
-  Motion inventory: the shared reveal (batch stagger from theme.js) and, on
-  real pointers, a 3% image zoom when the column carries a link.
+  Images show whole on the white photo ground by default ("Fit"), so a
+  product shot is never cropped through its label (APPLE-SPEC §0.3);
+  "Fill" crops to the frame for full-bleed photography. Columns wrap in a
+  centred row, so a short last row sits in the middle. Outside the editor
+  an empty section renders nothing. Motion inventory: the shared reveal
+  (batch stagger from theme.js) and, on real pointers, a 3% image zoom
+  when the column carries a link.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -36,8 +41,11 @@
   if section.settings.heading != blank or section.settings.intro != blank
     assign has_header = true
   endif
+
+  assign fit = section.settings.image_fit | default: 'contain'
 -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} multicolumn{% if section.settings.background_cards %} multicolumn--cards{% else %} multicolumn--flat{% endif %} multicolumn--ratio-{{ section.settings.image_ratio }} multicolumn--align-{{ align }}" id="section-{{ section.id }}">
+{%- if has_header or section.blocks.size > 0 or request.design_mode -%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} multicolumn{% if section.settings.background_cards %} multicolumn--cards{% else %} multicolumn--flat{% endif %} multicolumn--ratio-{{ section.settings.image_ratio }} multicolumn--fit-{{ fit }} multicolumn--align-{{ align }}" id="section-{{ section.id }}">
   <div class="page-width">
     {%- if has_header -%}
       <header class="section__header section__header--center multicolumn__header" data-reveal>
@@ -86,6 +94,7 @@
     {%- endif -%}
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {
@@ -126,6 +135,17 @@
         { "value": "circle", "label": "Circle" }
       ],
       "default": "landscape"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "info": "Fit shows the whole image on a white ground, so product photos are never cropped. Fill crops the image to the frame.",
+      "options": [
+        { "value": "contain", "label": "Fit" },
+        { "value": "cover", "label": "Fill" }
+      ],
+      "default": "contain"
     },
     {
       "type": "checkbox",

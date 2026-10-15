@@ -6,8 +6,10 @@
   (accordion base in components.css; assets/theme.js animates
   grid-template-rows 0fr → 1fr, the one tolerated layout animation).
   "Heading beside questions" is kept as an option: the header pins on the
-  left from 990px while the questions scroll on the right. Emits FAQPage
-  JSON-LD for the questions that have text.
+  left from 990px while the questions scroll on the right; below 990px it
+  is one centred column like the default. Emits FAQPage JSON-LD for the
+  questions that have text. Outside the editor an empty section renders
+  nothing.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -19,10 +21,8 @@
   endcase
 
   assign layout_class = ' faq--one-column'
-  assign header_class = ' section__header--center'
   if section.settings.layout == 'two_column'
     assign layout_class = ' faq--two-column'
-    assign header_class = ''
   endif
 
   assign question_count = 0
@@ -37,11 +37,12 @@
     assign has_header = true
   endif
 -%}
+{%- if has_header or question_count > 0 or request.design_mode -%}
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} faq{{ layout_class }}" id="section-{{ section.id }}">
   <div class="page-width">
     <div class="faq__layout">
       {%- if has_header -%}
-        <header class="section__header{{ header_class }} faq__header" data-reveal>
+        <header class="section__header section__header--center faq__header" data-reveal>
           {%- if section.settings.heading != blank -%}
             <h2 class="h2 faq__heading" id="FaqHeading-{{ section.id }}">{{ section.settings.heading }}</h2>
           {%- endif -%}
@@ -80,6 +81,7 @@
     </div>
   </div>
 </div>
+{%- endif -%}
 
 {%- if question_count > 0 -%}
   <script type="application/ld+json">

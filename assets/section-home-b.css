@@ -123,8 +123,10 @@
    Stacked (default): an apple.com product mini hero. Centred eyebrow, h2,
    short text, price, the CTA pair, then a large product image whose box
    follows the photo's own ratio, capped at the content measure and ~68% of
-   the viewport height. Product shots blend into light bands (multiply), so
-   a white-background photo sits straight on the white or light-gray band.
+   the small viewport height. The photo is never blended or cropped
+   (APPLE-SPEC §0.3): it sits whole (contain) on a rounded white stage, the
+   photo's own ground, which reads as an Apple Store tile on a light-gray or
+   dark band and simply disappears on a white one.
    Split: the same content left-aligned beside the image from 990px. */
 .featured-product__grid {
   display: grid;
@@ -154,7 +156,7 @@
   line-height: 1.38;
   letter-spacing: 0.011em;
   color: rgb(var(--c-ink-2));
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 .featured-product__text > * + * {
@@ -232,15 +234,22 @@
   min-width: 0;
 }
 
-.featured-product__media-link {
+.featured-product__stage {
+  --stage-pad: clamp(20px, 4vw, 56px);
   display: block;
-  width: min(100%, var(--content-max), calc(68svh * var(--fp-ratio, 1)));
-  border-radius: var(--r-media);
+  width: min(100%, var(--content-max), calc(68svh * var(--fp-ratio, 1) + var(--stage-pad) * 2));
+  padding: var(--stage-pad);
+  border-radius: var(--r-tile);
+  background: rgb(var(--c-photo-ground));
+}
+
+.featured-product--on-white .featured-product__stage {
+  --stage-pad: 0px;
 }
 
 .featured-product__figure {
   --media-radius: var(--r-media);
-  background: transparent;
+  background: rgb(var(--c-photo-ground));
 }
 
 .featured-product__figure--placeholder {
@@ -249,12 +258,6 @@
 
 .featured-product .featured-product__img {
   object-fit: contain;
-  mix-blend-mode: multiply;
-}
-
-[class*="color-scheme-3"].featured-product .featured-product__img,
-[class*="color-scheme-4"].featured-product .featured-product__img {
-  mix-blend-mode: normal;
 }
 
 /* split: left-aligned content beside the image */
@@ -293,17 +296,18 @@
     order: -1;
   }
 
-  .featured-product--split .featured-product__media-link {
-    width: min(100%, calc(76svh * var(--fp-ratio, 1)));
+  .featured-product--split .featured-product__stage {
+    width: min(100%, calc(76svh * var(--fp-ratio, 1) + var(--stage-pad) * 2));
   }
 }
 
 /* === section: faq ===
    One column (default): centred header, questions held to --text-max.
    Hairlines sit between items only. Two columns pin the header on the left
-   from 990px while the questions scroll on the right. The accordion itself
-   (21px semibold question, plus → ×, 0fr → 1fr) lives in components.css. */
-.faq--one-column .faq__list {
+   from 990px while the questions scroll on the right; below that it is the
+   same centred single column. The accordion itself (21px semibold
+   question, plus → ×, 0fr → 1fr) lives in components.css. */
+.faq__list {
   width: 100%;
   max-width: var(--text-max);
   margin-inline: auto;
@@ -311,6 +315,7 @@
 
 .faq__intro {
   max-width: var(--text-max);
+  text-wrap: balance;
 }
 
 /* olivet-accordion is a custom element (inline by default) */
@@ -342,7 +347,13 @@
   .faq--two-column .faq__header {
     position: sticky;
     top: calc(var(--header-height) + var(--space-6));
-    margin-bottom: 0;
+    align-items: flex-start;
+    margin: 0;
+    text-align: left;
+  }
+
+  .faq--two-column .faq__list {
+    max-width: none;
   }
 }
 
@@ -394,6 +405,10 @@
   text-wrap: pretty;
 }
 
+.newsletter--center .newsletter__text {
+  text-wrap: balance;
+}
+
 .newsletter__form-wrap {
   display: flex;
   flex-direction: column;
@@ -442,7 +457,9 @@
 /* === section: rich-text ===
    A centred (default) or left column at a chosen measure: eyebrow, a
    headline on the type scale, text in lead / body / small, then the CTA
-   pair in one .cta-row. */
+   pair in one .cta-row. Centred copy is balanced; copy long enough to run
+   past three centred lines on a phone (.rich-text--long, set in Liquid)
+   reads left-aligned below 750px. */
 .rich-text__inner {
   display: flex;
   flex-direction: column;
@@ -453,6 +470,25 @@
 .rich-text--center .rich-text__inner {
   align-items: center;
   text-align: center;
+}
+
+.rich-text--center .rich-text__text > * {
+  text-wrap: balance;
+}
+
+@media (max-width: 749px) {
+  .rich-text--long .rich-text__inner {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .rich-text--long .rich-text__text > * {
+    text-wrap: pretty;
+  }
+
+  .rich-text--long .rich-text__buttons {
+    justify-content: flex-start;
+  }
 }
 
 .rich-text__heading {
@@ -499,32 +535,42 @@
    Feature tiles (default): flat --c-surface panels, radius --r-tile, 24–40px
    padding. An image bleeds across the top of its tile (the tile clips the
    corners); without one a 40px icon in the accent detail colour leads.
-   Flat mode drops the panels and rounds the images instead. */
+   Flat mode drops the panels and rounds the images instead. Columns wrap
+   in a centred flex row, so a short last row (3 + 1, 2 + 1 on tablets)
+   sits in the middle instead of leaving a hole. Images "Fit" (default)
+   show whole on the white photo ground; "Fill" crops to the frame. */
 .multicolumn__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(12px, 1.6vw, 24px);
+  --gap: clamp(12px, 1.6vw, 24px);
+  --row-gap: var(--gap);
+  --cols: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--row-gap) var(--gap);
 }
 
 .multicolumn--flat .multicolumn__grid {
-  gap: clamp(40px, 5vw, 56px) clamp(24px, 3vw, 40px);
+  --gap: clamp(24px, 3vw, 40px);
+  --row-gap: clamp(40px, 5vw, 56px);
 }
 
 @media (min-width: 750px) {
   .multicolumn__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    --cols: 2;
   }
 }
 
 @media (min-width: 990px) {
   .multicolumn__grid {
-    grid-template-columns: repeat(var(--multicolumn-cols, 3), minmax(0, 1fr));
+    --cols: var(--multicolumn-cols, 3);
   }
 }
 
+/* the 0.1px keeps rounding from pushing the last column of a row onto the next */
 .multicolumn__item {
   --tile-pad: clamp(24px, 3vw, 40px);
   display: flex;
+  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols) - 0.1px);
   flex-direction: column;
   gap: var(--space-3);
   min-width: 0;
@@ -566,8 +612,16 @@
   --media-radius: 50%;
 }
 
+.multicolumn--fit-contain .multicolumn__figure {
+  background: rgb(var(--c-photo-ground));
+}
+
+.multicolumn--fit-contain .multicolumn__img {
+  object-fit: contain;
+}
+
 .multicolumn__img {
-  transition: transform 400ms var(--ease-out), opacity var(--dur-slow) ease;
+  transition: transform 400ms var(--ease-out), opacity var(--dur-slow) var(--ease-out);
 }
 
 .multicolumn__icon {
@@ -613,9 +667,13 @@
 /* === section: featured-blog ===
    Newsroom-style article tiles: image across the top of a rounded
    --c-surface tile, then tag, .h5 title, optional excerpt and a 14px muted
-   date pinned to the bottom. The title link's ::after covers the tile. */
-.featured-blog__intro {
+   date pinned to the bottom. The title link's ::after covers the tile. A
+   post without an image is a text-only tile with a larger title. Tiles
+   wrap in a centred flex row so a short last row sits in the middle. */
+.featured-blog__intro,
+.multicolumn__intro {
   max-width: var(--text-max);
+  text-wrap: balance;
 }
 
 .featured-blog__view-all {
@@ -623,31 +681,36 @@
 }
 
 .featured-blog__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(16px, 2vw, 24px);
+  --gap: clamp(16px, 2vw, 24px);
+  --cols: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
 }
 
 @media (min-width: 750px) {
   .featured-blog__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    --cols: 2;
   }
 }
 
 @media (min-width: 990px) {
   .featured-blog__grid {
-    grid-template-columns: repeat(var(--featured-blog-cols, 3), minmax(0, 1fr));
+    --cols: var(--featured-blog-cols, 3);
   }
 }
 
 .featured-blog__grid--single.featured-blog__grid {
-  grid-template-columns: minmax(0, 1fr);
+  --cols: 1;
   max-width: var(--content-max);
   margin-inline: auto;
 }
 
+/* the 0.1px keeps rounding from pushing the last tile of a row onto the next */
 .featured-blog__item {
   display: flex;
+  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols) - 0.1px);
   min-width: 0;
 }
 
@@ -675,23 +738,11 @@
 .featured-blog__media {
   --media-radius: 0;
   flex-shrink: 0;
-  background: rgba(var(--c-ink), 0.04);
+  background: rgb(var(--c-photo-ground));
 }
 
 .featured-blog__img {
-  transition: transform 400ms var(--ease-out), opacity var(--dur-slow) ease;
-}
-
-.featured-blog__placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: rgba(var(--c-ink), 0.22);
-}
-
-.featured-blog__placeholder .icon {
-  stroke-width: 1.25;
+  transition: transform 400ms var(--ease-out), opacity var(--dur-slow) var(--ease-out);
 }
 
 .featured-blog__body {
@@ -738,10 +789,22 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* No image: text-only, the title one step up the scale (.h4) */
+.featured-blog__tile--text .featured-blog__body {
+  padding-top: clamp(28px, 3.2vw, 40px);
+}
+
+.featured-blog__tile--text .featured-blog__title {
+  font-size: calc(clamp(1.3125rem, 1.1rem + 0.8vw, 1.75rem) * var(--heading-scale, 1));
+  line-height: 1.14;
+  letter-spacing: 0.007em;
+  -webkit-line-clamp: 5;
+}
+
 /* Tablets: an odd last tile spans the row and lays out wide */
 @media (min-width: 750px) and (max-width: 989px) {
   .featured-blog__item:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
+    flex-basis: 100%;
   }
 
   .featured-blog__item:last-child:nth-child(odd) .featured-blog__tile {
@@ -780,7 +843,7 @@
   .multicolumn__img,
   .featured-blog__img,
   .featured-blog__tile {
-    transition: opacity var(--dur-slow) ease;
+    transition: opacity var(--dur-slow) var(--ease-out);
   }
 
   .featured-blog__tile:active {

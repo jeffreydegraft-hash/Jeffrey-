@@ -9,6 +9,21 @@
 {%- liquid
   assign alignment = section.settings.alignment | default: 'center'
 
+  comment
+    The curly quotes are added by .scripture__quote; drop any the merchant
+    typed so the verse never shows two pairs.
+  endcomment
+  assign quote = section.settings.quote | strip
+  assign first_char = quote | slice: 0
+  if first_char == '"' or first_char == '“' or first_char == '‘' or first_char == "'"
+    assign quote = quote | slice: 1, quote.size | strip
+  endif
+  assign last_char = quote | slice: -1
+  if last_char == '"' or last_char == '”' or last_char == '’' or last_char == "'"
+    assign quote_len = quote.size | minus: 1
+    assign quote = quote | slice: 0, quote_len | strip
+  endif
+
   assign padding_class = ''
   case section.settings.padding
     when 'tight'
@@ -17,7 +32,7 @@
       assign padding_class = ' section--none'
   endcase
 -%}
-{%- if section.settings.quote != blank -%}
+{%- if quote != blank -%}
   <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} scripture-quote scripture-quote--{{ alignment }}" id="section-{{ section.id }}">
     <div class="page-width">
       <figure class="scripture scripture-quote__figure" data-reveal>
@@ -25,7 +40,7 @@
           <p class="eyebrow scripture-quote__eyebrow">{{ section.settings.eyebrow | escape }}</p>
         {%- endif -%}
         <blockquote class="scripture-quote__blockquote">
-          <p class="scripture__quote scripture-quote__text">{{ section.settings.quote | escape | newline_to_br }}</p>
+          <p class="scripture__quote scripture-quote__text">{{ quote | escape | newline_to_br }}</p>
         </blockquote>
         {%- if section.settings.reference != blank -%}
           <figcaption class="eyebrow eyebrow--ink scripture-quote__ref">{{ section.settings.reference | escape }}</figcaption>

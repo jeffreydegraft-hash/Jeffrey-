@@ -1,10 +1,13 @@
 {%- comment -%}
   Image with text: big rounded media (--r-tile) beside a short text column:
   eyebrow, h2, 17px muted body, "Learn more ›" link (or a pill button).
-  12 columns from 990px (an even split; from 1200px media 7/12, text 5/12),
-  stacked below. The media can lead or follow; the text can sit at the top,
-  middle or bottom of the media's height.
-  Placeholder: a neutral olive-oil bottle drawn in tokens on the tile surface.
+  12 columns from 750px (an even split; from 1200px media 7/12, text 5/12),
+  stacked on phones. The media can lead or follow; the text can sit at the
+  top, middle or bottom of the media's height.
+  Media, in order: the chosen image, else the chosen product's own photo,
+  shown whole on the white ground it was shot on (APPLE-SPEC §0). With
+  neither, the storefront shows the text alone in a centred reading column;
+  the theme editor shows Shopify's neutral placeholder. Nothing is drawn.
   Motion: media and text reveal on scroll (data-reveal), text one step later.
 {%- endcomment -%}
 {%- liquid
@@ -13,6 +16,32 @@
   assign ratio = section.settings.image_ratio | default: '4 / 5'
   assign vertical_align = section.settings.vertical_align | default: 'center'
   assign button_style = section.settings.button_style | default: 'link'
+  assign iwt_product = section.settings.product
+
+  assign media_image = section.settings.image
+  assign media_kind = 'photo'
+  assign media_alt = ''
+  if media_image == blank and iwt_product != blank and iwt_product.featured_media != blank
+    assign media_image = iwt_product.featured_media.preview_image
+    assign media_kind = 'product'
+    assign media_alt = iwt_product.featured_media.alt | default: iwt_product.title
+  endif
+
+  comment
+    "auto" keeps the image's own shape, so nothing is ever cropped.
+  endcomment
+  if ratio == 'auto'
+    if media_image != blank
+      assign ratio = media_image.aspect_ratio | append: ' / 1'
+    else
+      assign ratio = '4 / 5'
+    endif
+  endif
+
+  assign show_media = true
+  if media_image == blank and request.design_mode == false
+    assign show_media = false
+  endif
 
   assign padding_class = ''
   case section.settings.padding
@@ -28,47 +57,20 @@
   endif
 -%}
 <div
-  class="section{{ padding_class }} color-{{ section.settings.color_scheme }} image-with-text image-with-text--{{ layout_class }} image-with-text--align-{{ vertical_align }}"
+  class="section{{ padding_class }} color-{{ section.settings.color_scheme }} image-with-text image-with-text--{{ layout_class }} image-with-text--align-{{ vertical_align }}{% unless show_media %} image-with-text--text-only{% endunless %}"
   id="section-{{ section.id }}"
 >
   <div class="page-width">
     <div class="image-with-text__grid">
-      <div class="image-with-text__media media{% if section.settings.image == blank %} image-with-text__media--illustration{% endif %}" data-reveal style="--ratio: {{ ratio }}; --i: 0;">
-        {%- if section.settings.image != blank -%}
-          {%- render 'image', image: section.settings.image, sizes: '(min-width: 990px) 58vw, 100vw', widths: '400, 600, 800, 1200, 1600, 2000', loading: 'lazy', class: 'image-with-text__img' -%}
-        {%- else -%}
-          {%- comment -%} Designed fallback until a photo is chosen: a neutral bottle in theme tokens {%- endcomment -%}
-          <svg class="bottle bottle--neutral image-with-text__bottle" viewBox="0 0 240 560" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="BottleGlass-{{ section.id }}" x1="0" y1="0" x2="1" y2="0">
-                <stop class="bottle__stop bottle__stop--glass-edge" offset="0"/>
-                <stop class="bottle__stop bottle__stop--glass-mid" offset="0.32"/>
-                <stop class="bottle__stop bottle__stop--glass-mid" offset="0.68"/>
-                <stop class="bottle__stop bottle__stop--glass-edge" offset="1"/>
-              </linearGradient>
-              <linearGradient id="BottleOil-{{ section.id }}" x1="0" y1="0" x2="1" y2="0">
-                <stop class="bottle__stop bottle__stop--oil-edge" offset="0"/>
-                <stop class="bottle__stop bottle__stop--oil-mid" offset="0.4"/>
-                <stop class="bottle__stop bottle__stop--oil-edge" offset="1"/>
-              </linearGradient>
-            </defs>
-            <ellipse class="bottle__shadow" cx="120" cy="540" rx="96" ry="10"/>
-            <path class="bottle__glass" fill="url(#BottleGlass-{{ section.id }})" d="M94 112h52v36c0 18 58 18 58 62v292c0 18-12 30-30 30H66c-18 0-30-12-30-30V210c0-44 58-44 58-62v-36Z"/>
-            <path class="bottle__oil" fill="url(#BottleOil-{{ section.id }})" d="M44 244c24 7 50 10 76 10s52-3 76-10v256c0 14-9 23-24 23H68c-15 0-24-9-24-23V244Z"/>
-            <rect class="bottle__shine" x="50" y="222" width="9" height="282" rx="4.5"/>
-            <rect class="bottle__shine bottle__shine--soft" x="185" y="232" width="4" height="262" rx="2"/>
-            <rect class="bottle__label" x="56" y="300" width="128" height="156" rx="6"/>
-            <path class="bottle__mark" d="M119 322c-9 5-13 13-11 22 9-2 14-10 11-22Zm2 0c9 5 13 13 11 22-9-2-14-10-11-22Z"/>
-            <rect class="bottle__line bottle__line--strong" x="84" y="360" width="72" height="7" rx="3.5"/>
-            <rect class="bottle__line" x="96" y="377" width="48" height="5" rx="2.5"/>
-            <rect class="bottle__rule" x="76" y="402" width="88" height="1.5"/>
-            <rect class="bottle__line" x="102" y="420" width="36" height="5" rx="2.5"/>
-            <rect class="bottle__collar" x="90" y="100" width="60" height="16" rx="4"/>
-            <rect class="bottle__cap" x="84" y="22" width="72" height="82" rx="10"/>
-            <rect class="bottle__cap-shine" x="94" y="30" width="6" height="66" rx="3"/>
-          </svg>
-        {%- endif -%}
-      </div>
+      {%- if show_media -%}
+        <div class="image-with-text__media media image-with-text__media--{{ media_kind }}" data-reveal style="--ratio: {{ ratio }}; --i: 0;">
+          {%- if media_image != blank -%}
+            {%- render 'image', image: media_image, alt: media_alt, sizes: '(min-width: 1200px) 58vw, (min-width: 750px) 50vw, 100vw', widths: '400, 600, 800, 1200, 1600, 2000', loading: 'lazy', class: 'image-with-text__img' -%}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg image-with-text__placeholder' }}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
       <div class="image-with-text__content" data-reveal style="--i: 1;">
         {%- if section.settings.eyebrow != blank -%}
           <p class="eyebrow image-with-text__eyebrow">{{ section.settings.eyebrow | escape }}</p>
@@ -112,6 +114,12 @@
       "label": "Image"
     },
     {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "Used when no image is chosen: shows this product's own photo, whole, on white. With neither, the text shows on its own."
+    },
+    {
       "type": "select",
       "id": "image_ratio",
       "label": "Image ratio",
@@ -127,6 +135,10 @@
         {
           "value": "3 / 2",
           "label": "Landscape (3:2)"
+        },
+        {
+          "value": "auto",
+          "label": "Image's own shape (never cropped)"
         }
       ],
       "default": "4 / 5"

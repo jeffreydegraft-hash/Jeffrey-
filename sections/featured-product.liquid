@@ -4,13 +4,16 @@
   CTA pair (a "Buy" pill that submits the add-to-cart form + "Learn more ›"
   to the product), then a large centred product image below. "Side by side"
   keeps the same content left-aligned next to the image (image_position).
+  The photo is shown untouched (APPLE-SPEC §0.3): object-fit contain on its
+  own white ground (--c-photo-ground), a rounded white stage that reads as
+  an Apple Store tile on light-gray or dark bands and disappears on white.
 
   The add-to-cart form keeps the <product-form> contract (assets/cart.js):
   .product-form__error, {% form 'product' %} with name="id" (a native
   <select> when the product has variants, a hidden input otherwise) and a
   submit button whose first plain label span swaps to "Added". With no
-  product chosen the section renders a placeholder so the editor never shows
-  a hole. Motion inventory: the shared reveal (text, then image) and the
+  product chosen the editor shows Shopify's neutral placeholder; the live
+  store renders nothing rather than a fake product. Motion inventory: the shared reveal (text, then image) and the
   pill/link press from base.css; nothing else moves.
 {%- endcomment -%}
 {%- liquid
@@ -48,6 +51,13 @@
     endif
   endif
 
+  # On a band that is already the photo's white ground the stage needs no padding
+  assign stage_class = ''
+  assign scheme_bg = section.settings.color_scheme.settings.background
+  if scheme_bg != blank and scheme_bg.red == 255 and scheme_bg.green == 255 and scheme_bg.blue == 255
+    assign stage_class = ' featured-product--on-white'
+  endif
+
   if layout == 'split'
     assign media_sizes = '(min-width: 990px) 50vw, 100vw'
   else
@@ -67,10 +77,13 @@
     assign add_label = section.settings.button_label
   else
     assign add_label = 'sections.featured_product.buy' | t
+    if add_label contains 'ranslation missing'
+      assign add_label = 'products.product.add_to_cart' | t
+    endif
   endif
-
 -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-product featured-product--{{ layout }} featured-product--image-{{ section.settings.image_position }}" id="section-{{ section.id }}">
+{%- if product != blank or request.design_mode -%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-product featured-product--{{ layout }} featured-product--image-{{ section.settings.image_position }}{{ stage_class }}" id="section-{{ section.id }}">
   <div class="page-width">
     <div class="featured-product__grid">
       <div class="featured-product__content" data-reveal>
@@ -171,11 +184,11 @@
 
       <div class="featured-product__media" data-reveal>
         {%- if has_media -%}
-          <a href="{{ product.url }}" class="featured-product__media-link" aria-label="{{ product.title | escape }}" tabindex="-1" style="--fp-ratio: {{ media_ratio }};">
+          <a href="{{ product.url }}" class="featured-product__stage" aria-label="{{ product.title | escape }}" tabindex="-1" style="--fp-ratio: {{ media_ratio }};">
             {%- render 'image', image: product.featured_media, sizes: media_sizes, widths: '400, 600, 800, 1000, 1200, 1600', class: 'featured-product__img', loading: 'lazy', ratio: media_ratio, wrapper_class: 'featured-product__figure', alt: media_alt -%}
           </a>
         {%- else -%}
-          <div class="featured-product__media-link" style="--fp-ratio: 1;">
+          <div class="featured-product__stage" style="--fp-ratio: 1;">
             <div class="media featured-product__figure featured-product__figure--placeholder" style="--ratio: 1 / 1;">
               {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
             </div>
@@ -185,6 +198,7 @@
     </div>
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {

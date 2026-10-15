@@ -1,7 +1,8 @@
 {%- comment -%}
   Custom Liquid: renders whatever the merchant pastes into the setting,
   inside the page width and the chosen color scheme. In the editor an empty
-  setting shows a hint instead of nothing.
+  setting shows a hint; on the live store it renders nothing, so no empty
+  band of section spacing is left behind.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -12,6 +13,7 @@
       assign padding_class = ' section--none'
   endcase
 -%}
+{%- if section.settings.custom_liquid != blank or request.design_mode -%}
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} custom-liquid" id="section-{{ section.id }}">
   <div class="page-width custom-liquid__inner">
     {%- if section.settings.custom_liquid != blank -%}
@@ -24,6 +26,7 @@
     {%- endif -%}
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {

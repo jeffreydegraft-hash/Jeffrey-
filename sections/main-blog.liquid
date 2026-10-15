@@ -57,10 +57,10 @@
                 assign show_excerpt = true
               endif
             -%}
-            <li class="main-blog__item{% if featured %} main-blog__item--featured{% endif %}">
+            {%- assign stagger = forloop.index0 | modulo: 8 -%}
+            <li class="main-blog__item{% if featured %} main-blog__item--featured{% endif %}" data-reveal style="--i: {{ stagger }};">
               {%- render 'card-article',
                 article: article,
-                index: forloop.index0,
                 show_date: section.settings.show_date,
                 show_author: section.settings.show_author,
                 show_excerpt: show_excerpt,

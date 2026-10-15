@@ -5,7 +5,11 @@
   button blocks always render last, together in one .cta-row: a pill
   (primary or outline) and/or a "Learn more ›" text link with a chevron.
   "Remove bottom spacing" lets the column flow straight into the next
-  section of the same colour. Motion inventory: the shared reveal on each
+  section of the same colour. Centred copy long enough to run past three
+  lines on a phone (APPLE-SPEC §6) turns the column left-aligned below
+  750px; desktop keeps the chosen alignment. The eyebrow takes the hero
+  size over a Large (h1) heading. Outside the editor a section without
+  blocks renders nothing. Motion inventory: the shared reveal on each
   block (batch stagger from theme.js) and the pill/link press.
 {%- endcomment -%}
 {%- liquid
@@ -34,8 +38,34 @@
   endif
 
   assign buttons = section.blocks | where: 'type', 'button'
+
+  # Phone line estimate: about 32 / 40 / 48 characters per line for lead / body / small
+  assign long_class = ''
+  assign eyebrow_class = 'eyebrow'
+  for block in section.blocks
+    if block.type == 'text'
+      assign text_length = block.settings.text | strip_html | size
+      case block.settings.size
+        when 'lead'
+          assign line_limit = 100
+        when 'small'
+          assign line_limit = 150
+        else
+          assign line_limit = 130
+      endcase
+      if text_length > line_limit
+        assign long_class = ' rich-text--long'
+      endif
+    elsif block.type == 'heading' and block.settings.size == 'h1'
+      assign eyebrow_class = 'eyebrow eyebrow--lg'
+    endif
+  endfor
+  if section.settings.alignment != 'center'
+    assign long_class = ''
+  endif
 -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} rich-text rich-text--{{ section.settings.alignment }}" id="section-{{ section.id }}">
+{%- if section.blocks.size > 0 or request.design_mode -%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} rich-text rich-text--{{ section.settings.alignment }}{{ long_class }}" id="section-{{ section.id }}">
   <div class="page-width{{ width_class }}">
     {%- if section.blocks.size > 0 -%}
       <div class="rich-text__inner">
@@ -43,7 +73,7 @@
           {%- case block.type -%}
             {%- when 'eyebrow' -%}
               {%- if block.settings.text != blank -%}
-                <p class="eyebrow rich-text__eyebrow" data-reveal {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
+                <p class="{{ eyebrow_class }} rich-text__eyebrow" data-reveal {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
               {%- endif -%}
             {%- when 'heading' -%}
               {%- if block.settings.heading != blank -%}
@@ -89,6 +119,7 @@
     {%- endif -%}
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {

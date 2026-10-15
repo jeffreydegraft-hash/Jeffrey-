@@ -1,9 +1,11 @@
 {%- comment -%}
   Product media gallery (<media-gallery>, assets/product.js).
-  ≥990px, layout "thumbnails": one rounded stage on the tile surface that
-  crossfades between media, with small rounded-square thumbnails centred
-  beneath it (selected = accent ring). Layout "stacked": every media item
-  stacked as its own rounded tile.
+  ≥990px, layout "thumbnails": one rounded stage on the photos' own white
+  ground (--c-photo-ground; the merchant's photos are shot on white and are
+  shown untouched: contain, no blending), edged by a faint ring drawn by
+  .media-gallery__frame, crossfading between media, with small rounded-square
+  thumbnails centred beneath it (selected = accent ring). Layout "stacked":
+  every media item stacked as its own rounded white tile.
   <990px: a native scroll-snap carousel (full bleed on phones) with small
   dot indicators kept in sync by IntersectionObserver. The track is a plain
   overflow scroller: the browser owns the swipe, so no touch-action here.
@@ -53,25 +55,27 @@
     </div>
   {%- else -%}
     <div class="media-gallery__stage">
-      <div class="media-gallery__track" data-track>
-        {%- for media in product.media -%}
-          {%- liquid
-            assign is_active = false
-            assign loading = 'lazy'
-            if media.id == active_id
-              assign is_active = true
-              assign loading = 'eager'
-            endif
-          -%}
-          <div
-            class="media media-gallery__slide media-gallery__slide--{{ media.media_type }}{% if is_active %} is-active{% endif %}"
-            data-slide
-            data-media-id="{{ media.id }}"
-            data-media-type="{{ media.media_type }}"
-          >
-            {%- render 'product-media', media: media, product: product, index: forloop.index, loading: loading, enable_zoom: enable_zoom, sizes: media_sizes -%}
-          </div>
-        {%- endfor -%}
+      <div class="media-gallery__frame">
+        <div class="media-gallery__track" data-track>
+          {%- for media in product.media -%}
+            {%- liquid
+              assign is_active = false
+              assign loading = 'lazy'
+              if media.id == active_id
+                assign is_active = true
+                assign loading = 'eager'
+              endif
+            -%}
+            <div
+              class="media media-gallery__slide media-gallery__slide--{{ media.media_type }}{% if is_active %} is-active{% endif %}"
+              data-slide
+              data-media-id="{{ media.id }}"
+              data-media-type="{{ media.media_type }}"
+            >
+              {%- render 'product-media', media: media, product: product, index: forloop.index, loading: loading, enable_zoom: enable_zoom, sizes: media_sizes -%}
+            </div>
+          {%- endfor -%}
+        </div>
       </div>
 
       {%- if media_count > 1 -%}

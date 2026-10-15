@@ -4,11 +4,16 @@
   Three layouts:
   - centered (default, apple.com product hero): centred eyebrow, h0 headline,
     one-line lead, CTA pair (filled pill + "Learn more ›" link), then a large
-    centred product image below. Without an image an olive-oil bottle is
-    drawn in theme tokens, never an ornament.
+    centred product image below.
   - split: text left, a rounded 4:5 media tile right.
-  - full-bleed: media as the background with text placed over it; with no
-    media to show it falls back to the centered layout.
+  - full-bleed: media as the background with text placed over it.
+
+  Media, in order: the hero image (or video), else the chosen product's own
+  photo. Product shots are shown whole (contain) on the white ground they were
+  shot on, never blended, filtered or cropped (APPLE-SPEC §0). With no media
+  at all the hero is text-only on the storefront; split and full-bleed fall
+  back to centered. The theme editor shows Shopify's neutral placeholder so
+  the merchant can see where media goes. Nothing is drawn in its place.
 
   Motion (all CSS, no JS, named purposes):
   - Text staggers in with .enter + --i (@starting-style, base.css): marketing
@@ -27,9 +32,22 @@
   assign video = section.settings.video
   assign image = section.settings.image
   assign image_mobile = section.settings.image_mobile
+  assign hero_product = section.settings.product
+  assign image_alt = ''
+  assign from_product = false
 
   if image == blank and video != blank
     assign image = video.preview_image
+  endif
+
+  comment
+    No hero image: use the merchant's own product photo, shown whole on white.
+  endcomment
+  if image == blank and video == blank and hero_product != blank and hero_product.featured_media != blank
+    assign image = hero_product.featured_media.preview_image
+    assign image_style = 'product'
+    assign image_alt = hero_product.featured_media.alt | default: hero_product.title
+    assign from_product = true
   endif
 
   assign has_media = false
@@ -37,12 +55,19 @@
     assign has_media = true
   endif
 
+  assign show_placeholder = false
+  if has_media == false and request.design_mode
+    assign show_placeholder = true
+  endif
+
   comment
-    Full-bleed needs media to sit behind the text. Without it the section
-    reads best as the centered product hero, with the bottle drawn below.
+    Split and full-bleed need media. Without it the section reads best as the
+    centered hero: text-only on the storefront, a placeholder in the editor.
   endcomment
-  if layout == 'full-bleed' and has_media == false
-    assign layout = 'centered'
+  if has_media == false
+    if layout == 'full-bleed' or show_placeholder == false
+      assign layout = 'centered'
+    endif
   endif
 
   assign overlay = section.settings.overlay_opacity | divided_by: 100.0
@@ -76,42 +101,6 @@
   endif
 -%}
 
-{%- comment -%}
-  Bottle illustration: a calm, product-like olive-oil bottle drawn only with
-  theme tokens (classes in section-home-a.css), so it follows every scheme.
-{%- endcomment -%}
-{%- capture hero_bottle -%}
-  <svg class="bottle hero__bottle" viewBox="0 0 240 560" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="BottleGlass-{{ section.id }}" x1="0" y1="0" x2="1" y2="0">
-        <stop class="bottle__stop bottle__stop--glass-edge" offset="0"/>
-        <stop class="bottle__stop bottle__stop--glass-mid" offset="0.32"/>
-        <stop class="bottle__stop bottle__stop--glass-mid" offset="0.68"/>
-        <stop class="bottle__stop bottle__stop--glass-edge" offset="1"/>
-      </linearGradient>
-      <linearGradient id="BottleOil-{{ section.id }}" x1="0" y1="0" x2="1" y2="0">
-        <stop class="bottle__stop bottle__stop--oil-edge" offset="0"/>
-        <stop class="bottle__stop bottle__stop--oil-mid" offset="0.4"/>
-        <stop class="bottle__stop bottle__stop--oil-edge" offset="1"/>
-      </linearGradient>
-    </defs>
-    <ellipse class="bottle__shadow" cx="120" cy="540" rx="96" ry="10"/>
-    <path class="bottle__glass" fill="url(#BottleGlass-{{ section.id }})" d="M94 112h52v36c0 18 58 18 58 62v292c0 18-12 30-30 30H66c-18 0-30-12-30-30V210c0-44 58-44 58-62v-36Z"/>
-    <path class="bottle__oil" fill="url(#BottleOil-{{ section.id }})" d="M44 244c24 7 50 10 76 10s52-3 76-10v256c0 14-9 23-24 23H68c-15 0-24-9-24-23V244Z"/>
-    <rect class="bottle__shine" x="50" y="222" width="9" height="282" rx="4.5"/>
-    <rect class="bottle__shine bottle__shine--soft" x="185" y="232" width="4" height="262" rx="2"/>
-    <rect class="bottle__label" x="56" y="300" width="128" height="156" rx="6"/>
-    <path class="bottle__mark" d="M119 322c-9 5-13 13-11 22 9-2 14-10 11-22Zm2 0c9 5 13 13 11 22-9-2-14-10-11-22Z"/>
-    <rect class="bottle__line bottle__line--strong" x="84" y="360" width="72" height="7" rx="3.5"/>
-    <rect class="bottle__line" x="96" y="377" width="48" height="5" rx="2.5"/>
-    <rect class="bottle__rule" x="76" y="402" width="88" height="1.5"/>
-    <rect class="bottle__line" x="102" y="420" width="36" height="5" rx="2.5"/>
-    <rect class="bottle__collar" x="90" y="100" width="60" height="16" rx="4"/>
-    <rect class="bottle__cap" x="84" y="22" width="72" height="82" rx="10"/>
-    <rect class="bottle__cap-shine" x="94" y="30" width="6" height="66" rx="3"/>
-  </svg>
-{%- endcapture -%}
-
 {%- capture hero_image -%}
   {%- if image != blank -%}
     {%- if image_mobile != blank -%}
@@ -121,10 +110,10 @@
           srcset="{{ image_mobile | image_url: width: 480 }} 480w, {{ image_mobile | image_url: width: 750 }} 750w, {{ image_mobile | image_url: width: 1000 }} 1000w, {{ image_mobile | image_url: width: 1500 }} 1500w"
           sizes="100vw"
         >
-        {%- render 'image', image: image, sizes: image_sizes, widths: image_widths, loading: 'eager', fetchpriority: 'high', class: 'hero__img' -%}
+        {%- render 'image', image: image, alt: image_alt, sizes: image_sizes, widths: image_widths, loading: 'eager', fetchpriority: 'high', class: 'hero__img' -%}
       </picture>
     {%- else -%}
-      {%- render 'image', image: image, sizes: image_sizes, widths: image_widths, loading: 'eager', fetchpriority: 'high', class: 'hero__img', preload: true -%}
+      {%- render 'image', image: image, alt: image_alt, sizes: image_sizes, widths: image_widths, loading: 'eager', fetchpriority: 'high', class: 'hero__img', preload: true -%}
     {%- endif -%}
   {%- endif -%}
 {%- endcapture -%}
@@ -192,12 +181,12 @@
         <div class="hero__content">
           {{ hero_content }}
         </div>
-        <div class="hero__media media{% unless has_media %} hero__media--illustration{% endunless %}" style="--ratio: 4 / 5;">
+        <div class="hero__media media{% if from_product %} hero__media--product{% endif %}" style="--ratio: 4 / 5;">
           {%- if has_media -%}
             {{ hero_image }}
             {{ hero_video }}
           {%- else -%}
-            {{ hero_bottle }}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg hero__placeholder' }}
           {%- endif -%}
         </div>
       </div>
@@ -205,7 +194,7 @@
 
   {%- else -%}
     <div
-      class="section section--none color-{{ section.settings.color_scheme }} hero hero--centered hero--{{ height }}"
+      class="section section--none color-{{ section.settings.color_scheme }} hero hero--centered hero--{{ height }}{% unless has_media or show_placeholder %} hero--text-only{% endunless %}"
       id="section-{{ section.id }}"
     >
       <div class="page-width hero__inner">
@@ -221,9 +210,9 @@
           <div class="hero__stage hero__stage--{{ image_style }}">
             {{ hero_image }}
           </div>
-        {%- else -%}
-          <div class="hero__stage hero__stage--illustration">
-            {{ hero_bottle }}
+        {%- elsif show_placeholder -%}
+          <div class="hero__stage hero__stage--placeholder media" style="--ratio: 16 / 9;">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg hero__placeholder' }}
           </div>
         {%- endif -%}
       </div>
@@ -298,15 +287,15 @@
       "type": "image_picker",
       "id": "image",
       "label": "Image",
-      "info": "Centered: a product shot on a plain background, shown whole below the text. Split: portrait (4:5). Full-bleed: landscape. Without an image a bottle is drawn in its place."
+      "info": "Centered: a product shot on white, shown whole below the text. Split: portrait (4:5). Full-bleed: landscape."
     },
     {
       "type": "select",
       "id": "image_style",
       "label": "Image style",
-      "info": "Centered layout only.",
+      "info": "Centered layout only. Both show the whole image, never cropped.",
       "options": [
-        { "value": "product", "label": "Product shot (no frame)" },
+        { "value": "product", "label": "Product shot on white" },
         { "value": "photo", "label": "Photo (rounded corners)" }
       ],
       "default": "product"
@@ -316,6 +305,12 @@
       "id": "image_mobile",
       "label": "Mobile image",
       "info": "Optional. Shown below 750px instead of the image above."
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "Used when no image or video is chosen: the hero shows this product's own photo. With neither, the hero is text only."
     },
     {
       "type": "video",

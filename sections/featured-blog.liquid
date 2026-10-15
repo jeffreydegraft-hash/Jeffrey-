@@ -3,9 +3,11 @@
   lead, "All posts ›"), then the latest posts as article tiles: the image
   across the top of a rounded --c-surface tile (radius --r-card, 18px), then
   a small tag, an .h5 title and a 14px muted date. The whole tile is the
-  link (title ::after overlay), so it presses as one piece. Grid: one row of
-  2–4 from 990px (5–6 posts wrap at 3), two per row on tablets with an odd
-  last tile laid out wide, one per row on phones. With no blog chosen it
+  link (title ::after overlay), so it presses as one piece. A post without
+  an image is a text-only tile with a larger title (no drawn placeholder,
+  APPLE-SPEC §0.2). Grid: one row of 2–4 from 990px (5–6 posts wrap at 3
+  with a short last row centred), two per row on tablets with an odd last
+  tile laid out wide, one per row on phones. With no blog chosen it
   falls back to "the-anointing-journal"; a missing or empty blog keeps the
   header and shows a designed empty state. Motion inventory: the shared
   reveal, the tile press (scale .985) and, on real pointers, a 3% image zoom.
@@ -83,16 +85,12 @@
             endif
           -%}
           <li class="featured-blog__item" data-reveal>
-            <article class="featured-blog__tile">
-              <div class="media featured-blog__media" style="--ratio: 3 / 2;">
-                {%- if article.image -%}
+            <article class="featured-blog__tile{% unless article.image %} featured-blog__tile--text{% endunless %}">
+              {%- if article.image -%}
+                <div class="media featured-blog__media" style="--ratio: 3 / 2;">
                   {%- render 'image', image: article.image, sizes: image_sizes, widths: '400, 600, 800, 1000, 1200', class: 'featured-blog__img', loading: 'lazy', alt: '' -%}
-                {%- else -%}
-                  <span class="featured-blog__placeholder" aria-hidden="true">
-                    {%- render 'icon', name: 'leaf', size: 40 -%}
-                  </span>
-                {%- endif -%}
-              </div>
+                </div>
+              {%- endif -%}
               <div class="featured-blog__body">
                 {%- if tag != blank -%}
                   <p class="tag featured-blog__tag">{{ tag | escape }}</p>

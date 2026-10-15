@@ -1,7 +1,8 @@
 {%- comment -%}
   Featured collection (apple.com store grid): a centred header (eyebrow, h2,
-  muted lead), product tiles in a grid (3-up desktop by default, 2-up tablet,
-  2-up phone with compact tiles), then a centred "Shop all ›" link.
+  muted lead), product tiles in rows (3-up desktop by default, 2-up tablet,
+  2-up phone with compact tiles; a short last row centres under the full
+  ones), then a centred "Shop all ›" link.
 
   Empty cases:
   - no collection chosen: placeholder cards (design-mode preview and a
@@ -69,7 +70,6 @@
 
     {%- if show_empty -%}
       <div class="empty-state featured-collection__empty">
-        {%- render 'icon', name: 'olive', size: 40 -%}
         <p class="h4">{{ 'collections.general.empty' | t }}</p>
         <p class="muted text-pretty">{{ 'sections.featured_collection.empty' | t }}</p>
         <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'general.shop_now' | t }}</a>
