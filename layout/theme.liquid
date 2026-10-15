@@ -32,6 +32,51 @@
     {%- render 'meta-tags' -%}
 
     {%- liquid
+      comment
+        Organization structured data: the store name, its home URL, the
+        merchant's own logo (Theme settings, then Settings › Brand) and the
+        social profiles from Theme settings › Social media. Every value goes
+        through | json, so quotes and slashes are escaped.
+      endcomment
+      assign org_logo = settings.logo | default: shop.brand.logo
+      assign org_networks = 'instagram,facebook,tiktok,youtube,pinterest,x' | split: ','
+      assign org_same_as = ''
+      for network in org_networks
+        assign social_key = 'social_' | append: network | append: '_link'
+        assign social_url = settings[social_key] | strip
+        if social_url == blank or social_url contains ' '
+          continue
+        endif
+        assign social_first = social_url | slice: 0
+        if social_first == '@'
+          continue
+        endif
+        unless social_url contains '://'
+          assign social_url = social_url | prepend: 'https://'
+        endunless
+        assign social_json = social_url | json
+        if org_same_as != blank
+          assign org_same_as = org_same_as | append: ', '
+        endif
+        assign org_same_as = org_same_as | append: social_json
+      endfor
+    -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": {{ shop.name | json }},
+        {%- if org_logo != blank %}
+        "logo": {{ org_logo | image_url: width: 500 | prepend: 'https:' | json }},
+        {%- endif %}
+        {%- if org_same_as != blank %}
+        "sameAs": [{{ org_same_as }}],
+        {%- endif %}
+        "url": {{ shop.url | json }}
+      }
+    </script>
+
+    {%- liquid
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
       assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
       assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'

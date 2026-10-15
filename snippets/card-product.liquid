@@ -1,5 +1,6 @@
 {%- comment -%}
-  Product card.
+  Product card (APPLE-SPEC §3 product tile): tag line, title, price, then the
+  photo below the text, then a CTA row ("Buy" pill + "Learn more ›").
   Accepts:
   - product: {Object} product (optional; renders a placeholder card when blank)
   - index: {Number} position in the grid (optional, unused: theme.js sets the reveal stagger --i per batch)
@@ -9,6 +10,16 @@
   - lazy: {Boolean} lazy-load the image, default true
   - reveal: {Boolean} add data-reveal, default true
   Usage: {% render 'card-product', product: product, index: forloop.index0, sizes: '(min-width: 990px) 25vw, 50vw' %}
+
+  Tag line: "Sale" (accent detail) or "Sold out" (muted) sits in the .tag
+  position before the theme word, never as a pill over the photo.
+  Buy: a product with nothing to choose (only the default variant) adds
+  straight to the bag through the <product-form> contract (assets/cart.js:
+  {% form 'product' %}, name="id", a submit button whose first plain label
+  span swaps to "Added", .product-form__error). A product with options links
+  to its page, where the size is chosen. Sold out: no pill, "Learn more" only.
+  The photo is the merchant's own media, whole (object-fit: contain) on the
+  white it was shot on; nothing is drawn, blended or filtered.
 {%- endcomment -%}
 {%- liquid
   if show_secondary_image == nil
@@ -38,7 +49,41 @@
 {%- endif -%}
 
 {%- if product != blank -%}
+  {%- liquid
+    assign status = blank
+    if product.available == false
+      assign status = 'sold-out'
+    elsif product.compare_at_price > product.price
+      assign status = 'sale'
+    endif
+    assign eyebrow = blank
+    if theme_word != blank
+      assign eyebrow = theme_word
+    elsif show_vendor and product.vendor != blank
+      assign eyebrow = product.vendor
+    endif
+    assign variant = product.selected_or_first_available_variant
+    assign form_id = 'CardProductForm-' | append: product.id | append: '-' | append: index
+  -%}
   <article class="card card--product" {% if reveal != false %}data-reveal{% endif %}>
+    <div class="card__body">
+      {%- if status != blank or eyebrow != blank -%}
+        <p class="card__tags">
+          {%- if status == 'sold-out' -%}
+            <span class="card__tag card__tag--sold-out">{{ 'products.product.sold_out' | t }}</span>
+          {%- elsif status == 'sale' -%}
+            <span class="card__tag card__tag--sale">{{ 'products.product.on_sale' | t }}</span>
+          {%- endif -%}
+          {%- if eyebrow != blank -%}
+            <span class="card__eyebrow">{{ eyebrow | escape }}</span>
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+      <h3 class="card__title h5">
+        <a href="{{ product.url }}" class="card__link">{{ product.title | escape }}</a>
+      </h3>
+      {%- render 'price', product: product, price_class: 'price--card' -%}
+    </div>
     <a href="{{ product.url }}" class="card__media-link" aria-label="{{ product.title | escape }}" tabindex="-1">
       <div class="card__media media" style="--ratio: {{ settings.card_image_ratio }};">
         {%- if product.featured_media -%}
@@ -50,34 +95,56 @@
         {%- else -%}
           {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
         {%- endif -%}
-        {%- if product.available == false -%}
-          <span class="badge badge--sold-out card__badge">{{ 'products.product.sold_out' | t }}</span>
-        {%- elsif product.compare_at_price > product.price -%}
-          <span class="badge badge--sale card__badge">{{ 'products.product.on_sale' | t }}</span>
-        {%- endif -%}
       </div>
     </a>
-    <div class="card__body">
-      {%- if theme_word != blank -%}
-        <p class="card__eyebrow eyebrow">{{ theme_word | escape }}</p>
-      {%- elsif show_vendor and product.vendor != blank -%}
-        <p class="card__eyebrow eyebrow">{{ product.vendor | escape }}</p>
+    <div class="card__actions">
+      {%- if product.available -%}
+        {%- if product.has_only_default_variant -%}
+          <product-form class="product-form card__form">
+            <p class="product-form__error form-status form-status--error" role="alert" hidden></p>
+            {%- form 'product', product, id: form_id, class: 'card__buy-form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              <button
+                type="submit"
+                name="add"
+                class="btn btn--primary btn--sm card__buy"
+                {% if settings.cart_type == 'drawer' %}aria-haspopup="dialog"{% endif %}
+              >
+                <span class="btn__content"><span data-add-label>{{ 'sections.featured_product.buy' | t }}</span><span class="visually-hidden"> {{ product.title | escape }}</span></span>
+                {%- render 'loading-spinner' -%}
+              </button>
+            {%- endform -%}
+          </product-form>
+        {%- else -%}
+          <a href="{{ product.url }}" class="btn btn--primary btn--sm card__buy">
+            {{- 'sections.featured_product.buy' | t -}}
+            <span class="visually-hidden"> {{ product.title | escape }}</span>
+          </a>
+        {%- endif -%}
       {%- endif -%}
-      <h3 class="card__title h5">
-        <a href="{{ product.url }}" class="card__link">{{ product.title | escape }}</a>
-      </h3>
-      {%- render 'price', product: product, price_class: 'price--card' -%}
+      <a href="{{ product.url }}" class="link link--chevron card__more">
+        {{- 'general.learn_more' | t -}}
+        <span class="visually-hidden">: {{ product.title | escape }}</span>
+        {%- render 'icon', name: 'chevron-right', size: 12 -%}
+      </a>
     </div>
   </article>
 {%- else -%}
   <article class="card card--product card--placeholder" {% if reveal != false %}data-reveal{% endif %}>
+    <div class="card__body">
+      <p class="card__tags"><span class="card__eyebrow">Reverence</span></p>
+      <h3 class="card__title h5">Example product title</h3>
+      <div class="price"><div class="price__container"><div class="price__regular"><span class="price__item price__item--regular money">{{ 1998 | money }}</span></div></div></div>
+    </div>
     <div class="card__media media" style="--ratio: {{ settings.card_image_ratio }};">
       {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
     </div>
-    <div class="card__body">
-      <p class="card__eyebrow eyebrow">Reverence</p>
-      <h3 class="card__title h5">Example product title</h3>
-      <div class="price"><div class="price__container"><div class="price__regular"><span class="price__item price__item--regular money">{{ 1998 | money }}</span></div></div></div>
+    <div class="card__actions" aria-hidden="true">
+      <span class="btn btn--primary btn--sm card__buy">{{ 'sections.featured_product.buy' | t }}</span>
+      <span class="link link--chevron card__more">
+        {{- 'general.learn_more' | t -}}
+        {%- render 'icon', name: 'chevron-right', size: 12 -%}
+      </span>
     </div>
   </article>
 {%- endif -%}

@@ -316,11 +316,6 @@
   text-wrap: balance;
 }
 
-/* olivet-accordion is a custom element (inline by default) */
-.faq__item {
-  display: block;
-}
-
 .faq__item:last-child {
   border-bottom: 0;
 }
@@ -524,21 +519,8 @@
   margin-top: var(--space-3);
 }
 
-/* "Remove bottom spacing" exists to leave one gap, not two, before a section
-   of the same scheme. The home-a sections already drop their own top padding
-   after a same-scheme section (section-home-a.css), so in that pairing the
-   rich text keeps its bottom padding; otherwise the two would touch. */
-.shopify-section:has(> .rich-text.color-scheme-1.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-1) > .rich-text,
-.shopify-section:has(> .rich-text.color-scheme-2.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-2) > .rich-text,
-.shopify-section:has(> .rich-text.color-scheme-3.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-3) > .rich-text,
-.shopify-section:has(> .rich-text.color-scheme-4.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-4) > .rich-text,
-.shopify-section:has(> .rich-text.color-scheme-5.section--bottom-none):has(+ .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-5) > .rich-text {
-  padding-bottom: calc(var(--section-y) * var(--rich-text-pad-scale, 1));
-}
-
-.rich-text.section--tight {
-  --rich-text-pad-scale: 0.6;
-}
+/* "Remove bottom spacing" leaves the next section's top padding as the one
+   gap: base.css's same-surface collapse skips a .section--bottom-none section. */
 
 .rich-text__button[aria-disabled="true"],
 .rich-text__link[aria-disabled="true"] {

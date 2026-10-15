@@ -1,10 +1,12 @@
 {%- comment -%}
   Page hero (apple.com page header): a centred eyebrow, a big .h1 (falls
   back to the page title) and a one-line muted lead, on white with
-  generous space above. Ornaments and invented marks are retired
-  (APPLE-SPEC §0.1): the show_ornament setting is kept only because
-  templates reference its id; it renders nothing. First thing on the
-  page, so it enters with .enter
+  generous space above. Invented ornaments are retired (APPLE-SPEC §0.1):
+  the show_ornament setting (id kept, templates reference it) now shows
+  only the merchant's own square logo mark (Theme settings → Logo →
+  logo_mark) through snippets/brand-logo.liquid, used intact; with no
+  mark set it renders nothing. First thing on the page, so it enters
+  with .enter
   (@starting-style in base.css, no JS) and never carries data-reveal.
   A long intro (over 100 characters) is set a step smaller on desktop and
   left-aligns the hero on phones, so a paragraph is never centred over
@@ -48,6 +50,11 @@
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} {{ hero_class }}" id="section-{{ section.id }}">
   <div class="page-width page-width--medium">
     <header class="page-hero__inner">
+      {%- if section.settings.show_ornament and settings.logo_mark != blank -%}
+        <div class="page-hero__mark enter" style="--i: 0;">
+          {%- render 'brand-logo', override: settings.logo_mark, width: 48, class: 'page-hero__mark-img', alt_empty: true -%}
+        </div>
+      {%- endif -%}
       {%- if eyebrow != blank -%}
         <p class="eyebrow eyebrow--lg page-hero__eyebrow enter" style="--i: 1;">{{ eyebrow | escape }}</p>
       {%- endif -%}
@@ -98,8 +105,8 @@
     {
       "type": "checkbox",
       "id": "show_ornament",
-      "label": "Ornament (retired)",
-      "info": "No longer shown: the page header uses no ornament. Kept so existing templates keep working.",
+      "label": "Show logo mark",
+      "info": "Shows your square logo mark (Theme settings → Logo) above the heading, exactly as uploaded. Nothing shows when no mark is set.",
       "default": true
     },
     {

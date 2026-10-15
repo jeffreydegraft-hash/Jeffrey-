@@ -3,7 +3,8 @@
   held to --content-max like the navigation, small type throughout:
   1. Footnotes first: the brand disclaimer, 12px muted, then a hairline.
   2. Directory: one column per block (link lists, contact, text, newsletter);
-     12px/600 headings, 12px links with a 24px line pitch. Below 750px the
+     12px/600 headings, 12px links with a 24px line pitch (a 32px hit
+     area with a mouse, 44px rows on touch). Below 750px the
      link, contact and text columns become accordions (<olivet-accordion>,
      12px headings with a plus that turns into ×, 44px rows, hairlines).
      The newsletter stays open: a compact field with a small pill inside it.
@@ -29,17 +30,23 @@
   assign year = 'now' | date: '%Y'
 
   comment
-    Logo tone follows the scheme: a dark ground asks brand-logo for the
-    merchant's light version. The selection is mirrored here only to size
-    the image (its width for the srcset); brand-logo makes the real choice.
+    Logo tone follows the scheme: a dark ground (scheme-3 Black and
+    scheme-4 Graphite by default) asks brand-logo for the merchant's light
+    version. The scheme's own background decides when it is known, so a
+    re-coloured scheme still gets the right logo; otherwise the scheme id
+    does. The selection is mirrored here only to size the image (width and
+    height attributes, so nothing shifts); brand-logo makes the real choice.
   endcomment
   assign logo_tone = 'light'
+  assign scheme_id = section.settings.color_scheme.id | default: section.settings.color_scheme
   assign scheme_bg = section.settings.color_scheme.settings.background
   if scheme_bg != blank
     assign scheme_brightness = scheme_bg | color_brightness
     if scheme_brightness < 128
       assign logo_tone = 'dark'
     endif
+  elsif scheme_id == 'scheme-3' or scheme_id == 'scheme-4'
+    assign logo_tone = 'dark'
   endif
 
   assign logo_height = section.settings.logo_height | default: 28
@@ -269,7 +276,22 @@
                       {%- endif -%}
                     </ul>
                     {%- if settings.brand_address != blank -%}
-                      <p class="footer__address footer__contact-line">{{ settings.brand_address | escape | newline_to_br }}</p>
+                      {%- comment -%}
+                        One line per address line; each comma-separated part
+                        moves as a unit, so "Pkwy S," never breaks from its
+                        street (same treatment as contact-form).
+                      {%- endcomment -%}
+                      {%- assign address_lines = settings.brand_address | newline_to_br | split: '<br />' -%}
+                      <p class="footer__address footer__contact-line">
+                        {%- for address_line in address_lines -%}
+                          {%- assign address_parts = address_line | strip | split: ', ' -%}
+                          <span class="footer__address-line">
+                            {%- for address_part in address_parts -%}
+                              <span class="footer__address-part">{{ address_part | escape }}{% unless forloop.last %},{% endunless %}</span>{% unless forloop.last %} {% endunless %}
+                            {%- endfor -%}
+                          </span>
+                        {%- endfor -%}
+                      </p>
                     {%- endif -%}
                   </address>
                 {%- endif -%}

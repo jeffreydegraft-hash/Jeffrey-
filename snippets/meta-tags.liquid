@@ -1,3 +1,14 @@
+{%- comment -%}
+  Open Graph and Twitter tags. The share image is always the merchant's own
+  artwork, first that exists wins:
+    1. page_image             the page's own image (product, collection,
+                              article), else Online Store › Preferences'
+                              social sharing image
+    2. settings.share_image   Theme settings › Logo › Social sharing image
+    3. shop.brand.cover_image Settings › Brand cover image
+    4. the logo               settings.logo, then Settings › Brand logo
+  Rendered at most 1200px wide; width and height are the rendered size.
+{%- endcomment -%}
 {%- liquid
   assign og_title = page_title | default: shop.name
   assign og_url = canonical_url | default: request.origin
@@ -11,17 +22,34 @@
   elsif request.page_type == 'password'
     assign og_url = request.origin
   endif
+
+  assign og_image = page_image | default: settings.share_image | default: shop.brand.cover_image
+  assign twitter_card = 'summary_large_image'
+  if og_image == blank
+    comment
+      Only the logo is left: a small "summary" card shows it whole
+      instead of cropping it into a wide banner.
+    endcomment
+    assign og_image = settings.logo | default: shop.brand.logo
+    assign twitter_card = 'summary'
+  endif
+  if og_image != blank
+    assign og_image_width = og_image.width | at_most: 1200
+    assign og_image_height = og_image_width | divided_by: og_image.aspect_ratio | round
+    assign og_image_url = og_image | image_url: width: 1200
+  endif
 -%}
-<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:site_name" content="{{ shop.name | escape }}">
 <meta property="og:url" content="{{ og_url }}">
 <meta property="og:title" content="{{ og_title | escape }}">
 <meta property="og:type" content="{{ og_type }}">
 <meta property="og:description" content="{{ og_description | escape }}">
-{%- if page_image -%}
-  <meta property="og:image" content="http:{{ page_image | image_url: width: 1200 }}">
-  <meta property="og:image:secure_url" content="https:{{ page_image | image_url: width: 1200 }}">
-  <meta property="og:image:width" content="{{ page_image.width }}">
-  <meta property="og:image:height" content="{{ page_image.height }}">
+{%- if og_image != blank -%}
+  <meta property="og:image" content="http:{{ og_image_url }}">
+  <meta property="og:image:secure_url" content="https:{{ og_image_url }}">
+  <meta property="og:image:width" content="{{ og_image_width }}">
+  <meta property="og:image:height" content="{{ og_image_height }}">
+  <meta property="og:image:alt" content="{{ og_image.alt | default: shop.name | escape }}">
 {%- endif -%}
 {%- if request.page_type == 'product' -%}
   <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
@@ -30,6 +58,6 @@
 {%- if settings.social_x_link != blank -%}
   <meta name="twitter:site" content="{{ settings.social_x_link | split: '/' | last | prepend: '@' }}">
 {%- endif -%}
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="{{ twitter_card }}">
 <meta name="twitter:title" content="{{ og_title | escape }}">
 <meta name="twitter:description" content="{{ og_description | escape }}">

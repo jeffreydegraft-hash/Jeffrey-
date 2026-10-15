@@ -9,13 +9,19 @@
    and on top of the legal row (and between accordion rows on phones). The
    legal row owns its rule, so it is there whichever blocks are missing, and
    it drops it where a rule already sits right above.
+   Hit areas: with a mouse the rows keep the 24px pitch (--footer-row) but
+   every link, policy link and selector is 32px tall (--footer-hit): 4px of
+   padding above and below, taken back with negative margins, so the
+   targets overlap their neighbours' padding instead of spreading the
+   rows. On touch the rows themselves are 44px.
    Motion is press feedback and colour only, plus the shared accordion
    (grid-template-rows, components.css) on phones. Every colour is a scheme
    token, so a dark scheme works too. */
 
 .footer {
   --footer-pad-top: 20px;
-  --footer-hit: 24px; /* row height for links: 12px type on a 2.0 line pitch */
+  --footer-row: 24px; /* row pitch for links: 12px type on a 2.0 line pitch */
+  --footer-hit: 32px; /* mouse hit area: the row plus 4px above and below */
   position: relative;
   padding-top: var(--footer-pad-top);
   padding-bottom: calc(20px + var(--safe-bottom));
@@ -28,9 +34,10 @@
 .footer--padding-compact { --footer-pad-top: 14px; }
 .footer--padding-airy { --footer-pad-top: clamp(32px, 4vw, 48px); }
 
-/* Touch: every footer target grows to 44px (mobile-native) */
+/* Touch: every footer row and target grows to 44px (mobile-native) */
 @media (pointer: coarse) {
   .footer {
+    --footer-row: 44px;
     --footer-hit: 44px;
   }
 }
@@ -71,14 +78,24 @@
   align-items: flex-start;
 }
 
-/* 4px block padding: a one-line link is still exactly 24px, a link that
-   wraps keeps air above and below instead of running into its neighbour. */
+/* A flex row, so the link's negative margins set the row height exactly */
+.footer__links > li {
+  display: flex;
+  max-width: 100%;
+}
+
+/* 4px block padding: a one-line link still takes exactly one row, a link
+   that wraps keeps air above and below instead of running into its
+   neighbour. With a mouse the box is --footer-hit (32px) tall and the
+   negative margins give the extra 8px back, so the row stays 24px. */
 .footer__link {
   display: inline-flex;
   align-items: center;
+  min-width: 0;
   min-height: var(--footer-hit);
   max-width: 100%;
-  padding-block: 4px;
+  margin-block: calc((var(--footer-row) - var(--footer-hit)) / 2);
+  padding-block: calc(4px + (var(--footer-hit) - var(--footer-row)) / 2);
   font-size: 0.75rem;
   line-height: 1.33;
   letter-spacing: -0.01em;
@@ -136,6 +153,18 @@
   font-size: 0.75rem;
   line-height: 1.5;
   color: rgb(var(--c-ink-2));
+}
+
+/* One line per address line; each comma-separated part moves as a unit,
+   so the line breaks after a comma, never inside "Pkwy S" or "103-225".
+   A part wider than the column still wraps inside itself. */
+.footer__address-line {
+  display: block;
+}
+
+.footer__address-part {
+  display: inline-block;
+  max-width: 100%;
 }
 
 /* ---- accordion columns (olivet-accordion; phones only) ----
@@ -442,6 +471,7 @@
   display: inline-flex;
   align-items: center;
   min-height: var(--footer-hit);
+  margin-block: calc((var(--footer-row) - var(--footer-hit)) / 2);
   color: rgba(var(--c-ink), 0.8);
   text-decoration: underline;
   text-decoration-color: transparent;
@@ -630,6 +660,7 @@
   gap: 5px;
   min-height: var(--footer-hit, 44px);
   min-width: 0;
+  margin-block: calc((var(--footer-row, 44px) - var(--footer-hit, 44px)) / 2);
   font-size: 0.75rem;
   line-height: 1.33;
   letter-spacing: -0.01em;

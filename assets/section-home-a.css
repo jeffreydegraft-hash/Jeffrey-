@@ -9,17 +9,7 @@
    were shot on).
    ========================================================================== */
 
-/* === shared: one gap between same-surface sections ===
-   When one of these sections follows a padded section (or a centered/split
-   hero) on the same colour scheme, its top padding goes, so the page reads
-   as one continuous surface with a single section gap instead of two. */
-.shopify-section:has(> .color-scheme-1:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-1,
-.shopify-section:has(> .color-scheme-2:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-2,
-.shopify-section:has(> .color-scheme-3:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-3,
-.shopify-section:has(> .color-scheme-4:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-4,
-.shopify-section:has(> .color-scheme-5:is(.section:not(.section--none), .hero--centered, .hero--split)) + .shopify-section > :is(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps).color-scheme-5 {
-  padding-top: 0;
-}
+/* One gap between same-surface sections: base.css (generic, every section). */
 
 /* === shared: centred rows ===
    Tiles flow in rows that centre, so a short last row (an odd tile on a
@@ -36,17 +26,6 @@
 .steps__item {
   flex: 0 0 calc((100% - (var(--row-cols) - 1) * var(--grid-gap)) / var(--row-cols));
   min-width: 0;
-}
-
-/* === shared: "Learn more ›" chevron sizing ===
-   The icon snippet sets --icon-size inline; size the box from the text so the
-   chevron reads about half a cap-height tall and sits close to the label. */
-.hero__link .icon,
-.featured-collection__view-all .icon,
-.image-with-text__link .icon {
-  width: 0.9em;
-  height: 0.9em;
-  margin-inline-start: -0.22em;
 }
 
 /* === section: hero ===
@@ -390,18 +369,6 @@
 
   .featured-collection .card--product .price {
     font-size: 0.875rem;
-  }
-
-  /* Compare-at and sale price wrap as whole amounts, centred, never mid-price */
-  .featured-collection .card--product .price__sale {
-    flex-wrap: wrap;
-    justify-content: center;
-    column-gap: 6px;
-    row-gap: 0;
-  }
-
-  .featured-collection .card--product .price__item {
-    white-space: nowrap;
   }
 }
 

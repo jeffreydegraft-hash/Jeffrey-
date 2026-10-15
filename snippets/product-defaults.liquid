@@ -4,6 +4,14 @@
   custom.scripture_reference, custom.meaning, custom.botanical,
   custom.ingredients) is still empty, so product pages are complete on day one.
 
+  Theme words and Scripture references follow the brand's own labels
+  (MOUNT OF OLIVES™ / [oil] / THE ANOINTING OIL / theme word / botanical /
+  verse; brand/BRAND-ASSETS.md §2 and §4.6): Frankincense & Myrrh Restore,
+  Pomegranate Eternal, Spikenard Renewal (John 12:1-8), Hyssop
+  Purification & Protection, Rose of Sharon Radiance, Latter Rain
+  Revitalize (Joel 2:23). The other handles keep the launch copy. A live
+  metafield always wins over these defaults.
+
   Snippets cannot hand variables back to the caller, so this snippet OUTPUTS
   one field. Capture it:
     {% capture scripture_quote %}{% render 'product-defaults', product: product, field: 'scripture_quote' %}{% endcapture %}
@@ -25,7 +33,7 @@
 
   case product.handle
     when 'frankincense-myrrh-anointing-oil'
-      assign default_theme_word = "Reverence"
+      assign default_theme_word = "Restore"
       assign default_one_liner = "Two gifts of the Magi, blended in olive squalane for prayer and skin."
       assign default_scripture_quote = "Then, opening their treasures, they offered him gifts, gold and frankincense and myrrh."
       assign default_scripture_reference = "Matthew 2:11"
@@ -61,16 +69,16 @@
       assign default_ingredients = "Olive oil, olive-derived squalane, olive polyphenols"
 
     when 'spikenard-anointing-oil'
-      assign default_theme_word = "Devotion"
+      assign default_theme_word = "Renewal"
       assign default_one_liner = "The costly oil Mary poured out, for worship and devotion."
       assign default_scripture_quote = "Then took Mary a pound of ointment of spikenard, very costly, and anointed the feet of Jesus, and wiped his feet with her hair: and the house was filled with the odour of the ointment."
-      assign default_scripture_reference = "John 12:3"
+      assign default_scripture_reference = "John 12:1-8"
       assign default_meaning = "Mary of Bethany took a pound of costly spikenard and anointed the feet of Jesus, and the house was filled with its fragrance. Some called it waste. Jesus called it a good work, and said it would be remembered wherever the gospel is preached."
       assign default_botanical = "Nardostachys jatamansi, a root from the high Himalayas, in olive oil and olive-derived squalane with olive polyphenols. Earthy and sweet, it nourishes the skin."
       assign default_ingredients = "Olive oil, olive-derived squalane, Nardostachys jatamansi (Spikenard), olive polyphenols"
 
     when 'pomegranate-anointing-oil'
-      assign default_theme_word = "Revitalize"
+      assign default_theme_word = "Eternal"
       assign default_one_liner = "Antioxidant-rich pomegranate in olive squalane, a sign of fruitfulness and blessing."
       assign default_scripture_quote = "Thy plants are an orchard of pomegranates, with pleasant fruits."
       assign default_scripture_reference = "Song of Solomon 4:13"
@@ -88,7 +96,7 @@
       assign default_ingredients = "Olive oil, olive-derived squalane, lily of the valley floral blend, olive polyphenols"
 
     when 'hyssop'
-      assign default_theme_word = "Cleansing"
+      assign default_theme_word = "Purification & Protection"
       assign default_one_liner = "The herb of cleansing, blended in olive squalane for purification."
       assign default_scripture_quote = "Purge me with hyssop, and I shall be clean: wash me, and I shall be whiter than snow."
       assign default_scripture_reference = "Psalm 51:7"
@@ -108,8 +116,8 @@
     when 'latter-rain-anointing-oil'
       assign default_theme_word = "Revitalize"
       assign default_one_liner = "An oil of renewal, named for the rain that brings the harvest."
-      assign default_scripture_quote = "That I will give you the rain of your land in his due season, the first rain and the latter rain, that thou mayest gather in thy corn, and thy wine, and thine oil."
-      assign default_scripture_reference = "Deuteronomy 11:14"
+      assign default_scripture_quote = "Be glad then, ye children of Zion, and rejoice in the LORD your God: for he hath given you the former rain moderately, and he will cause to come down for you the rain, the former rain, and the latter rain in the first month."
+      assign default_scripture_reference = "Joel 2:23"
       assign default_meaning = "In the land of Israel the latter rain fell in spring, just before the harvest. God promised it to his people as a sign of his provision, so they could gather their grain, wine, and oil. The prophets used it as a picture of renewal and the outpouring of his Spirit."
       assign default_botanical = "A fresh blend of biblical botanicals in olive oil and olive-derived squalane with olive polyphenols. Made to hydrate and nourish the skin."
       assign default_ingredients = "Olive oil, olive-derived squalane, biblical botanical blend, olive polyphenols"

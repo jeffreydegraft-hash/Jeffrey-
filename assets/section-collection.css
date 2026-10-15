@@ -402,24 +402,7 @@
   width: 100%;
 }
 
-/* Names wrap instead of truncating mid-word (the Store never clips a
-   product name); three lines covers the longest names in a 2-up phone tile. */
-.product-grid .card__title {
-  -webkit-line-clamp: 3;
-}
-
-/* A sale price keeps its phrases whole and centred: the was-price and
-   "From $16.98" wrap as units in narrow tiles, never mid-phrase. */
-.product-grid .card--product .price__container,
-.product-grid .card--product .price--on-sale .price__sale {
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 6px;
-}
-
-.product-grid .card--product .price__item {
-  white-space: nowrap;
-}
+/* Three-line names and whole-amount price wrapping: components.css (.card--product). */
 
 @media (max-width: 749px) {
   .product-grid .card__title {
@@ -469,9 +452,7 @@
 }
 
 /* Separators between groups only, never above the first or under the last */
-/* olivet-accordion is a custom element (inline by default) */
 .facets__group.accordion {
-  display: block;
   border-bottom: 0;
 }
 

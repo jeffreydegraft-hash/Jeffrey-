@@ -503,10 +503,6 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
 }
 
 /* ---- collapsible tabs: Apple FAQ, compact; hairlines between items only ---- */
-.product__accordion {
-  display: block; /* a custom element is inline by default: its hairline needs a block box */
-}
-
 .product__accordion .accordion__title {
   overflow-wrap: anywhere;
 }

@@ -15,15 +15,10 @@
 /* === section: page-hero ===
    Centred eyebrow, .h1 and muted lead with generous space above. No
    ornament or invented mark (APPLE-SPEC §0.1). Above the fold, so it enters with .enter (@starting-style, base.css).
-   --flush drops the bottom padding so the next section's own top padding
-   is the only gap — but only when that section sits on the same surface
-   AND keeps its top padding. section-home-a.css removes the top padding
-   of a same-scheme image-with-text / values-strip / scripture-quote /
-   steps / featured-collection that follows a padded section, so before
-   one of those (or before a different surface, or at the end of the
-   page) the hero keeps its own bottom padding: always one gap, never
-   none. Without :has() the hero keeps its padding (a larger gap, never
-   a collision). --long: a lead over ~3 phone lines left-aligns the hero
+   --flush drops the bottom padding before a same-surface section so that
+   section's own top padding is the only gap (base.css, "one gap between
+   same-surface sections"); before a different surface or at the end of the
+   page the hero keeps it. --long: a lead over ~3 phone lines left-aligns the hero
    below 750px (never centre a paragraph longer than three lines). */
 .page-hero.section {
   padding-top: max(var(--section-y), 96px);
@@ -31,14 +26,6 @@
 
 .page-hero.section--tight {
   padding-top: max(calc(var(--section-y) * 0.6), 64px);
-}
-
-.shopify-section:has(+ .shopify-section > .color-scheme-1:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-1,
-.shopify-section:has(+ .shopify-section > .color-scheme-2:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-2,
-.shopify-section:has(+ .shopify-section > .color-scheme-3:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-3,
-.shopify-section:has(+ .shopify-section > .color-scheme-4:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-4,
-.shopify-section:has(+ .shopify-section > .color-scheme-5:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-5 {
-  padding-bottom: 0;
 }
 
 .page-hero__inner {

@@ -315,13 +315,21 @@ h1 em, h2 em, h3 em, h4 em {
   color: rgb(var(--c-gold));
 }
 
+/* 1.21 at the 19px phone size (multi-line leads stay open), Apple's 1.14 for
+   the 28px desktop subhead */
 .lead {
   font-size: clamp(1.1875rem, 0.95rem + 0.9vw, 1.75rem);
-  line-height: 1.14;
+  line-height: 1.21;
   letter-spacing: 0.007em;
   font-weight: var(--font-body-weight);
   color: rgb(var(--c-ink));
   text-wrap: pretty;
+}
+
+@media (min-width: 990px) {
+  .lead {
+    line-height: 1.14;
+  }
 }
 
 .lead--muted {
@@ -439,6 +447,34 @@ h1 em, h2 em, h3 em, h4 em {
 
 .section--top-none { padding-top: 0; }
 .section--bottom-none { padding-bottom: 0; }
+
+/* One gap between same-surface sections.
+   When two adjacent sections share a colour scheme, the second loses its top
+   padding, so the page reads as one surface with a single gap (the first
+   section's bottom padding) instead of two stacked ones. The first section
+   must actually end in padding: .section--none / --bottom-none ("Remove
+   bottom spacing") keep the next section's top padding as the only gap; the
+   centred and split heroes are .section--none outside but padded inside, so
+   they count as padded; the collection banner hands its bottom spacing to the
+   grid (section-collection.css). A flush page hero (page-hero "Remove bottom
+   spacing") drops its own bottom padding instead, before any same-surface
+   section, and the next section's top padding is the gap.
+   Without :has() sections keep both paddings (a larger gap, never a collision). */
+.shopify-section:has(> .color-scheme-1:is(.section:not(.section--none, .section--bottom-none, .collection-banner, .page-hero--flush), .hero--centered, .hero--split)) + .shopify-section > .section.color-scheme-1,
+.shopify-section:has(> .color-scheme-2:is(.section:not(.section--none, .section--bottom-none, .collection-banner, .page-hero--flush), .hero--centered, .hero--split)) + .shopify-section > .section.color-scheme-2,
+.shopify-section:has(> .color-scheme-3:is(.section:not(.section--none, .section--bottom-none, .collection-banner, .page-hero--flush), .hero--centered, .hero--split)) + .shopify-section > .section.color-scheme-3,
+.shopify-section:has(> .color-scheme-4:is(.section:not(.section--none, .section--bottom-none, .collection-banner, .page-hero--flush), .hero--centered, .hero--split)) + .shopify-section > .section.color-scheme-4,
+.shopify-section:has(> .color-scheme-5:is(.section:not(.section--none, .section--bottom-none, .collection-banner, .page-hero--flush), .hero--centered, .hero--split)) + .shopify-section > .section.color-scheme-5 {
+  padding-top: 0;
+}
+
+.shopify-section:has(+ .shopify-section > .section.color-scheme-1:not(.section--none, .section--top-none)) > .page-hero--flush.color-scheme-1,
+.shopify-section:has(+ .shopify-section > .section.color-scheme-2:not(.section--none, .section--top-none)) > .page-hero--flush.color-scheme-2,
+.shopify-section:has(+ .shopify-section > .section.color-scheme-3:not(.section--none, .section--top-none)) > .page-hero--flush.color-scheme-3,
+.shopify-section:has(+ .shopify-section > .section.color-scheme-4:not(.section--none, .section--top-none)) > .page-hero--flush.color-scheme-4,
+.shopify-section:has(+ .shopify-section > .section.color-scheme-5:not(.section--none, .section--top-none)) > .page-hero--flush.color-scheme-5 {
+  padding-bottom: 0;
+}
 
 /* Section headers are centred by default on Apple-style pages */
 .section__header {
@@ -798,11 +834,24 @@ h1 em, h2 em, h3 em, h4 em {
   font-size: clamp(1.0625rem, 0.9rem + 0.6vw, 1.3125rem);
 }
 
+/* snippets/icon.liquid sets --icon-size inline, so the box is sized here
+   from the text: the chevron scales with its label (about half a cap-height
+   of glyph) and its built-in side bearing is pulled in so it sits close. */
 .link--chevron .icon,
 .link--arrow .icon {
-  --icon-size: 0.75em;
+  width: 0.9em;
+  height: 0.9em;
   stroke-width: 2.2;
   transition: transform var(--dur-base) var(--ease-out);
+}
+
+.link--chevron .icon {
+  margin-inline-start: -0.22em;
+}
+
+/* a leading chevron (‹ Back) pulls in on the side that faces its label */
+.link--chevron .icon--chevron-left {
+  margin-inline: 0 -0.22em;
 }
 
 .link:active {
@@ -1016,6 +1065,12 @@ input[type="search"]::-webkit-search-cancel-button {
   background: rgb(var(--c-surface));
 }
 
+/* display: flex above would otherwise override the hidden attribute
+   (cart.js toggles [hidden] on .product-form__error) */
+.form-status[hidden] {
+  display: none;
+}
+
 .form-status--success {
   background: rgba(var(--c-success), 0.1);
   color: rgb(var(--c-ink));
@@ -1150,18 +1205,23 @@ input[type="search"]::-webkit-search-cancel-button {
    Apple-style fade-up. Decorative, never blocking. Content is hidden only
    once theme.js has marked the page ready (html.reveal-ready), so a failed
    or blocked script never leaves sections invisible. Reduced motion keeps
-   the fade, drops the lift. */
+   the fade, drops the lift.
+   The lift runs on the independent `translate` property, never `transform`,
+   so a revealed tile's own :active press (`transform: scale(.985)`) and
+   hover transforms still apply. The transition list carries `transform` at
+   the press timing with no stagger delay, because this rule's transition
+   replaces the element's own. */
 .reveal-ready [data-reveal] {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 60ms);
+  translate: 0 24px;
+  transition: opacity var(--dur-reveal) var(--ease-out), translate var(--dur-reveal) var(--ease-out), transform var(--dur-press) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 60ms), calc(var(--i, 0) * 60ms), 0ms;
 }
 
 .reveal-ready [data-reveal].is-visible,
 .no-reveal [data-reveal] {
   opacity: 1;
-  transform: none;
+  translate: none;
 }
 
 /* ---------- entrance (no JS): @starting-style ---------- */
@@ -1182,7 +1242,7 @@ input[type="search"]::-webkit-search-cancel-button {
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .reveal-ready [data-reveal] {
-    transform: none;
+    translate: none;
     transition: opacity var(--dur-base) ease;
     transition-delay: 0ms;
   }
