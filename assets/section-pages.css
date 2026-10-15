@@ -399,6 +399,17 @@
   margin-top: var(--space-2);
 }
 
+/* A long body: one step smaller and a narrower measure on larger screens,
+   so the centred lead stays within three even lines. */
+@media (min-width: 750px) {
+  .main-password--long .main-password__body {
+    max-width: 36em;
+    font-size: clamp(1.1875rem, 0.95rem + 0.6vw, 1.5rem);
+    line-height: 1.25;
+    letter-spacing: 0.004em;
+  }
+}
+
 /* Phones: the splash stays centred, so its lead drops to body size to
    keep within three lines. */
 @media (max-width: 749px) {
@@ -459,7 +470,17 @@
 }
 
 .main-password__footer a {
-  color: rgb(var(--c-ink));
+  color: rgb(var(--c-accent));
+  text-decoration-line: none;
+  text-decoration-color: currentColor;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .main-password__footer a:hover {
+    text-decoration-line: underline;
+  }
 }
 
 /* === section: main-blog ===
@@ -810,6 +831,10 @@
 /* A pull quote gets room to breathe above and below */
 .main-article__content blockquote {
   margin-block: 1.6em;
+}
+
+.main-article__content > blockquote:first-child {
+  margin-top: 0;
 }
 
 /* A quiet text button in the accent colour; .btn__content carries the

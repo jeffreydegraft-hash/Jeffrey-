@@ -240,13 +240,38 @@
 {%- endif -%}
 
 <script>
-  /* The menu and search panels open from under the bar. The ribbon may sit
-     above it, so publish where the bar really ends; capture phase, so this
-     runs before theme.js opens the drawer. */
   (function () {
     var Olivet = (window.Olivet = window.Olivet || {});
+
+    /* ≥ 990px the links stay on one line. When they cannot (a long menu, a
+       wide logo, a centred logo with a long menu), the bar keeps the menu
+       button instead. Measured before first paint and again on resize. */
+    var wide = window.matchMedia('(min-width: 990px)');
+    Olivet.fitHeaderNav = function () {
+      var header = document.querySelector('.section-header .header');
+      var nav = header && header.querySelector('.header__nav');
+      var list = nav && nav.querySelector('.header__menu');
+      if (!list) return;
+      header.classList.remove('header--overflow');
+      if (!wide.matches) return;
+      header.classList.toggle('header--overflow', list.scrollWidth > nav.clientWidth + 1);
+    };
+    Olivet.fitHeaderNav();
+
     if (Olivet.headerBottomBound) return;
     Olivet.headerBottomBound = true;
+
+    var frame;
+    var refit = function () {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(Olivet.fitHeaderNav);
+    };
+    window.addEventListener('resize', refit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+
+    /* The menu and search panels open from under the bar. The ribbon may sit
+       above it, so publish where the bar really ends; capture phase, so this
+       runs before theme.js opens the drawer. */
     document.addEventListener(
       'click',
       function (event) {

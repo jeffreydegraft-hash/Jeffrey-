@@ -250,14 +250,37 @@ sticky-header.header-wrapper {
 @media (min-width: 990px) {
   .header {
     grid-template-areas: "logo nav icons";
-    /* equal side tracks centre the links; max-content keeps a long wordmark whole */
-    grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
+    /* equal side tracks centre the links; max-content keeps a long wordmark
+       whole; the links' track may shrink below its content so the inline
+       script in header.liquid can tell when they no longer fit one line */
+    grid-template-columns: minmax(max-content, 1fr) minmax(0, auto) minmax(max-content, 1fr);
     column-gap: var(--space-6);
     min-height: 52px;
   }
 
+  /* centred logo: the links get exactly the left half, so the logo is truly centred */
   .header--center {
     grid-template-areas: "nav logo icons";
+    grid-template-columns: minmax(0, 1fr) auto minmax(max-content, 1fr);
+  }
+
+  /* The bar is one line, always (Apple's global nav never wraps). When the
+     links cannot fit, header.liquid adds .header--overflow and the bar keeps
+     the menu button instead, as on phones. */
+  .js .header__menu {
+    flex-wrap: nowrap;
+  }
+
+  .header--overflow .header__nav {
+    display: none;
+  }
+
+  .header--overflow .header__icon.header__menu-toggle {
+    display: inline-flex;
+  }
+
+  .header--center.header--overflow {
+    grid-template-areas: "menu logo icons";
   }
 
   .header--compact {
@@ -721,6 +744,15 @@ a.header__flyout-heading:active {
   -webkit-overflow-scrolling: touch;
   padding: var(--space-3) max(var(--gutter), var(--safe-right)) calc(var(--space-7) + var(--safe-bottom)) max(var(--gutter), var(--safe-left));
   transition: transform 300ms var(--ease-out), opacity var(--dur-base) var(--ease-out), visibility 0s linear 0s;
+}
+
+/* Reached at ≥ 990px only when the links did not fit the bar: the overlay's
+   content lines up with the bar's content column. */
+@media (min-width: 990px) {
+  .menu-drawer__main,
+  .menu-drawer__submenu-inner {
+    padding-inline: max(var(--gutter), calc((100% - var(--content-max)) / 2));
+  }
 }
 
 /* iOS push: the list slides back a little and fades as a submenu comes in */
