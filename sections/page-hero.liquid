@@ -8,8 +8,11 @@
   (@starting-style in base.css, no JS) and never carries data-reveal.
   A long intro (over 100 characters) is set a step smaller on desktop and
   left-aligns the hero on phones, so a paragraph is never centred over
-  more than three lines. "Remove bottom
-  spacing" lets the next section continue the page without a double gap.
+  more than three lines. An eyebrow that only repeats the heading (e.g.
+  "Contact" over "Contact") is dropped: one label, said once. "Remove
+  bottom spacing" lets the next section continue the page without a double
+  gap (section-pages.css keeps the hero's padding where the next section
+  would otherwise lose its own).
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -34,12 +37,19 @@
   if intro_length > 100
     assign hero_class = hero_class | append: ' page-hero--long'
   endif
+
+  assign eyebrow = section.settings.eyebrow | strip
+  assign eyebrow_key = eyebrow | downcase
+  assign heading_key = heading | strip_html | strip | downcase
+  if eyebrow_key == heading_key
+    assign eyebrow = ''
+  endif
 -%}
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} {{ hero_class }}" id="section-{{ section.id }}">
   <div class="page-width page-width--medium">
     <header class="page-hero__inner">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="eyebrow eyebrow--lg page-hero__eyebrow enter" style="--i: 1;">{{ section.settings.eyebrow | escape }}</p>
+      {%- if eyebrow != blank -%}
+        <p class="eyebrow eyebrow--lg page-hero__eyebrow enter" style="--i: 1;">{{ eyebrow | escape }}</p>
       {%- endif -%}
       {%- if heading != blank -%}
         <h1 class="h1 page-hero__heading enter" style="--i: 2;">{{ heading }}</h1>

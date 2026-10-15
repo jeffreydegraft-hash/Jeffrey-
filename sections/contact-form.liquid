@@ -1,12 +1,16 @@
 {%- comment -%}
-  Contact (Apple layout): a centred .h2 and muted lead, then one centred
+  Contact (Apple layout): a centred heading (h2 at .h3 size: it sits
+  under the page hero's h1, so it never competes with it) and muted lead,
+  then one centred
   column (max 560px): the Shopify contact form with Apple inputs (52px,
   radius --r-input, 14px/600 labels above, base.css) and a "Send" primary
   pill, then the studio's details as a flat --c-surface tile of 17px rows
   (icon, label, value) with inset hairlines between rows. Success and
   error states render as .form-status blocks that take focus. The details
   tile hides itself when every brand setting is empty, and the social row
-  hides with no links. Motion: the pill presses (.btn); nothing else moves.
+  hides with no links. The address breaks only between its comma-separated
+  parts ("Ste. 103-225" never splits at the hyphen). Motion: the pill
+  presses (.btn); nothing else moves.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -31,7 +35,7 @@
     {%- if section.settings.heading != blank or section.settings.intro != blank -%}
       <header class="section__header section__header--center contact-form__header">
         {%- if section.settings.heading != blank -%}
-          <h2 class="h2 contact-form__heading">{{ section.settings.heading }}</h2>
+          <h2 class="h3 contact-form__heading">{{ section.settings.heading }}</h2>
         {%- endif -%}
         {%- if section.settings.intro != blank -%}
           <p class="lead lead--muted contact-form__intro">{{ section.settings.intro | escape }}</p>
@@ -170,7 +174,17 @@
                 {%- render 'icon', name: 'map-pin', size: 20 -%}
                 <div class="contact-form__item-body">
                   <span class="contact-form__item-label">{{ 'contact.details.address' | t }}</span>
-                  <address class="contact-form__item-value contact-form__address">{{ settings.brand_address | escape | newline_to_br }}</address>
+                  {%- assign address_lines = settings.brand_address | newline_to_br | split: '<br />' -%}
+                  <address class="contact-form__item-value contact-form__address">
+                    {%- for address_line in address_lines -%}
+                      {%- assign address_parts = address_line | strip | split: ', ' -%}
+                      <span class="contact-form__address-line">
+                        {%- for address_part in address_parts -%}
+                          <span class="contact-form__address-part">{{ address_part | escape }}{% unless forloop.last %},{% endunless %}</span>{% unless forloop.last %} {% endunless %}
+                        {%- endfor -%}
+                      </span>
+                    {%- endfor -%}
+                  </address>
                 </div>
               </li>
             {%- endif -%}

@@ -16,8 +16,15 @@
    Centred eyebrow, .h1 and muted lead with generous space above. No
    ornament or invented mark (APPLE-SPEC §0.1). Above the fold, so it enters with .enter (@starting-style, base.css).
    --flush drops the bottom padding so the next section's own top padding
-   is the only gap. --long: a lead over ~3 phone lines left-aligns the
-   hero below 750px (never centre a paragraph longer than three lines). */
+   is the only gap — but only when that section sits on the same surface
+   AND keeps its top padding. section-home-a.css removes the top padding
+   of a same-scheme image-with-text / values-strip / scripture-quote /
+   steps / featured-collection that follows a padded section, so before
+   one of those (or before a different surface, or at the end of the
+   page) the hero keeps its own bottom padding: always one gap, never
+   none. Without :has() the hero keeps its padding (a larger gap, never
+   a collision). --long: a lead over ~3 phone lines left-aligns the hero
+   below 750px (never centre a paragraph longer than three lines). */
 .page-hero.section {
   padding-top: max(var(--section-y), 96px);
 }
@@ -26,7 +33,11 @@
   padding-top: max(calc(var(--section-y) * 0.6), 64px);
 }
 
-.page-hero--flush.section {
+.shopify-section:has(+ .shopify-section > .color-scheme-1:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-1,
+.shopify-section:has(+ .shopify-section > .color-scheme-2:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-2,
+.shopify-section:has(+ .shopify-section > .color-scheme-3:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-3,
+.shopify-section:has(+ .shopify-section > .color-scheme-4:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-4,
+.shopify-section:has(+ .shopify-section > .color-scheme-5:not(.featured-collection, .values-strip, .image-with-text, .scripture-quote, .steps)) > .page-hero--flush.color-scheme-5 {
   padding-bottom: 0;
 }
 
@@ -51,6 +62,24 @@
 .page-hero__intro {
   max-width: 34em;
   margin-top: var(--space-2);
+}
+
+/* Centred leads break into even lines (no one-word last line). Leads
+   that left-align on phones (--long, article) keep "pretty" there. */
+.page-hero--center:not(.page-hero--long) .page-hero__intro,
+.main-blog__header:not(.main-blog__header--long) .main-blog__intro,
+.main-404__body,
+.main-password__body,
+.contact-form__intro {
+  text-wrap: balance;
+}
+
+@media (min-width: 750px) {
+  .page-hero--center .page-hero__intro,
+  .main-blog__intro,
+  .main-article__lead {
+    text-wrap: balance;
+  }
 }
 
 /* A long intro: one step smaller so it stays within three lines on a
@@ -97,12 +126,15 @@
   --contact-column: 560px;
 }
 
-.contact-form__header {
-  max-width: var(--content-max);
-}
 
 .contact-form__intro {
   max-width: 32em;
+}
+
+/* The form heading sits right under the page hero: a quieter gap */
+.contact-form__header {
+  max-width: var(--content-max);
+  margin-bottom: clamp(28px, 4vw, 48px);
 }
 
 .contact-form__layout {
@@ -240,6 +272,18 @@
 
 .contact-form__address {
   font-style: normal;
+}
+
+/* One line per address line; each comma-separated part moves as a unit,
+   so the line breaks after a comma, never inside "103-225". A part wider
+   than the column still wraps inside itself (inline-block shrinks to fit). */
+.contact-form__address-line {
+  display: block;
+}
+
+.contact-form__address-part {
+  display: inline-block;
+  max-width: 100%;
 }
 
 .contact-form__social {
@@ -421,7 +465,10 @@
 /* === section: main-blog ===
    Apple Newsroom index: centred .h1 + muted lead, then article tiles
    1-up / 2-up (≥750) / 3-up (≥990). The top story spans the full row.
-   Tiles reveal on scroll with an --i stagger (base.css). */
+   Rows wrap and centre, so a short last row (one or two tiles) sits under
+   the middle of the full rows instead of leaving a hole on the right;
+   tiles in a row share its height. Tiles reveal on scroll with an --i
+   stagger (base.css). */
 .main-blog__intro {
   max-width: 32em;
 }
@@ -453,30 +500,34 @@
 }
 
 .main-blog__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(16px, 2vw, 24px);
+  --blog-cols: 1;
+  --blog-gap: clamp(16px, 2vw, 24px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--blog-gap);
 }
 
 @media (min-width: 750px) {
   .main-blog__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .main-blog__item--featured {
-    grid-column: 1 / -1;
+    --blog-cols: 2;
   }
 }
 
 @media (min-width: 990px) {
   .main-blog__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    --blog-cols: 3;
   }
 }
 
 .main-blog__item {
   display: flex;
+  flex: 0 0 calc((100% - (var(--blog-cols) - 1) * var(--blog-gap)) / var(--blog-cols));
   min-width: 0;
+}
+
+.main-blog__item--featured {
+  flex-basis: 100%;
 }
 
 /* === snippet: card-article ===
