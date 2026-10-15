@@ -505,6 +505,24 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
   min-width: 0;
 }
 
+/* The stage's edge: a faint ring drawn over the media (an inset shadow on
+   the track would sit beneath the photos), the same 6% edge as the product
+   tiles. Phones run the carousel full bleed, so no edge there. */
+.media-gallery__frame {
+  position: relative;
+  border-radius: var(--r-card);
+}
+
+.media-gallery__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.06);
+  pointer-events: none;
+}
+
 /* A plain overflow scroller: the browser owns the swipe (no touch-action) */
 .media-gallery__track {
   position: relative;
@@ -516,21 +534,24 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   border-radius: var(--r-card);
-  background: rgb(var(--c-surface));
+  background: rgb(var(--c-photo-ground));
 }
 
 .media-gallery__track::-webkit-scrollbar {
   display: none;
 }
 
-.media-gallery__slide,
-.media-gallery__placeholder {
+/* The merchant's photos are shot on white: they sit on that same white
+   ground, whole (contain) and untouched (APPLE-SPEC §0.3: no blending,
+   filters or crops through a label). */
+.media-gallery__slide {
   --ratio: 1 / 1;
   --media-radius: 0;
-  background: rgb(var(--c-surface));
+  background: rgb(var(--c-photo-ground));
 }
 
 .media-gallery__placeholder {
+  --ratio: 1 / 1;
   --media-radius: var(--r-card);
 }
 
@@ -540,19 +561,9 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
   scroll-snap-stop: always;
 }
 
-/* Product photography sits on the tile: contained, white backgrounds
-   multiplied into the surface in light schemes */
 .media-gallery__slide .media__img,
 .media-gallery__thumb .media__img {
   object-fit: contain;
-  mix-blend-mode: multiply;
-}
-
-[class*="color-scheme-3"] .media-gallery__slide .media__img,
-[class*="color-scheme-4"] .media-gallery__slide .media__img,
-[class*="color-scheme-3"] .media-gallery__thumb .media__img,
-[class*="color-scheme-4"] .media-gallery__thumb .media__img {
-  mix-blend-mode: normal;
 }
 
 .media-gallery__slide > iframe,
