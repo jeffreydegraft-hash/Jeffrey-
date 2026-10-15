@@ -3,6 +3,13 @@
   Accepts:
   - paginate: {Object}
   - anchor: {String} optional e.g. '#products'
+
+  Both arrows render on every page (a muted, aria-hidden placeholder when
+  there is no previous/next) so the row never shifts. Under 750px the
+  number window (.pagination__page) is hidden by components.css and the
+  .pagination__status "Page N of M" shows between the arrows instead, so a
+  long pager never wraps at phone width. The status ships with [hidden];
+  only the phone media query in components.css reveals it.
 {%- endcomment -%}
 {%- if paginate.pages > 1 -%}
   <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
@@ -13,9 +20,18 @@
             {%- render 'icon', name: 'chevron-left', size: 18 -%}
           </a>
         </li>
+      {%- else -%}
+        <li aria-hidden="true">
+          <span class="pagination__item pagination__item--arrow pagination__item--disabled">
+            {%- render 'icon', name: 'chevron-left', size: 18 -%}
+          </span>
+        </li>
       {%- endif -%}
+      <li class="pagination__status" hidden>
+        {{- 'general.pagination.page_of' | t: current: paginate.current_page, total: paginate.pages -}}
+      </li>
       {%- for part in paginate.parts -%}
-        <li>
+        <li class="pagination__page">
           {%- if part.is_link -%}
             <a href="{{ part.url }}{{ anchor }}" class="pagination__item" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
           {%- elsif part.title == paginate.current_page -%}
@@ -30,6 +46,12 @@
           <a href="{{ paginate.next.url }}{{ anchor }}" class="pagination__item pagination__item--arrow" aria-label="{{ 'general.pagination.next' | t }}">
             {%- render 'icon', name: 'chevron-right', size: 18 -%}
           </a>
+        </li>
+      {%- else -%}
+        <li aria-hidden="true">
+          <span class="pagination__item pagination__item--arrow pagination__item--disabled">
+            {%- render 'icon', name: 'chevron-right', size: 18 -%}
+          </span>
         </li>
       {%- endif -%}
     </ul>

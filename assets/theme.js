@@ -13,6 +13,13 @@
   Olivet.prefersReducedMotion = () =>
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Response on press (APPLE-SPEC §1.6): iOS Safari applies :active on
+     touch-down only where a touch listener exists, otherwise press states
+     flash after the finger lifts. Empty and passive, so it never holds up
+     scrolling. Large tiles delay their press a little in CSS, so a scroll
+     that starts on one doesn't visibly press it. */
+  document.addEventListener('touchstart', () => {}, { passive: true });
+
   Olivet.debounce = (fn, wait = 200) => {
     let t;
     return (...args) => {
@@ -187,11 +194,42 @@
           axis: () => this.sheetConfig().axis,
           dismissDirection: () => this.sheetConfig().dir,
           enabled: () => this.isOpen && this.sheetConfig().drag,
-          onDrag: (progress) => this.setBackdropProgress(progress),
-          onRelease: () => this.setBackdropProgress(0),
+          onDrag: (progress) => {
+            this.setBackdropProgress(progress);
+            // Reduce Motion pins the panel (CSS transform: none !important), so
+            // the sheet answers the finger by fading in place instead of moving.
+            if (motion.reduced()) this.panel.style.opacity = progress > 0 ? String(1 - progress * 0.6) : '';
+          },
+          onRelease: () => {
+            this.setBackdropProgress(0);
+            this.panel.style.opacity = '';
+          },
           onDismiss: (info) => this.close(false, info),
         });
       }
+    }
+
+    /* Theme editor: a section re-render can remove an open drawer. Undo what
+       open() set on the document so the page doesn't stay scroll-locked. */
+    disconnectedCallback() {
+      if (this.isConnected) return; // moved, not removed
+      document.removeEventListener('keydown', this.onKeydown);
+      this.cancelGesture();
+      if (this.isOpen || this.classList.contains('is-closing')) {
+        this.closeToken = null;
+        if (this.isOpen) Olivet.releaseFocus();
+        if (!document.querySelector('[data-drawer].is-open')) document.body.classList.remove('drawer-open');
+      }
+    }
+
+    // Stops a drag in flight (pending or dragging) so its window listeners
+    // stop writing to the panel.
+    cancelGesture() {
+      const g = this.gesture;
+      if (!g || g.pointerId == null) return;
+      if (typeof g.cancel === 'function') return g.cancel();
+      if (g.state === 'dragging') this.panel.classList.remove('is-dragging');
+      g.end();
     }
 
     get isOpen() {
@@ -247,9 +285,13 @@
      */
     close(silent = false, gesture) {
       if (!this.isOpen) return;
+      // A drag still in flight (Escape, a second finger on the backdrop) must
+      // not keep moving the panel or commit 'none' to it after it closes.
+      this.cancelGesture();
       this.classList.remove('is-open');
       this.classList.add('is-closing');
       this.setBackdropProgress(0);
+      this.panel.style.opacity = ''; // reduced motion: fade out from where the drag left it
       document.removeEventListener('keydown', this.onKeydown);
       Olivet.releaseFocus();
       if (!document.querySelector('[data-drawer].is-open')) document.body.classList.remove('drawer-open');
@@ -266,6 +308,7 @@
         this.panel.style.transform = ''; // CSS owns the closed position again
         this.setAttribute('aria-hidden', 'true');
         this.setAttribute('inert', '');
+        if (typeof this.onClosed === 'function') this.onClosed(); // subclass reset, once off screen
         // Return focus only if nothing else took over (another drawer opened meanwhile)
         const focusFree = !document.querySelector('[data-drawer].is-open') && (document.activeElement === document.body || this.contains(document.activeElement));
         if (!silent && focusFree && trigger && trigger.focus) trigger.focus({ preventScroll: true });
@@ -343,11 +386,14 @@
             });
           });
         }
-        close(silent) {
-          super.close(silent);
+        // Submenus reset only after the overlay's exit, so closing from a
+        // submenu is one motion, not a pop-back inside a fade.
+        onClosed() {
           this.querySelectorAll('[data-submenu].is-open').forEach((p) => {
             p.classList.remove('is-open');
             p.setAttribute('inert', '');
+            const opener = this.querySelector(`[data-submenu-open="#${p.id}"]`);
+            if (opener) opener.setAttribute('aria-expanded', 'false');
           });
         }
       }

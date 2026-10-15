@@ -18,7 +18,7 @@
     when 'none'
       assign spacing_class = ' section--none'
   endcase
-  assign first_name = customer.first_name | escape
+  assign first_name = customer.first_name
 -%}
 <div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-account account" id="section-{{ section.id }}">
   <div class="page-width page-width--medium">

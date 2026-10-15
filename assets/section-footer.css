@@ -241,10 +241,12 @@
   border-color: rgb(var(--c-error));
 }
 
-/* 17px keeps iOS from zooming the page into the field */
+/* 17px keeps iOS from zooming the page into the field. The 8em floor
+   (136px at 17px, 112px at 14px) keeps the whole "Email address"
+   placeholder visible however long the merchant's button label is. */
 .footer .footer__field-input {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex: 1 1 8em;
+  min-width: 8em;
   width: auto;
   min-height: 0;
   height: 34px;
@@ -264,8 +266,15 @@
   outline: none;
 }
 
-.footer__field-button {
-  flex-shrink: 0;
+/* A long label shrinks the pill and wraps to a second line instead of
+   squeezing the field. The .footer prefix outranks the .btn--sm nowrap, so
+   the .btn wrap and balance apply; the field grows with the pill and its
+   corners stay concentric. */
+.footer .footer__field-button {
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .footer__status {

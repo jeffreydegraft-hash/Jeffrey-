@@ -729,6 +729,7 @@
 .order-line__discount {
   font-size: 0.875rem;
   color: rgb(var(--c-accent));
+  overflow-wrap: anywhere;
 }
 
 .order-line__fulfillment {
@@ -759,8 +760,11 @@
   padding-block: 6px;
 }
 
+/* anywhere (not break-word) also lowers min-content, so a long discount
+   code or translated label wraps instead of pushing the amount out of the tile */
 .order-table tfoot th {
   text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .order-table tfoot td {
