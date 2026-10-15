@@ -153,6 +153,8 @@
       this.closeButtons = this.querySelectorAll('[data-drawer-close]');
       this.closeButtons.forEach((btn) => btn.addEventListener('click', () => this.close()));
       if (this.backdrop) this.backdrop.addEventListener('click', () => this.close());
+      // The panel is the fallback focus target, so it must accept programmatic focus
+      if (this.panel !== this && !this.panel.hasAttribute('tabindex')) this.panel.setAttribute('tabindex', '-1');
       this.setAttribute('aria-hidden', 'true');
     }
 
@@ -162,6 +164,9 @@
 
     open(trigger) {
       if (this.isOpen) return;
+      // Interrupting a close: cancel its pending cleanup so it can't mark this
+      // drawer inert or pull focus back after it has reopened.
+      this.cancelPendingClose();
       this.trigger = trigger || document.activeElement;
       // Close any other open drawer first (spatial consistency: one surface at a time)
       document.querySelectorAll('[data-drawer].is-open').forEach((d) => d !== this && d.close(true));
@@ -185,30 +190,39 @@
       Olivet.releaseFocus();
       if (!document.querySelector('[data-drawer].is-open')) document.body.classList.remove('drawer-open');
       if (this.trigger && this.trigger.setAttribute) this.trigger.setAttribute('aria-expanded', 'false');
+      const trigger = this.trigger;
+      this.trigger = null;
       const finish = () => {
+        this.cancelPendingClose();
         this.setAttribute('aria-hidden', 'true');
         this.setAttribute('inert', '');
-        if (!silent && this.trigger && this.trigger.focus) this.trigger.focus({ preventScroll: true });
-        this.trigger = null;
+        // Return focus only if nothing else took over (another drawer opened meanwhile)
+        const focusFree = !document.querySelector('[data-drawer].is-open') && (document.activeElement === document.body || this.contains(document.activeElement));
+        if (!silent && focusFree && trigger && trigger.focus) trigger.focus({ preventScroll: true });
       };
+      this.cancelPendingClose();
       if (Olivet.prefersReducedMotion()) {
         finish();
       } else {
-        this.panel.addEventListener('transitionend', this.onTransitionEnd, { once: true });
-        // Safety: if no transition fires (display none etc.)
-        this.closeTimeout = setTimeout(() => {
-          this.panel.removeEventListener('transitionend', this.onTransitionEnd);
-          finish();
-        }, 500);
+        // Not { once: true }: child transitions (fading links) bubble here first
+        // and would consume a one-shot listener before the panel's own event.
         this.finish = finish;
+        this.panel.addEventListener('transitionend', this.onTransitionEnd);
+        this.closeTimeout = setTimeout(finish, 500); // safety if no transition fires
       }
       Olivet.pubsub.publish(Olivet.EVENTS.drawerClosed, { drawer: this });
     }
 
-    onTransitionEnd(event) {
-      if (event.target !== this.panel) return;
+    cancelPendingClose() {
       clearTimeout(this.closeTimeout);
-      this.finish && this.finish();
+      this.closeTimeout = null;
+      this.panel.removeEventListener('transitionend', this.onTransitionEnd);
+      this.finish = null;
+    }
+
+    onTransitionEnd(event) {
+      if (event.target !== this.panel || event.propertyName !== 'transform' && event.propertyName !== 'opacity') return;
+      if (this.finish) this.finish();
     }
 
     onKeydown(event) {

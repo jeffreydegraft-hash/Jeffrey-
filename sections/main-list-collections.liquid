@@ -11,7 +11,7 @@
   endcase
 
   assign col_vw = 100 | divided_by: section.settings.columns_desktop
-  assign card_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, (min-width: 750px) 50vw, 50vw'
+  assign card_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, 50vw'
 
   assign spacing_class = ''
   case section.settings.spacing

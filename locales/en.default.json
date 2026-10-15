@@ -82,7 +82,7 @@
     },
     "account": "Account",
     "log_in": "Log in",
-    "submenu_view_all": "All {{ title }}",
+    "submenu_view_all": "View all",
     "menu_empty": "No menu has been assigned yet. Add one in the theme editor."
   },
   "footer": {

@@ -81,6 +81,13 @@
   transition-duration: var(--dur-drawer);
 }
 
+/* Focus lands on the panel itself when a drawer has no [data-drawer-focus]
+   target; the dialog doesn't need a ring, its first control will show one. */
+.drawer__panel:focus,
+.drawer__panel:focus-visible {
+  outline: none;
+}
+
 .drawer__header {
   display: flex;
   align-items: center;

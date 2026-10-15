@@ -202,7 +202,9 @@
           this.form.addEventListener('change', (e) => this.onChange(e));
           this.form.addEventListener('submit', (e) => {
             e.preventDefault();
-            this.update(null);
+            // Enter inside a price field: apply now, keep the field focused.
+            const active = document.activeElement;
+            this.update(this.form.contains(active) ? active : null);
           });
         }
         onChange(event) {
