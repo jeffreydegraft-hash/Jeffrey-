@@ -752,6 +752,15 @@ a.header__flyout-heading:active {
   transition: transform 300ms var(--ease-out), opacity var(--dur-base) var(--ease-out), visibility 0s linear 0s;
 }
 
+/* Tablets and up: rows end near their labels, so a submenu's chevron stays
+   beside the item it opens instead of across the screen. */
+@media (min-width: 750px) {
+  .menu-drawer__list,
+  .menu-drawer__sublist {
+    max-width: 480px;
+  }
+}
+
 /* Reached at ≥ 990px only when the links did not fit the bar: the overlay's
    content lines up with the bar's content column. */
 @media (min-width: 990px) {

@@ -8,7 +8,8 @@
   .h0 balance (initial value and expiry beneath, 14px muted), the code in
   a --c-surface pill with a quiet copy button, the QR code on a surface
   tile for in-store use, Apple Wallet, then the primary pill "Visit online
-  store" and a secondary pill to print. Print hides the actions.
+  store" and a secondary pill to print. Print hides the actions. Nothing
+  here is italic, so no italic font faces are loaded.
 {%- endcomment -%}
 {%- liquid
   assign scheme = settings.color_schemes | first
@@ -16,9 +17,6 @@
   assign formatted_initial = gift_card.initial_value | money
 
   assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
-  assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
-  assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
-  assign heading_font_italic = settings.type_header_font | font_modify: 'style', 'italic'
 -%}
 <!doctype html>
 <html class="no-js" lang="{{ request.locale.iso_code }}">
@@ -50,10 +48,7 @@
       {%- unless settings.use_system_font %}
       {{ settings.type_body_font | font_face: font_display: 'swap' }}
       {{ body_font_bold | font_face: font_display: 'swap' }}
-      {{ body_font_italic | font_face: font_display: 'swap' }}
-      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
       {{ settings.type_header_font | font_face: font_display: 'swap' }}
-      {{ heading_font_italic | font_face: font_display: 'swap' }}
       {%- endunless %}
 
       {%- for scheme in settings.color_schemes -%}

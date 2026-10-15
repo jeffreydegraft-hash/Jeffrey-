@@ -260,6 +260,10 @@
 
 .contact-form__item-link {
   align-self: flex-start;
+  /* 44px touch target without moving the row: the padding reaches into
+     the row's own padding, never into the neighbouring row */
+  padding-block: 10px;
+  margin-block: -10px;
   color: rgb(var(--c-accent));
   text-underline-offset: 0.18em;
   text-decoration-thickness: 1px;
@@ -713,6 +717,10 @@
 }
 
 .main-article__blog-link {
+  /* 44px touch target around a 20px label, layout unchanged */
+  display: inline-block;
+  padding-block: 12px;
+  margin-block: -12px;
   color: inherit;
   text-underline-offset: 0.18em;
   text-decoration-thickness: 1px;
