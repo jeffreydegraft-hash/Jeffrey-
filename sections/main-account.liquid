@@ -120,10 +120,17 @@
             <p class="customer-muted">{{ 'customer.account.no_address' | t }}</p>
           {%- endif -%}
         </div>
-        <a href="{{ routes.account_addresses_url }}" class="link link--chevron account__tile-link">
-          {{- 'customer.account.view_addresses' | t -}}
-          {%- render 'icon', name: 'chevron-right', size: 11 -%}
-        </a>
+        {%- if customer.default_address != blank -%}
+          <a href="{{ routes.account_addresses_url }}" class="link link--chevron account__tile-link">
+            {{- 'customer.account.view_addresses' | t -}}
+            {%- render 'icon', name: 'chevron-right', size: 11 -%}
+          </a>
+        {%- else -%}
+          <a href="{{ routes.account_addresses_url }}#AddAddress" class="link link--chevron account__tile-link">
+            {{- 'customer.addresses.add_new' | t -}}
+            {%- render 'icon', name: 'chevron-right', size: 11 -%}
+          </a>
+        {%- endif -%}
       </section>
 
       <section class="tile account__tile account__details" aria-labelledby="AccountDetails">

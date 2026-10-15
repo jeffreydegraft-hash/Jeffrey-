@@ -39,6 +39,7 @@
 
 .customer-hero__lead {
   max-width: 640px;
+  text-wrap: balance;
 }
 
 .customer-hero__meta {
@@ -204,7 +205,7 @@
 
 .customer-auth__guest-text {
   color: rgb(var(--c-ink-2));
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 .customer-auth__guest-form {
@@ -224,6 +225,12 @@
 .customer-form__row {
   display: grid;
   gap: 20px 12px;
+}
+
+@container (min-width: 300px) {
+  .customer-form__row--names {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @container (min-width: 400px) {
@@ -252,21 +259,61 @@
   gap: var(--space-2) var(--space-3);
 }
 
+/* Messages, Apple style: an error is plain 14px red text above the
+   fields (the fields themselves turn red), never a tinted box; a
+   confirmation or notice sits on the neutral surface with colour only in
+   its icon. These boxes take focus from script for screen readers, so
+   they carry no focus ring of their own. */
+.form-status.customer-form__errors {
+  gap: var(--space-2);
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-error));
+  background: none;
+}
+
+.customer-form__errors .icon {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+}
+
 .customer-form__errors ul {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   padding: 0;
   list-style: none;
 }
 
 .customer-form__errors a {
+  color: inherit;
   text-decoration: underline;
+  text-decoration-color: rgba(var(--c-error), 0.4);
   text-underline-offset: 0.18em;
 }
 
-.customer-form__status p {
+.form-status.customer-form__status,
+.form-status.order__cancelled {
+  padding: var(--space-4) 20px;
+  border-radius: var(--r-lg);
+  font-size: 0.9375rem;
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-surface));
+}
+
+.customer-form__status p,
+.order__cancelled p {
   margin: 0;
+}
+
+.customer-form__errors:focus,
+.customer-form__status:focus,
+.order__cancelled:focus {
+  outline: none;
 }
 
 .customer-form__checkbox {
@@ -362,6 +409,10 @@
 .account__email {
   color: rgb(var(--c-ink-2));
   overflow-wrap: anywhere;
+}
+
+.account__email:first-child {
+  color: rgb(var(--c-ink));
 }
 
 /* Orders: a table from 750px whose rows are whole-row links */
@@ -604,6 +655,16 @@
   text-align: center;
 }
 
+/* The numeric columns hug their figures with even 32px gutters and the
+   product takes the rest. The totals rows span two columns each, so a
+   long grand total never widens the Total column. */
+.order-table .order-table__price,
+.order-table .order-table__quantity,
+.order-table .order-table__total {
+  width: 1%;
+  padding-left: var(--space-6);
+}
+
 .order-table__compare {
   display: block;
   font-size: 0.875rem;
@@ -751,18 +812,27 @@
     white-space: nowrap;
   }
 
-  /* [image  title ............ total]
-     [       Quantity 2              ]
-     [       Price $29.98            ]  (only when it adds something) */
+  /* [image  title (full width) ......]
+     [       Quantity 2       $49.96]
+     [       Price $24.98           ]  (only when it adds something)
+     The title keeps the whole width beside the image; the line total
+     sits on the quantity line, like an Apple Store bag row. */
   .order-table tbody tr {
     display: grid;
     grid-template-columns: 64px minmax(0, 1fr) auto;
     grid-template-areas:
-      "product product total"
-      ". quantity quantity"
+      "product product product"
+      ". quantity total"
       ". price price";
     column-gap: var(--space-4);
-    padding: var(--space-4) 0;
+    padding: var(--space-5) 0;
+  }
+
+  .order-table .order-table__price,
+  .order-table .order-table__quantity,
+  .order-table .order-table__total {
+    width: auto;
+    padding-left: 0;
   }
 
   .order-table tbody tr:first-child {
@@ -782,6 +852,13 @@
   .order-table .order-table__total {
     grid-area: total;
     justify-self: end;
+    align-self: baseline;
+    margin-top: var(--space-3);
+    font-weight: var(--font-body-weight-bold);
+  }
+
+  .order-table__total .order-table__compare {
+    font-weight: var(--font-body-weight);
   }
 
   .order-table .order-table__quantity,
@@ -794,7 +871,8 @@
 
   .order-table .order-table__quantity {
     grid-area: quantity;
-    margin-top: var(--space-2);
+    align-self: baseline;
+    margin-top: var(--space-3);
   }
 
   .order-table .order-table__price {
@@ -811,8 +889,10 @@
     content: attr(data-label) " ";
   }
 
-  .order-table__price .order-table__compare {
+  .order-table__price .order-table__compare,
+  .order-table__total .order-table__compare {
     display: inline;
+    margin-right: 6px;
     font-size: inherit;
   }
 
@@ -820,9 +900,7 @@
     width: 64px;
   }
 
-  .order-table tfoot {
-    margin-top: var(--space-4);
-  }
+
 
   .order-table tfoot tr {
     display: flex;
@@ -928,6 +1006,17 @@
   align-self: flex-start;
 }
 
+/* Two up, the card beside the default one keeps a blank line where the
+   "Default" tag sits, so both addresses start on the same line. */
+@media (min-width: 750px) {
+  .address-card--default:nth-child(odd):not(:has(.is-open)) + .address-card:not(:has(.is-open)) .address-card__body::before,
+  .address-card:nth-child(odd):not(:has(.is-open)):has(+ .address-card--default:not(:has(.is-open))) .address-card__body::before {
+    content: "";
+    display: block;
+    height: calc(0.75rem * 1.33);
+  }
+}
+
 /* Edit / Delete: small accent text links with a 44px tap row */
 .address-card__actions {
   display: flex;
@@ -949,14 +1038,23 @@
   border-top: 1px solid rgb(var(--c-line));
 }
 
-/* The card being edited takes the full row so the form gets two columns */
+/* The card being edited takes its own row at the add form's width, so
+   both forms read as the same centred tile */
 .address-card:has(.address-form.is-open) {
   grid-column: 1 / -1;
+  justify-self: center;
+  width: 100%;
+  max-width: var(--text-max);
 }
 
 .addresses__empty {
   max-width: var(--text-max);
   margin-inline: auto;
+}
+
+/* While the add form is open it replaces the empty state */
+.addresses__inner:has(#AddAddress.is-open) .addresses__empty {
+  display: none;
 }
 
 /* === customers: hover + reduced motion === */

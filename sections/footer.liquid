@@ -7,11 +7,17 @@
      link, contact and text columns become accordions (<olivet-accordion>,
      12px headings with a plus that turns into ×, 44px rows, hairlines).
      The newsletter stays open: a compact field with a small pill inside it.
-  3. Brand line: a small wordmark (or logo) and the tagline, with small,
-     muted social and payment icons.
+  3. Brand line: the merchant's own logo (snippets/brand-logo.liquid, used
+     intact; the light version on dark schemes) or the store name, the
+     tagline, and small, muted social and payment icons.
   4. Legal row: copyright, policy links divided by thin bars, and the
      country / language selectors as small text buttons.
   Every colour is a scheme token, so any scheme works.
+
+  Nothing appears twice (apple.com never repeats a footer link): with
+  "Hide repeated links" on, a column leaves out links an earlier column
+  already shows, the legal row leaves out policies a column already lists,
+  and a column left empty is not rendered (the editor shows a hint).
 
   Accordion columns: the details are rendered open, so without JS every
   column is visible at every width. The inline script below closes them
@@ -22,28 +28,107 @@
 {%- liquid
   assign year = 'now' | date: '%Y'
 
+  comment
+    Logo tone follows the scheme: a dark ground asks brand-logo for the
+    merchant's light version. The selection is mirrored here only to size
+    the image (its width for the srcset); brand-logo makes the real choice.
+  endcomment
+  assign logo_tone = 'light'
+  assign scheme_bg = section.settings.color_scheme.settings.background
+  if scheme_bg != blank
+    assign scheme_brightness = scheme_bg | color_brightness
+    if scheme_brightness < 128
+      assign logo_tone = 'dark'
+    endif
+  endif
+
+  assign logo_height = section.settings.logo_height | default: 28
   assign footer_logo = section.settings.logo
   if footer_logo == blank
-    assign footer_logo = settings.logo
+    if logo_tone == 'dark'
+      assign footer_logo = settings.logo_inverse
+      if footer_logo == blank and settings.logo_dark_safe
+        assign footer_logo = settings.logo | default: shop.brand.logo
+      endif
+    else
+      assign footer_logo = settings.logo | default: shop.brand.logo
+    endif
+  endif
+  assign logo_width = logo_height | times: 4
+  if footer_logo != blank and footer_logo.aspect_ratio > 0
+    assign logo_width = footer_logo.aspect_ratio | times: logo_height | ceil
+  endif
+  if logo_width > 240
+    assign logo_width = 240
   endif
 
   comment
-    One grid track per block from 990px. The newsletter column is weighted
-    so the inline field has room and the contact column so a street
-    address stays on one line; link lists share the rest equally.
+    Directory pass. Repeated links: a link whose URL an earlier column
+    already shows is dropped (tokens "|block:index|" in keep). A column with
+    nothing to show is skipped outside the editor. Grid tracks from 990px:
+    one per rendered block, the newsletter weighted so the inline field has
+    room and the contact column so a street address stays on one line.
+    750-989px: the columns share one row (cols_md tracks), the newsletter
+    takes the row below.
   endcomment
+  assign dedupe = section.settings.hide_repeated_links
+  assign seen = '|'
+  assign keep = '|'
+  assign skipped = '|'
   assign cols = ''
+  assign cols_md = 0
+  assign has_contact = false
+  if settings.brand_email != blank or settings.brand_phone != blank or settings.brand_address != blank
+    assign has_contact = true
+  endif
+
   for block in section.blocks
+    assign has_content = true
+    case block.type
+      when 'link_list'
+        assign kept = 0
+        for link in block.settings.menu.links
+          assign url_token = '|' | append: link.url | append: '|'
+          if dedupe and seen contains url_token
+            continue
+          endif
+          assign seen = seen | append: link.url | append: '|'
+          assign keep = keep | append: block.id | append: ':' | append: forloop.index0 | append: '|'
+          assign kept = kept | plus: 1
+        endfor
+        if kept == 0
+          assign has_content = false
+        endif
+      when 'text'
+        if block.settings.text == blank
+          assign has_content = false
+        endif
+      when 'contact'
+        assign has_content = has_contact
+    endcase
+
+    unless has_content or request.design_mode
+      assign skipped = skipped | append: block.id | append: '|'
+      continue
+    endunless
+
     case block.type
       when 'newsletter'
         assign cols = cols | append: ' minmax(0, 1.6fr)'
       when 'contact'
         assign cols = cols | append: ' minmax(0, 1.2fr)'
+        assign cols_md = cols_md | plus: 1
       else
         assign cols = cols | append: ' minmax(0, 1fr)'
+        assign cols_md = cols_md | plus: 1
     endcase
   endfor
   assign cols = cols | strip
+  if cols_md > 4
+    assign cols_md = 4
+  elsif cols_md < 1
+    assign cols_md = 1
+  endif
 
   assign collapse = section.settings.collapse_on_mobile
 
@@ -70,12 +155,22 @@
     endfor
   endif
 
+  comment
+    Legal row: every policy the directory has not already listed.
+  endcomment
   assign policy_count = 0
+  assign policy_keep = '|'
   if section.settings.show_policies
     for policy in shop.policies
-      if policy != blank
-        assign policy_count = policy_count | plus: 1
+      if policy == blank
+        continue
       endif
+      assign url_token = '|' | append: policy.url | append: '|'
+      if dedupe and seen contains url_token
+        continue
+      endif
+      assign policy_count = policy_count | plus: 1
+      assign policy_keep = policy_keep | append: forloop.index0 | append: '|'
     endfor
   endif
 
@@ -99,9 +194,14 @@
 
     {%- comment -%} 2. Directory {%- endcomment -%}
     {%- if section.blocks.size > 0 -%}
-      <div class="footer__directory"{% if cols != blank %} style="--footer-cols: {{ cols }};"{% endif %}>
+      <div class="footer__directory" style="--footer-cols-md: {{ cols_md }};{% if cols != blank %} --footer-cols: {{ cols }};{% endif %}">
         {%- for block in section.blocks -%}
           {%- liquid
+            assign skip_token = '|' | append: block.id | append: '|'
+            if skipped contains skip_token
+              continue
+            endif
+
             assign heading = block.settings.heading
             if block.type == 'link_list' and heading == blank
               assign heading = block.settings.menu.title
@@ -119,16 +219,24 @@
           {%- capture column_content -%}
             {%- case block.type -%}
               {%- when 'link_list' -%}
-                {%- if block.settings.menu.links.size > 0 -%}
-                  <ul class="footer__links" role="list">
-                    {%- for link in block.settings.menu.links -%}
+                {%- capture link_items -%}
+                  {%- for link in block.settings.menu.links -%}
+                    {%- assign link_token = '|' | append: block.id | append: ':' | append: forloop.index0 | append: '|' -%}
+                    {%- if keep contains link_token -%}
                       <li>
                         <a href="{{ link.url }}" class="footer__link"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
                       </li>
-                    {%- endfor -%}
-                  </ul>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endcapture -%}
+                {%- if link_items != blank -%}
+                  <ul class="footer__links" role="list">{{ link_items }}</ul>
                 {%- elsif request.design_mode -%}
-                  <p class="footer__hint">{{ 'footer.menu_hint' | t }}</p>
+                  {%- if block.settings.menu.links.size > 0 -%}
+                    <p class="footer__hint">{{ 'footer.repeated_hint' | t }}</p>
+                  {%- else -%}
+                    <p class="footer__hint">{{ 'footer.menu_hint' | t }}</p>
+                  {%- endif -%}
                 {%- endif -%}
 
               {%- when 'text' -%}
@@ -140,7 +248,7 @@
                 {%- liquid
                   assign phone_href = settings.brand_phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | remove: '.'
                 -%}
-                {%- if settings.brand_email != blank or settings.brand_phone != blank or settings.brand_address != blank -%}
+                {%- if has_contact -%}
                   <address class="footer__contact">
                     <ul class="footer__links" role="list">
                       {%- if settings.brand_email != blank -%}
@@ -244,14 +352,10 @@
       <div class="footer__brandline">
         {%- if show_brand -%}
           <p class="footer__brand">
-            {%- comment -%} Plain text, not a link: the navigation already leads home {%- endcomment -%}
-            {%- if footer_logo != blank -%}
-              <span class="footer__logo">
-                {{- footer_logo | image_url: width: 320 | image_tag: class: 'footer__logo-img', alt: shop.name, loading: 'lazy' -}}
-              </span>
-            {%- else -%}
-              <span class="footer__wordmark">{{ shop.name | escape }}</span>
-            {%- endif -%}
+            {%- comment -%} Not a link: the navigation already leads home {%- endcomment -%}
+            <span class="footer__logo" style="--footer-logo-height: {{ logo_height }}px;">
+              {%- render 'brand-logo', tone: logo_tone, override: section.settings.logo, width: logo_width, class: 'footer__logo-img', wordmark_class: 'footer__wordmark' -%}
+            </span>
             {%- if settings.brand_tagline != blank -%}
               <span class="footer__tagline">{{ settings.brand_tagline | escape }}</span>
             {%- endif -%}
@@ -285,7 +389,8 @@
         <nav class="footer__policies-nav" aria-label="{{ 'footer.policies' | t }}">
           <ul class="footer__policies" role="list">
             {%- for policy in shop.policies -%}
-              {%- if policy != blank -%}
+              {%- assign policy_token = '|' | append: forloop.index0 | append: '|' -%}
+              {%- if policy != blank and policy_keep contains policy_token -%}
                 <li class="footer__policy"><a href="{{ policy.url }}" class="footer__policy-link">{{ policy.title | escape }}</a></li>
               {%- endif -%}
             {%- endfor -%}
@@ -379,20 +484,37 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "hide_repeated_links",
+      "label": "Hide repeated links",
+      "info": "A column leaves out links an earlier column already shows, and the policy row leaves out policies a column lists, so nothing appears twice.",
+      "default": true
+    },
+    {
       "type": "header",
       "content": "Brand line"
     },
     {
       "type": "checkbox",
       "id": "show_brand_line",
-      "label": "Show wordmark and tagline",
+      "label": "Show logo and tagline",
       "default": true
     },
     {
       "type": "image_picker",
       "id": "logo",
       "label": "Footer logo",
-      "info": "Optional. Shown small (20px tall). Use a light version of the logo for dark color schemes. Falls back to the theme logo, then to the store name."
+      "info": "Optional, shown as uploaded. Falls back to the theme logo (its light version on dark color schemes), then to the store name."
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 28
     },
     {
       "type": "checkbox",

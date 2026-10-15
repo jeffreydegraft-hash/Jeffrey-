@@ -124,7 +124,7 @@
                         {%- if property.last != blank and property_first_char != '_' -%}
                           <span class="order-line__meta">
                             {{ property.first | escape }}:
-                            {%- if property.last contains '/uploads/' -%}
+                            {% if property.last contains '/uploads/' -%}
                               <a href="{{ property.last }}" class="link link--underline">{{ property.last | split: '/' | last | escape }}</a>
                             {%- else -%}
                               {{ property.last | escape }}
@@ -135,7 +135,7 @@
                       {%- if line_item.line_level_discount_allocations != blank -%}
                         <ul class="order-line__discounts" role="list" aria-label="{{ 'customer.order.discount' | t }}">
                           {%- for discount_allocation in line_item.line_level_discount_allocations -%}
-                            <li class="order-line__discount">{{ discount_allocation.discount_application.title | escape }} (-{{ discount_allocation.amount | money }})</li>
+                            <li class="order-line__discount">{{ discount_allocation.discount_application.title | escape }} (−{{ discount_allocation.amount | money }})</li>
                           {%- endfor -%}
                         </ul>
                       {%- endif -%}
@@ -191,41 +191,41 @@
           </tbody>
           <tfoot role="rowgroup" class="order-table__totals">
             <tr role="row">
-              <th scope="row" role="rowheader" colspan="3">{{ 'customer.order.subtotal' | t }}</th>
-              <td role="cell" class="tnum">{{ order.line_items_subtotal_price | money }}</td>
+              <th scope="row" role="rowheader" colspan="2">{{ 'customer.order.subtotal' | t }}</th>
+              <td role="cell" class="tnum" colspan="2">{{ order.line_items_subtotal_price | money }}</td>
             </tr>
             {%- for discount_application in order.cart_level_discount_applications -%}
               <tr role="row">
-                <th scope="row" role="rowheader" colspan="3">{{ 'customer.order.discount' | t }} <span class="order-table__note">({{ discount_application.title | escape }})</span></th>
-                <td role="cell" class="tnum">-{{ discount_application.total_allocated_amount | money }}</td>
+                <th scope="row" role="rowheader" colspan="2">{{ 'customer.order.discount' | t }} <span class="order-table__note">({{ discount_application.title | escape }})</span></th>
+                <td role="cell" class="tnum" colspan="2">−{{ discount_application.total_allocated_amount | money }}</td>
               </tr>
             {%- endfor -%}
             {%- for shipping_method in order.shipping_methods -%}
               <tr role="row">
-                <th scope="row" role="rowheader" colspan="3">{{ 'customer.order.shipping' | t }} <span class="order-table__note">({{ shipping_method.title | escape }})</span></th>
-                <td role="cell" class="tnum">{{ shipping_method.price | money }}</td>
+                <th scope="row" role="rowheader" colspan="2">{{ 'customer.order.shipping' | t }} <span class="order-table__note">({{ shipping_method.title | escape }})</span></th>
+                <td role="cell" class="tnum" colspan="2">{{ shipping_method.price | money }}</td>
               </tr>
             {%- endfor -%}
             {%- for tax_line in order.tax_lines -%}
               <tr role="row">
-                <th scope="row" role="rowheader" colspan="3">{{ 'customer.order.tax' | t }} <span class="order-table__note">({{ tax_line.title | escape }} {{ tax_line.rate_percentage }}%)</span></th>
-                <td role="cell" class="tnum">{{ tax_line.price | money }}</td>
+                <th scope="row" role="rowheader" colspan="2">{{ 'customer.order.tax' | t }} <span class="order-table__note">({{ tax_line.title | escape }} {{ tax_line.rate_percentage }}%)</span></th>
+                <td role="cell" class="tnum" colspan="2">{{ tax_line.price | money }}</td>
               </tr>
             {%- endfor -%}
             {%- if order.total_duties > 0 -%}
               <tr role="row">
-                <th scope="row" role="rowheader" colspan="3">{{ 'customer.order.total_duties' | t }}</th>
-                <td role="cell" class="tnum">{{ order.total_duties | money }}</td>
+                <th scope="row" role="rowheader" colspan="2">{{ 'customer.order.total_duties' | t }}</th>
+                <td role="cell" class="tnum" colspan="2">{{ order.total_duties | money }}</td>
               </tr>
             {%- endif -%}
             <tr role="row" class="order-table__grand">
-              <th scope="row" role="rowheader" colspan="3">{{ 'customer.order.total' | t }}</th>
-              <td role="cell" class="tnum">{{ order.total_price | money_with_currency }}</td>
+              <th scope="row" role="rowheader" colspan="2">{{ 'customer.order.total' | t }}</th>
+              <td role="cell" class="tnum" colspan="2">{{ order.total_price | money_with_currency }}</td>
             </tr>
             {%- if order.total_refunded_amount > 0 -%}
               <tr role="row" class="order-table__refund">
-                <th scope="row" role="rowheader" colspan="3">{{ 'customer.order.total_refunded' | t }}</th>
-                <td role="cell" class="tnum">-{{ order.total_refunded_amount | money }}</td>
+                <th scope="row" role="rowheader" colspan="2">{{ 'customer.order.total_refunded' | t }}</th>
+                <td role="cell" class="tnum" colspan="2">−{{ order.total_refunded_amount | money }}</td>
               </tr>
             {%- endif -%}
           </tfoot>

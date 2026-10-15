@@ -11,7 +11,7 @@
 {%- liquid
   assign prefix = 'AddressForm' | append: suffix
 -%}
-<div class="customer-form__row">
+<div class="customer-form__row customer-form__row--names">
   <div class="field">
     <label class="field__label" for="{{ prefix }}-first_name">{{ 'customer.addresses.first_name' | t }}</label>
     <input

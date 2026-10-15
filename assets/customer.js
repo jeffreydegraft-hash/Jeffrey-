@@ -143,6 +143,15 @@
       errors.removeAttribute('data-form-errors');
     });
 
+    // A link such as /account/addresses#AddAddress (the dashboard's "Add a
+    // new address ›") arrives with that panel open and in view, unless a
+    // form that came back with errors already holds the stage.
+    const requested = window.location.hash ? document.getElementById(window.location.hash.slice(1)) : null;
+    if (requested && root.contains(requested) && requested.matches('[data-address-form]') && !root.querySelector('[data-address-form].is-open')) {
+      openPanel(root, requested);
+      requested.scrollIntoView({ block: 'start' });
+    }
+
     root.addEventListener('click', (event) => {
       const toggle = event.target.closest('[data-address-toggle]');
       if (toggle) {

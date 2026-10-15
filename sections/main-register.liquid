@@ -23,7 +23,7 @@
 
       {%- form 'create_customer', class: 'customer-form' -%}
         {%- render 'customer-form-errors', form: form, prefix: 'RegisterForm' -%}
-        <div class="customer-form__row">
+        <div class="customer-form__row customer-form__row--names">
           <div class="field">
             <label class="field__label" for="RegisterForm-first_name">{{ 'customer.register.first_name' | t }}</label>
             <input

@@ -5,6 +5,9 @@
     phone/tablet  [wordmark ............ search · bag · menu]
                   (logo "center": [menu | wordmark | search · bag])
     ≥ 990px       [wordmark | links, centred | search · account · bag]
+                  (one line, always: when the links cannot fit, the inline
+                  script below adds .header--overflow and the bar keeps the
+                  menu button instead of wrapping)
   Desktop dropdowns are Apple "flyouts": full-width translucent panels under
   the bar (positioned against <sticky-header>), opened by click through
   <details-disclosure>; a light scrim dims the page while one is open.

@@ -6,7 +6,9 @@
    --content-max, 12px type throughout with hierarchy from weight and ink
    strength, never size jumps. Order: footnotes, directory, brand line,
    legal row; the only rules are 1px --c-line hairlines under the footnotes
-   and above the legal row (and between accordion rows on phones).
+   and on top of the legal row (and between accordion rows on phones). The
+   legal row owns its rule, so it is there whichever blocks are missing, and
+   it drops it where a rule already sits right above.
    Motion is press feedback and colour only, plus the shared accordion
    (grid-template-rows, components.css) on phones. Every colour is a scheme
    token, so a dark scheme works too. */
@@ -267,13 +269,21 @@
   }
 }
 
+/* With a mouse there is no zoom to avoid: the text matches the 14px pill
+   beside it instead of out-sizing every other line in the footer. */
+@media (hover: hover) and (pointer: fine) {
+  .footer .footer__field-input {
+    font-size: 14px;
+    letter-spacing: -0.016em;
+  }
+}
+
 /* ---- 3. brand line ---- */
 .footer__brandline {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding-block: 20px 12px;
-  border-bottom: 1px solid rgb(var(--c-line));
+  padding-top: 20px;
 }
 
 .footer__brand {
@@ -284,11 +294,11 @@
   min-width: 0;
 }
 
-.footer__wordmark,
 .footer__logo {
   display: inline-flex;
   align-items: center;
   min-height: 24px;
+  max-width: 100%;
 }
 
 .footer__wordmark {
@@ -299,11 +309,15 @@
   overflow-wrap: anywhere;
 }
 
+/* The merchant's logo exactly as uploaded: set by height, width from its
+   own aspect ratio (the width/height attributes reserve the box). */
 .footer__logo-img {
+  display: block;
   width: auto;
-  height: 20px;
-  max-width: 160px;
+  height: var(--footer-logo-height, 28px);
+  max-width: min(240px, 100%);
   object-fit: contain;
+  object-position: left center;
 }
 
 .footer__tagline {
@@ -356,7 +370,21 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
+  margin-top: var(--space-3);
   padding-top: var(--space-2);
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+/* Straight under the directory (no brand line): room above the rule */
+.footer__directory + .footer__legal {
+  margin-top: var(--space-5);
+}
+
+/* A rule already sits right above (the footnotes), or nothing does */
+.footer__footnotes + .footer__legal,
+.footer__inner > .footer__legal:first-child {
+  margin-top: 0;
+  border-top: 0;
 }
 
 .footer__copyright {
@@ -437,9 +465,11 @@
   .footer--padding-compact { --footer-pad-top: 14px; }
   .footer--padding-airy { --footer-pad-top: clamp(32px, 4vw, 48px); }
 
+  /* The columns share one row (--footer-cols-md, set inline: one track per
+     rendered column, at most 4); the newsletter takes the row below. */
   .footer__directory {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(var(--footer-cols-md, 3), minmax(0, 1fr));
     gap: var(--space-5) var(--space-5);
     padding-top: 20px;
   }
@@ -476,7 +506,7 @@
     justify-content: space-between;
     gap: var(--space-2) var(--space-6);
     margin-top: var(--space-6);
-    padding-block: 0 var(--space-2);
+    padding-top: 0;
   }
 
   .footer .footer__social {
@@ -488,6 +518,16 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 0 30px;
+    margin-top: var(--space-2);
+  }
+
+  .footer__directory + .footer__legal {
+    margin-top: var(--space-6);
+  }
+
+  .footer__footnotes + .footer__legal,
+  .footer__inner > .footer__legal:first-child {
+    margin-top: 0;
   }
 
   .footer__localization {
@@ -501,7 +541,7 @@
   .footer__directory {
     /* --footer-cols is set inline: minmax(0, 1fr) per link list, 1.2fr for
        contact (one-line street address), 1.6fr for the newsletter field. */
-    grid-template-columns: var(--footer-cols, repeat(auto-fit, minmax(140px, 1fr)));
+    grid-template-columns: var(--footer-cols, repeat(var(--footer-cols-md, 3), minmax(0, 1fr)));
     gap: 0 var(--space-5);
   }
 
@@ -518,6 +558,12 @@
 
   .footer__directory > .footer__col:not(.footer__group) .footer__heading {
     margin-bottom: 4px;
+  }
+
+  /* The last accordion row already draws a rule under itself */
+  .footer__directory:has(> .footer__group:last-child) + .footer__legal {
+    margin-top: 0;
+    border-top: 0;
   }
 }
 

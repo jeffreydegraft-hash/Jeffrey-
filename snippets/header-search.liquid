@@ -5,7 +5,8 @@
   - color_scheme: {String} the header's colour scheme (optional)
   ≥ 750px: a translucent panel that drops from under the bar (the viewport
   wrapper clips it at the bar's bottom edge, so it slides out from beneath).
-  < 750px: a full-screen overlay over the bar.
+  < 750px: a full-screen, opaque overlay over the bar, with an iOS search
+  bar (filled field, glass and clear button inside, Cancel beside it).
   Both move on the Drawer base spring; geometry lives in section-header.css.
   Contract: <search-drawer id="SearchDrawer" data-drawer> from theme.js;
   <predictive-search> from assets/predictive-search.js when enabled.

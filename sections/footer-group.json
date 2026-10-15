@@ -8,14 +8,14 @@
         "shop": {
           "type": "link_list",
           "settings": {
-            "heading": "Shop",
+            "heading": "Shop and learn",
             "menu": "main-menu"
           }
         },
         "company": {
           "type": "link_list",
           "settings": {
-            "heading": "Company",
+            "heading": "Help",
             "menu": "footer"
           }
         },
@@ -39,6 +39,8 @@
         "color_scheme": "scheme-2",
         "collapse_on_mobile": true,
         "show_brand_line": true,
+        "logo_height": 28,
+        "hide_repeated_links": true,
         "show_social": true,
         "show_payment_icons": true,
         "show_policies": true,

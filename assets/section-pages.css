@@ -70,7 +70,8 @@
 .main-blog__header:not(.main-blog__header--long) .main-blog__intro,
 .main-404__body,
 .main-password__body,
-.contact-form__intro {
+.contact-form__intro,
+.main-blog__empty p {
   text-wrap: balance;
 }
 
@@ -125,7 +126,6 @@
 .contact-form {
   --contact-column: 560px;
 }
-
 
 .contact-form__intro {
   max-width: 32em;
@@ -950,7 +950,6 @@
   margin-top: clamp(56px, 8vw, 96px);
 }
 
-
 .main-article__comment-list {
   display: flex;
   flex-direction: column;
@@ -998,7 +997,6 @@
   flex-direction: column;
   gap: var(--space-5);
 }
-
 
 .main-article__form-row {
   display: grid;
@@ -1147,6 +1145,7 @@
 
 .gift-card__hint {
   max-width: 28ch;
+  text-wrap: balance;
 }
 
 .gift-card__wallet {
