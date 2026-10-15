@@ -30,36 +30,32 @@ const PALETTE = {
   '100-squalane': ['#2F3F2A', '#F3EFE6'],
 };
 
-/* Preview stand-ins only (never shipped): the merchant's product photos are shot on
-   white (APPLE-SPEC §0.3), so the mock shots are too; scenes carry no drawn emblems. */
+/* Preview stand-ins only (never shipped). The preview cannot download the
+   merchant's real photos (their CDN is blocked here), so every image slot shows
+   a plain, clearly labelled placeholder instead of drawn product art — on the
+   live store each slot shows the merchant's own photo. White ground, like the
+   real product photography (APPLE-SPEC §0.3). */
 export function bottleSvg(title, [ink], variant = 0) {
-  const label = esc(title.replace(' Anointing Oil', '').replace(' (Unscented)', ''));
-  const shift = variant * 18;
+  const label = esc(title);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
-  <defs>
-    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${ink}" stop-opacity=".92"/><stop offset=".5" stop-color="${ink}" stop-opacity=".7"/><stop offset="1" stop-color="${ink}" stop-opacity=".95"/></linearGradient>
-  </defs>
   <rect width="800" height="1000" fill="#FFFFFF"/>
-  <ellipse cx="400" cy="860" rx="190" ry="26" fill="${ink}" opacity=".12"/>
-  <g transform="translate(${shift} 0)">
-    <rect x="330" y="150" width="140" height="70" rx="10" fill="#1F2A1C"/>
-    <rect x="345" y="120" width="110" height="40" rx="8" fill="#B08D57"/>
-    <path d="M300 230 h200 c20 0 30 12 30 30 v560 c0 30 -20 50 -50 50 h-160 c-30 0 -50 -20 -50 -50 v-560 c0 -18 10 -30 30 -30z" fill="url(#glass)"/>
-    <rect x="285" y="420" width="230" height="260" rx="6" fill="#F7F3EC"/>
-    <text x="400" y="505" font-family="Georgia, serif" font-size="26" text-anchor="middle" fill="#1F2A1C" letter-spacing="2">MOUNT OF OLIVES</text>
-    <line x1="330" y1="528" x2="470" y2="528" stroke="#B08D57" stroke-width="2"/>
-    <text x="400" y="582" font-family="Georgia, serif" font-size="30" font-style="italic" text-anchor="middle" fill="#1F2A1C">${label}</text>
-    <text x="400" y="620" font-family="Helvetica, Arial, sans-serif" font-size="14" text-anchor="middle" fill="#5F6A58" letter-spacing="3">THE ANOINTING OIL</text>
-    <text x="400" y="660" font-family="Helvetica, Arial, sans-serif" font-size="13" text-anchor="middle" fill="#5F6A58">2 FL OZ · 60 mL</text>
+  <rect x="150" y="150" width="500" height="700" rx="28" fill="#F2F2F4" stroke="#D2D2D7" stroke-width="2" stroke-dasharray="10 10"/>
+  <g transform="translate(400 430)" fill="none" stroke="#A1A1A6" stroke-width="6" stroke-linejoin="round">
+    <rect x="-70" y="-52" width="140" height="104" rx="14"/>
+    <circle cx="-26" cy="-14" r="13"/>
+    <path d="M-70 40 l46 -42 32 28 26 -22 36 36"/>
   </g>
+  <text x="400" y="560" font-family="Helvetica, Arial, sans-serif" font-size="30" font-weight="600" text-anchor="middle" fill="#6E6E73">Your product photo</text>
+  <text x="400" y="602" font-family="Helvetica, Arial, sans-serif" font-size="22" text-anchor="middle" fill="#A1A1A6">${label}${variant ? ' · ' + (variant + 1) : ''}</text>
 </svg>`;
 }
 
 export function sceneSvg(name, [ink, bg], w = 1600, h = 1200) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
-  <defs><radialGradient id="r" cx=".3" cy=".3" r=".9"><stop offset="0" stop-color="${bg}"/><stop offset="1" stop-color="${ink}" stop-opacity=".55"/></radialGradient></defs>
-  <rect width="${w}" height="${h}" fill="url(#r)"/>
-  <text x="60" y="${h - 60}" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#F7F3EC" opacity=".8">${esc(name)}</text>
+  <rect width="${w}" height="${h}" fill="#F2F2F4"/>
+  <rect x="24" y="24" width="${w - 48}" height="${h - 48}" rx="24" fill="none" stroke="#D2D2D7" stroke-width="3" stroke-dasharray="14 14"/>
+  <text x="${w / 2}" y="${h / 2}" font-family="Helvetica, Arial, sans-serif" font-size="${Math.round(w / 32)}" font-weight="600" text-anchor="middle" fill="#6E6E73">Your image</text>
+  <text x="${w / 2}" y="${h / 2 + Math.round(w / 22)}" font-family="Helvetica, Arial, sans-serif" font-size="${Math.round(w / 48)}" text-anchor="middle" fill="#A1A1A6">${esc(name)}</text>
 </svg>`;
 }
 
