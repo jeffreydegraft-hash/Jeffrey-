@@ -1,0 +1,126 @@
+{%- comment -%}
+  Product media gallery (<media-gallery>, assets/product.js).
+  ≥990px, layout "thumbnails": a 72px thumbnail column + one 4/5 stage that
+  crossfades between media. Layout "stacked": every media item stacked.
+  <990px: a scroll-snap carousel (touch-action: pan-y) with dot indicators
+  kept in sync by IntersectionObserver.
+  Zoom: image slides are buttons that open the native <dialog class="lightbox">.
+
+  Accepts:
+  - product: {Object} product
+  - layout: {String} 'thumbnails' (default) | 'stacked'
+  - enable_zoom: {Boolean}
+  Usage: {% render 'product-media-gallery', product: product, layout: section.settings.media_layout, enable_zoom: section.settings.enable_zoom %}
+{%- endcomment -%}
+{%- liquid
+  assign layout = layout | default: 'thumbnails'
+  if layout != 'stacked'
+    assign layout = 'thumbnails'
+  endif
+  assign media_count = product.media.size
+  assign featured = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+  assign active_id = featured.id
+  assign has_image = false
+  for media in product.media
+    if media.media_type == 'image'
+      assign has_image = true
+      break
+    endif
+  endfor
+  if has_image == false
+    assign enable_zoom = false
+  endif
+-%}
+<media-gallery
+  id="MediaGallery-{{ section.id }}"
+  class="media-gallery media-gallery--{{ layout }}{% if media_count < 2 %} media-gallery--single{% endif %}"
+  data-layout="{{ layout }}"
+  data-section="{{ section.id }}"
+  role="region"
+  aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
+>
+  {%- if media_count == 0 -%}
+    <div class="media media-gallery__placeholder" style="--ratio: 4 / 5;">
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    </div>
+  {%- else -%}
+    {%- if layout == 'thumbnails' and media_count > 1 -%}
+      <ul class="media-gallery__thumbs" role="list" aria-label="{{ 'products.product.media.carousel_label' | t }}">
+        {%- for media in product.media -%}
+          {%- liquid
+            assign thumb_alt = media.alt | default: product.title
+            assign is_active = false
+            if media.id == active_id
+              assign is_active = true
+            endif
+          -%}
+          <li class="media-gallery__thumb-item">
+            <button
+              type="button"
+              class="media-gallery__thumb"
+              data-thumb
+              data-media-id="{{ media.id }}"
+              aria-pressed="{{ is_active }}"
+              aria-label="{{ 'products.product.media.load_image' | t: index: forloop.index }}"
+            >
+              <span class="media media-gallery__thumb-media" style="--ratio: 4 / 5;">
+                {{ media.preview_image | image_url: width: 216 | image_tag: widths: '72, 144, 216', sizes: '72px', class: 'media__img media-gallery__thumb-img', loading: 'lazy', alt: thumb_alt }}
+              </span>
+              {%- if media.media_type != 'image' -%}
+                <span class="media-gallery__thumb-badge" aria-hidden="true">{% render 'icon', name: 'play', size: 12 %}</span>
+              {%- endif -%}
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <div class="media-gallery__stage">
+      <div class="media-gallery__track" data-track>
+        {%- for media in product.media -%}
+          {%- liquid
+            assign is_active = false
+            assign loading = 'lazy'
+            if media.id == active_id
+              assign is_active = true
+              assign loading = 'eager'
+            endif
+          -%}
+          <div
+            class="media media-gallery__slide media-gallery__slide--{{ media.media_type }}{% if is_active %} is-active{% endif %}"
+            style="--ratio: 4 / 5;"
+            data-slide
+            data-media-id="{{ media.id }}"
+            data-media-type="{{ media.media_type }}"
+          >
+            {%- render 'product-media', media: media, product: product, index: forloop.index, loading: loading, enable_zoom: enable_zoom -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if media_count > 1 -%}
+        <div class="media-gallery__dots" role="group" aria-label="{{ 'products.product.media.carousel_label' | t }}">
+          {%- for media in product.media -%}
+            <button
+              type="button"
+              class="media-gallery__dot"
+              data-dot
+              data-media-id="{{ media.id }}"
+              aria-label="{{ 'accessibility.slide' | t: index: forloop.index }}"
+              aria-current="{% if media.id == active_id %}true{% else %}false{% endif %}"
+            ></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if enable_zoom -%}
+      <dialog class="lightbox" data-lightbox aria-label="{{ 'products.modal.label' | t }}">
+        <button type="button" class="btn btn--icon btn--surface lightbox__close" data-lightbox-close aria-label="{{ 'accessibility.close' | t }}">
+          {%- render 'icon', name: 'close', size: 20 -%}
+        </button>
+        <div class="lightbox__body" data-lightbox-body></div>
+      </dialog>
+    {%- endif -%}
+  {%- endif -%}
+</media-gallery>

@@ -1,0 +1,143 @@
+{%- comment -%}
+  Built-in brand copy for the eleven launch products, keyed by handle.
+  Used wherever a product metafield (custom.theme_word, custom.scripture_quote,
+  custom.scripture_reference, custom.meaning, custom.botanical,
+  custom.ingredients) is still empty, so product pages are complete on day one.
+
+  Snippets cannot hand variables back to the caller, so this snippet OUTPUTS
+  one field. Capture it:
+    {% capture scripture_quote %}{% render 'product-defaults', product: product, field: 'scripture_quote' %}{% endcapture %}
+    {% assign scripture_quote = scripture_quote | strip %}
+
+  Accepts:
+  - product: {Object} product
+  - field: {String} theme_word | scripture_quote | scripture_reference | meaning | botanical | ingredients | one_liner
+  Outputs an empty string for unknown handles or fields.
+{%- endcomment -%}
+{%- liquid
+  assign default_theme_word = ''
+  assign default_scripture_quote = ''
+  assign default_scripture_reference = ''
+  assign default_meaning = ''
+  assign default_botanical = ''
+  assign default_ingredients = ''
+  assign default_one_liner = ''
+
+  case product.handle
+    when 'frankincense-myrrh-anointing-oil'
+      assign default_theme_word = "Reverence"
+      assign default_one_liner = "Two gifts of the Magi, blended in olive squalane for prayer and skin."
+      assign default_scripture_quote = "Then, opening their treasures, they offered him gifts, gold and frankincense and myrrh."
+      assign default_scripture_reference = "Matthew 2:11"
+      assign default_meaning = "Frankincense and myrrh were laid before the infant Christ by the Magi, beside gold. Frankincense rose from the altar as a sign of God's presence. Myrrh, bitter and costly, pointed ahead to his sacrifice."
+      assign default_botanical = "Resins of Boswellia serrata and Commiphora myrrha, blended into olive oil and olive-derived squalane with olive polyphenols. Warm and resinous, it nourishes the skin as it scents it."
+      assign default_ingredients = "Olive oil, olive-derived squalane, Boswellia serrata (Frankincense), Commiphora myrrha (Myrrh), olive polyphenols"
+
+    when 'frankincense'
+      assign default_theme_word = "Presence"
+      assign default_one_liner = "Pure frankincense in olive squalane, for sacred moments and glowing skin."
+      assign default_scripture_quote = "They shall bring gold and frankincense, and shall bring good news, the praises of the LORD."
+      assign default_scripture_reference = "Isaiah 60:6"
+      assign default_meaning = "Pure frankincense was set apart for the holy incense and laid on the grain offering before the Lord. Its smoke filled the tabernacle as a sign of God's nearness. Isaiah saw the nations bringing it as praise."
+      assign default_botanical = "Resin of Boswellia serrata in olive oil and olive-derived squalane, with olive polyphenols. Clear and resinous, it nourishes the skin and is made for sacred rituals."
+      assign default_ingredients = "Olive oil, olive-derived squalane, Boswellia serrata (Frankincense), olive polyphenols"
+
+    when 'myrrh-anointing-oil-1'
+      assign default_theme_word = "Purification"
+      assign default_one_liner = "Myrrh in olive squalane, a quiet oil for purification and remembrance."
+      assign default_scripture_quote = "All thy garments smell of myrrh, and aloes, and cassia, out of the ivory palaces, whereby they have made thee glad."
+      assign default_scripture_reference = "Psalm 45:8"
+      assign default_meaning = "Myrrh was the first ingredient God named for the holy anointing oil. It perfumed the garments of the king and was brought by Nicodemus to prepare the body of Jesus. It speaks of what is costly, set apart, and given."
+      assign default_botanical = "Resin of Commiphora myrrha in olive oil and olive-derived squalane, with olive polyphenols. Deep, earthy, and antioxidant-rich, it nourishes the skin and supports the skin barrier."
+      assign default_ingredients = "Olive oil, olive-derived squalane, Commiphora myrrha (Myrrh), olive polyphenols"
+
+    when 'gethsemane-anointing-oil-unscented'
+      assign default_theme_word = "Intercession"
+      assign default_one_liner = "Unscented anointing oil of olive and squalane, for prayer and intercession."
+      assign default_scripture_quote = "Then cometh Jesus with them unto a place called Gethsemane, and saith unto the disciples, Sit ye here, while I go and pray yonder."
+      assign default_scripture_reference = "Matthew 26:36"
+      assign default_meaning = "Gethsemane means oil press. It was the garden on the Mount of Olives where Jesus prayed before the cross. We named our unscented oil for that place of prayer, intercession, and surrender."
+      assign default_botanical = "Olive oil, olive-derived squalane, and olive polyphenols, with no added fragrance. Squalane is a lipid similar to the squalene in human skin, so it hydrates and nourishes without a scent of its own."
+      assign default_ingredients = "Olive oil, olive-derived squalane, olive polyphenols"
+
+    when 'spikenard-anointing-oil'
+      assign default_theme_word = "Devotion"
+      assign default_one_liner = "The costly oil Mary poured out, for worship and devotion."
+      assign default_scripture_quote = "Then took Mary a pound of ointment of spikenard, very costly, and anointed the feet of Jesus, and wiped his feet with her hair: and the house was filled with the odour of the ointment."
+      assign default_scripture_reference = "John 12:3"
+      assign default_meaning = "Mary of Bethany took a pound of costly spikenard and anointed the feet of Jesus, and the house was filled with its fragrance. Some called it waste. Jesus called it a good work, and said it would be remembered wherever the gospel is preached."
+      assign default_botanical = "Nardostachys jatamansi, a root from the high Himalayas, in olive oil and olive-derived squalane with olive polyphenols. Earthy and sweet, it nourishes the skin."
+      assign default_ingredients = "Olive oil, olive-derived squalane, Nardostachys jatamansi (Spikenard), olive polyphenols"
+
+    when 'pomegranate-anointing-oil'
+      assign default_theme_word = "Revitalize"
+      assign default_one_liner = "Antioxidant-rich pomegranate in olive squalane, a sign of fruitfulness and blessing."
+      assign default_scripture_quote = "Thy plants are an orchard of pomegranates, with pleasant fruits."
+      assign default_scripture_reference = "Song of Solomon 4:13"
+      assign default_meaning = "Pomegranates hung from the hem of the high priest's robe and were carved into the pillars of Solomon's temple. They were among the fruits that proved the goodness of the promised land. Scripture uses them as a picture of fruitfulness, abundance, and covenant blessing."
+      assign default_botanical = "Punica granatum, rich in ellagitannins and punicalagins, in olive oil and olive-derived squalane with olive polyphenols. Antioxidant-rich, it nourishes the skin and supports the skin barrier."
+      assign default_ingredients = "Olive oil, olive-derived squalane, Punica granatum (Pomegranate), olive polyphenols"
+
+    when 'lily-of-the-valley'
+      assign default_theme_word = "Purity"
+      assign default_one_liner = "A gentle floral oil for purity, peace, and consecrated prayer."
+      assign default_scripture_quote = "I am the rose of Sharon, and the lily of the valleys."
+      assign default_scripture_reference = "Song of Solomon 2:1"
+      assign default_meaning = "The Beloved of the Song of Solomon calls himself the lily of the valleys, and the church has long heard in that name the voice of Christ. Jesus told his followers to consider the lilies, which neither toil nor spin, yet are clothed by God. It is a name for purity and peace."
+      assign default_botanical = "A soft floral blend in olive oil and olive-derived squalane with olive polyphenols. Light and clean, it nourishes the skin and is made for prayer, worship, and consecration."
+      assign default_ingredients = "Olive oil, olive-derived squalane, lily of the valley floral blend, olive polyphenols"
+
+    when 'hyssop'
+      assign default_theme_word = "Cleansing"
+      assign default_one_liner = "The herb of cleansing, blended in olive squalane for purification."
+      assign default_scripture_quote = "Purge me with hyssop, and I shall be clean: wash me, and I shall be whiter than snow."
+      assign default_scripture_reference = "Psalm 51:7"
+      assign default_meaning = "A bunch of hyssop spread the blood of the Passover lamb on the doorposts in Egypt. The priests used it in the rites of cleansing, and David asked to be purged with it. At the cross, a sponge on hyssop was lifted to the lips of Jesus."
+      assign default_botanical = "Hyssopus officinalis, a hardy herb of the mint family, in olive oil and olive-derived squalane with olive polyphenols. Green and herbal, it nourishes the skin."
+      assign default_ingredients = "Olive oil, olive-derived squalane, Hyssopus officinalis (Hyssop), olive polyphenols"
+
+    when 'rose-of-sharon'
+      assign default_theme_word = "Radiance"
+      assign default_one_liner = "A radiant floral oil in olive squalane, named for the Beloved."
+      assign default_scripture_quote = "I am the rose of Sharon, and the lily of the valleys."
+      assign default_scripture_reference = "Song of Solomon 2:1"
+      assign default_meaning = "Sharon was the fertile plain along the coast of Israel, known for its beauty. The Beloved of the Song of Solomon calls himself the rose of Sharon, and believers have long taken the name as a title for Christ. It speaks of beauty that God brings up from ordinary ground."
+      assign default_botanical = "A rose of Sharon floral blend in olive oil and olive-derived squalane with olive polyphenols. Soft and floral, it nourishes and hydrates the skin."
+      assign default_ingredients = "Olive oil, olive-derived squalane, rose of Sharon floral blend, olive polyphenols"
+
+    when 'latter-rain-anointing-oil'
+      assign default_theme_word = "Revitalize"
+      assign default_one_liner = "An oil of renewal, named for the rain that brings the harvest."
+      assign default_scripture_quote = "That I will give you the rain of your land in his due season, the first rain and the latter rain, that thou mayest gather in thy corn, and thy wine, and thine oil."
+      assign default_scripture_reference = "Deuteronomy 11:14"
+      assign default_meaning = "In the land of Israel the latter rain fell in spring, just before the harvest. God promised it to his people as a sign of his provision, so they could gather their grain, wine, and oil. The prophets used it as a picture of renewal and the outpouring of his Spirit."
+      assign default_botanical = "A fresh blend of biblical botanicals in olive oil and olive-derived squalane with olive polyphenols. Made to hydrate and nourish the skin."
+      assign default_ingredients = "Olive oil, olive-derived squalane, biblical botanical blend, olive polyphenols"
+
+    when '100-squalane'
+      assign default_theme_word = "Hydration"
+      assign default_one_liner = "Pure olive-derived squalane, vegan and sustainable, hydration from head to toe."
+      assign default_scripture_quote = "But I am like a green olive tree in the house of God: I trust in the mercy of God for ever and ever."
+      assign default_scripture_reference = "Psalm 52:8"
+      assign default_meaning = "The olive tree runs through Scripture from the dove's branch to the garden where Jesus prayed. Its oil lit the lamps of the tabernacle and anointed kings and priests. The psalmist called himself a green olive tree in the house of God."
+      assign default_botanical = "100% olive-derived squalane, a lipid similar to the squalene in human skin. Sustainable and vegan, it offers hydration from head to toe."
+      assign default_ingredients = "100% olive-derived squalane"
+  endcase
+
+  case field
+    when 'theme_word'
+      echo default_theme_word
+    when 'scripture_quote'
+      echo default_scripture_quote
+    when 'scripture_reference'
+      echo default_scripture_reference
+    when 'meaning'
+      echo default_meaning
+    when 'botanical'
+      echo default_botanical
+    when 'ingredients'
+      echo default_ingredients
+    when 'one_liner'
+      echo default_one_liner
+  endcase
+-%}

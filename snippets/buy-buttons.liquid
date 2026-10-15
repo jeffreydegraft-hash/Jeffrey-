@@ -1,0 +1,58 @@
+{%- comment -%}
+  Add-to-cart form. <product-form> (assets/cart.js, cart group) intercepts
+  the submit, posts to routes.cart_add_url with sections=cart-drawer,cart-icon-bubble
+  and opens the drawer; on error it fills .product-form__error.
+  The hidden id input and the submit button are kept in sync by
+  <variant-picker> (assets/product.js) on every variant change.
+
+  Accepts:
+  - product: {Object} product
+  - product_form_id: {String} id for the form (matches the quantity input and variant radios' form="")
+  - show_dynamic_checkout: {Boolean} render the dynamic checkout button, default true
+  Usage: {% render 'buy-buttons', product: product, product_form_id: product_form_id, show_dynamic_checkout: block.settings.show_dynamic_checkout %}
+{%- endcomment -%}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign unavailable = false
+  if variant == null or variant.available == false
+    assign unavailable = true
+  endif
+  if show_dynamic_checkout == nil
+    assign show_dynamic_checkout = true
+  endif
+  if variant == null
+    assign add_label = 'products.product.unavailable' | t
+  elsif variant.available == false
+    assign add_label = 'products.product.sold_out' | t
+  else
+    assign add_label = 'products.product.add_to_cart' | t
+  endif
+-%}
+<product-form class="product-form" data-section-id="{{ section.id }}">
+  <p class="product-form__error form-status form-status--error" role="alert" hidden></p>
+  {%- form 'product', product, id: product_form_id, class: 'form product-form__form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+    <input
+      type="hidden"
+      name="id"
+      value="{{ variant.id }}"
+      class="product-variant-id"
+      {% if unavailable %}disabled{% endif %}
+    >
+    <div class="product-form__buttons">
+      <button
+        id="ProductSubmitButton-{{ section.id }}"
+        type="submit"
+        name="add"
+        class="btn btn--primary btn--full btn--lg product-form__submit"
+        {% if unavailable %}disabled{% endif %}
+        {% if settings.cart_type == 'drawer' %}aria-haspopup="dialog"{% endif %}
+      >
+        <span class="btn__content"><span data-add-label>{{ add_label }}</span></span>
+        {%- render 'loading-spinner' -%}
+      </button>
+      {%- if show_dynamic_checkout -%}
+        {{ form | payment_button }}
+      {%- endif -%}
+    </div>
+  {%- endform -%}
+</product-form>

@@ -1,0 +1,69 @@
+{%- comment -%}
+  Variant picker: one fieldset of radio pills per product option.
+  product.js (<variant-picker>) listens for changes, finds the matching
+  variant in the embedded [data-variants] JSON, updates the form, URL,
+  price, button state and gallery, and publishes Olivet.EVENTS.variantChanged.
+  Without JS the radios still post options[] with the form and the hidden
+  id input keeps the server-selected variant.
+
+  Accepts:
+  - product: {Object} product
+  - product_form_id: {String} id of the {% form 'product' %} the inputs belong to
+  Usage: {% render 'product-variant-picker', product: product, product_form_id: product_form_id %}
+{%- endcomment -%}
+{%- unless product.has_only_default_variant -%}
+  <variant-picker
+    class="variant-picker"
+    id="VariantPicker-{{ section.id }}"
+    data-section="{{ section.id }}"
+    data-url="{{ product.url }}"
+    data-update-url="true"
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign option_index = forloop.index0
+        assign option_name = option.name | escape
+      -%}
+      <fieldset class="variant-picker__group" data-option-index="{{ option_index }}">
+        <legend class="field__label variant-picker__legend">
+          <span class="variant-picker__name">{{ option_name }}:</span>
+          <span class="variant-picker__value" data-selected-value>{{ option.selected_value }}</span>
+        </legend>
+        <div class="variant-picker__pills">
+          {%- for value in option.values -%}
+            {%- liquid
+              assign input_id = 'Option-' | append: section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0
+              assign value_name = value | escape
+            -%}
+            <input
+              type="radio"
+              class="visually-hidden variant-picker__input"
+              id="{{ input_id }}"
+              name="options[{{ option_name }}]"
+              value="{{ value_name }}"
+              form="{{ product_form_id }}"
+              data-option-position="{{ option.position }}"
+              {% if value.selected %}checked{% endif %}
+            >
+            <label
+              class="chip variant-picker__pill{% if value.selected %} is-selected{% endif %}{% unless value.available %} is-unavailable{% endunless %}"
+              for="{{ input_id }}"
+            >
+              <span class="variant-picker__pill-text">{{ value_name }}</span>
+              {%- unless value.available -%}
+                <span class="visually-hidden">{{ 'products.product.value_unavailable' | t: option_value: value_name }}</span>
+              {%- endunless -%}
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endfor -%}
+
+    <script type="application/json" data-selected-variant>
+      {{ product.selected_or_first_available_variant | json }}
+    </script>
+    <script type="application/json" data-variants>
+      {{ product.variants | json }}
+    </script>
+  </variant-picker>
+{%- endunless -%}

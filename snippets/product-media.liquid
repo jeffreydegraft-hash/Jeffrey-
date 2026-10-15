@@ -1,0 +1,49 @@
+{%- comment -%}
+  One product media item for the gallery stage. Rendered inside a .media box
+  (the slide) so the img/video/iframe fills it.
+
+  Accepts:
+  - media: {Object} product media (image | video | external_video | model)
+  - product: {Object} product, for alt fallback
+  - index: {Number} 1-based position, used in accessible labels
+  - loading: {String} 'eager' for the active image (adds fetchpriority=high), else 'lazy'
+  - sizes: {String} sizes attribute, default '(min-width: 990px) 55vw, 100vw'
+  - enable_zoom: {Boolean} wrap images in a lightbox opener
+  Usage: {% render 'product-media', media: media, product: product, index: forloop.index, loading: 'eager', enable_zoom: true %}
+{%- endcomment -%}
+{%- liquid
+  assign sizes = sizes | default: '(min-width: 990px) 55vw, 100vw'
+  assign loading = loading | default: 'lazy'
+  assign media_alt = media.alt | default: product.title
+  if loading == 'eager'
+    assign fetchpriority = 'high'
+  else
+    assign fetchpriority = nil
+  endif
+-%}
+{%- case media.media_type -%}
+  {%- when 'image' -%}
+    {%- if enable_zoom -%}
+      <button
+        type="button"
+        class="media-gallery__open"
+        data-lightbox-open
+        data-zoom-src="{{ media.preview_image | image_url: width: 2000 }}"
+        data-zoom-width="{{ media.preview_image.width }}"
+        data-zoom-height="{{ media.preview_image.height }}"
+        data-zoom-alt="{{ media_alt | escape }}"
+        aria-label="{{ 'products.product.media.open_media' | t: index: index }}"
+      >
+        {%- render 'image', image: media.preview_image, sizes: sizes, widths: '400, 600, 800, 1000, 1200, 1600', class: 'media-gallery__img', loading: loading, fetchpriority: fetchpriority, alt: media_alt -%}
+        <span class="media-gallery__zoom-hint" aria-hidden="true">{% render 'icon', name: 'zoom', size: 18 %}</span>
+      </button>
+    {%- else -%}
+      {%- render 'image', image: media.preview_image, sizes: sizes, widths: '400, 600, 800, 1000, 1200, 1600', class: 'media-gallery__img', loading: loading, fetchpriority: fetchpriority, alt: media_alt -%}
+    {%- endif -%}
+  {%- when 'video' -%}
+    {{ media | video_tag: controls: true, muted: true, loop: true, preload: 'metadata', class: 'media-gallery__video' }}
+  {%- when 'external_video' -%}
+    {{ media | external_video_tag: class: 'media-gallery__iframe', loading: 'lazy' }}
+  {%- when 'model' -%}
+    {{ media | model_viewer_tag: class: 'media-gallery__model' }}
+{%- endcase -%}
