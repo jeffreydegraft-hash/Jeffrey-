@@ -73,6 +73,8 @@ for (const vp of [{ n: 'phone', w: 390, h: 844, m: true }, { n: 'desktop', w: 14
       await sub.click();
       await page.waitForTimeout(300);
       check('menu drawer: submenu opens', await page.evaluate(() => !!document.querySelector('[data-submenu].is-open')));
+      // the row stagger settles at (min(--i, 8) × 40ms + 80ms) + 300ms ≈ 700ms for a full list; shoot the settled state
+      await page.waitForTimeout(450);
       await page.screenshot({ path: path.join(OUT, 'drawer-submenu--phone.png') });
       await page.locator('[data-submenu].is-open [data-submenu-back]').click();
       await page.waitForTimeout(250);

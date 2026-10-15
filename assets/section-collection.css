@@ -83,12 +83,17 @@
    image's own ratio from the inline --ratio, and the height cap keeps tall
    art from pushing the grid far down. When the cap clamps the box,
    media--contain letterboxes the image on the white photo ground instead
-   of cropping it. */
+   of cropping it. The width follows the same cap (cap × ratio), so on wide
+   screens the box hugs the artwork and the rounded corners land on the
+   image itself, not on invisible white letterbox bands. */
 .collection-banner__media {
   --media-radius: var(--r-tile);
+  width: min(100%, calc(680px * var(--ratio, 4 / 3)));
+  width: min(100%, calc(min(72svh, 680px) * var(--ratio, 4 / 3)));
   max-height: 680px;
   max-height: min(72svh, 680px);
   margin-top: clamp(32px, 5vw, 64px);
+  margin-inline: auto;
   background: rgb(var(--c-photo-ground));
 }
 
