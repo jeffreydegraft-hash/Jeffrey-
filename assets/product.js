@@ -1,20 +1,33 @@
 /* ==========================================================================
    Olivet — product.js
-   <variant-picker>, <media-gallery>, <product-recommendations>.
-   Vanilla, no dependencies beyond window.Olivet (assets/theme.js).
-   Every lookup is guarded: a missing element is a no-op, never a throw.
+   <variant-picker>, <media-gallery> (+ lightbox), <sticky-buy-bar>,
+   <product-recommendations>.
+   Vanilla, no dependencies beyond window.Olivet (assets/theme.js) and
+   Olivet.motion (assets/motion.js) for springs. Every lookup is guarded:
+   a missing element is a no-op, never a throw.
    ========================================================================== */
 (() => {
   const Olivet = (window.Olivet = window.Olivet || {});
   const strings = Olivet.strings || {};
+  const config = Olivet.config || {};
   const EVENTS = Olivet.EVENTS || { variantChanged: 'variant:changed' };
   const publish = (name, data) => {
     if (Olivet.pubsub && typeof Olivet.pubsub.publish === 'function') Olivet.pubsub.publish(name, data);
   };
+  const subscribe = (name, cb) =>
+    Olivet.pubsub && typeof Olivet.pubsub.subscribe === 'function' ? Olivet.pubsub.subscribe(name, cb) : () => {};
   const reducedMotion = () =>
     typeof Olivet.prefersReducedMotion === 'function'
       ? Olivet.prefersReducedMotion()
       : window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motion = () => (Olivet.motion && typeof Olivet.motion.animate === 'function' ? Olivet.motion : null);
+
+  /* Money in the shop's format; with currency codes when the theme shows them. */
+  const formatPrice = (cents) => {
+    if (typeof Olivet.formatMoney !== 'function') return null;
+    const format = config.currencyCodeEnabled ? config.moneyWithCurrencyFormat : config.moneyFormat;
+    return Olivet.formatMoney(cents, format || undefined);
+  };
 
   const readJson = (root, selector) => {
     const el = root && root.querySelector(selector);
@@ -114,28 +127,37 @@
             const value = checked ? checked.value : select ? select.value : '';
             if (label) label.textContent = value;
             group.querySelectorAll('input[type="radio"]').forEach((input) => {
-              const pill = group.querySelector(`label[for="${input.id}"]`);
-              if (pill) pill.classList.toggle('is-selected', input.checked);
+              const card = group.querySelector(`label[for="${input.id}"]`);
+              if (card) card.classList.toggle('is-selected', input.checked);
             });
           });
         }
 
-        /* Strike through values that have no purchasable variant with the other
-           current selections. Purely visual; the radios stay selectable. */
+        /* Each card shows the variant it leads to with the other current
+           selections: its price, and a struck-through name when that variant
+           can't be bought. Purely visual; the radios stay selectable. */
         markAvailability() {
           if (!this.variants.length) return;
           const selected = this.selectedOptions;
           this.groups.forEach((group, index) => {
             group.querySelectorAll('input[type="radio"]').forEach((input) => {
-              const pill = group.querySelector(`label[for="${input.id}"]`);
-              if (!pill) return;
-              const exists = this.variants.some(
-                (v) =>
-                  Array.isArray(v.options) &&
-                  v.available &&
-                  v.options.every((opt, i) => (i === index ? opt === input.value : opt === selected[i]))
+              const card = group.querySelector(`label[for="${input.id}"]`);
+              if (!card) return;
+              const match = this.variants.find(
+                (v) => Array.isArray(v.options) && v.options.every((opt, i) => (i === index ? opt === input.value : opt === selected[i]))
               );
-              pill.classList.toggle('is-unavailable', !exists);
+              const available = !!(match && match.available);
+              card.classList.toggle('is-unavailable', !available);
+              const note = card.querySelector('[data-option-unavailable]');
+              if (note) note.hidden = available;
+              const price = card.querySelector('[data-option-price]');
+              if (price) {
+                const text = match ? formatPrice(match.price) : '';
+                if (text !== null) {
+                  price.textContent = text;
+                  price.hidden = !text;
+                }
+              }
             });
           });
         }
@@ -164,7 +186,7 @@
             swapLabel(button, strings.soldOut || 'Sold out');
           } else {
             button.disabled = false;
-            swapLabel(button, strings.addToCart || 'Add to cart');
+            swapLabel(button, strings.addToCart || 'Add to Bag');
           }
         }
 
@@ -259,6 +281,7 @@
           this.lightbox = this.querySelector('[data-lightbox]');
           this.layout = this.dataset.layout || 'thumbnails';
           this.desktop = window.matchMedia('(min-width: 990px)');
+          this.phone = window.matchMedia('(max-width: 749px)');
           this.onClick = this.onClick.bind(this);
           this.onThumbKeydown = this.onThumbKeydown.bind(this);
           this.addEventListener('click', this.onClick);
@@ -273,6 +296,7 @@
         disconnectedCallback() {
           this.removeEventListener('click', this.onClick);
           if (this.io) this.io.disconnect();
+          this.endDrag();
         }
 
         get activeSlide() {
@@ -331,7 +355,7 @@
           else this.track.scrollLeft = left;
         }
 
-        /* Mobile carousel → dots/thumbs follow the slide in view. */
+        /* Mobile carousel → dots follow the slide in view. */
         observeSlides() {
           if (!this.track || !('IntersectionObserver' in window) || this.slides.length < 2) return;
           this.io = new IntersectionObserver(
@@ -377,38 +401,55 @@
           this.setActive(thumb.dataset.mediaId, { scroll: true });
         }
 
-        /* ---- lightbox (native <dialog>) ---- */
+        /* ---- lightbox (native <dialog>) ----
+           Large screens: a centred modal; it scales .96 → 1 from its centre on
+           a spring (Lightbox preset: 0.4s, no bounce) while it fades in.
+           Phones: full screen. The image follows the finger 1:1 when dragged
+           down, rubber-bands upward, and on release either springs home with
+           the finger's velocity or, if the projected landing point passes 30%
+           of the screen (or the flick is fast), carries on off screen and
+           closes (apple-design §2, §5, §6, §9). */
         bindLightbox() {
           if (!this.lightbox || typeof this.lightbox.showModal !== 'function') return;
+          this.lbPanel = this.lightbox.querySelector('[data-lightbox-panel]');
+          this.lbBody = this.lightbox.querySelector('[data-lightbox-body]');
+          this.lbScrim = this.lightbox.querySelector('[data-lightbox-scrim]');
           this.lightbox.addEventListener('click', (event) => {
-            if (event.target === this.lightbox) this.closeLightbox(); // backdrop / padding click
+            // Outside the centred panel (the scrim or the dialog's own box) closes
+            if (event.target === this.lightbox || event.target === this.lbScrim) this.closeLightbox();
           });
           this.lightbox.addEventListener('cancel', (event) => {
-            event.preventDefault(); // Escape: run the exit transition first
+            event.preventDefault(); // Escape: run the exit motion first
             this.closeLightbox();
           });
-          this.lightbox.addEventListener('close', () => {
-            this.lightbox.classList.remove('is-closing');
-            const body = this.lightbox.querySelector('[data-lightbox-body]');
-            if (body) body.innerHTML = '';
-          });
+          this.lightbox.addEventListener('close', () => this.resetLightbox());
+          this.onDragDown = this.onDragDown.bind(this);
+          this.onDragMove = this.onDragMove.bind(this);
+          this.onDragUp = this.onDragUp.bind(this);
+          this.onViewport = this.onViewport.bind(this);
+          if (this.lbBody) this.lbBody.addEventListener('pointerdown', this.onDragDown);
+        }
+
+        lightboxRest() {
+          // Where the panel enters from and leaves to: centred scale on large screens, a short rise on phones
+          return this.phone.matches ? 'translateY(48px)' : 'scale(0.96)';
         }
 
         openLightbox(opener) {
           if (!this.lightbox || typeof this.lightbox.showModal !== 'function' || this.lightbox.open) return;
-          const body = this.lightbox.querySelector('[data-lightbox-body]');
+          const body = this.lbBody;
           if (!body || !opener.dataset.zoomSrc) return;
           body.innerHTML = '';
           const img = document.createElement('img');
           img.className = 'lightbox__img';
           img.alt = opener.dataset.zoomAlt || '';
           img.decoding = 'async';
+          img.draggable = false;
           const w = parseInt(opener.dataset.zoomWidth, 10);
           const h = parseInt(opener.dataset.zoomHeight, 10);
           if (w > 0 && h > 0) {
             img.width = w;
             img.height = h;
-            img.style.aspectRatio = `${w} / ${h}`;
           }
           // Show the already-loaded stage image at once, then the 2000px source replaces it.
           const current = opener.querySelector('img');
@@ -420,38 +461,296 @@
           };
           full.src = opener.dataset.zoomSrc;
           body.appendChild(img);
+
           this.lightboxTrigger = opener;
-          this.lightbox.classList.remove('is-closing');
+          this.lbClosing = false;
+          clearTimeout(this.closeTimer);
+          this.lightbox.classList.remove('is-closing', 'is-open', 'is-dismissing');
           this.lightbox.showModal();
+          // Commit the closed style (opacity 0) before .is-open so the fade runs
+          void this.lightbox.offsetWidth;
+          this.lightbox.classList.add('is-open');
+          const m = motion();
+          if (m && !reducedMotion() && this.lbPanel) {
+            m.animate(this.lbPanel, { from: this.lightboxRest(), to: 'none' }, { duration: 0.4, bounce: 0 });
+          }
+          if (window.visualViewport) window.visualViewport.addEventListener('resize', this.onViewport);
           const close = this.lightbox.querySelector('[data-lightbox-close]');
           if (close) close.focus({ preventScroll: true });
         }
 
-        closeLightbox() {
-          if (!this.lightbox || !this.lightbox.open) return;
+        /**
+         * @param {{velocity:number, offset:number, height:number}} [gesture] release state of a drag-dismiss
+         */
+        closeLightbox(gesture) {
+          if (!this.lightbox || !this.lightbox.open || this.lbClosing) return;
+          this.lbClosing = true;
+          this.endDrag();
           const trigger = this.lightboxTrigger;
           const finish = () => {
+            if (!this.lbClosing) return;
+            this.lbClosing = false;
             clearTimeout(this.closeTimer);
             if (this.lightbox.open) this.lightbox.close();
-            this.lightbox.classList.remove('is-closing');
+            this.resetLightbox();
             if (trigger && typeof trigger.focus === 'function') trigger.focus({ preventScroll: true });
             this.lightboxTrigger = null;
           };
-          if (reducedMotion()) {
-            finish();
+          this.lightbox.classList.remove('is-open', 'is-dragging');
+          this.lightbox.classList.add('is-closing');
+          if (gesture) this.lightbox.classList.add('is-dismissing');
+          if (this.lbScrim) this.lbScrim.style.opacity = '';
+          this.lightbox.style.removeProperty('--lb-progress');
+
+          const m = motion();
+          if (!m || reducedMotion()) {
+            this.closeTimer = setTimeout(finish, 180); // opacity fade only (CSS)
             return;
           }
-          this.lightbox.classList.add('is-closing');
-          const onEnd = (event) => {
-            if (event.target !== this.lightbox) return;
-            this.lightbox.removeEventListener('transitionend', onEnd);
-            finish();
+          if (gesture && this.lbBody) {
+            // Keep going the way the finger threw it, from where it is, at its speed
+            const remaining = Math.max(1, gesture.height - gesture.offset);
+            m.animate(
+              this.lbBody,
+              { to: `translateY(${Math.round(gesture.height)}px) scale(0.88)` },
+              { duration: 0.35, bounce: 0, velocity: Math.max(0, gesture.velocity) / remaining }
+            );
+            this.closeTimer = setTimeout(finish, 280);
+          } else if (this.lbPanel) {
+            // Exit along the entrance path, faster than the entrance (the fade ends it)
+            m.animate(this.lbPanel, { to: this.lightboxRest() }, { duration: 0.35, bounce: 0 });
+            this.closeTimer = setTimeout(finish, 200);
+          } else {
+            this.closeTimer = setTimeout(finish, 200);
+          }
+        }
+
+        resetLightbox() {
+          if (!this.lightbox) return;
+          this.endDrag();
+          this.lbClosing = false;
+          this.lightbox.classList.remove('is-open', 'is-closing', 'is-dismissing', 'is-dragging', 'is-zoomed');
+          this.lightbox.style.removeProperty('--lb-progress');
+          const m = Olivet.motion;
+          [this.lbPanel, this.lbBody].forEach((el) => {
+            if (!el) return;
+            if (m && typeof m.stop === 'function') m.stop(el);
+            el.style.transform = '';
+          });
+          if (this.lbScrim) this.lbScrim.style.opacity = '';
+          if (this.lbBody) this.lbBody.innerHTML = '';
+          if (window.visualViewport) window.visualViewport.removeEventListener('resize', this.onViewport);
+        }
+
+        /* Pinch-zoomed in: hand one-finger pans back to the browser (CSS touch-action) */
+        onViewport() {
+          const zoomed = !!(window.visualViewport && window.visualViewport.scale > 1.01);
+          if (this.lightbox) this.lightbox.classList.toggle('is-zoomed', zoomed);
+        }
+
+        /* ---- phone: drag down to dismiss ---- */
+        onDragDown(event) {
+          if (!this.lightbox || !this.lightbox.open || this.lbClosing || !this.phone.matches) return;
+          if (this.drag) {
+            // A second finger: this is a pinch, not a dismiss. Put the image back.
+            this.settleDrag(0);
+            this.endDrag();
+            return;
+          }
+          if (event.pointerType === 'mouse' && event.button !== 0) return;
+          if (window.visualViewport && window.visualViewport.scale > 1.01) return;
+          this.drag = {
+            id: event.pointerId,
+            x0: event.clientX,
+            y0: event.clientY,
+            state: 'pending',
+            offset: 0,
+            samples: [{ t: event.timeStamp, y: event.clientY }],
           };
-          this.lightbox.addEventListener('transitionend', onEnd);
-          this.closeTimer = setTimeout(() => {
-            this.lightbox.removeEventListener('transitionend', onEnd);
-            finish();
-          }, 260);
+          window.addEventListener('pointermove', this.onDragMove, { passive: true });
+          window.addEventListener('pointerup', this.onDragUp);
+          window.addEventListener('pointercancel', this.onDragUp);
+        }
+
+        onDragMove(event) {
+          const d = this.drag;
+          if (!d || event.pointerId !== d.id) return;
+          const dx = event.clientX - d.x0;
+          const dy = event.clientY - d.y0;
+          const m = Olivet.motion;
+          if (d.state === 'pending') {
+            if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return; // hysteresis
+            if (Math.abs(dx) > Math.abs(dy)) {
+              this.endDrag(); // sideways: not ours
+              return;
+            }
+            d.state = 'dragging';
+            try {
+              this.lbBody.setPointerCapture(d.id);
+            } catch (e) {
+              /* capture is best effort */
+            }
+            if (m && typeof m.stop === 'function') m.stop(this.lbBody);
+            d.height = window.innerHeight || this.lightbox.clientHeight || 800;
+            // Grab mid-settle: continue from where the image is on screen
+            const matrix = new DOMMatrixReadOnly(getComputedStyle(this.lbBody).transform);
+            d.base = matrix.m42 || 0;
+            this.lightbox.classList.add('is-dragging');
+          }
+          if (d.state !== 'dragging') return;
+          const raw = d.base + dy; // 1:1 from the grab point
+          const rubber = m && typeof m.rubberband === 'function' ? m.rubberband : (o) => o * 0.3;
+          const offset = raw < 0 ? -rubber(-raw, d.height) : raw;
+          d.offset = offset;
+          this.applyDrag(offset, d.height);
+          d.samples.push({ t: event.timeStamp, y: event.clientY });
+          while (d.samples.length > 2 && event.timeStamp - d.samples[0].t > 80) d.samples.shift();
+        }
+
+        applyDrag(offset, height) {
+          const progress = Math.max(0, Math.min(1, offset / (height * 0.5)));
+          // Hint toward the outcome: the image shrinks a little as it leaves
+          this.lbBody.style.transform = `translateY(${offset}px) scale(${1 - 0.12 * progress})`;
+          if (this.lbScrim) this.lbScrim.style.opacity = String(1 - progress);
+          this.lightbox.style.setProperty('--lb-progress', progress.toFixed(3));
+        }
+
+        onDragUp(event) {
+          const d = this.drag;
+          if (!d || event.pointerId !== d.id) return;
+          if (d.state === 'dragging') {
+            const first = d.samples[0];
+            const last = d.samples[d.samples.length - 1];
+            const dt = Math.max(1, last.t - first.t);
+            const velocity = ((last.y - first.y) / dt) * 1000; // px/s, + = down
+            const project = Olivet.motion && Olivet.motion.project ? Olivet.motion.project : (v) => v * 0.5;
+            const projected = d.offset + project(velocity);
+            const cancelled = event.type === 'pointercancel';
+            const dismiss = !cancelled && (projected > d.height * 0.3 || velocity > 700) && velocity > -200;
+            this.lightbox.classList.remove('is-dragging');
+            if (dismiss) {
+              const gesture = { velocity, offset: d.offset, height: d.height };
+              this.endDrag();
+              this.closeLightbox(gesture);
+              return;
+            }
+            this.settleDrag(cancelled ? 0 : velocity);
+          }
+          this.endDrag();
+        }
+
+        /* Spring home from the on-screen value, carrying the release velocity */
+        settleDrag(velocity) {
+          const d = this.drag;
+          if (!d || d.state !== 'dragging' || !this.lbBody) return;
+          this.lightbox.classList.remove('is-dragging');
+          if (this.lbScrim) this.lbScrim.style.opacity = '';
+          this.lightbox.style.removeProperty('--lb-progress');
+          const m = motion();
+          const from = this.lbBody.style.transform;
+          if (!m || reducedMotion()) {
+            this.lbBody.style.transform = '';
+            return;
+          }
+          const distance = Math.abs(d.offset) || 1;
+          const momentum = Math.abs(velocity) > 300;
+          m.animate(this.lbBody, { from, to: 'none' }, { duration: 0.4, bounce: momentum ? 0.15 : 0, velocity: -velocity / distance });
+        }
+
+        endDrag() {
+          window.removeEventListener('pointermove', this.onDragMove);
+          window.removeEventListener('pointerup', this.onDragUp);
+          window.removeEventListener('pointercancel', this.onDragUp);
+          const d = this.drag;
+          if (d && this.lbBody) {
+            try {
+              this.lbBody.releasePointerCapture(d.id);
+            } catch (e) {
+              /* already released */
+            }
+          }
+          this.drag = null;
+        }
+      }
+    );
+  }
+
+  /* ---------- sticky-buy-bar ----------
+     Phones and tablets: a translucent bar with the title, price and an
+     "Add to Bag" pill. It rises (transform + opacity, CSS) once the main
+     submit button has scrolled above the viewport, and steps aside while
+     the footer is in view. Its button submits the same product form through
+     the form attribute; it mirrors the main button's disabled, loading and
+     "Added" states so the feedback shows where the user tapped. */
+  if (!customElements.get('sticky-buy-bar')) {
+    customElements.define(
+      'sticky-buy-bar',
+      class StickyBuyBar extends HTMLElement {
+        connectedCallback() {
+          this.sectionId = this.dataset.section || '';
+          this.main = document.getElementById(this.dataset.button || `ProductSubmitButton-${this.sectionId}`);
+          this.button = this.querySelector('[data-sticky-button]');
+          this.label = this.querySelector('[data-sticky-label]');
+          this.price = this.querySelector('[data-sticky-price]');
+          if (!this.main || !this.button || !('IntersectionObserver' in window)) return;
+          this.mq = window.matchMedia('(max-width: 989px)');
+          this.past = false;
+          this.footerInView = false;
+          this.update = this.update.bind(this);
+
+          this.io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.target === this.main) {
+                const top = entry.rootBounds ? entry.rootBounds.top : 0;
+                this.past = !entry.isIntersecting && entry.boundingClientRect.bottom <= top + 1;
+              } else {
+                this.footerInView = entry.isIntersecting;
+              }
+            });
+            this.update();
+          });
+          this.io.observe(this.main);
+          this.footer = document.querySelector('[role="contentinfo"], footer');
+          if (this.footer) this.io.observe(this.footer);
+          if (this.mq.addEventListener) this.mq.addEventListener('change', this.update);
+
+          this.mirror = new MutationObserver(() => this.sync());
+          this.mirror.observe(this.main, { attributes: true, attributeFilter: ['disabled', 'class', 'aria-disabled'], childList: true, subtree: true, characterData: true });
+          this.sync();
+
+          this.unsubscribe = subscribe(EVENTS.variantChanged, (data) => {
+            if (!data || data.sectionId !== this.sectionId || !data.variant || !this.price) return;
+            const text = formatPrice(data.variant.price);
+            if (text) this.price.textContent = text;
+          });
+        }
+
+        disconnectedCallback() {
+          if (this.io) this.io.disconnect();
+          if (this.mirror) this.mirror.disconnect();
+          if (this.unsubscribe) this.unsubscribe();
+          if (this.mq && this.mq.removeEventListener) this.mq.removeEventListener('change', this.update);
+        }
+
+        update() {
+          const show = this.past && !this.footerInView && this.mq.matches;
+          if (show === this.classList.contains('is-visible')) return;
+          this.classList.toggle('is-visible', show);
+          this.toggleAttribute('inert', !show);
+          // Never strand focus inside a bar that is leaving
+          if (!show && this.contains(document.activeElement) && typeof this.main.focus === 'function') this.main.focus({ preventScroll: true });
+        }
+
+        sync() {
+          const main = this.main;
+          const button = this.button;
+          button.disabled = main.disabled;
+          ['is-loading', 'is-transitioning'].forEach((cls) => button.classList.toggle(cls, main.classList.contains(cls)));
+          if (main.hasAttribute('aria-disabled')) button.setAttribute('aria-disabled', main.getAttribute('aria-disabled'));
+          else button.removeAttribute('aria-disabled');
+          const source = main.querySelector('[data-add-label]');
+          const text = source ? source.textContent.trim() : '';
+          if (this.label && text && this.label.textContent !== text) this.label.textContent = text;
         }
       }
     );

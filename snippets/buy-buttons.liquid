@@ -1,9 +1,14 @@
 {%- comment -%}
-  Add-to-cart form. <product-form> (assets/cart.js, cart group) intercepts
+  Add-to-bag form. <product-form> (assets/cart.js, cart group) intercepts
   the submit, posts to routes.cart_add_url with sections=cart-drawer,cart-icon-bubble
   and opens the drawer; on error it fills .product-form__error.
   The hidden id input and the submit button are kept in sync by
-  <variant-picker> (assets/product.js) on every variant change.
+  <variant-picker> (assets/product.js) on every variant change; the phone
+  buy bar (<sticky-buy-bar>) submits this same form and mirrors the
+  button's state.
+
+  Layout: a full-width primary pill ("Add to Bag"), then Shopify's dynamic
+  checkout button restyled as the secondary pill beneath it.
 
   Accepts:
   - product: {Object} product
@@ -38,7 +43,7 @@
       class="product-variant-id"
       {% if unavailable %}disabled{% endif %}
     >
-    <div class="product-form__buttons">
+    <div class="product-form__buttons{% if show_dynamic_checkout %} product-form__buttons--dynamic{% endif %}">
       <button
         id="ProductSubmitButton-{{ section.id }}"
         type="submit"

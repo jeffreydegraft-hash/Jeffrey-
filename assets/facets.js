@@ -6,7 +6,8 @@
    Contract (sections/main-collection-product-grid + snippets/facets):
    - <facet-filters-form> wraps <form data-section="…">
        #FacetFiltersForm (sidebar) / #FacetFiltersFormMobile (drawer)
-   - #SortBy toolbar select is form-associated; [data-sort-select] in drawer
+   - #SortBy toolbar pill (every breakpoint) is form-associated; the sheet
+     form carries sort_by as a hidden [data-sort-select] kept in sync
    - #ProductGridContainer is replaced; #ProductCount, #ProductCountDrawer,
      #ActiveFacets, #ActiveFacetsBadge are swapped by id
    - per filter group: [data-facet-group] > [data-facet-selected], [data-facet-values]
@@ -48,7 +49,7 @@
   const urlFor = (query) => `${window.location.pathname}${query ? `?${query}` : ''}`;
 
   /* Form → query string. Empty values are dropped; sort_by is deduped
-     (the toolbar select and the drawer select can share a form owner). */
+     (the toolbar select and the sheet's sort value can share a form owner). */
   const buildQuery = (form) => {
     const params = new URLSearchParams();
     new FormData(form).forEach((value, key) => {
@@ -175,6 +176,10 @@
         renderGrid(doc);
         renderSwaps(doc);
         renderForms(doc, source, target);
+        // The request is the source of truth for the order: a cached or
+        // stale response must not reset the sheet's sort value.
+        const sort = new URLSearchParams(query).get('sort_by');
+        if (sort) syncSort(sort, null);
         if (push && window.location.search.replace(/^\?/, '') !== query) {
           history.pushState({ olivetFacets: query }, '', urlFor(query));
         }

@@ -118,6 +118,41 @@
             const btn = event.target.closest('[data-drawer-close]');
             if (btn && this.contains(btn) && typeof this.close === 'function') this.close();
           });
+          // Scroll edges: hairlines under the header / above the footer only while
+          // content is underneath them (apple-design §12). Scroll doesn't bubble: capture.
+          this.addEventListener(
+            'scroll',
+            (event) => {
+              if (event.target && event.target.hasAttribute && event.target.hasAttribute('data-cart-scroll')) this.scheduleEdges();
+            },
+            true
+          );
+          // The note accordion changes the content height when it opens or closes
+          this.addEventListener('transitionend', () => this.scheduleEdges());
+          window.addEventListener('resize', debounce(() => this.updateScrollEdges(), 150));
+          this.updateScrollEdges();
+        }
+
+        open(trigger) {
+          if (typeof super.open === 'function') super.open(trigger);
+          this.scheduleEdges();
+        }
+
+        scheduleEdges() {
+          if (this.edgeFrame) return;
+          this.edgeFrame = requestAnimationFrame(() => {
+            this.edgeFrame = null;
+            this.updateScrollEdges();
+          });
+        }
+
+        updateScrollEdges() {
+          const body = this.querySelector('.cart-drawer__body[data-cart-scroll]');
+          const main = this.querySelector('.cart-drawer__main');
+          const scrolled = [body, main].some((el) => el && el.scrollTop > 1);
+          const more = !!body && body.scrollHeight - body.clientHeight - body.scrollTop > 1;
+          this.classList.toggle('is-scrolled', scrolled);
+          this.classList.toggle('has-more', more);
         }
 
         getSectionsToRender() {
@@ -138,6 +173,7 @@
             if (next && current) current.innerHTML = next.innerHTML;
             const nextRoot = doc.querySelector('cart-drawer');
             if (nextRoot) this.classList.toggle('is-empty', nextRoot.classList.contains('is-empty'));
+            this.scheduleEdges();
           }
           updateCartBubble(sections['cart-icon-bubble'], options.bump !== false);
 

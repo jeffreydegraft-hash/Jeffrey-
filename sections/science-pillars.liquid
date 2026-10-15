@@ -53,7 +53,7 @@
     {%- endif -%}
 
     {%- if pillar_count > 0 -%}
-      <ol class="science-pillars__grid" role="list" style="--pillars-cols: {{ cols_desktop }};">
+      <ol class="science-pillars__grid{% if pillar_count == 1 %} science-pillars__grid--single{% endif %}" role="list" style="--pillars-cols: {{ cols_desktop }};">
         {%- for block in section.blocks -%}
           <li class="tile science-pillars__tile" data-reveal {{ block.shopify_attributes }}>
             <span class="h2 science-pillars__numeral" aria-hidden="true">{{ forloop.index }}</span>

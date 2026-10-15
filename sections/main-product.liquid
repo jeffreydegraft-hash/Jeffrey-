@@ -1,14 +1,16 @@
 {%- comment -%}
-  Main product section.
-  Grid: media (7/12, left) + info column (5/12) from 990px. The shorter
-  column sticks while the longer one scrolls when enable_sticky_info is on
-  (media for the thumbnails layout, info for the stacked layout).
+  Main product section: an Apple Store buy flow.
+  ≥990px: gallery (7/12, left, sticky for the thumbnail layout) + buy column
+  (5/12). Below 990px the gallery is a native scroll-snap carousel (full
+  bleed on phones) and a translucent buy bar (<sticky-buy-bar>, product.js)
+  rises from the bottom once the main "Add to Bag" button scrolls away.
   Every block root carries block.shopify_attributes.
 {%- endcomment -%}
 {%- liquid
   assign product_form_id = 'product-form-' | append: section.id
   assign variant = product.selected_or_first_available_variant
   assign media_layout = section.settings.media_layout | default: 'thumbnails'
+  assign buy_block = section.blocks | where: 'type', 'buy_buttons' | first
 
   assign padding_class = ''
   case section.settings.padding
@@ -53,6 +55,18 @@
   assign meaning = product.metafields.custom.meaning.value | default: default_meaning
   assign botanical = product.metafields.custom.botanical.value | default: default_botanical
   assign ingredients_line = product.metafields.custom.ingredients.value | default: default_ingredients
+
+  assign sticky_unavailable = false
+  if variant == null or variant.available == false
+    assign sticky_unavailable = true
+  endif
+  if variant == null
+    assign sticky_label = 'products.product.unavailable' | t
+  elsif variant.available == false
+    assign sticky_label = 'products.product.sold_out' | t
+  else
+    assign sticky_label = 'products.product.add_to_cart' | t
+  endif
 -%}
 
 <section
@@ -78,13 +92,13 @@
               {%- when 'theme_word' -%}
                 {%- if theme_word != blank -%}
                   <div class="product__block product__block--theme-word" {{ block.shopify_attributes }}>
-                    <p class="eyebrow product__eyebrow">{{ theme_word | escape }}</p>
+                    <p class="tag product__tag">{{ theme_word | escape }}</p>
                   </div>
                 {%- endif -%}
 
               {%- when 'title' -%}
                 <div class="product__block product__block--title" {{ block.shopify_attributes }}>
-                  <h1 class="h1 product__title">{{ product.title | escape }}</h1>
+                  <h1 class="h2 product__title">{{ product.title | escape }}</h1>
                 </div>
 
               {%- when 'price' -%}
@@ -102,7 +116,7 @@
                     <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
                     <span class="product__sku-value">{{ variant.sku }}</span>
                   </p>
-                  <p class="product__inventory caption" id="Inventory-{{ section.id }}" role="status" {% unless show_low_stock %}hidden{% endunless %}>
+                  <p class="product__inventory small" id="Inventory-{{ section.id }}" role="status" {% unless show_low_stock %}hidden{% endunless %}>
                     {%- if show_low_stock -%}
                       {{ 'products.product.inventory_low_stock_show_count' | t: quantity: variant.inventory_quantity }}
                     {%- endif -%}
@@ -136,8 +150,10 @@
                   assign qty_step = variant.quantity_rule.increment | default: 1
                 -%}
                 <div class="product__block product__block--quantity" {{ block.shopify_attributes }}>
-                  <label class="field__label product__quantity-label" for="{{ qty_id }}">{{ 'products.product.quantity.label' | t }}</label>
-                  {%- render 'quantity-input', id: qty_id, form: product_form_id, label: product.title, value: qty_min, min: qty_min, max: qty_max, step: qty_step -%}
+                  <div class="product__quantity">
+                    <label class="product__quantity-label" for="{{ qty_id }}">{{ 'products.product.quantity.label' | t }}</label>
+                    {%- render 'quantity-input', id: qty_id, form: product_form_id, label: product.title, value: qty_min, min: qty_min, max: qty_max, step: qty_step -%}
+                  </div>
                 </div>
 
               {%- when 'buy_buttons' -%}
@@ -164,7 +180,7 @@
                         -%}
                         {%- if trust_text != blank -%}
                           <li class="product__trust-item">
-                            {%- render 'icon', name: trust_icon, size: 18 -%}
+                            {%- render 'icon', name: trust_icon, size: 20 -%}
                             <span>{{ trust_text | escape }}</span>
                           </li>
                         {%- endif -%}
@@ -177,16 +193,16 @@
                 {%- if scripture_quote != blank -%}
                   <div class="product__block product__block--scripture" {{ block.shopify_attributes }}>
                     <figure class="scripture product__scripture">
-                      <p class="eyebrow eyebrow--ink product__scripture-label">{{ 'products.product.scripture_label' | t }}</p>
+                      <p class="tag product__scripture-label">{{ 'products.product.scripture_label' | t }}</p>
                       <blockquote class="scripture__quote">{{ scripture_quote | escape }}</blockquote>
                       {%- if scripture_reference != blank -%}
                         <figcaption class="scripture__ref">{{ scripture_reference | escape }}</figcaption>
                       {%- endif -%}
                     </figure>
                     {%- if block.settings.show_meaning and meaning != blank -%}
-                      <div class="product__meaning">
-                        <p class="eyebrow eyebrow--ink">{{ 'products.product.meaning_label' | t }}</p>
-                        <p class="product__meaning-text">{{ meaning | escape | newline_to_br }}</p>
+                      <div class="product__copy product__meaning">
+                        <h2 class="product__copy-title">{{ 'products.product.meaning_label' | t }}</h2>
+                        <p class="product__copy-text">{{ meaning | escape | newline_to_br }}</p>
                       </div>
                     {%- endif -%}
                   </div>
@@ -195,8 +211,10 @@
               {%- when 'botanical' -%}
                 {%- if botanical != blank -%}
                   <div class="product__block product__block--botanical" {{ block.shopify_attributes }}>
-                    <p class="eyebrow eyebrow--ink">{{ 'products.product.botanical_label' | t }}</p>
-                    <p class="product__botanical-text">{{ botanical | escape | newline_to_br }}</p>
+                    <div class="product__copy">
+                      <h2 class="product__copy-title">{{ 'products.product.botanical_label' | t }}</h2>
+                      <p class="product__copy-text">{{ botanical | escape | newline_to_br }}</p>
+                    </div>
                   </div>
                 {%- endif -%}
 
@@ -207,7 +225,7 @@
                   </div>
                 {%- elsif default_one_liner != blank -%}
                   <div class="product__block product__block--description" {{ block.shopify_attributes }}>
-                    <p class="lead product__description">{{ default_one_liner | escape }}</p>
+                    <p class="product__description">{{ default_one_liner | escape }}</p>
                   </div>
                 {%- endif -%}
 
@@ -246,7 +264,7 @@
                 -%}
                 {%- if show_tab -%}
                   <div class="product__block product__block--tab" {{ block.shopify_attributes }}>
-                    <olivet-accordion class="accordion product__accordion">
+                    <olivet-accordion class="accordion accordion--compact product__accordion">
                       <details id="{{ tab_id }}">
                         <summary class="accordion__summary" aria-controls="{{ tab_id }}-content">
                           <span class="accordion__title">{{ tab_heading | escape }}</span>
@@ -263,10 +281,10 @@
                                 {%- if shop.shipping_policy.body != blank or shop.refund_policy.body != blank -%}
                                   <p class="product__policy-links">
                                     {%- if shop.shipping_policy.body != blank -%}
-                                      <a href="{{ shop.shipping_policy.url }}" class="link link--underline">{{ shop.shipping_policy.title }}</a>
+                                      <a href="{{ shop.shipping_policy.url }}" class="link link--chevron">{{ shop.shipping_policy.title }}{% render 'icon', name: 'chevron-right', size: 10 %}</a>
                                     {%- endif -%}
                                     {%- if shop.refund_policy.body != blank -%}
-                                      <a href="{{ shop.refund_policy.url }}" class="link link--underline">{{ shop.refund_policy.title }}</a>
+                                      <a href="{{ shop.refund_policy.url }}" class="link link--chevron">{{ shop.refund_policy.title }}{% render 'icon', name: 'chevron-right', size: 10 %}</a>
                                     {%- endif -%}
                                   </p>
                                 {%- endif -%}
@@ -287,9 +305,9 @@
                     data-title="{{ product.title | escape }}"
                     data-copied="{{ 'general.share.copied' | t }}"
                   >
-                    <button type="button" class="btn btn--ghost btn--sm product__share-button">
-                      {%- render 'icon', name: 'share', size: 18 -%}
-                      <span class="btn__content"><span data-share-label>{{ 'general.share.label' | t }}</span></span>
+                    <button type="button" class="link product__share-button">
+                      {%- render 'icon', name: 'share', size: 16 -%}
+                      <span data-share-label>{{ 'general.share.label' | t }}</span>
                     </button>
                   </share-button>
                 </div>
@@ -306,6 +324,46 @@
       </div>
     </div>
   </div>
+
+  {%- if section.settings.enable_sticky_bar and buy_block != blank -%}
+    {%- comment -%}
+      Phones and tablets: rises when the main button leaves the viewport and
+      submits the same product form (form attribute). Hidden (visibility +
+      inert) until then, so it is out of the tab order and the a11y tree.
+    {%- endcomment -%}
+    <sticky-buy-bar
+      class="product-sticky"
+      data-section="{{ section.id }}"
+      data-button="ProductSubmitButton-{{ section.id }}"
+      role="region"
+      aria-label="{{ product.title | escape }}"
+      inert
+    >
+      <div class="product-sticky__inner">
+        <div class="product-sticky__text">
+          <p class="product-sticky__title">{{ product.title | escape }}</p>
+          <p class="product-sticky__price money" data-sticky-price>
+            {%- if settings.currency_code_enabled -%}
+              {{ variant.price | money_with_currency }}
+            {%- else -%}
+              {{ variant.price | money }}
+            {%- endif -%}
+          </p>
+        </div>
+        <button
+          type="submit"
+          form="{{ product_form_id }}"
+          class="btn btn--primary btn--sm product-sticky__button"
+          data-sticky-button
+          {% if sticky_unavailable %}disabled{% endif %}
+          {% if settings.cart_type == 'drawer' %}aria-haspopup="dialog"{% endif %}
+        >
+          <span class="btn__content"><span data-sticky-label>{{ sticky_label }}</span></span>
+          {%- render 'loading-spinner' -%}
+        </button>
+      </div>
+    </sticky-buy-bar>
+  {%- endif -%}
 </section>
 
 <script src="{{ 'product.js' | asset_url }}" defer="defer"></script>
@@ -371,6 +429,7 @@
       "type": "checkbox",
       "id": "enable_zoom",
       "label": "Open images in a lightbox",
+      "info": "Phones show the image full screen; swipe down to close.",
       "default": true
     },
     {
@@ -381,13 +440,21 @@
       "type": "checkbox",
       "id": "enable_sticky_info",
       "label": "Keep the shorter column in view",
-      "info": "On large screens the product details stick while stacked media scrolls. With the thumbnail layout the media stage sticks while the details scroll.",
+      "info": "On large screens the gallery stays in view while the details scroll (thumbnail layout). With stacked media the details stay in view instead.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_bar",
+      "label": "Show a buy bar on phones and tablets",
+      "info": "A translucent bar with the title, price and Add to Bag rises from the bottom once the main button scrolls out of view.",
       "default": true
     },
     {
       "type": "select",
       "id": "padding",
       "label": "Section spacing",
+      "info": "Sets the space below the product. The top stays compact so the gallery starts right under the navigation.",
       "options": [
         { "value": "default", "label": "Default" },
         { "value": "tight", "label": "Tight" },

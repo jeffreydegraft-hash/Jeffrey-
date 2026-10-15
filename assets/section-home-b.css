@@ -1,23 +1,38 @@
 /* ==========================================================================
-   Olivet — section-home-b.css (home-b sections)
+   Olivet — section-home-b.css (Apple-first)
+   Science pillars, featured product, FAQ, newsletter, rich text,
+   multicolumn, featured blog, custom Liquid, apps.
+
+   Every section header is centred (.section__header--center), surfaces are
+   flat tiles (--c-surface, --r-tile / --r-card, no border, no shadow) and
+   separation comes from scheme changes, never hairlines. Colours are
+   tokens only. Motion: the shared scroll reveal from base.css, press
+   feedback on :active, hover only behind (hover: hover) and (pointer: fine),
+   and no transform motion under prefers-reduced-motion.
    ========================================================================== */
+
 /* === section: science-pillars ===
-   Dark editorial band. Header at 44rem, then numbered pillars under thin
-   hairlines. Motion inventory: the staggered scroll reveal from base.css
-   (marketing explanation) and the .btn press. Nothing else moves. */
+   Dark band (scheme-3): centred header, then flat dark tiles with a big
+   numeral in the accent detail colour. 1–3 tiles share a row from 990px,
+   four make a 2×2 grid; tablets pair tiles and let an odd last tile span
+   the row; phones stack. */
 .science-pillars__intro {
-  max-width: 40rem;
+  max-width: 48rem;
 }
 
 .science-pillars__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 56px);
+  gap: clamp(12px, 1.6vw, 24px);
 }
 
 @media (min-width: 750px) {
   .science-pillars__grid {
-    grid-template-columns: repeat(var(--pillars-cols-tablet, 2), minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .science-pillars__tile:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 }
 
@@ -25,37 +40,42 @@
   .science-pillars__grid {
     grid-template-columns: repeat(var(--pillars-cols, 3), minmax(0, 1fr));
   }
+
+  .science-pillars__tile:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
 }
 
-.science-pillars__pillar {
-  display: flex;
-  flex-direction: column;
+/* one pillar: a single tile at the content measure */
+.science-pillars__grid--single.science-pillars__grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+.science-pillars__tile {
   gap: var(--space-3);
-  min-width: 0;
-  padding-top: var(--space-5);
-  border-top: 1px solid rgba(var(--c-ink), 0.18);
+  align-items: flex-start;
+  text-align: left;
 }
 
 .science-pillars__numeral {
-  font-family: var(--font-heading);
-  font-weight: var(--font-heading-weight);
-  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.375rem);
+  margin-bottom: clamp(12px, 2vw, 28px);
   line-height: 1;
-  letter-spacing: -0.01em;
   font-variant-numeric: lining-nums tabular-nums;
   color: rgb(var(--c-gold));
 }
 
 .science-pillars__title {
-  margin-top: var(--space-1);
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 .science-pillars__body {
-  font-size: 0.9375rem;
-  line-height: 1.65;
+  font-size: 1.0625rem;
+  line-height: 1.47;
   color: rgb(var(--c-ink-2));
   text-wrap: pretty;
+  max-width: 40em;
 }
 
 .science-pillars__body > * + * {
@@ -63,10 +83,15 @@
 }
 
 .science-pillars__body a {
-  color: rgb(var(--c-ink));
+  color: rgb(var(--c-accent));
   text-decoration: underline;
   text-underline-offset: 0.18em;
   text-decoration-thickness: 1px;
+}
+
+.science-pillars__body strong {
+  font-weight: var(--font-body-weight-bold);
+  color: rgb(var(--c-ink));
 }
 
 .science-pillars__cta {
@@ -78,72 +103,78 @@
 }
 
 /* === section: featured-product ===
-   Two columns from 990px: media (4:5) and a 34rem content column centered on
-   it. Variant choice is a native select so it works without JS; the add
-   button is full width on phones and a 260px minimum on larger screens.
-   Motion inventory: the reveal pair (media, then content) and the .btn /
-   .link press and arrow nudge from base.css. */
+   Stacked (default): an apple.com product mini hero. Centred eyebrow, h2,
+   short text, price, the CTA pair, then a large product image whose box
+   follows the photo's own ratio, capped at the content measure and ~68% of
+   the viewport height. Product shots blend into light bands (multiply), so
+   a white-background photo sits straight on the white or light-gray band.
+   Split: the same content left-aligned beside the image from 990px. */
 .featured-product__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(28px, 5vw, 80px);
-  align-items: center;
-}
-
-@media (min-width: 990px) {
-  .featured-product__grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-
-  .featured-product--image-right .featured-product__media {
-    order: 2;
-  }
-}
-
-.featured-product__media {
-  min-width: 0;
-}
-
-.featured-product__media-link {
-  display: block;
-  border-radius: var(--r-card);
-}
-
-.featured-product__figure {
-  max-width: 560px;
-  margin-inline: auto;
-}
-
-@media (min-width: 990px) {
-  .featured-product__figure {
-    max-width: none;
-    margin-inline: 0;
-  }
+  gap: clamp(40px, 6vw, 72px);
+  justify-items: center;
 }
 
 .featured-product__content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  max-width: 34rem;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: var(--content-max);
   min-width: 0;
+  text-align: center;
 }
 
 .featured-product__heading {
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 .featured-product__text {
+  max-width: var(--text-max);
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3125rem);
+  line-height: 1.38;
+  letter-spacing: 0.011em;
   color: rgb(var(--c-ink-2));
+  text-wrap: pretty;
+}
+
+.featured-product__text > * + * {
+  margin-top: 0.6em;
+}
+
+.featured-product__text a {
+  color: rgb(var(--c-accent));
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  text-decoration-thickness: 1px;
+}
+
+.featured-product__price {
+  margin-top: var(--space-1);
+}
+
+.featured-product__price .price {
+  justify-content: center;
+  font-size: 1.0625rem;
+  color: rgb(var(--c-ink));
+}
+
+.featured-product__price .price__container {
+  justify-content: center;
 }
 
 .featured-product__form-wrap {
   display: block;
-  margin-top: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-3);
 }
 
 .featured-product__form-wrap .product-form__error {
-  margin-bottom: var(--space-3);
+  max-width: var(--text-max);
+  margin: 0 auto var(--space-4);
+  text-align: left;
 }
 
 .featured-product__form-wrap .product-form__error[hidden] {
@@ -153,59 +184,139 @@
 .featured-product__form {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-4);
 }
 
 .featured-product__field {
-  max-width: 24rem;
+  width: min(100%, 320px);
 }
 
 .featured-product__select {
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+.featured-product__actions {
+  margin-top: 0;
+}
+
 .featured-product__submit {
-  width: 100%;
-}
-
-@media (min-width: 750px) {
-  .featured-product__submit {
-    width: auto;
-    min-width: 260px;
-    align-self: flex-start;
-  }
-}
-
-.featured-product__details {
-  align-self: flex-start;
-  margin-top: var(--space-1);
+  min-width: 96px;
 }
 
 .featured-product__hint {
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.featured-product__media {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.featured-product__media-link {
+  display: block;
+  width: min(100%, var(--content-max), calc(68svh * var(--fp-ratio, 1)));
+  border-radius: var(--r-media);
+}
+
+.featured-product__figure {
+  --media-radius: var(--r-media);
+  background: transparent;
+}
+
+.featured-product__figure--placeholder {
+  background: rgb(var(--c-surface));
+}
+
+.featured-product .featured-product__img {
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+[class*="color-scheme-3"].featured-product .featured-product__img,
+[class*="color-scheme-4"].featured-product .featured-product__img {
+  mix-blend-mode: normal;
+}
+
+/* split: left-aligned content beside the image */
+.featured-product--split .featured-product__grid {
+  justify-items: stretch;
+}
+
+.featured-product--split .featured-product__content {
+  align-items: flex-start;
+  text-align: left;
+  max-width: 34rem;
+}
+
+.featured-product--split .featured-product__price .price,
+.featured-product--split .featured-product__price .price__container,
+.featured-product--split .featured-product__actions {
+  justify-content: flex-start;
+}
+
+.featured-product--split .featured-product__form {
+  align-items: flex-start;
+}
+
+.featured-product--split .featured-product__form-wrap .product-form__error {
+  margin-inline: 0;
+}
+
+@media (min-width: 990px) {
+  .featured-product--split .featured-product__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: clamp(40px, 6vw, 96px);
+  }
+
+  .featured-product--split.featured-product--image-left .featured-product__media {
+    order: -1;
+  }
+
+  .featured-product--split .featured-product__media-link {
+    width: min(100%, calc(76svh * var(--fp-ratio, 1)));
+  }
 }
 
 /* === section: faq ===
-   One column holds a 46rem measure; two columns pin the header on the left
-   from 990px while the questions scroll on the right. Questions are set in
-   the serif. Motion inventory: the accordion 0fr→1fr transition and the
-   plus-icon rotate, both owned by components.css; the staggered reveal. */
-.faq__layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(28px, 4vw, 48px);
+   One column (default): centred header, questions held to --text-max.
+   Hairlines sit between items only. Two columns pin the header on the left
+   from 990px while the questions scroll on the right. The accordion itself
+   (21px semibold question, plus → ×, 0fr → 1fr) lives in components.css. */
+.faq--one-column .faq__list {
+  width: 100%;
+  max-width: var(--text-max);
+  margin-inline: auto;
 }
 
-.faq--one-column .faq__layout {
-  max-width: 46rem;
+.faq__intro {
+  max-width: var(--text-max);
 }
 
-.faq__header {
-  margin-bottom: 0;
+/* olivet-accordion is a custom element (inline by default) */
+.faq__item {
+  display: block;
+}
+
+.faq__item:last-child {
+  border-bottom: 0;
+}
+
+.faq__question {
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.faq__item .accordion__summary .icon {
+  --icon-size: 20px;
 }
 
 @media (min-width: 990px) {
   .faq--two-column .faq__layout {
+    display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     gap: clamp(40px, 6vw, 96px);
     align-items: start;
@@ -214,92 +325,76 @@
   .faq--two-column .faq__header {
     position: sticky;
     top: calc(var(--header-height) + var(--space-6));
+    margin-bottom: 0;
   }
 }
 
-.faq__item {
-  display: block;
-}
-
-.faq__question {
-  font-family: var(--font-heading);
-  font-weight: var(--font-heading-weight);
-  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
-  line-height: 1.25;
-  letter-spacing: -0.005em;
-  text-wrap: pretty;
-  overflow-wrap: anywhere;
-}
-
-.faq__item .accordion__summary {
-  padding-block: var(--space-5);
-}
-
 /* === section: newsletter ===
-   Centered 40rem column by default; "split" puts words left and the form
-   right from 990px. The form reuses .inline-form (stacks under 480px).
-   Motion inventory: status messages enter with .enter (@starting-style
-   fade/lift, no JS) and the .btn press. */
+   A quiet band (scheme-2 by default): centred .h3, one line of muted text,
+   then the 52px email field beside a 52px pill (stacked under 480px by
+   .inline-form). "Show as tile" puts the same content on a rounded
+   --c-surface tile. Split sets words left, form right from 990px. */
 .newsletter__inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(24px, 4vw, 40px);
+  gap: clamp(20px, 3vw, 32px);
 }
 
 .newsletter--center .newsletter__inner {
-  max-width: 40rem;
+  max-width: var(--text-max);
   margin-inline: auto;
   justify-items: center;
   text-align: center;
 }
 
-@media (min-width: 990px) {
-  .newsletter--split .newsletter__inner {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(40px, 6vw, 96px);
-    align-items: center;
-  }
+.newsletter--tile .newsletter__inner {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: clamp(40px, 6vw, 72px) clamp(24px, 5vw, 64px);
+  border-radius: var(--r-tile);
+  background: rgb(var(--c-surface));
 }
 
 .newsletter__header {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  max-width: 36rem;
+  max-width: var(--text-max);
 }
 
 .newsletter--center .newsletter__header {
   align-items: center;
 }
 
-.newsletter__rule {
-  display: block;
-  width: 40px;
-  height: 1px;
-  margin-bottom: var(--space-2);
-  background: rgb(var(--c-gold));
-}
-
 .newsletter__heading {
   text-wrap: balance;
 }
 
+.newsletter__text {
+  font-size: 1.0625rem;
+  line-height: 1.47;
+  color: rgb(var(--c-ink-2));
+  text-wrap: pretty;
+}
+
 .newsletter__form-wrap {
-  width: 100%;
-  max-width: 32rem;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-}
-
-.newsletter--split .newsletter__form-wrap {
-  justify-self: end;
+  width: 100%;
+  max-width: 30rem;
 }
 
 .newsletter__form {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+}
+
+/* On a band the field takes the tile colour (white on light gray); on a tile
+   it keeps the page colour, so it always reads as a field. */
+.newsletter:not(.newsletter--tile) .newsletter__input {
+  background: rgb(var(--c-surface));
 }
 
 .newsletter__button {
@@ -315,14 +410,27 @@
   text-wrap: pretty;
 }
 
+@media (min-width: 990px) {
+  .newsletter--split .newsletter__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+  }
+
+  .newsletter--split .newsletter__form-wrap {
+    justify-self: end;
+  }
+}
+
 /* === section: rich-text ===
-   A column of blocks at a chosen measure. Each block carries its own reveal
-   index, so the column staggers in top to bottom. */
+   A centred (default) or left column at a chosen measure: eyebrow, a
+   headline on the type scale, text in lead / body / small, then the CTA
+   pair in one .cta-row. */
 .rich-text__inner {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .rich-text--center .rich-text__inner {
@@ -334,34 +442,35 @@
   text-wrap: balance;
 }
 
+.rich-text__heading + .rich-text__text {
+  margin-top: var(--space-2);
+}
+
 .rich-text__text {
   width: 100%;
 }
 
 .rich-text__text--lead {
-  font-size: 1.125rem;
-  line-height: 1.6;
+  font-size: clamp(1.1875rem, 0.95rem + 0.9vw, 1.75rem);
+  line-height: 1.25;
+  letter-spacing: 0.007em;
   color: rgb(var(--c-ink-2));
 }
 
-@media (min-width: 750px) {
-  .rich-text__text--lead {
-    font-size: 1.25rem;
-  }
+.rich-text__text--body {
+  font-size: 1.0625rem;
+  line-height: 1.47;
 }
 
 .rich-text__text--small {
-  font-size: 0.9375rem;
-  line-height: 1.6;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.016em;
   color: rgb(var(--c-ink-2));
 }
 
 .rich-text__buttons {
-  margin-top: var(--space-2);
-}
-
-.rich-text--center .rich-text__buttons {
-  justify-content: center;
+  margin-top: var(--space-3);
 }
 
 .rich-text__button[aria-disabled="true"],
@@ -370,13 +479,18 @@
 }
 
 /* === section: multicolumn ===
-   2–4 columns of image-or-icon, title, text, link. "Cards" puts each column
-   on a surface panel. Motion inventory: the staggered reveal and, on real
-   pointers, a 3% image zoom when the column carries a link. */
+   Feature tiles (default): flat --c-surface panels, radius --r-tile, 24–40px
+   padding. An image bleeds across the top of its tile (the tile clips the
+   corners); without one a 40px icon in the accent detail colour leads.
+   Flat mode drops the panels and rounds the images instead. */
 .multicolumn__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 40px);
+  gap: clamp(12px, 1.6vw, 24px);
+}
+
+.multicolumn--flat .multicolumn__grid {
+  gap: clamp(40px, 5vw, 56px) clamp(24px, 3vw, 40px);
 }
 
 @media (min-width: 750px) {
@@ -392,61 +506,76 @@
 }
 
 .multicolumn__item {
+  --tile-pad: clamp(24px, 3vw, 40px);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
   min-width: 0;
 }
 
-.multicolumn--cards .multicolumn__grid {
-  gap: clamp(16px, 2.5vw, 28px);
+.multicolumn--cards .multicolumn__item {
+  padding: var(--tile-pad);
 }
 
-.multicolumn--cards .multicolumn__item {
-  padding: clamp(20px, 3vw, 32px);
-  background: rgb(var(--c-surface));
-  border-radius: var(--r-card);
+.multicolumn--align-center .multicolumn__item {
+  align-items: center;
+  text-align: center;
 }
 
 .multicolumn__media {
-  width: 100%;
+  align-self: stretch;
+  margin-bottom: var(--space-2);
 }
 
-.multicolumn--cards .multicolumn__figure {
-  --media-radius: var(--r-md);
+/* the image bleeds to the tile's edges; the tile's radius clips its corners */
+.multicolumn--cards:not(.multicolumn--ratio-circle) .multicolumn__media {
+  margin: calc(var(--tile-pad) * -1) calc(var(--tile-pad) * -1) var(--space-3);
+}
+
+.multicolumn--cards:not(.multicolumn--ratio-circle) .multicolumn__figure {
+  --media-radius: 0;
+}
+
+.multicolumn--flat .multicolumn__figure {
+  --media-radius: var(--r-media);
+}
+
+.multicolumn--ratio-circle .multicolumn__media {
+  align-self: auto;
+  width: min(100%, 200px);
 }
 
 .multicolumn--ratio-circle .multicolumn__figure {
   --media-radius: 50%;
-  max-width: 220px;
 }
 
 .multicolumn__img {
-  transition: transform var(--dur-slow) var(--ease-out);
+  transition: transform 400ms var(--ease-out), opacity var(--dur-slow) ease;
 }
 
 .multicolumn__icon {
-  display: inline-grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--r-pill);
+  display: inline-flex;
+  margin-bottom: var(--space-2);
   color: rgb(var(--c-gold));
-  background: rgba(var(--c-gold), 0.12);
 }
 
 .multicolumn__title {
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 .multicolumn__text {
-  font-size: 0.9375rem;
-  line-height: 1.6;
+  font-size: 1.0625rem;
+  line-height: 1.47;
   color: rgb(var(--c-ink-2));
+  text-wrap: pretty;
 }
 
 .multicolumn__text > * + * {
   margin-top: 0.75em;
+}
+
+.multicolumn__text strong {
+  color: rgb(var(--c-ink));
 }
 
 .multicolumn__link {
@@ -454,44 +583,164 @@
   align-self: flex-start;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .multicolumn__item:has(.multicolumn__link):hover .multicolumn__img {
-    transform: scale(1.03);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .multicolumn__item:has(.multicolumn__link):hover .multicolumn__img {
-      transform: none;
-    }
-  }
+.multicolumn--align-center .multicolumn__link {
+  align-self: center;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .multicolumn__img {
-    transition: none;
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .multicolumn__item:has(.multicolumn__link):hover .multicolumn__img {
+    transform: scale(1.03);
   }
 }
 
 /* === section: featured-blog ===
-   Header row (heading, intro, "All posts") and a grid of article cards from
-   snippets/card-article.liquid. Column count follows the posts setting. */
+   Newsroom-style article tiles: image across the top of a rounded
+   --c-surface tile, then tag, .h5 title, optional excerpt and a 14px muted
+   date pinned to the bottom. The title link's ::after covers the tile. */
 .featured-blog__intro {
-  max-width: 40rem;
+  max-width: var(--text-max);
 }
 
 .featured-blog__view-all {
-  flex-shrink: 0;
-  min-height: 44px;
+  margin-top: calc(var(--space-2) * -1);
+}
+
+.featured-blog__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+}
+
+@media (min-width: 750px) {
+  .featured-blog__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 990px) {
+  .featured-blog__grid {
+    grid-template-columns: repeat(var(--featured-blog-cols, 3), minmax(0, 1fr));
+  }
+}
+
+.featured-blog__grid--single.featured-blog__grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: var(--content-max);
+  margin-inline: auto;
 }
 
 .featured-blog__item {
+  display: flex;
   min-width: 0;
 }
 
-/* row gap matches the product and collection grids so stacked cards read apart */
-.featured-blog__grid,
-.main-blog__grid {
-  --grid-gap: clamp(28px, 4vw, 44px) clamp(16px, 2.5vw, 32px);
+.featured-blog__tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  background: rgb(var(--c-surface));
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.featured-blog__tile:active {
+  transform: scale(0.985);
+}
+
+.featured-blog__tile:has(.featured-blog__link:focus-visible) {
+  outline: 2px solid rgb(var(--c-accent));
+  outline-offset: 4px;
+}
+
+.featured-blog__media {
+  --media-radius: 0;
+  flex-shrink: 0;
+  background: rgba(var(--c-ink), 0.04);
+}
+
+.featured-blog__img {
+  transition: transform 400ms var(--ease-out), opacity var(--dur-slow) ease;
+}
+
+.featured-blog__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(var(--c-ink), 0.22);
+}
+
+.featured-blog__placeholder .icon {
+  stroke-width: 1.25;
+}
+
+.featured-blog__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: clamp(20px, 2.4vw, 28px) clamp(20px, 2.4vw, 28px) clamp(24px, 2.8vw, 32px);
+}
+
+.featured-blog__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
+}
+
+.featured-blog__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.featured-blog__link:focus-visible {
+  outline: none;
+}
+
+.featured-blog__excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: rgb(var(--c-ink-2));
+}
+
+.featured-blog__date {
+  margin-top: auto;
+  padding-top: var(--space-2);
+  color: rgb(var(--c-ink-2));
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tablets: an odd last tile spans the row and lays out wide */
+@media (min-width: 750px) and (max-width: 989px) {
+  .featured-blog__item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .featured-blog__item:last-child:nth-child(odd) .featured-blog__tile {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .featured-blog__item:last-child:nth-child(odd) .featured-blog__media {
+    flex: 0 0 50%;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .featured-blog__tile:hover .featured-blog__img {
+    transform: scale(1.03);
+  }
 }
 
 /* === section: custom-liquid === */
@@ -507,4 +756,17 @@
 
 .apps__inner > * + * {
   margin-top: var(--space-5);
+}
+
+/* === reduced motion: keep the fades, drop the movement === */
+@media (prefers-reduced-motion: reduce) {
+  .multicolumn__img,
+  .featured-blog__img,
+  .featured-blog__tile {
+    transition: opacity var(--dur-slow) ease;
+  }
+
+  .featured-blog__tile:active {
+    transform: none;
+  }
 }

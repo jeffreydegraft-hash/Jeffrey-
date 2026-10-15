@@ -1,124 +1,257 @@
 /* ==========================================================================
-   Olivet — section-collection.css (collection sections)
+   Olivet — section-collection.css (Apple-first)
+   Collection banner, collection grid + filters (sidebar and sheet),
+   collections list, collection list section, collection tile, search page.
+
+   Apple Store category language: big centred titles, quiet 14px controls,
+   pills, flat surface tiles, no hairlines between sections, separators
+   only between rows. Hover lives behind (hover: hover) and (pointer: fine);
+   every pressable answers on pointer-down.
    ========================================================================== */
+
 /* === section: collection-banner ===
-   Page header band for a collection: optional wide media, eyebrow, title,
-   description. Nothing here moves — the title must be legible the instant
-   the page paints. The bottom spacing is handed to the grid section below,
+   Centred title + short muted description, then the collection image as a
+   wide rounded tile. Nothing here moves: the title must be legible the
+   instant the page paints. The bottom spacing is handed to the grid below,
    so stacked sections never double their padding. */
 .collection-banner.section {
   padding-bottom: 0;
 }
 
-.collection-banner__media {
-  margin-bottom: clamp(24px, 4vw, 48px);
-}
-
-.collection-banner__figure {
-  --ratio: 16 / 9;
-}
-
-@media (min-width: 750px) {
-  .collection-banner__figure {
-    --ratio: 3 / 1;
-  }
-}
-
 .collection-banner__header {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  align-items: center;
+  gap: var(--space-4);
+  max-width: var(--content-max);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.collection-banner__eyebrow {
+  margin-bottom: calc(var(--space-2) * -1);
 }
 
 .collection-banner__title {
-  max-width: 44rem;
+  max-width: 100%;
 }
 
+/* Merchant descriptions run long: a 17–21px lead at the reading measure
+   keeps a centred paragraph to about three lines. */
 .collection-banner__description {
-  max-width: 60ch;
+  max-width: var(--text-max);
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3125rem);
+  line-height: 1.38;
+  letter-spacing: 0.011em;
 }
 
 .collection-banner__description > * + * {
   margin-top: 0.75em;
 }
 
+/* Long descriptions: start-aligned header (always for long, phones for medium) */
+.collection-banner--long .collection-banner__header {
+  align-items: flex-start;
+  margin-inline: 0;
+  text-align: start;
+}
+
+@media (max-width: 749px) {
+  .collection-banner--medium .collection-banner__header {
+    align-items: flex-start;
+    text-align: start;
+  }
+}
+
 .collection-banner__description a {
+  color: rgb(var(--c-accent));
   text-decoration: underline;
   text-underline-offset: 0.18em;
   text-decoration-thickness: 1px;
 }
 
+/* Wide and short: the product tiles stay close to the fold */
+.collection-banner__media {
+  --ratio: 3 / 2;
+  --media-radius: var(--r-tile);
+  margin-top: clamp(32px, 5vw, 64px);
+}
+
+@media (min-width: 750px) {
+  .collection-banner__media {
+    --ratio: 2 / 1;
+  }
+}
+
+@media (min-width: 990px) {
+  .collection-banner__media {
+    --ratio: 3 / 1;
+  }
+}
+
 /* === section: collection-grid (main-collection-product-grid) ===
-   Toolbar (count / sort / mobile filter button), active-filter chips,
-   260px sticky sidebar at ≥990px, product grid, mobile filter drawer.
+   Toolbar (count / sort pill / "Filter" pill under 990px), active-filter
+   chips, a slim sticky filter column at 990px and up, product tiles, and
+   the filter sheet (left sheet on tablets, bottom sheet on phones).
    Motion inventory: the grid dims on opacity while a fetch is in flight
-   (state); chips press to .97 via .chip (feedback); everything else is
-   inherited from .accordion / .drawer / .btn. */
+   (state); pills and chips press to .97 and checkboxes to .9 (feedback);
+   the sheet itself is spring-driven by the Drawer base. */
 .collection-grid__toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-2) var(--space-4);
   min-height: 44px;
-  padding-bottom: var(--space-4);
-  margin-bottom: var(--space-5);
-  border-bottom: 1px solid rgb(var(--c-line));
+  margin-bottom: var(--space-4);
 }
 
 .collection-grid__count {
+  flex-shrink: 0;
   margin: 0;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.016em;
   color: rgb(var(--c-ink-2));
   font-variant-numeric: lining-nums tabular-nums;
 }
 
 .collection-grid__controls {
   display: flex;
+  flex: 0 1 auto;
   align-items: center;
-  gap: var(--space-3);
-  flex-shrink: 0;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  min-width: 0;
+  margin-left: auto;
 }
 
 .collection-grid__sort {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .collection-grid__sort-label {
+  font-size: 0.875rem;
+  letter-spacing: -0.016em;
   color: rgb(var(--c-ink-2));
   white-space: nowrap;
 }
 
+/* Phones: the pill shows the current order on its own; the label stays for
+   assistive tech. */
+@media (max-width: 749px) {
+  .collection-grid__sort-label {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.collection-grid__select {
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+/* Compact native select as a pill (the platform picker opens on phones) */
 .collection-grid__select select {
+  field-sizing: content; /* fits the chosen order where supported; else shrinks and clips */
   width: auto;
-  min-width: 200px;
-  min-height: 44px;
-  padding: 8px 44px 8px 14px;
-  background: transparent;
+  max-width: 100%;
+  min-height: 36px;
+  padding: 0 34px 0 16px;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.016em;
+  text-overflow: ellipsis;
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-surface));
+  border: 0;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: transform var(--dur-press) var(--ease-out), box-shadow var(--dur-fast) ease;
+}
+
+.collection-grid__select select:active {
+  transform: scale(0.97);
+}
+
+.collection-grid__select .icon {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  stroke-width: 2.2;
+  color: rgb(var(--c-ink-2));
+  pointer-events: none;
 }
 
 .collection-grid__filter-button {
-  min-height: 44px;
-  gap: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 0.875rem;
+  letter-spacing: -0.016em;
+  white-space: nowrap;
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-surface));
+  border-radius: var(--r-pill);
+  transition: transform var(--dur-press) var(--ease-out), box-shadow var(--dur-fast) ease;
+}
+
+.collection-grid__filter-button:active {
+  transform: scale(0.97);
+}
+
+.collection-grid__filter-button .icon {
+  stroke-width: 1.8;
 }
 
 .collection-grid__badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
   border-radius: var(--r-pill);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: var(--font-body-weight-bold);
   font-variant-numeric: lining-nums tabular-nums;
   line-height: 1;
+  letter-spacing: 0;
   color: rgb(var(--c-accent-ink));
   background: rgb(var(--c-accent));
 }
 
 .collection-grid__badge.is-empty {
   display: none;
+}
+
+/* Touch: controls grow to 44px; both pills go to 16px together because
+   iOS zooms into a select set smaller than that. */
+@media (pointer: coarse) {
+  .collection-grid__select select {
+    min-height: 44px;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .collection-grid__filter-button {
+    min-height: 44px;
+    padding: 0 16px;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
 }
 
 /* ---------- active filter chips ---------- */
@@ -138,11 +271,9 @@
 }
 
 .active-facets__chip {
-  min-height: 44px;
-  padding: 0 10px 0 14px;
-  font-size: 0.875rem;
-  gap: 6px;
   max-width: 100%;
+  padding: 0 12px 0 14px;
+  gap: 6px;
 }
 
 .active-facets__chip-label {
@@ -150,27 +281,35 @@
 }
 
 .active-facets__chip .icon {
+  stroke-width: 2;
   color: rgb(var(--c-ink-2));
   transition: color var(--dur-fast) ease;
 }
 
 .active-facets__clear {
-  min-height: 44px;
-  margin-left: var(--space-2);
+  min-height: 36px;
+  padding-inline: var(--space-2);
   font-size: 0.875rem;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-accent));
+}
+
+@media (pointer: coarse) {
+  .active-facets__clear {
+    min-height: 44px;
+  }
 }
 
 /* ---------- layout ---------- */
 .collection-grid__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-7);
   align-items: start;
 }
 
 @media (min-width: 990px) {
   .collection-grid--has-filters .collection-grid__layout {
-    grid-template-columns: 260px minmax(0, 1fr);
+    grid-template-columns: 220px minmax(0, 1fr);
     gap: clamp(32px, 4vw, 56px);
   }
 }
@@ -178,14 +317,23 @@
 .collection-grid__sidebar-inner {
   position: sticky;
   top: calc(var(--header-height) + var(--space-5));
-  max-height: calc(100dvh - var(--header-height) - var(--space-6));
+  max-height: calc(100dvh - var(--header-height) - var(--space-7));
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding-right: var(--space-2);
+  scrollbar-width: thin;
+  padding-bottom: var(--space-5);
 }
 
+/* Lines up with the toolbar row so the first group meets the first tile */
 .collection-grid__sidebar-title {
-  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: var(--space-4);
+  font-size: 0.875rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.43;
+  letter-spacing: -0.016em;
 }
 
 .collection-grid__main {
@@ -202,26 +350,90 @@
   pointer-events: none;
 }
 
+/* ---------- product tiles ----------
+   2-up on phones and tablets with tight 12px gaps, the setting's column
+   count from 990px. Tiles in a row share a height. */
 .product-grid {
-  --grid-gap: clamp(28px, 4vw, 44px) clamp(12px, 2.5vw, 32px);
+  --grid-gap: 12px;
+}
+
+@media (min-width: 750px) {
+  .product-grid {
+    --grid-gap: clamp(16px, 2vw, 24px);
+  }
 }
 
 .product-grid__item {
+  display: flex;
   min-width: 0;
 }
 
-/* ---------- facets form (sidebar and drawer) ---------- */
+.product-grid__item > .card {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+@media (max-width: 749px) {
+  .product-grid .card__title {
+    font-size: 0.9375rem;
+    line-height: 1.25;
+  }
+}
+
+/* ---------- empty state ---------- */
+.collection-grid__empty,
+.main-search__empty,
+.list-collections__empty,
+.collection-list__empty {
+  max-width: var(--text-max);
+}
+
+.collection-grid__empty-body,
+.main-search__empty-body,
+.list-collections__empty-body,
+.collection-list__empty-body {
+  max-width: 30rem;
+  font-size: 1.0625rem;
+  text-wrap: pretty;
+  color: rgb(var(--c-ink-2));
+}
+
+.collection-grid__empty .cta-row,
+.main-search__empty .cta-row,
+.list-collections__empty .cta-row {
+  margin-top: var(--space-2);
+}
+
+/* ---------- facets form (sidebar and sheet) ---------- */
 .facets__form {
   display: flex;
   flex-direction: column;
 }
 
-.facets__sort {
-  margin-bottom: var(--space-5);
+/* Separators between groups only, never above the first or under the last */
+/* olivet-accordion is a custom element (inline by default) */
+.facets__group.accordion {
+  display: block;
+  border-bottom: 0;
+}
+
+.facets__group + .facets__group {
+  border-top: 1px solid rgb(var(--c-line));
 }
 
 .facets__summary {
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
+  font-weight: var(--font-body-weight-bold);
+  letter-spacing: -0.022em;
+}
+
+.facets__group:first-child .facets__summary {
+  padding-top: 0;
+  min-height: 36px;
+}
+
+.facets__summary .icon {
+  stroke-width: 2;
 }
 
 .facets__summary-label {
@@ -241,8 +453,10 @@
   padding: 0 5px;
   border-radius: var(--r-pill);
   font-size: 0.6875rem;
+  font-weight: var(--font-body-weight-bold);
   font-variant-numeric: lining-nums tabular-nums;
   line-height: 1;
+  letter-spacing: 0;
   color: rgb(var(--c-accent-ink));
   background: rgb(var(--c-accent));
 }
@@ -261,36 +475,42 @@
 .facets__list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
   padding-bottom: var(--space-4);
 }
 
+/* 17px option rows on the base .checkbox */
 .facets__label {
   width: 100%;
-  min-height: 44px;
-  padding: var(--space-2) 0;
+  min-height: 36px;
+  padding: 6px 0;
   align-items: center;
+  font-size: 1.0625rem;
+  line-height: 1.29;
+  letter-spacing: -0.022em;
+}
+
+@media (pointer: coarse) {
+  .facets__label {
+    min-height: 44px;
+  }
+}
+
+.facets__label .facets__checkbox {
+  margin: 0;
+  transition: border-color var(--dur-fast) ease, background-color var(--dur-fast) ease, transform var(--dur-press) var(--ease-out);
+}
+
+.facets__label:not(.is-disabled):active .facets__checkbox {
+  transform: scale(0.9);
 }
 
 .facets__label.is-disabled {
-  opacity: 0.45;
+  opacity: 0.42;
   cursor: not-allowed;
 }
 
-/* Native checkboxes do not paint ::before; appearance: none lets the
-   .checkbox check mark from base.css render. */
-.facets__label .facets__checkbox {
-  appearance: none;
-  -webkit-appearance: none;
-  margin: 0;
-  border: 1px solid rgba(var(--c-ink), 0.32);
-  background: rgb(var(--c-bg));
-  cursor: pointer;
-  transition: border-color var(--dur-fast) ease;
-}
-
-.facets__label .facets__checkbox:checked {
-  border-color: rgb(var(--c-accent));
+.facets__label.is-disabled .facets__checkbox {
+  cursor: not-allowed;
 }
 
 .facets__value {
@@ -304,30 +524,35 @@
 
 .facets__value-label {
   overflow-wrap: anywhere;
-  transition: color var(--dur-fast) ease;
 }
 
 .facets__value-count {
   flex-shrink: 0;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
+  letter-spacing: -0.016em;
   font-variant-numeric: lining-nums tabular-nums;
   color: rgb(var(--c-ink-2));
 }
 
 .facets__hint {
   padding-bottom: var(--space-3);
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-ink-2));
 }
 
 .facets__price {
   display: flex;
   align-items: flex-end;
-  gap: var(--space-3);
-  padding-bottom: var(--space-4);
+  gap: var(--space-2);
+  padding-bottom: var(--space-5);
 }
 
 .facets__price-field {
   flex: 1 1 0;
   min-width: 0;
+  gap: 6px;
 }
 
 .facets__price-input {
@@ -336,18 +561,24 @@
 
 .facets__currency {
   position: absolute;
-  left: 14px;
   top: 50%;
+  left: 12px;
   transform: translateY(-50%);
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
   color: rgb(var(--c-ink-2));
   pointer-events: none;
 }
 
 .facets__price-input input {
-  padding-left: 30px;
+  min-height: 44px;
+  padding: 10px 10px 10px 28px;
   font-variant-numeric: lining-nums tabular-nums;
   -moz-appearance: textfield;
+}
+
+/* In the sheet the fields return to the 52px form height */
+.facets--drawer .facets__price-input input {
+  min-height: 52px;
 }
 
 .facets__price-input input::-webkit-outer-spin-button,
@@ -357,28 +588,55 @@
 }
 
 .facets__price-sep {
-  padding-bottom: 14px;
+  padding-bottom: 12px;
   color: rgb(var(--c-ink-2));
+}
+
+.facets--drawer .facets__price-sep {
+  padding-bottom: 16px;
 }
 
 .facets__apply {
   margin-top: var(--space-4);
 }
 
-/* ---------- mobile drawer ---------- */
-.facets-drawer .drawer__panel {
-  width: min(100%, 400px);
+/* ---------- filter sheet ----------
+   Left sheet at 750–989px, bottom sheet on phones (geometry and the grab
+   handle come from components.css). The header is a drag zone too; the
+   "Show results" pill sits in the footer, outside the scrolling body, so
+   it is always in reach. */
+.facets-drawer__header {
+  min-height: 56px;
+  padding-bottom: var(--space-2);
+}
+
+.facets-drawer__body {
+  padding-top: var(--space-3);
+}
+
+.facets-drawer__body .facets__group:first-child .facets__summary {
+  padding-top: var(--space-2);
 }
 
 .facets-drawer__footer {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .facets-drawer__clear {
-  min-height: 44px;
   flex-shrink: 0;
+  min-height: 44px;
+  padding-inline: var(--space-1);
+  font-size: 1.0625rem;
+  color: rgb(var(--c-accent));
+  transition: opacity var(--dur-fast) ease;
+}
+
+/* Nothing to clear: say so, quietly */
+.facets-drawer__panel:not(:has(.facets__checkbox:checked, .facets__price-input input:not(:placeholder-shown))) .facets-drawer__clear {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .facets-drawer__apply {
@@ -392,182 +650,206 @@
   }
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .facets__label:not(.is-disabled):hover .facets__value-label {
-    color: rgb(var(--c-accent));
-  }
-
-  .facets__label:not(.is-disabled):hover .facets__checkbox {
-    border-color: rgb(var(--c-ink));
-  }
-
-  .active-facets__chip:hover .icon {
-    color: rgb(var(--c-ink));
-  }
+/* === section: list-collections + collection-list + card-collection ===
+   Flat tiles: the image fills the top of the tile, the title and count sit
+   centred below. A short set is centred instead of leaving a hole. */
+.list-collections__header .h1 {
+  max-width: 100%;
 }
 
-/* === section: list-collections + collection-list + card-collection ===
-   Motion: the card's arrow nudges 4px on hover (spatial cue toward the
-   link); the card image scale is inherited from .card. */
-.list-collections__header {
-  margin-bottom: clamp(28px, 4vw, 48px);
+.list-collections__lead {
+  max-width: var(--text-max);
+  text-wrap: balance;
 }
 
 .list-collections__grid,
 .collection-list__grid {
-  --grid-gap: clamp(28px, 4vw, 44px) clamp(12px, 2.5vw, 32px);
+  --tile-gap: 12px;
+  --grid-gap: var(--tile-gap);
+}
+
+@media (min-width: 750px) {
+  .list-collections__grid,
+  .collection-list__grid {
+    --tile-gap: clamp(16px, 2vw, 24px);
+  }
+}
+
+@media (min-width: 990px) {
+  .list-collections__grid--few,
+  .collection-list__grid--few {
+    grid-template-columns: repeat(var(--count, 1), calc((100% - (var(--cols-desktop) - 1) * var(--tile-gap)) / var(--cols-desktop)));
+    justify-content: center;
+  }
+}
+
+.list-collections__grid > li,
+.collection-list__grid > li {
+  display: flex;
+  min-width: 0;
+}
+
+.list-collections__grid .card,
+.collection-list__grid .card {
+  flex: 1 1 auto;
+  width: 100%;
 }
 
 .collection-list__view-all {
-  flex-shrink: 0;
-  min-height: 44px;
+  margin-top: calc(var(--space-2) * -1);
 }
 
-.card-collection__row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-3);
+.card--collection {
+  gap: 0;
+  overflow: hidden;
+  border-radius: var(--r-tile);
+  background: rgb(var(--c-surface));
+  text-align: center;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.card--collection:active {
+  transform: scale(0.985);
+}
+
+.card--collection .card__media-link,
+.card--collection .card__media {
+  border-radius: 0;
+}
+
+.card--collection .card__media {
+  --ratio: 1 / 1;
+}
+
+.card--collection .card__body {
+  flex: 1 1 auto;
+  justify-content: center;
+  gap: 2px;
+  padding: clamp(16px, 2vw, 24px) clamp(12px, 2vw, 24px) clamp(20px, 2.4vw, 28px);
 }
 
 .card--collection .card-collection__title {
   -webkit-line-clamp: 2;
-  min-width: 0;
-}
-
-.card-collection__arrow {
-  flex-shrink: 0;
-  margin-top: 0.2em;
-  color: rgb(var(--c-ink-2));
-}
-
-.card-collection__arrow .icon {
-  transition: transform var(--dur-base) var(--ease-out), color var(--dur-fast) ease;
+  max-width: 100%;
 }
 
 .card-collection__count {
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-ink-2));
   font-variant-numeric: lining-nums tabular-nums;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .card--collection:hover .card-collection__arrow .icon {
-    transform: translateX(4px);
-    color: rgb(var(--c-accent));
+@media (max-width: 749px) {
+  .card--collection .card-collection__title {
+    font-size: 1rem;
+    line-height: 1.25;
   }
-}
 
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
-  .card--collection:hover .card-collection__arrow .icon {
-    transform: none;
+  .card-collection__count {
+    font-size: 0.8125rem;
   }
 }
 
 /* === section: main-search ===
-   Large serif search field; results as a product grid plus a plain list
-   for articles and pages. Motion: the clear button fades in once there is
-   text (state); the result arrow nudges on hover (spatial cue). */
+   Centred title and a big 52px field (12px radius), a 17px count, product
+   tiles, then pages and articles as clean 17px rows with a › chevron.
+   Motion: the clear button fades in once there is text (state); rows dim
+   on press (feedback); the chevron nudges on hover (spatial cue). */
 .main-search__header {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-5);
-  max-width: 44rem;
-  margin-bottom: clamp(32px, 5vw, 64px);
+  max-width: var(--text-max);
+  margin: 0 auto clamp(48px, 7vw, 88px);
+  text-align: center;
+}
+
+.main-search__form {
+  width: 100%;
 }
 
 .search-form__field {
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid rgba(var(--c-ink), 0.3);
-  transition: border-color var(--dur-fast) ease;
-}
-
-.search-form__field:focus-within {
-  border-bottom-color: rgb(var(--c-accent));
 }
 
 .search-form__icon {
-  flex-shrink: 0;
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  display: flex;
+  transform: translateY(-50%);
   color: rgb(var(--c-ink-2));
+  pointer-events: none;
 }
 
-.search-form__input {
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 56px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  font-family: var(--font-heading);
-  font-weight: var(--font-heading-weight);
-  font-size: 1.5rem;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+.search-form__icon .icon {
+  stroke-width: 1.8;
 }
 
-@media (min-width: 750px) {
-  .search-form__input {
-    font-size: 2rem;
-  }
+.main-search .search-form__input {
+  min-height: 52px;
+  padding: 12px 48px 12px 46px;
+  border-radius: var(--r-input, var(--r-md));
+  font-size: 1.0625rem;
 }
 
-.search-form__input:focus-visible {
-  border-color: transparent;
-  box-shadow: none;
-}
-
-.search-form__input::placeholder {
-  font-style: italic;
-  color: rgba(var(--c-ink), 0.4);
-}
-
+/* Apple's clear control: a small filled circle with an × */
 .search-form__reset {
+  position: absolute;
+  top: 50%;
+  right: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 44px;
   height: 44px;
-  flex-shrink: 0;
   border-radius: var(--r-pill);
-  color: rgb(var(--c-ink-2));
-  transition: opacity var(--dur-fast) ease, transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease;
+  color: rgb(var(--c-bg));
+  transform: translateY(-50%);
+  transition: opacity var(--dur-fast) ease, visibility 0s linear 0s, transform var(--dur-press) var(--ease-out);
+}
+
+.search-form__reset::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(var(--c-ink), 0.36);
+  transition: background-color var(--dur-fast) ease;
+}
+
+.search-form__reset .icon {
+  position: relative;
+  stroke-width: 3;
+}
+
+.search-form__reset:active {
+  transform: translateY(-50%) scale(0.92);
 }
 
 .search-form__field:has(.search-form__input:placeholder-shown) .search-form__reset {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-}
-
-.search-form__reset:active {
-  transform: scale(0.92);
-}
-
-.search-form__submit {
-  min-height: 44px;
-  flex-shrink: 0;
-}
-
-@media (max-width: 480px) {
-  .search-form__field {
-    flex-wrap: wrap;
-  }
-
-  .search-form__submit {
-    width: 100%;
-    margin-top: var(--space-2);
-  }
+  transition: opacity var(--dur-fast) ease, visibility 0s linear var(--dur-fast), transform var(--dur-press) var(--ease-out);
 }
 
 .main-search__count {
   margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.47;
+  letter-spacing: -0.022em;
+  color: rgb(var(--c-ink-2));
   font-variant-numeric: lining-nums tabular-nums;
+  text-wrap: balance;
 }
 
 .main-search__group + .main-search__group {
-  margin-top: clamp(40px, 6vw, 72px);
+  margin-top: clamp(56px, 8vw, 96px);
 }
 
 .main-search__group-title {
@@ -577,99 +859,140 @@
 .search-results {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid rgb(var(--c-line));
-  max-width: 52rem;
+  max-width: var(--content-max);
 }
 
-.search-results__item {
-  border-bottom: 1px solid rgb(var(--c-line));
+.search-results__item + .search-results__item {
+  border-top: 1px solid rgb(var(--c-line));
 }
 
 .search-results__link {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "meta arrow"
-    "title arrow"
-    "excerpt arrow";
+  display: flex;
   align-items: center;
-  gap: var(--space-2) var(--space-4);
-  padding: var(--space-5) 0;
+  gap: var(--space-4);
+  min-height: 44px;
+  padding: var(--space-4) 0;
   transition: opacity var(--dur-press) ease;
 }
 
 .search-results__link:active {
-  opacity: 0.7;
+  opacity: 0.6;
+}
+
+.search-results__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .search-results__meta {
-  grid-area: meta;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
+  gap: 6px;
+  font-size: 0.75rem;
+  line-height: 1.33;
+  letter-spacing: -0.01em;
+  color: rgb(var(--c-ink-2));
 }
 
 .search-results__title {
-  grid-area: title;
-  display: block;
+  font-size: 1.0625rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.29;
+  letter-spacing: -0.022em;
+  color: rgb(var(--c-ink));
   overflow-wrap: anywhere;
   transition: color var(--dur-fast) ease;
 }
 
 .search-results__excerpt {
-  grid-area: excerpt;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-size: 0.9375rem;
+  max-width: var(--text-max);
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.016em;
   color: rgb(var(--c-ink-2));
 }
 
-.search-results__arrow {
-  grid-area: arrow;
-  color: rgb(var(--c-ink-2));
+.search-results__chevron {
+  flex-shrink: 0;
+  display: flex;
+  color: rgba(var(--c-ink), 0.32);
 }
 
-.search-results__arrow .icon {
+.search-results__chevron .icon {
+  stroke-width: 2.2;
   transition: transform var(--dur-base) var(--ease-out), color var(--dur-fast) ease;
 }
 
+/* ---------- hover (real pointers only) ---------- */
 @media (hover: hover) and (pointer: fine) {
+  .collection-grid__select select:hover,
+  .collection-grid__filter-button:hover {
+    box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.16);
+  }
+
+  .facets__label:not(.is-disabled):hover .facets__checkbox:not(:checked) {
+    border-color: rgba(var(--c-ink), 0.6);
+  }
+
+  .active-facets__chip:hover .icon {
+    color: rgb(var(--c-ink));
+  }
+
+  .active-facets__clear:hover,
+  .facets-drawer__clear:hover {
+    text-decoration-line: underline;
+  }
+
   .search-results__link:hover .search-results__title {
     color: rgb(var(--c-accent));
   }
 
-  .search-results__link:hover .search-results__arrow .icon {
-    transform: translateX(4px);
-    color: rgb(var(--c-accent));
+  .search-results__link:hover .search-results__chevron .icon {
+    transform: translateX(2px);
+    color: rgb(var(--c-ink-2));
   }
 
-  .search-form__reset:hover {
-    background: rgba(var(--c-ink), 0.06);
-    color: rgb(var(--c-ink));
+  .search-form__reset:hover::before {
+    background: rgba(var(--c-ink), 0.5);
+  }
+}
+
+/* ---------- reduced motion (collection group) ----------
+   Presses and nudges lose their movement; opacity and colour stay. */
+@media (prefers-reduced-motion: reduce) {
+  .collection-grid__select select,
+  .collection-grid__filter-button,
+  .card--collection,
+  .facets__label .facets__checkbox {
+    transition-property: opacity, background-color, border-color, box-shadow;
+  }
+
+  .collection-grid__select select:active,
+  .collection-grid__filter-button:active,
+  .card--collection:active,
+  .facets__label:not(.is-disabled):active .facets__checkbox {
+    transform: none;
+  }
+
+  .search-form__reset,
+  .search-form__reset:active {
+    transform: translateY(-50%);
+  }
+
+  .search-results__chevron .icon {
+    transition: color var(--dur-fast) ease;
   }
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
-  .search-results__link:hover .search-results__arrow .icon {
+  .search-results__link:hover .search-results__chevron .icon {
     transform: none;
-  }
-}
-
-/* ---------- reduced motion (collection group) ---------- */
-@media (prefers-reduced-motion: reduce) {
-  .search-form__reset {
-    transition: opacity var(--dur-fast) ease, background-color var(--dur-fast) ease;
-  }
-
-  .search-form__reset:active {
-    transform: none;
-  }
-
-  .card-collection__arrow .icon,
-  .search-results__arrow .icon {
-    transition: color var(--dur-fast) ease;
   }
 }

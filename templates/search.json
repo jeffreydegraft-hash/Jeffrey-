@@ -5,7 +5,7 @@
       "settings": {
         "products_per_page": 24,
         "color_scheme": "scheme-1",
-        "spacing": "default"
+        "spacing": "tight"
       }
     }
   },

@@ -1,10 +1,14 @@
 {%- comment -%}
-  Variant picker: one fieldset of radio pills per product option.
+  Variant picker: one fieldset per product option, each value a large
+  selectable card (Apple Store style): the value name on the left, the
+  price of the variant it leads to on the right. The radios stay real
+  inputs (visually hidden) so keyboard, form posting and no-JS all work.
+
   product.js (<variant-picker>) listens for changes, finds the matching
   variant in the embedded [data-variants] JSON, updates the form, URL,
-  price, button state and gallery, and publishes Olivet.EVENTS.variantChanged.
-  Without JS the radios still post options[] with the form and the hidden
-  id input keeps the server-selected variant.
+  price, button state and gallery, keeps every card's price and
+  availability in step with the other selections, and publishes
+  Olivet.EVENTS.variantChanged.
 
   Accepts:
   - product: {Object} product
@@ -25,11 +29,11 @@
         assign option_name = option.name | escape
       -%}
       <fieldset class="variant-picker__group" data-option-index="{{ option_index }}">
-        <legend class="field__label variant-picker__legend">
-          <span class="variant-picker__name">{{ option_name }}:</span>
-          <span class="variant-picker__value" data-selected-value>{{ option.selected_value }}</span>
+        <legend class="variant-picker__legend">
+          <span class="variant-picker__name">{{ option_name }}</span>
+          <span class="visually-hidden">: <span class="variant-picker__value" data-selected-value>{{ option.selected_value }}</span></span>
         </legend>
-        <div class="variant-picker__pills">
+        <div class="variant-picker__options{% if option.values.size > 4 %} variant-picker__options--grid{% endif %}">
           {%- for value in option.values -%}
             {%- liquid
               assign input_id = 'Option-' | append: section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0
@@ -46,13 +50,22 @@
               {% if value.selected %}checked{% endif %}
             >
             <label
-              class="chip variant-picker__pill{% if value.selected %} is-selected{% endif %}{% unless value.available %} is-unavailable{% endunless %}"
+              class="variant-picker__pill variant-card{% if value.selected %} is-selected{% endif %}{% unless value.available %} is-unavailable{% endunless %}"
               for="{{ input_id }}"
             >
-              <span class="variant-picker__pill-text">{{ value_name }}</span>
-              {%- unless value.available -%}
-                <span class="visually-hidden">{{ 'products.product.value_unavailable' | t: option_value: value_name }}</span>
-              {%- endunless -%}
+              <span class="variant-card__name">{{ value_name }}</span>
+              <span class="variant-card__price money" data-option-price {% if value.variant == blank %}hidden{% endif %}>
+                {%- if value.variant != blank -%}
+                  {%- if settings.currency_code_enabled -%}
+                    {{ value.variant.price | money_with_currency }}
+                  {%- else -%}
+                    {{ value.variant.price | money }}
+                  {%- endif -%}
+                {%- endif -%}
+              </span>
+              <span class="visually-hidden" data-option-unavailable {% if value.available %}hidden{% endif %}>
+                {{- 'products.product.value_unavailable' | t: option_value: value_name -}}
+              </span>
             </label>
           {%- endfor -%}
         </div>

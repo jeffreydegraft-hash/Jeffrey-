@@ -1,8 +1,9 @@
 {%- comment -%}
-  Announcement bar.
+  Announcement ribbon (apple.com style): a quiet #F5F5F7 band under the
+  navigation, centred 14px text, an accent "Learn more ›" link.
   Up to three announcements. Below 750px only the first one shows; on wider
-  screens they sit in a centred row separated by a small gold dot. No
-  auto-rotate, no marquee: text wraps, never clips.
+  screens they sit in a centred row. No auto-rotate, no marquee: text wraps,
+  never clips.
 {%- endcomment -%}
 {%- liquid
   assign has_social = false
@@ -31,10 +32,19 @@
           {%- for block in section.blocks -%}
             {%- if block.settings.text != blank -%}
               <li class="announcement-bar__item" {{ block.shopify_attributes }}>
-                {%- if block.settings.link != blank -%}
-                  <a href="{{ block.settings.link }}" class="announcement-bar__link">{{ block.settings.text }}</a>
+                {%- if block.settings.link != blank and block.settings.link_label == blank -%}
+                  <a href="{{ block.settings.link }}" class="link link--chevron announcement-bar__link">
+                    {{- block.settings.text -}}
+                    {%- render 'icon', name: 'chevron-right', size: 10 -%}
+                  </a>
                 {%- else -%}
                   <span class="announcement-bar__text">{{ block.settings.text }}</span>
+                  {%- if block.settings.link != blank %}
+                    <a href="{{ block.settings.link }}" class="link link--chevron announcement-bar__link">
+                      {{- block.settings.link_label | escape -}}
+                      {%- render 'icon', name: 'chevron-right', size: 10 -%}
+                    </a>
+                  {%- endif -%}
                 {%- endif -%}
               </li>
             {%- endif -%}
@@ -63,7 +73,8 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-3"
+      "info": "Light gray (scheme 2) gives the apple.com ribbon look.",
+      "default": "scheme-2"
     },
     {
       "type": "checkbox",
@@ -90,6 +101,12 @@
           "type": "url",
           "id": "link",
           "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "info": "Shown after the text with a chevron, e.g. “Shop the oils”. When empty, the whole announcement becomes the link."
         }
       ]
     }

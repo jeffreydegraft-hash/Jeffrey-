@@ -1,60 +1,177 @@
 /* ==========================================================================
-   Olivet — section-home-a.css (home-a sections)
+   Olivet — section-home-a.css (Apple-first)
+   hero, featured-collection, values-strip, image-with-text, scripture-quote,
+   steps. Tokens, type scale, .btn / .link--chevron / .tile / .card--product
+   come from base.css and components.css; this file only lays them out.
    ========================================================================== */
+
+/* === shared: bottle illustration ===
+   The no-image fallback for the hero and image-with-text: an olive-oil bottle
+   drawn with scheme tokens only, so it follows every colour scheme. Static. */
+.bottle {
+  display: block;
+  overflow: visible;
+}
+
+.bottle__shadow { fill: rgba(var(--c-ink), 0.08); }
+.bottle__stop--glass-edge { stop-color: rgb(var(--c-ink)); stop-opacity: 0.13; }
+.bottle__stop--glass-mid { stop-color: rgb(var(--c-ink)); stop-opacity: 0.045; }
+.bottle__stop--oil-edge { stop-color: rgb(var(--c-gold)); stop-opacity: 0.5; }
+.bottle__stop--oil-mid { stop-color: rgb(var(--c-gold)); stop-opacity: 0.26; }
+.bottle__shine { fill: rgb(var(--c-bg)); opacity: 0.55; }
+.bottle__shine--soft { opacity: 0.3; }
+.bottle__label { fill: rgb(var(--c-bg)); }
+.bottle__mark { fill: rgb(var(--c-gold)); }
+.bottle__line { fill: rgba(var(--c-ink), 0.2); }
+.bottle__line--strong { fill: rgba(var(--c-ink), 0.62); }
+.bottle__rule { fill: rgba(var(--c-ink), 0.1); }
+.bottle__collar { fill: rgba(var(--c-ink), 0.16); }
+.bottle__cap { fill: rgb(var(--c-ink)); opacity: 0.9; }
+.bottle__cap-shine { fill: rgb(var(--c-bg)); opacity: 0.14; }
+
+/* Neutral variant: a placeholder, not a product. Gray oil, gray mark. */
+.bottle--neutral .bottle__stop--oil-edge { stop-color: rgb(var(--c-ink)); stop-opacity: 0.1; }
+.bottle--neutral .bottle__stop--oil-mid { stop-color: rgb(var(--c-ink)); stop-opacity: 0.05; }
+.bottle--neutral .bottle__mark { fill: rgba(var(--c-ink), 0.28); }
+.bottle--neutral .bottle__cap { opacity: 0.72; }
+
+/* === shared: "Learn more ›" chevron sizing ===
+   The icon snippet sets --icon-size inline; size the box from the text so the
+   chevron reads about half a cap-height tall and sits close to the label. */
+.hero__link .icon,
+.featured-collection__view-all .icon,
+.image-with-text__link .icon {
+  width: 0.9em;
+  height: 0.9em;
+  margin-inline-start: -0.22em;
+}
+
 /* === section: hero ===
-   First screen. Split: text left, a 4:5 media right; full-bleed: media behind
-   a scheme-3 scrim with the text placed over it.
+   centered (default): eyebrow, h0, one-line lead, CTA pair, then the product
+   large and centred below. split: text left, a rounded 4:5 tile right.
+   full-bleed: media behind a scheme-3 scrim with the text over it.
    Motion inventory (all CSS, no JS, no data-reveal):
    - text staggers in via .enter + --i (base.css @starting-style): marketing
      entrance, the heading is readable the instant the page paints
-   - split media wipes in on clip-path from the top (600ms, var(--ease-out))
-     while its image settles from scale(1.04): spatial, "the picture arrives"
-   - full-bleed media fades in on opacity
-   - prefers-reduced-motion: everything becomes a short fade and the video is
-     hidden behind its poster image */
+   - the product image / media tile rises 24px while it fades in, one beat
+     after the text (600ms, var(--ease-out)): "the product arrives"
+   - full-bleed media fades in on opacity only
+   - prefers-reduced-motion: fades only; the video is hidden behind its
+     poster image */
 .hero {
   position: relative;
   overflow: hidden;
 }
 
 .hero__content {
-  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
 }
 
-.hero__content > * + * {
-  margin-top: var(--space-5);
+.hero__heading {
+  max-width: 100%;
 }
 
-.hero__eyebrow + * {
-  margin-top: var(--space-4);
+.hero__eyebrow + .hero__heading {
+  margin-top: clamp(8px, 1vw, 14px);
 }
 
 .hero__subheading {
-  max-width: 34rem;
+  margin-top: clamp(12px, 1.6vw, 20px);
+  max-width: 34ch;
 }
 
 .hero__actions {
-  --cluster-gap: var(--space-3);
-  margin-top: var(--space-6);
+  margin-top: clamp(24px, 3vw, 36px);
 }
 
-@media (max-width: 479px) {
-  .hero__button {
-    flex: 1 1 100%;
-  }
+/* centered: the apple.com product hero */
+.hero--centered .hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: clamp(48px, 7vw, 96px) clamp(56px, 8vw, 112px);
 }
 
-/* split layout */
+.hero--centered .hero__content {
+  align-items: center;
+  max-width: var(--content-max);
+  text-align: center;
+}
+
+.hero--centered .hero__subheading {
+  max-width: var(--text-max);
+}
+
+.hero__stage {
+  position: relative;
+  width: 100%;
+  max-width: var(--content-max);
+  margin-top: clamp(40px, 6vw, 72px);
+  margin-inline: auto;
+}
+
+/* Product shot: shown whole, no frame, no border, no radius */
+.hero__stage--product .media__img,
+.hero__stage--photo .media__img {
+  position: static;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(72svh, 760px);
+  object-fit: contain;
+}
+
+/* Photo with its own background: rounded like a tile */
+.hero__stage--photo {
+  overflow: hidden;
+  border-radius: var(--r-tile);
+}
+
+.hero__stage--photo .media__img {
+  object-fit: cover;
+}
+
+.hero--tall .hero__stage--product .media__img,
+.hero--tall .hero__stage--photo .media__img {
+  max-height: min(84svh, 900px);
+}
+
+.hero__stage--video {
+  --media-radius: var(--r-tile);
+}
+
+.hero__stage--illustration {
+  display: flex;
+  justify-content: center;
+}
+
+.hero__stage--illustration .hero__bottle {
+  width: auto;
+  height: clamp(300px, 22vw + 180px, 500px);
+}
+
+.hero--tall .hero__stage--illustration .hero__bottle {
+  height: clamp(340px, 28vw + 180px, 600px);
+}
+
+/* split: text left, rounded media tile right */
 .hero--split .hero__inner {
   display: grid;
-  gap: clamp(32px, 5vw, 72px);
+  gap: clamp(40px, 5vw, 72px);
   align-items: center;
-  padding-block: clamp(32px, 6vw, 64px) clamp(40px, 7vw, 96px);
+  padding-block: clamp(40px, 6vw, 80px) clamp(56px, 7vw, 96px);
+}
+
+.hero--split .hero__heading {
+  font-size: calc(clamp(3rem, 1.6rem + 3.6vw, 5rem) * var(--heading-scale, 1));
 }
 
 @media (min-width: 990px) {
   .hero--split .hero__inner {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     min-height: min(80svh, 820px);
   }
 
@@ -65,28 +182,34 @@
 
 .hero__media {
   --ratio: 4 / 5;
-  clip-path: inset(0 round var(--r-card));
-  transition: clip-path calc(var(--dur-reveal) * 1.2) var(--ease-out);
+  --media-radius: var(--r-tile);
 }
 
-.hero__media .media__img,
-.hero__media .hero__video {
+.hero__media--illustration .hero__bottle {
+  position: absolute;
+  inset: 14% 0;
+  width: 100%;
+  height: 72%;
+}
+
+/* The product arrives: rises 24px and fades in, one beat after the text */
+.hero__stage,
+.hero__media {
+  opacity: 1;
   transform: none;
-  transition: transform calc(var(--dur-reveal) * 1.2) var(--ease-out);
+  transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out);
+  transition-delay: 240ms;
 }
 
 @starting-style {
+  .hero__stage,
   .hero__media {
-    clip-path: inset(0 0 100% 0 round var(--r-card));
-  }
-
-  .hero__media .media__img,
-  .hero__media .hero__video {
-    transform: scale(1.04);
+    opacity: 0;
+    transform: translateY(24px);
   }
 }
 
-/* media pieces shared by both layouts */
+/* media pieces shared by the layouts */
 .hero__video {
   position: absolute;
   inset: 0;
@@ -100,42 +223,19 @@
   object-fit: cover;
 }
 
-.hero__ornament {
-  position: absolute;
-  inset: 0;
-  color: rgb(var(--c-gold));
-  background: radial-gradient(ellipse 70% 60% at 50% 42%, rgba(var(--c-gold), 0.25), rgba(var(--c-gold), 0) 70%);
-}
-
-.hero__branch {
-  position: absolute;
-  inset: 10%;
-  width: 80%;
-  height: 80%;
-}
-
-/* full-bleed layout */
+/* full-bleed: media behind, text over a scheme-3 scrim */
 .hero--full .hero__bg {
   position: absolute;
   inset: 0;
   overflow: hidden;
   background: rgb(var(--c-surface));
   opacity: 1;
-  transition: opacity calc(var(--dur-reveal) * 1.2) ease;
-}
-
-.hero--full .hero__bg .media__img {
-  transform: none;
-  transition: transform calc(var(--dur-reveal) * 1.2) var(--ease-out);
+  transition: opacity var(--dur-reveal) ease;
 }
 
 @starting-style {
   .hero--full .hero__bg {
     opacity: 0;
-  }
-
-  .hero--full .hero__bg .media__img {
-    transform: scale(1.04);
   }
 }
 
@@ -164,17 +264,14 @@
   min-height: 88svh;
 }
 
+.hero--full .hero__content {
+  max-width: 40rem;
+}
+
 .hero--text-center .hero__content {
+  align-items: center;
   margin-inline: auto;
   text-align: center;
-}
-
-.hero--text-center .hero__subheading {
-  margin-inline: auto;
-}
-
-.hero--text-center .hero__actions {
-  justify-content: center;
 }
 
 .hero--text-right .hero__content {
@@ -182,71 +279,112 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__media {
-    transition: opacity var(--dur-base) ease;
-  }
-
-  .hero__media .media__img,
-  .hero__media .hero__video,
-  .hero--full .hero__bg .media__img {
-    transition: none;
-  }
-
+  .hero__stage,
+  .hero__media,
   .hero--full .hero__bg {
     transition: opacity var(--dur-base) ease;
+    transition-delay: 0ms;
+  }
+
+  @starting-style {
+    .hero__stage,
+    .hero__media {
+      opacity: 0;
+      transform: none;
+    }
   }
 
   .hero__video {
     display: none;
   }
-
-  @starting-style {
-    .hero__media {
-      clip-path: inset(0 round var(--r-card));
-      opacity: 0;
-    }
-
-    .hero__media .media__img,
-    .hero__media .hero__video,
-    .hero--full .hero__bg .media__img {
-      transform: none;
-    }
-  }
 }
 
 /* === section: featured-collection ===
-   Header row (eyebrow, heading, description | view-all link) over a product
-   grid. Cards and their stagger come from card-product / components.css. */
-.featured-collection__intro {
-  min-width: 0;
-}
-
+   Centred header (eyebrow, h2, muted lead) over product tiles: 3-up desktop
+   (columns setting), 2-up tablet and phone, then a centred "Shop all ›".
+   Tiles and their reveal come from card-product / components.css; phones
+   get compact tiles (16px padding, 15px titles). */
 .featured-collection__description {
-  max-width: 52ch;
-  font-size: 1.0625rem;
-}
-
-.featured-collection__view-all {
-  flex-shrink: 0;
-  min-height: 44px;
-  font-weight: var(--font-body-weight-bold);
+  max-width: var(--text-max);
 }
 
 .featured-collection__grid {
-  row-gap: clamp(28px, 4vw, 48px);
+  --grid-gap: clamp(12px, 1.6vw, 24px);
 }
 
 .featured-collection__item {
+  display: flex;
   min-width: 0;
+}
+
+.featured-collection__item > .card {
+  flex: 1 1 auto;
+}
+
+/* 2-up below 990px: an odd last tile sits centred, not stranded at the left */
+@media (max-width: 989px) {
+  .featured-collection__item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc((100% - var(--grid-gap)) / 2);
+  }
+}
+
+.featured-collection__footer {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(32px, 4vw, 56px);
 }
 
 .featured-collection__empty .h4 {
   margin: 0;
 }
 
+.featured-collection__empty .icon {
+  color: rgb(var(--c-gold));
+}
+
+@media (max-width: 749px) {
+  .featured-collection__grid {
+    --grid-gap: 12px;
+  }
+
+  .featured-collection .card--product {
+    padding: 16px 16px 20px;
+    border-radius: var(--r-lg);
+  }
+
+  .featured-collection .card--product .card__media {
+    margin-bottom: 12px;
+  }
+
+  .featured-collection .card__title {
+    font-size: 0.9375rem;
+    line-height: 1.24;
+    letter-spacing: -0.01em;
+  }
+
+  .featured-collection .card--product .price {
+    font-size: 0.875rem;
+  }
+
+  /* Compare-at and sale price wrap as whole amounts, centred, never mid-price */
+  .featured-collection .card--product .price__sale {
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 6px;
+    row-gap: 0;
+  }
+
+  .featured-collection .card--product .price__item {
+    white-space: nowrap;
+  }
+}
+
 /* === section: values-strip ===
-   Four small promises: 44px icon disc, .h5 title, .small body. Two columns on
-   phones, four from 990px. Items reveal with a 50ms stagger. */
+   An apple.com feature row: centred items, a 40px line icon in the accent
+   detail colour (no disc), .h5 title, muted .small body. Four across from
+   990px, two on tablets, one on phones (centred lines stay short). */
 .values-strip--divider-top {
   border-top: 1px solid rgb(var(--c-line));
 }
@@ -256,45 +394,66 @@
 }
 
 .values-strip__grid {
-  row-gap: clamp(28px, 4vw, 44px);
+  row-gap: clamp(40px, 5vw, 56px);
+  column-gap: clamp(16px, 3vw, 40px);
 }
 
 .values-strip__item {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-2);
   min-width: 0;
+  text-align: center;
 }
 
 .values-strip__icon {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  margin-bottom: var(--space-2);
-  border-radius: var(--r-pill);
-  background: rgb(var(--c-surface));
+  margin-bottom: var(--space-3);
   color: rgb(var(--c-gold));
+}
+
+.values-strip__icon .icon {
+  stroke-width: 1.3;
 }
 
 .values-strip__title {
   margin: 0;
+  max-width: 14em;
   text-wrap: balance;
 }
 
 .values-strip__body {
   margin: 0;
-  max-width: 32ch;
+  max-width: 34ch;
   text-wrap: pretty;
 }
 
+/* Two columns on tablets: an odd last value centres on its own row */
+@media (min-width: 750px) and (max-width: 989px) {
+  .values-strip__item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 749px) {
+  .values-strip__icon .icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 /* === section: image-with-text ===
-   12-column editorial pair from 990px: image 6/12, text 5/12, one empty
-   column between. Stacked below, text first when the layout says so. */
+   Big rounded media (--r-tile) and a short text column. From 1200px the
+   media takes 7 of 12 columns and the text 5, inset from the media; 990-1199px
+   splits evenly. Stacked below, text first when the layout says so. */
 .image-with-text__grid {
   display: grid;
-  gap: clamp(28px, 5vw, 56px);
+  gap: clamp(32px, 5vw, 56px);
+}
+
+.image-with-text__media {
+  --media-radius: var(--r-tile);
 }
 
 .image-with-text--text-first .image-with-text__content {
@@ -309,19 +468,21 @@
   }
 
   .image-with-text__media {
-    grid-column: 1 / 7;
+    grid-column: 1 / 8;
   }
 
   .image-with-text__content {
     grid-column: 8 / 13;
+    padding-inline-start: clamp(16px, 3vw, 48px);
   }
 
   .image-with-text--text-first .image-with-text__content {
     grid-column: 1 / 6;
+    padding-inline: 0 clamp(16px, 3vw, 48px);
   }
 
   .image-with-text--text-first .image-with-text__media {
-    grid-column: 7 / 13;
+    grid-column: 6 / 13;
   }
 
   .image-with-text--align-top .image-with-text__grid {
@@ -337,38 +498,62 @@
   }
 }
 
+/* Small laptops: an even split keeps the h2 to three lines */
+@media (min-width: 990px) and (max-width: 1199px) {
+  .image-with-text__media {
+    grid-column: 1 / 7;
+  }
+
+  .image-with-text__content {
+    grid-column: 7 / 13;
+  }
+
+  .image-with-text--text-first .image-with-text__content {
+    grid-column: 1 / 7;
+  }
+
+  .image-with-text--text-first .image-with-text__media {
+    grid-column: 7 / 13;
+  }
+}
+
+.image-with-text__media--illustration .image-with-text__bottle {
+  position: absolute;
+  inset: 16% 0;
+  width: 100%;
+  height: 68%;
+}
+
 .image-with-text__content {
   min-width: 0;
 }
 
-.image-with-text__content > * + * {
-  margin-top: var(--space-4);
-}
-
-.image-with-text__eyebrow + * {
+.image-with-text__eyebrow + .image-with-text__heading {
   margin-top: var(--space-3);
 }
 
 .image-with-text__text {
-  margin-top: var(--space-5);
+  margin-top: clamp(16px, 2vw, 24px);
   max-width: 36rem;
+  font-size: 1.0625rem;
+  line-height: 1.47;
   color: rgb(var(--c-ink-2));
 }
 
 .image-with-text__cta {
-  margin-top: var(--space-6);
-}
-
-.image-with-text__cta .link {
-  min-height: 44px;
-  font-weight: var(--font-body-weight-bold);
+  margin-top: clamp(16px, 2vw, 24px);
 }
 
 /* === section: scripture-quote ===
-   Eyebrow between gold hairlines, a 30ch serif italic verse, gold reference.
-   Sizes override .scripture__quote from components.css. */
+   An Apple "statement": optional eyebrow, the verse as a semibold headline
+   with curly quotes (.scripture__quote), the reference below as a quiet
+   eyebrow. No ornaments. Extra breathing room at the default spacing. */
+.scripture-quote:not(.section--tight):not(.section--none) {
+  padding-block: calc(var(--section-y) * 1.25);
+}
+
 .scripture-quote__figure {
-  gap: var(--space-5);
+  gap: 0;
   align-items: flex-start;
 }
 
@@ -377,22 +562,20 @@
   text-align: center;
 }
 
-.scripture-quote__ornament {
-  width: 100%;
-  max-width: 22rem;
+.scripture-quote__eyebrow {
+  margin-bottom: clamp(12px, 1.6vw, 20px);
 }
 
 .scripture-quote__blockquote {
   margin: 0;
   width: 100%;
+  max-width: var(--content-max);
 }
 
-/* 30ch is measured in the quote's own (large serif) font, so it lives on
-   the text element, not on the blockquote. */
 .scripture-quote__text {
-  max-width: 30ch;
-  font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
-  line-height: 1.22;
+  font-size: calc(clamp(1.75rem, 1rem + 2.8vw, 3rem) * var(--heading-scale, 1));
+  line-height: 1.12;
+  letter-spacing: -0.005em;
 }
 
 .scripture-quote--center .scripture-quote__text {
@@ -400,64 +583,50 @@
 }
 
 .scripture-quote__ref {
-  margin: 0;
+  margin: clamp(20px, 2.4vw, 32px) 0 0;
 }
 
 /* === section: steps ===
-   Centred heading and intro, then up to three columns, one on phones. Each
-   step: optional 4:3 image, a 3rem gold serif numeral, a hairline, .h4 title,
-   .small body. The footnote under the grid carries the external-use line. */
-.steps__header {
-  gap: var(--space-4);
-}
-
+   Centred heading and intro, then flat tiles (--c-surface): a large numeral
+   in the accent detail colour, .h4 title, muted body. Three across from
+   750px, stacked on phones; the external-use caption sits centred below. */
 .steps__intro {
-  max-width: 40rem;
+  max-width: var(--text-max);
 }
 
 .steps__grid {
-  row-gap: clamp(32px, 5vw, 48px);
-  column-gap: clamp(24px, 4vw, 56px);
+  --grid-gap: clamp(12px, 1.6vw, 24px);
 }
 
 .steps__item {
-  display: flex;
-  flex-direction: column;
   min-width: 0;
+  padding-block: clamp(32px, 4vw, 56px);
 }
 
 .steps__media {
-  margin-bottom: var(--space-5);
+  --media-radius: var(--r-lg);
+  margin-bottom: clamp(20px, 2.4vw, 32px);
 }
 
 .steps__numeral {
-  font-family: var(--font-heading);
-  font-weight: var(--font-heading-weight);
-  font-size: 3rem;
+  display: block;
+  font-weight: 600;
   line-height: 1;
-  letter-spacing: -0.02em;
   color: rgb(var(--c-gold));
   font-variant-numeric: lining-nums tabular-nums;
 }
 
-.steps__rule {
-  display: block;
-  width: 100%;
-  height: 1px;
-  margin-block: var(--space-4);
-  background: rgb(var(--c-line));
-}
-
 .steps__title {
-  margin-bottom: var(--space-2);
+  margin-top: clamp(16px, 2vw, 28px);
 }
 
 .steps__body {
-  max-width: 38ch;
+  margin-top: var(--space-2);
+  max-width: 30ch;
   text-wrap: pretty;
 }
 
 .steps__footnote {
-  margin-top: clamp(28px, 4vw, 48px);
+  margin-top: clamp(24px, 3vw, 40px);
   text-align: center;
 }

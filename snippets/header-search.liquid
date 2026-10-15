@@ -1,114 +1,125 @@
 {%- comment -%}
-  Search drawer (top panel). Rendered by sections/header.liquid, so
-  section.settings.popular_* are the header section's settings.
+  Search panel. Rendered by sections/header.liquid, so section.settings.popular_*
+  are the header section's settings.
+  Accepts:
+  - color_scheme: {String} the header's colour scheme (optional)
+  ≥ 750px: a translucent panel that drops from under the bar (the viewport
+  wrapper clips it at the bar's bottom edge, so it slides out from beneath).
+  < 750px: a full-screen overlay over the bar.
+  Both move on the Drawer base spring; geometry lives in section-header.css.
   Contract: <search-drawer id="SearchDrawer" data-drawer> from theme.js;
   <predictive-search> from assets/predictive-search.js when enabled.
 {%- endcomment -%}
 {%- liquid
   assign predictive = settings.predictive_search_enabled
-  assign has_popular = false
-  if section.settings.popular_1_label != blank and section.settings.popular_1_url != blank
-    assign has_popular = true
-  endif
-  if section.settings.popular_2_label != blank and section.settings.popular_2_url != blank
-    assign has_popular = true
-  endif
-  if section.settings.popular_3_label != blank and section.settings.popular_3_url != blank
-    assign has_popular = true
-  endif
+  assign quick_count = 0
+  for i in (1..5)
+    assign label_key = 'popular_' | append: i | append: '_label'
+    assign url_key = 'popular_' | append: i | append: '_url'
+    if section.settings[label_key] != blank and section.settings[url_key] != blank
+      assign quick_count = quick_count | plus: 1
+    endif
+  endfor
 -%}
 <search-drawer id="SearchDrawer" data-drawer class="search-drawer" aria-hidden="true" inert>
   <div class="drawer__backdrop" data-drawer-backdrop></div>
-  <div
-    class="drawer__panel drawer__panel--top search-drawer__panel"
-    data-drawer-panel
-    role="dialog"
-    aria-modal="true"
-    aria-label="{{ 'search.title' | t }}"
-  >
-    <div class="search-drawer__inner page-width">
-      <div class="search-drawer__top">
-        {%- if predictive -%}
-          <predictive-search class="search-drawer__predictive" data-loading-text="{{ 'search.loading' | t }}" data-error-text="{{ 'search.error' | t }}">
-        {%- endif -%}
-        <form action="{{ routes.search_url }}" method="get" role="search" class="search-drawer__form">
-          <label for="SearchDrawer-Input" class="visually-hidden">{{ 'search.search' | t }}</label>
-          <div class="search-drawer__field">
-            <button type="submit" class="search-drawer__submit" aria-label="{{ 'search.search' | t }}">
-              {%- render 'icon', name: 'search', size: 22 -%}
-            </button>
-            <input
-              id="SearchDrawer-Input"
-              class="search-drawer__input"
-              type="search"
-              name="q"
-              value="{{ search.terms | escape }}"
-              placeholder="{{ 'search.placeholder' | t }}"
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="off"
-              spellcheck="false"
-              data-drawer-focus
-              {%- if predictive %}
-                role="combobox"
-                aria-expanded="false"
-                aria-controls="predictive-search-results"
-                aria-autocomplete="list"
-                aria-haspopup="listbox"
-              {%- endif %}
-            >
-            <input type="hidden" name="options[prefix]" value="last">
-            <button type="button" class="search-drawer__reset" data-search-reset aria-label="{{ 'search.clear' | t }}">
-              {%- render 'icon', name: 'close', size: 20 -%}
-            </button>
-          </div>
-
+  <div class="search-drawer__viewport">
+    <div
+      class="drawer__panel drawer__panel--top search-drawer__panel{% if color_scheme != blank %} color-{{ color_scheme }}{% endif %}"
+      data-drawer-panel
+      role="dialog"
+      aria-modal="true"
+      aria-label="{{ 'search.title' | t }}"
+    >
+      <div class="search-drawer__inner page-width page-width--medium">
+        <div class="search-drawer__top">
           {%- if predictive -%}
-            <div class="search-drawer__skeleton" aria-hidden="true">
-              <div class="search-drawer__skeleton-row">
-                <span class="skeleton search-drawer__skeleton-media"></span>
-                <span class="search-drawer__skeleton-lines">
-                  <span class="skeleton search-drawer__skeleton-line"></span>
-                  <span class="skeleton search-drawer__skeleton-line search-drawer__skeleton-line--short"></span>
-                </span>
-              </div>
-              <div class="search-drawer__skeleton-row">
-                <span class="skeleton search-drawer__skeleton-media"></span>
-                <span class="search-drawer__skeleton-lines">
-                  <span class="skeleton search-drawer__skeleton-line"></span>
-                  <span class="skeleton search-drawer__skeleton-line search-drawer__skeleton-line--short"></span>
-                </span>
-              </div>
-            </div>
-            <div id="predictive-search-results" class="search-drawer__results" aria-live="polite"></div>
-            <span class="search-drawer__status visually-hidden" role="status" aria-live="polite" data-predictive-search-status></span>
+            <predictive-search class="search-drawer__predictive" data-loading-text="{{ 'search.loading' | t }}" data-error-text="{{ 'search.error' | t }}">
           {%- endif -%}
-        </form>
-        {%- if predictive -%}
-          </predictive-search>
-        {%- endif -%}
+          <form action="{{ routes.search_url }}" method="get" role="search" class="search-drawer__form">
+            <label for="SearchDrawer-Input" class="visually-hidden">{{ 'search.search' | t }}</label>
+            <div class="search-drawer__field">
+              <button type="submit" class="search-drawer__submit" aria-label="{{ 'search.search' | t }}">
+                {%- render 'icon', name: 'search', size: 22 -%}
+              </button>
+              <input
+                id="SearchDrawer-Input"
+                class="search-drawer__input"
+                type="search"
+                name="q"
+                value="{{ search.terms | escape }}"
+                placeholder="{{ 'search.placeholder' | t }}"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                enterkeyhint="search"
+                data-drawer-focus
+                {%- if predictive %}
+                  role="combobox"
+                  aria-expanded="false"
+                  aria-controls="predictive-search-results"
+                  aria-autocomplete="list"
+                  aria-haspopup="listbox"
+                {%- endif %}
+              >
+              <input type="hidden" name="options[prefix]" value="last">
+              <button type="button" class="search-drawer__reset" data-search-reset aria-label="{{ 'search.clear' | t }}">
+                {%- render 'icon', name: 'close', size: 12 -%}
+              </button>
+            </div>
 
-        <button type="button" class="drawer__close search-drawer__close" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
-          {%- render 'icon', name: 'close', size: 22 -%}
-        </button>
-      </div>
+            {%- if predictive -%}
+              <div class="search-drawer__skeleton" aria-hidden="true">
+                {%- for i in (1..2) -%}
+                  <div class="search-drawer__skeleton-row">
+                    <span class="skeleton search-drawer__skeleton-media"></span>
+                    <span class="search-drawer__skeleton-lines">
+                      <span class="skeleton search-drawer__skeleton-line"></span>
+                      <span class="skeleton search-drawer__skeleton-line search-drawer__skeleton-line--short"></span>
+                    </span>
+                  </div>
+                {%- endfor -%}
+              </div>
+              <div id="predictive-search-results" class="search-drawer__results" aria-live="polite"></div>
+              <span class="search-drawer__status visually-hidden" role="status" aria-live="polite" data-predictive-search-status></span>
+            {%- endif -%}
+          </form>
+          {%- if predictive -%}
+            </predictive-search>
+          {%- endif -%}
 
-      {%- if has_popular -%}
-        <div class="search-drawer__popular" data-search-popular>
-          <p class="eyebrow eyebrow--ink">{{ 'search.popular' | t }}</p>
-          <ul class="search-drawer__popular-list" role="list">
-            {%- if section.settings.popular_1_label != blank and section.settings.popular_1_url != blank -%}
-              <li><a href="{{ section.settings.popular_1_url }}" class="chip">{{ section.settings.popular_1_label | escape }}</a></li>
-            {%- endif -%}
-            {%- if section.settings.popular_2_label != blank and section.settings.popular_2_url != blank -%}
-              <li><a href="{{ section.settings.popular_2_url }}" class="chip">{{ section.settings.popular_2_label | escape }}</a></li>
-            {%- endif -%}
-            {%- if section.settings.popular_3_label != blank and section.settings.popular_3_url != blank -%}
-              <li><a href="{{ section.settings.popular_3_url }}" class="chip">{{ section.settings.popular_3_label | escape }}</a></li>
-            {%- endif -%}
-          </ul>
+          <button type="button" class="drawer__close search-drawer__close" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
+            {%- render 'icon', name: 'close', size: 16 -%}
+          </button>
         </div>
-      {%- endif -%}
+
+        {%- if quick_count > 0 -%}
+          <div class="search-drawer__popular" data-search-popular>
+            <h2 class="search-drawer__heading" id="SearchDrawer-QuickLinks">{{ 'footer.quick_links' | t }}</h2>
+            <ul class="search-drawer__quick-list" role="list" aria-labelledby="SearchDrawer-QuickLinks">
+              {%- assign item_index = 0 -%}
+              {%- for i in (1..5) -%}
+                {%- liquid
+                  assign label_key = 'popular_' | append: i | append: '_label'
+                  assign url_key = 'popular_' | append: i | append: '_url'
+                  assign quick_label = section.settings[label_key]
+                  assign quick_url = section.settings[url_key]
+                -%}
+                {%- if quick_label != blank and quick_url != blank -%}
+                  <li style="--i: {{ item_index }};">
+                    <a href="{{ quick_url }}" class="search-drawer__quick-link">
+                      {%- render 'icon', name: 'chevron-right', size: 12 -%}
+                      <span>{{ quick_label | escape }}</span>
+                    </a>
+                  </li>
+                  {%- assign item_index = item_index | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 </search-drawer>

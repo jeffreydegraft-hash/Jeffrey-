@@ -1,8 +1,10 @@
 {%- comment -%}
   Predictive search results. Fetched by assets/predictive-search.js via
   routes.predictive_search_url?section_id=predictive-search; the JS copies the
-  innerHTML of #predictive-search-results into the search drawer.
-  Each <ul> is its own listbox so a heading never sits between options.
+  innerHTML of #predictive-search-results into the search panel.
+  Apple-style rows: 56px rounded thumbnail, title, price; quiet 12px group
+  headings. Each <ul> is its own listbox so a heading never sits between
+  options.
 {%- endcomment -%}
 <div id="predictive-search-results">
   {%- if predictive_search.performed -%}
@@ -22,7 +24,7 @@
         {%- if products.size > 0 -%}
           <div class="predictive-search__main">
             <div class="predictive-search__group">
-              <h3 id="PredictiveSearch-Products" class="predictive-search__heading eyebrow eyebrow--ink">{{ 'search.products' | t }}</h3>
+              <h3 id="PredictiveSearch-Products" class="predictive-search__heading">{{ 'search.products' | t }}</h3>
               <ul class="predictive-search__list" role="listbox" aria-labelledby="PredictiveSearch-Products">
                 {%- for product in products -%}
                   <li id="PredictiveSearch-Product-{{ forloop.index }}" class="predictive-search__item" role="option" aria-selected="false">
@@ -46,7 +48,7 @@
           <div class="predictive-search__aside">
             {%- if queries.size > 0 -%}
               <div class="predictive-search__group">
-                <h3 id="PredictiveSearch-Queries" class="predictive-search__heading eyebrow eyebrow--ink">{{ 'search.suggestions' | t }}</h3>
+                <h3 id="PredictiveSearch-Queries" class="predictive-search__heading">{{ 'search.suggestions' | t }}</h3>
                 <ul class="predictive-search__list" role="listbox" aria-labelledby="PredictiveSearch-Queries">
                   {%- for query in queries -%}
                     <li id="PredictiveSearch-Query-{{ forloop.index }}" class="predictive-search__item" role="option" aria-selected="false">
@@ -62,7 +64,7 @@
 
             {%- if collections.size > 0 -%}
               <div class="predictive-search__group">
-                <h3 id="PredictiveSearch-Collections" class="predictive-search__heading eyebrow eyebrow--ink">{{ 'search.collections' | t }}</h3>
+                <h3 id="PredictiveSearch-Collections" class="predictive-search__heading">{{ 'search.collections' | t }}</h3>
                 <ul class="predictive-search__list" role="listbox" aria-labelledby="PredictiveSearch-Collections">
                   {%- for collection in collections -%}
                     <li id="PredictiveSearch-Collection-{{ forloop.index }}" class="predictive-search__item" role="option" aria-selected="false">
@@ -77,7 +79,7 @@
 
             {%- if pages.size > 0 -%}
               <div class="predictive-search__group">
-                <h3 id="PredictiveSearch-Pages" class="predictive-search__heading eyebrow eyebrow--ink">{{ 'search.pages' | t }}</h3>
+                <h3 id="PredictiveSearch-Pages" class="predictive-search__heading">{{ 'search.pages' | t }}</h3>
                 <ul class="predictive-search__list" role="listbox" aria-labelledby="PredictiveSearch-Pages">
                   {%- for page in pages -%}
                     <li id="PredictiveSearch-Page-{{ forloop.index }}" class="predictive-search__item" role="option" aria-selected="false">
@@ -92,7 +94,7 @@
 
             {%- if articles.size > 0 -%}
               <div class="predictive-search__group">
-                <h3 id="PredictiveSearch-Articles" class="predictive-search__heading eyebrow eyebrow--ink">{{ 'search.articles' | t }}</h3>
+                <h3 id="PredictiveSearch-Articles" class="predictive-search__heading">{{ 'search.articles' | t }}</h3>
                 <ul class="predictive-search__list" role="listbox" aria-labelledby="PredictiveSearch-Articles">
                   {%- for article in articles -%}
                     <li id="PredictiveSearch-Article-{{ forloop.index }}" class="predictive-search__item" role="option" aria-selected="false">
@@ -114,9 +116,9 @@
 
         <ul class="predictive-search__footer" role="listbox" aria-label="{{ 'search.see_all_results' | t }}">
           <li id="PredictiveSearch-All" class="predictive-search__item predictive-search__item--all" role="option" aria-selected="false">
-            <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&options%5Bprefix%5D=last" class="predictive-search__all link link--arrow" tabindex="-1">
+            <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&options%5Bprefix%5D=last" class="predictive-search__all link link--chevron" tabindex="-1">
               <span>{{ 'search.see_all_results' | t }}</span>
-              {%- render 'icon', name: 'arrow-right', size: 18 -%}
+              {%- render 'icon', name: 'chevron-right', size: 10 -%}
             </a>
           </li>
         </ul>

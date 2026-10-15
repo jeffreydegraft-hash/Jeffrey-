@@ -106,7 +106,8 @@
         "enable_zoom": true,
         "enable_sticky_info": true,
         "padding": "default",
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-1",
+        "enable_sticky_bar": true
       }
     },
     "related": {
@@ -115,7 +116,7 @@
         "heading": "You may also like",
         "products_to_show": 4,
         "padding": "default",
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-2"
       }
     }
   },

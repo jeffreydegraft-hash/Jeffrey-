@@ -1,18 +1,19 @@
 {%- comment -%}
   One product media item for the gallery stage. Rendered inside a .media box
-  (the slide) so the img/video/iframe fills it.
+  (the slide) so the img/video/iframe fills it. Images sit on the tile
+  surface with object-fit: contain (assets/section-product.css).
 
   Accepts:
   - media: {Object} product media (image | video | external_video | model)
   - product: {Object} product, for alt fallback
   - index: {Number} 1-based position, used in accessible labels
   - loading: {String} 'eager' for the active image (adds fetchpriority=high), else 'lazy'
-  - sizes: {String} sizes attribute, default '(min-width: 990px) 55vw, 100vw'
+  - sizes: {String} sizes attribute, default '(min-width: 1300px) 700px, (min-width: 990px) 55vw, 100vw'
   - enable_zoom: {Boolean} wrap images in a lightbox opener
   Usage: {% render 'product-media', media: media, product: product, index: forloop.index, loading: 'eager', enable_zoom: true %}
 {%- endcomment -%}
 {%- liquid
-  assign sizes = sizes | default: '(min-width: 990px) 55vw, 100vw'
+  assign sizes = sizes | default: '(min-width: 1300px) 700px, (min-width: 990px) 55vw, 100vw'
   assign loading = loading | default: 'lazy'
   assign media_alt = media.alt | default: product.title
   if loading == 'eager'
@@ -33,6 +34,7 @@
         data-zoom-height="{{ media.preview_image.height }}"
         data-zoom-alt="{{ media_alt | escape }}"
         aria-label="{{ 'products.product.media.open_media' | t: index: index }}"
+        aria-haspopup="dialog"
       >
         {%- render 'image', image: media.preview_image, sizes: sizes, widths: '400, 600, 800, 1000, 1200, 1600', class: 'media-gallery__img', loading: loading, fetchpriority: fetchpriority, alt: media_alt -%}
         <span class="media-gallery__zoom-hint" aria-hidden="true">{% render 'icon', name: 'zoom', size: 18 %}</span>
@@ -41,7 +43,7 @@
       {%- render 'image', image: media.preview_image, sizes: sizes, widths: '400, 600, 800, 1000, 1200, 1600', class: 'media-gallery__img', loading: loading, fetchpriority: fetchpriority, alt: media_alt -%}
     {%- endif -%}
   {%- when 'video' -%}
-    {{ media | video_tag: controls: true, muted: true, loop: true, preload: 'metadata', class: 'media-gallery__video' }}
+    {{ media | video_tag: controls: true, muted: true, loop: true, preload: 'metadata', class: 'media-gallery__video', playsinline: true }}
   {%- when 'external_video' -%}
     {{ media | external_video_tag: class: 'media-gallery__iframe', loading: 'lazy' }}
   {%- when 'model' -%}

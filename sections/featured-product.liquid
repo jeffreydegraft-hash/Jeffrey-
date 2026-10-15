@@ -70,12 +70,8 @@
     assign add_label = 'sections.featured_product.buy' | t
   endif
 
-  assign align_class = ' featured-product--center'
-  if layout == 'split'
-    assign align_class = ' featured-product--start'
-  endif
 -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-product featured-product--{{ layout }}{{ align_class }} featured-product--image-{{ section.settings.image_position }}" id="section-{{ section.id }}">
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-product featured-product--{{ layout }} featured-product--image-{{ section.settings.image_position }}" id="section-{{ section.id }}">
   <div class="page-width">
     <div class="featured-product__grid">
       <div class="featured-product__content" data-reveal>

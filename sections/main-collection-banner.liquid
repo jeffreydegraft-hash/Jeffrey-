@@ -3,6 +3,9 @@
   short muted description, then the collection image as a wide rounded tile.
   The title is above the fold and must be readable the instant the page
   paints, so nothing in this section carries data-reveal.
+  Centred paragraphs stay within about three lines (APPLE-SPEC §6): about
+  120 characters on a phone, 210 at the desktop reading measure. Longer
+  descriptions start-align the header (--medium: phones only, --long: always).
 {%- endcomment -%}
 {%- liquid
   assign show_image = false
@@ -11,8 +14,15 @@
   endif
 
   assign show_description = false
+  assign length_class = ''
   if section.settings.show_description and collection.description != blank
     assign show_description = true
+    assign description_length = collection.description | strip_html | strip | size
+    if description_length > 210
+      assign length_class = ' collection-banner--long'
+    elsif description_length > 120
+      assign length_class = ' collection-banner--medium'
+    endif
   endif
 
   assign spacing_class = ''
@@ -23,7 +33,7 @@
       assign spacing_class = ' section--none'
   endcase
 -%}
-<div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} collection-banner{% if show_image %} collection-banner--has-image{% endif %}" id="section-{{ section.id }}">
+<div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} collection-banner{{ length_class }}{% if show_image %} collection-banner--has-image{% endif %}" id="section-{{ section.id }}">
   <div class="page-width">
     <header class="collection-banner__header">
       {%- if section.settings.eyebrow != blank -%}

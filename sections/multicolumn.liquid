@@ -1,8 +1,13 @@
 {%- comment -%}
-  Multicolumn: a heading and 2–4 columns, each with an optional image or
-  icon, a title, text and a link. Columns can sit flat on the section
-  background or become soft surface cards. Columns stagger in with their
-  own reveal index.
+  Multicolumn: a centred header and 2–4 feature tiles (apple.com "why buy"
+  tiles). As tiles (default) each column is a flat --c-surface panel with
+  radius --r-tile and 40px padding; an optional image bleeds across the top
+  of the tile, otherwise a 40px icon in the accent detail colour leads.
+  Then an .h4 title, muted text and an optional "Learn more ›" link pinned
+  to the bottom. Text is left- or centre-aligned per setting. With tiles off
+  the columns sit flat on the section background with rounded images.
+  Motion inventory: the shared reveal (batch stagger from theme.js) and, on
+  real pointers, a 3% image zoom when the column carries a link.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -25,20 +30,22 @@
   assign col_vw = 100 | divided_by: section.settings.columns
   assign image_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, (min-width: 750px) 50vw, 100vw'
 
+  assign align = section.settings.text_alignment | default: 'left'
+
   assign has_header = false
   if section.settings.heading != blank or section.settings.intro != blank
     assign has_header = true
   endif
 -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} multicolumn{% if section.settings.background_cards %} multicolumn--cards{% endif %} multicolumn--ratio-{{ section.settings.image_ratio }}" id="section-{{ section.id }}">
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} multicolumn{% if section.settings.background_cards %} multicolumn--cards{% else %} multicolumn--flat{% endif %} multicolumn--ratio-{{ section.settings.image_ratio }} multicolumn--align-{{ align }}" id="section-{{ section.id }}">
   <div class="page-width">
     {%- if has_header -%}
-      <header class="section__header multicolumn__header" data-reveal>
+      <header class="section__header section__header--center multicolumn__header" data-reveal>
         {%- if section.settings.heading != blank -%}
           <h2 class="h2 multicolumn__heading">{{ section.settings.heading }}</h2>
         {%- endif -%}
         {%- if section.settings.intro != blank -%}
-          <p class="lead multicolumn__intro">{{ section.settings.intro | escape }}</p>
+          <p class="lead lead--muted multicolumn__intro">{{ section.settings.intro | escape }}</p>
         {%- endif -%}
       </header>
     {%- endif -%}
@@ -46,14 +53,14 @@
     {%- if section.blocks.size > 0 -%}
       <ul class="multicolumn__grid" role="list" style="--multicolumn-cols: {{ section.settings.columns }};">
         {%- for block in section.blocks -%}
-          <li class="multicolumn__item" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>
+          <li class="multicolumn__item{% if section.settings.background_cards %} tile{% endif %}{% if block.settings.image != blank %} multicolumn__item--image{% endif %}" data-reveal {{ block.shopify_attributes }}>
             {%- if block.settings.image != blank -%}
               <div class="multicolumn__media">
                 {%- render 'image', image: block.settings.image, sizes: image_sizes, widths: '300, 400, 500, 600, 800, 1000', class: 'multicolumn__img', loading: 'lazy', ratio: ratio, wrapper_class: 'multicolumn__figure' -%}
               </div>
             {%- elsif block.settings.icon != blank and block.settings.icon != 'none' -%}
               <span class="multicolumn__icon" aria-hidden="true">
-                {%- render 'icon', name: block.settings.icon, size: 22 -%}
+                {%- render 'icon', name: block.settings.icon, size: 40 -%}
               </span>
             {%- endif -%}
             {%- if block.settings.title != blank -%}
@@ -63,9 +70,9 @@
               <div class="rte multicolumn__text">{{ block.settings.text }}</div>
             {%- endif -%}
             {%- if block.settings.link_label != blank and block.settings.link != blank -%}
-              <a href="{{ block.settings.link }}" class="link link--arrow multicolumn__link">
-                {{ block.settings.link_label | escape }}
-                {%- render 'icon', name: 'arrow-right', size: 18 -%}
+              <a href="{{ block.settings.link }}" class="link link--chevron multicolumn__link">
+                {{- block.settings.link_label | escape -}}
+                {%- render 'icon', name: 'chevron-right', size: 16 -%}
               </a>
             {%- endif -%}
           </li>
@@ -73,7 +80,7 @@
       </ul>
     {%- elsif request.design_mode -%}
       <div class="empty-state multicolumn__empty">
-        {%- render 'icon', name: 'info', size: 36 -%}
+        {%- render 'icon', name: 'info', size: 40 -%}
         <p class="muted text-pretty">{{ 'sections.general.add_blocks' | t }}</p>
       </div>
     {%- endif -%}
@@ -123,9 +130,19 @@
     {
       "type": "checkbox",
       "id": "background_cards",
-      "label": "Show columns as cards",
-      "info": "Soft surface panels with rounded corners.",
-      "default": false
+      "label": "Show columns as tiles",
+      "info": "Flat surface panels with rounded corners. Off, columns sit on the section background.",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Column text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
     },
     {
       "type": "color_scheme",

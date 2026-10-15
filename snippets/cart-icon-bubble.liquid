@@ -1,8 +1,10 @@
 {%- comment -%}
-  Inner markup of the header cart link. Rendered in the header and by the
+  Inner markup of the header bag link. Rendered in the header and by the
   cart-icon-bubble section (used by the Section Rendering API to refresh it).
+  The count is a small dark circle with an 11px number (Apple bag badge);
+  cart.js adds .is-bumping to the link for a moment when it changes.
 {%- endcomment -%}
-{%- render 'icon', name: 'bag', size: 22, class: 'header__icon-svg' -%}
+{%- render 'icon', name: 'bag', size: 18, class: 'header__icon-svg' -%}
 <span class="visually-hidden">{{ 'header.cart' | t }}</span>
 <span class="cart-count{% if cart.item_count == 0 %} is-empty{% endif %}" aria-hidden="true">{{ cart.item_count | at_most: 99 }}</span>
 <span class="visually-hidden">{{ 'header.cart_count' | t: count: cart.item_count }}</span>

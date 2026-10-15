@@ -37,7 +37,7 @@
         </header>
       {%- endif -%}
       {%- if section.blocks.size > 0 -%}
-        <dl class="grid grid--mobile-2 values-strip__grid" style="--cols-desktop: {{ cols_desktop }}; --cols-tablet: {{ cols_tablet }};">
+        <dl class="grid values-strip__grid" style="--cols-desktop: {{ cols_desktop }}; --cols-tablet: {{ cols_tablet }};">
           {%- for block in section.blocks -%}
             <div class="values-strip__item" data-reveal style="--i: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
               <span class="values-strip__icon" aria-hidden="true">
@@ -100,7 +100,7 @@
         { "value": "tight", "label": "Tight" },
         { "value": "none", "label": "None" }
       ],
-      "default": "default"
+      "default": "tight"
     }
   ],
   "blocks": [

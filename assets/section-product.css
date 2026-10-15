@@ -1,16 +1,35 @@
 /* ==========================================================================
-   Olivet — section-product.css (product sections)
+   Olivet — section-product.css (product sections, Apple-first)
+   An Apple Store buy flow: a rounded gallery on the tile surface (left,
+   sticky) and a quiet buy column (right): tag, headline, price, option
+   cards, quantity pill, "Add to Bag" pill, trust row, scripture statement
+   card, copy, FAQ-style tabs. Phones: full-bleed snap carousel and a
+   translucent buy bar. Lightbox: centred modal / full screen with
+   drag-to-dismiss (springs in assets/product.js via Olivet.motion).
+
+   Motion here: stage crossfade (opacity), presses (transform .97 / .985),
+   option-card border colour, buy-bar rise (transform + opacity), lightbox
+   scrim/panel fades (opacity; transforms are springs in JS).
+   Every :hover sits behind (hover: hover) and (pointer: fine); reduced
+   motion keeps fades and drops every transform.
    ========================================================================== */
-/* === section: main-product ===
-   Media (7/12) + info (5/12) from 990px. Motion here: the stage crossfade
-   (opacity), thumb/dot presses (transform), the lightbox entrance
-   (opacity + scale .98 via @starting-style) and the payment button press.
-   Every hover sits behind the pointer media query; reduced motion keeps
-   fades and drops every transform. */
+
+/* === section: main-product === */
+
+/* The top stays compact so the gallery starts right under the navigation;
+   the spacing setting controls the space below. */
+.product.section {
+  padding-top: clamp(12px, 2.4vw, 40px);
+}
+
+.product.section--none {
+  padding-top: 0;
+}
+
 .product__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-7);
+  gap: var(--space-5);
 }
 
 .product__media,
@@ -21,26 +40,25 @@
 .product__info-inner {
   display: flex;
   flex-direction: column;
-  max-width: 40rem;
+}
+
+@media (min-width: 750px) and (max-width: 989px) {
+  .product__info-inner {
+    width: 100%;
+    max-width: var(--text-max);
+    margin-inline: auto;
+  }
 }
 
 @media (min-width: 990px) {
   .product__grid {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: clamp(24px, 4vw, 64px);
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: clamp(40px, 5vw, 80px);
     align-items: start;
   }
 
-  .product__media {
-    grid-column: span 7;
-  }
-
-  .product__info {
-    grid-column: span 5;
-  }
-
-  /* The shorter column sticks: the stage for the thumbnail layout, the
-     details for the stacked layout (whose media column runs long). */
+  /* The shorter column stays in view: the gallery for the thumbnail
+     layout, the buy column for the stacked layout (whose media runs long). */
   .product__grid--sticky.product__grid--thumbnails .product__media,
   .product__grid--sticky.product__grid--stacked .product__info {
     position: sticky;
@@ -48,9 +66,17 @@
   }
 }
 
-/* ---- block rhythm ---- */
+/* ---- block rhythm: grouped like the Apple Store buy column ---- */
 .product__block + .product__block {
   margin-top: var(--space-5);
+}
+
+.product__block + :is(.product__block--scripture, .product__block--botanical, .product__block--description, .product__block--text, .product__block--tab) {
+  margin-top: var(--space-7);
+}
+
+.product__block--tab + .product__block--tab {
+  margin-top: 0;
 }
 
 .product__block--theme-word + .product__block--title {
@@ -61,23 +87,25 @@
   margin-top: var(--space-3);
 }
 
+.product__block--price + .product__block {
+  margin-top: var(--space-6);
+}
+
 .product__block--quantity + .product__block--buy-buttons {
   margin-top: var(--space-4);
 }
 
-.product__block--tab + .product__block--tab {
-  margin-top: 0;
+/* ---- tag + headline ---- */
+/* .tag at 14px here: it sits over a headline, like "New" on the Store */
+.product__tag {
+  font-size: 0.875rem;
+  line-height: 1.29;
 }
 
-.product__block--scripture + .product__block--botanical,
-.product__block--botanical + .product__block--description {
-  margin-top: var(--space-6);
-}
-
-/* ---- eyebrow + title ---- */
+/* h1 for the outline, .h2 for the size; capped at 48px so long names
+   stay at two or three lines in the buy column */
 .product__title {
-  font-size: calc(clamp(2rem, 1.3rem + 2.4vw, 3.25rem) * var(--heading-scale, 1));
-  line-height: 1.08;
+  font-size: calc(clamp(2rem, 1.2rem + 2.2vw, 3rem) * var(--heading-scale, 1));
 }
 
 /* ---- price ---- */
@@ -85,7 +113,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  min-height: 32px;
+  min-height: 28px;
   transition: opacity var(--dur-fast) ease;
 }
 
@@ -110,11 +138,15 @@
   font-weight: var(--font-body-weight-bold);
 }
 
-/* ---- variant picker ---- */
+.product__tax-note a {
+  color: rgb(var(--c-accent));
+}
+
+/* ---- variant picker: option cards ---- */
 .variant-picker {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-6);
 }
 
 .variant-picker__group {
@@ -125,55 +157,124 @@
 }
 
 .variant-picker__legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--space-1);
   padding: 0;
   margin-bottom: var(--space-3);
+  font-size: 1.0625rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.24;
+  letter-spacing: -0.022em;
+  color: rgb(var(--c-ink));
 }
 
-.variant-picker__value {
-  font-weight: var(--font-body-weight);
-  color: rgb(var(--c-ink-2));
+.variant-picker__options {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
 }
 
-.variant-picker__pills {
+/* Many values: two columns so the column doesn't run away */
+.variant-picker__options--grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+}
+
+.variant-card {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 60px;
+  padding: 14px 18px;
+  border: 1px solid rgba(var(--c-ink), 0.32);
+  border-radius: var(--r-md);
+  background: rgb(var(--c-bg));
+  color: rgb(var(--c-ink));
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease, transform var(--dur-press) var(--ease-out);
 }
 
-.variant-picker__pill {
-  min-height: 44px;
-  padding-inline: 20px;
-  font-variant-numeric: lining-nums tabular-nums;
+.variant-card:active {
+  transform: scale(0.985);
 }
 
-.variant-picker__input:checked + .variant-picker__pill {
-  color: rgb(var(--c-accent-ink));
-  background: rgb(var(--c-accent));
+.variant-card__name {
+  min-width: 0;
+  font-size: 1.0625rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.24;
+  letter-spacing: -0.022em;
+  overflow-wrap: anywhere;
+  font-variant-numeric: lining-nums;
+}
+
+.variant-card__price {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-ink-2));
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.variant-card__price[hidden] {
+  display: none;
+}
+
+/* Selected: a 2px accent edge (1px border + 1px inset ring, so nothing shifts) */
+.variant-picker__input:checked + .variant-card {
+  border-color: rgb(var(--c-accent));
   box-shadow: inset 0 0 0 1px rgb(var(--c-accent));
 }
 
-.variant-picker__input:checked + .variant-picker__pill.is-unavailable {
-  text-decoration-color: rgba(var(--c-accent-ink), 0.7);
+.variant-picker__input:checked + .variant-card .variant-card__price {
+  color: rgb(var(--c-ink));
 }
 
-.variant-picker__input:focus-visible + .variant-picker__pill {
+.variant-picker__input:focus-visible + .variant-card {
   outline: 2px solid rgb(var(--c-accent));
   outline-offset: 3px;
 }
 
+/* No purchasable variant with the other selections: muted, name struck */
+.variant-card.is-unavailable {
+  color: rgb(var(--c-ink-2));
+}
+
+.variant-card.is-unavailable .variant-card__name {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(var(--c-ink), 0.5);
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .variant-picker__input:checked + .variant-picker__pill:hover {
-    box-shadow: inset 0 0 0 1px rgb(var(--c-accent));
+  .variant-picker__input:not(:checked) + .variant-card:hover {
+    border-color: rgba(var(--c-ink), 0.56);
   }
 }
 
-/* ---- quantity ---- */
+@media (prefers-contrast: more) {
+  .variant-card {
+    border-color: rgb(var(--c-ink));
+  }
+}
+
+/* ---- quantity: label left, pill stepper right ---- */
+.product__quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
 .product__quantity-label {
-  display: block;
-  margin-bottom: var(--space-2);
+  font-size: 1.0625rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.24;
+  letter-spacing: -0.022em;
 }
 
 /* ---- buy buttons ---- */
@@ -189,195 +290,269 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  /* Shopify's accelerated checkout buttons read these */
+  --shopify-accelerated-checkout-button-block-size: 52px;
+  --shopify-accelerated-checkout-button-border-radius: var(--r-btn, var(--r-pill));
+  --shopify-accelerated-checkout-row-gap: var(--space-3);
 }
 
-/* Shopify's dynamic checkout button, styled to sit as the secondary action */
-.shopify-payment-button {
+/* Shopify's dynamic checkout button, restyled as the secondary pill.
+   The element-qualified selector outranks Shopify's injected stylesheet,
+   including its ungated :hover, so nothing sticks after a tap. */
+product-form.product-form .shopify-payment-button {
   width: 100%;
 }
 
-.shopify-payment-button__button {
-  min-height: 48px;
-  border-radius: var(--r-btn);
+product-form.product-form .shopify-payment-button .shopify-payment-button__button {
+  min-height: 52px;
+  border-radius: var(--r-btn, var(--r-pill));
   overflow: hidden;
   transition: transform var(--dur-press) var(--ease-out);
 }
 
-.shopify-payment-button__button--unbranded {
-  display: inline-flex;
+product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded {
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 0 clamp(20px, 2.4vw, 28px);
+  padding: 0 28px;
   font-family: var(--font-body);
-  font-size: 0.9375rem;
-  font-weight: var(--font-body-weight-bold);
-  letter-spacing: 0.01em;
-  line-height: 1.2;
-  color: rgb(var(--c-ink));
-  background: transparent;
-  border: 1px solid rgba(var(--c-ink), 0.28);
-  transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+  font-size: 1.0625rem;
+  font-weight: var(--font-body-weight);
+  line-height: 1.18;
+  letter-spacing: -0.022em;
+  text-decoration: none;
+  color: rgb(var(--c-accent));
+  background-color: transparent;
+  border: 1px solid rgb(var(--c-accent));
+  box-shadow: none;
+  transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease;
 }
 
-.shopify-payment-button__button:active {
-  transform: scale(.97);
+product-form.product-form .shopify-payment-button .shopify-payment-button__button:active {
+  transform: scale(0.97);
 }
 
-.shopify-payment-button__button--unbranded:focus-visible {
+product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded:focus-visible {
   outline: 2px solid rgb(var(--c-accent));
   outline-offset: 3px;
 }
 
-.shopify-payment-button__more-options {
-  margin-top: var(--space-2);
+product-form.product-form .shopify-payment-button .shopify-payment-button__more-options {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: var(--space-1);
   font-size: 0.875rem;
-  color: rgb(var(--c-ink-2));
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-accent));
+  text-decoration: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .shopify-payment-button__button--unbranded:hover {
-    background: rgba(var(--c-ink), 0.04);
-    border-color: rgb(var(--c-ink));
+  product-form.product-form .shopify-payment-button .shopify-payment-button__button--unbranded:hover:not([disabled]) {
+    background-color: rgba(var(--c-accent), 0.06);
+  }
+
+  product-form.product-form .shopify-payment-button .shopify-payment-button__more-options:hover {
+    text-decoration: underline;
   }
 }
 
-/* ---- trust points ---- */
+/* ---- trust row: small icons, 14px text, no rules ---- */
 .product__trust {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4) 0;
-  border-top: 1px solid rgb(var(--c-line));
-  border-bottom: 1px solid rgb(var(--c-line));
+  display: grid;
+  gap: var(--space-3);
 }
 
 .product__trust-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-3);
   font-size: 0.875rem;
-  line-height: 1.5;
-  color: rgb(var(--c-ink-2));
+  line-height: 1.43;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-ink));
   overflow-wrap: anywhere;
 }
 
 .product__trust-item .icon {
-  margin-top: 1px;
-  color: rgb(var(--c-gold));
+  color: rgb(var(--c-ink-2));
 }
 
-/* ---- scripture / botanical / description ---- */
+/* ---- scripture: a quiet, centred statement card ---- */
 .product__scripture {
+  align-items: center;
   gap: var(--space-3);
+  padding: clamp(32px, 3.4vw, 48px) clamp(24px, 3vw, 40px);
+  border-radius: var(--r-card);
+  background: rgb(var(--c-surface));
+  text-align: center;
+}
+
+.product__scripture-label {
+  color: rgb(var(--c-ink-2));
 }
 
 .product__scripture .scripture__quote {
-  font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+  max-width: 28ch;
+  font-size: calc(clamp(1.3125rem, 1.1rem + 0.6vw, 1.75rem) * var(--heading-scale, 1));
+  line-height: 1.17;
+  letter-spacing: 0.007em;
 }
 
+.product__scripture .scripture__ref {
+  font-size: 0.875rem;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-gold));
+}
+
+/* ---- meaning / botanical / description: 17px reading copy ---- */
 .product__meaning {
-  margin-top: var(--space-5);
+  margin-top: var(--space-7);
 }
 
-.product__meaning-text,
-.product__botanical-text {
-  margin-top: var(--space-2);
-  font-size: 0.9375rem;
-  line-height: 1.65;
+.product__copy-title {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.24;
+  letter-spacing: -0.022em;
+  color: rgb(var(--c-ink));
+}
+
+.product__copy-text {
+  margin-top: var(--space-1);
+  font-size: 1.0625rem;
+  line-height: 1.47;
+  letter-spacing: -0.022em;
   color: rgb(var(--c-ink-2));
   text-wrap: pretty;
 }
 
-.product__description.rte {
-  font-size: 1rem;
-  line-height: 1.65;
-}
-
-.product__description.lead {
+.product__description,
+.product__description.rte,
+.product__text.rte {
   font-size: 1.0625rem;
+  line-height: 1.47;
+  letter-spacing: -0.022em;
+  color: rgb(var(--c-ink));
+  text-wrap: pretty;
 }
 
-/* ---- collapsible tabs ---- */
+/* ---- collapsible tabs: Apple FAQ, compact; hairlines between items only ---- */
 .product__accordion {
-  border-top: 0;
-  border-bottom: 1px solid rgb(var(--c-line));
-}
-
-.product__block--tab:first-child .product__accordion,
-.product__block:not(.product__block--tab) + .product__block--tab .product__accordion {
-  border-top: 1px solid rgb(var(--c-line));
-}
-
-.product__accordion .accordion__summary {
-  min-height: 56px;
+  display: block; /* a custom element is inline by default: its hairline needs a block box */
 }
 
 .product__accordion .accordion__title {
   overflow-wrap: anywhere;
 }
 
+.product__block--tab:not(:has(+ .product__block--tab)) .product__accordion {
+  border-bottom: 0;
+}
+
 .product__tab-body {
-  padding-bottom: var(--space-4);
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
   color: rgb(var(--c-ink-2));
 }
 
+.product__tab-body > * + * {
+  margin-top: 0.8em;
+}
+
 .product__ingredients {
-  font-size: 0.875rem;
-  line-height: 1.6;
   color: rgb(var(--c-ink));
 }
 
 .product__policy-links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
+  gap: 0 var(--space-5);
 }
 
-/* ---- share ---- */
-/* ghost padding restored over .btn--sm; pull by padding + 1px border so
-   the icon sits on the column edge */
+/* ---- share: a small text link ---- */
 .product__share-button {
-  padding-inline: var(--space-3);
-  margin-left: calc((var(--space-3) + 1px) * -1);
+  min-height: 44px;
+  gap: 6px;
+  font-size: 0.875rem;
+  letter-spacing: -0.016em;
+  color: rgb(var(--c-accent));
+}
+
+.product__share-button [data-share-label] {
+  transition: opacity var(--dur-base) ease, filter var(--dur-base) ease;
+}
+
+.product__share-button.is-transitioning [data-share-label] {
+  opacity: 0.5;
+  filter: blur(2px);
 }
 
 /* === component: media-gallery ===
-   Mobile: scroll-snap carousel. Desktop thumbnails: 72px column + stage.
-   Desktop stacked: every item in a column. */
+   <990px: native scroll-snap carousel (full bleed on phones), dots below.
+   ≥990px thumbnails: one crossfading stage + centred square thumbnails.
+   ≥990px stacked: every item as its own rounded tile. */
 .media-gallery {
   position: relative;
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .media-gallery__stage {
+  position: relative;
   min-width: 0;
 }
 
+/* A plain overflow scroller: the browser owns the swipe (no touch-action) */
 .media-gallery__track {
   position: relative;
   display: flex;
-  gap: var(--space-2);
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  border-radius: var(--r-card);
+  background: rgb(var(--c-surface));
 }
 
 .media-gallery__track::-webkit-scrollbar {
   display: none;
 }
 
+.media-gallery__slide,
+.media-gallery__placeholder {
+  --ratio: 1 / 1;
+  --media-radius: 0;
+  background: rgb(var(--c-surface));
+}
+
+.media-gallery__placeholder {
+  --media-radius: var(--r-card);
+}
+
 .media-gallery__slide {
   flex: 0 0 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+}
+
+/* Product photography sits on the tile: contained, white backgrounds
+   multiplied into the surface in light schemes */
+.media-gallery__slide .media__img,
+.media-gallery__thumb .media__img {
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+[class*="color-scheme-3"] .media-gallery__slide .media__img,
+[class*="color-scheme-4"] .media-gallery__slide .media__img,
+[class*="color-scheme-3"] .media-gallery__thumb .media__img,
+[class*="color-scheme-4"] .media-gallery__thumb .media__img {
+  mix-blend-mode: normal;
 }
 
 .media-gallery__slide > iframe,
@@ -391,11 +566,11 @@
 }
 
 .media-gallery__slide--video .media-gallery__video {
-  object-fit: cover;
+  object-fit: contain;
   background: rgb(var(--c-surface));
 }
 
-/* zoom opener fills the slide; the hint only shows for real pointers */
+/* zoom opener fills the slide; the hint shows only for real pointers */
 .media-gallery__open {
   position: absolute;
   inset: 0;
@@ -413,16 +588,17 @@
 
 .media-gallery__zoom-hint {
   position: absolute;
-  right: var(--space-3);
-  bottom: var(--space-3);
+  right: var(--space-4);
+  bottom: var(--space-4);
   display: grid;
   place-items: center;
   width: 36px;
   height: 36px;
   border-radius: var(--r-pill);
   color: rgb(var(--c-ink));
-  background: rgba(var(--c-bg), 0.88);
-  box-shadow: var(--shadow-sm);
+  background: var(--material-chrome);
+  -webkit-backdrop-filter: var(--material-blur);
+  backdrop-filter: var(--material-blur);
   opacity: 0;
   transition: opacity var(--dur-fast) ease;
 }
@@ -437,87 +613,26 @@
   }
 }
 
-/* ---- thumbs (desktop only) ---- */
-.media-gallery__thumbs {
-  display: none;
-}
-
-.media-gallery__thumb {
-  position: relative;
-  display: block;
-  width: 72px;
-  border-radius: var(--r-md);
-  transition: transform var(--dur-press) var(--ease-out);
-}
-
-.media-gallery__thumb:active {
-  transform: scale(.97);
-}
-
-.media-gallery__thumb-media {
-  --media-radius: var(--r-md);
-  opacity: 0.82;
-  transition: opacity var(--dur-fast) ease;
-}
-
-.media-gallery__thumb::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.1);
-  transition: box-shadow var(--dur-fast) ease;
-  pointer-events: none;
-}
-
-.media-gallery__thumb[aria-pressed="true"] .media-gallery__thumb-media {
-  opacity: 1;
-}
-
-.media-gallery__thumb[aria-pressed="true"]::after {
-  box-shadow: inset 0 0 0 1.5px rgb(var(--c-ink));
-}
-
-.media-gallery__thumb-badge {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: var(--r-pill);
-  color: rgb(var(--c-ink));
-  background: rgba(var(--c-bg), 0.9);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .media-gallery__thumb:hover .media-gallery__thumb-media {
-    opacity: 1;
-  }
-
-  .media-gallery__thumb:hover::after {
-    box-shadow: inset 0 0 0 1px rgba(var(--c-ink), 0.45);
-  }
-
-  .media-gallery__thumb[aria-pressed="true"]:hover::after {
-    box-shadow: inset 0 0 0 1.5px rgb(var(--c-ink));
+@media (prefers-reduced-transparency: reduce) {
+  .media-gallery__zoom-hint {
+    background: rgb(var(--c-bg));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
-/* ---- dots (mobile only): 44px targets overlapping so the row stays tight ---- */
+/* ---- dots (below 990px): small, quiet, 44px tall targets ---- */
 .media-gallery__dots {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: calc(var(--space-2) * -1);
+  margin-top: var(--space-1);
 }
 
 .media-gallery__dot {
   position: relative;
-  width: 44px;
+  width: 28px;
   height: 44px;
-  margin-inline: -7px;
   border-radius: var(--r-pill);
   transition: transform var(--dur-press) var(--ease-out);
 }
@@ -527,67 +642,150 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
   border-radius: 50%;
-  background: rgba(var(--c-ink), 0.28);
-  transform: translate(-50%, -50%);
-  transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-fast) ease;
+  background: rgba(var(--c-ink), 0.24);
+  transition: background-color var(--dur-fast) ease;
 }
 
 .media-gallery__dot:active {
-  transform: scale(.9);
+  transform: scale(0.9);
 }
 
 .media-gallery__dot[aria-current="true"]::before {
   background: rgb(var(--c-ink));
-  transform: translate(-50%, -50%) scale(1.4);
 }
 
 .media-gallery--single .media-gallery__dots {
   display: none;
 }
 
-/* ---- desktop layouts ---- */
-@media (min-width: 990px) {
-  .media-gallery--thumbnails {
-    grid-template-columns: 72px minmax(0, 1fr);
-    column-gap: var(--space-4);
-    align-items: start;
+/* ---- thumbnails (≥990px, thumbnail layout): small rounded squares ---- */
+.media-gallery__thumbs {
+  display: none;
+}
+
+.media-gallery__thumb {
+  position: relative;
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-md);
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.media-gallery__thumb:active {
+  transform: scale(0.95);
+}
+
+.media-gallery__thumb-media {
+  --ratio: 1 / 1;
+  --media-radius: var(--r-md);
+  background: rgb(var(--c-surface));
+}
+
+/* Selected: a 2px accent ring set 2px off the square */
+.media-gallery__thumb::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 2px solid transparent;
+  border-radius: calc(var(--r-md) + 4px);
+  pointer-events: none;
+  transition: border-color var(--dur-fast) ease;
+}
+
+.media-gallery__thumb[aria-pressed="true"]::after {
+  border-color: rgb(var(--c-accent));
+}
+
+.media-gallery__thumb-badge {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--r-pill);
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-bg));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .media-gallery__thumb[aria-pressed="false"]:hover::after {
+    border-color: rgba(var(--c-ink), 0.16);
+  }
+}
+
+/* ---- phones: full-bleed carousel ---- */
+@media (max-width: 749px) {
+  .product__media {
+    margin-inline: calc(-1 * max(var(--gutter), var(--safe-left))) calc(-1 * max(var(--gutter), var(--safe-right)));
   }
 
-  .media-gallery--thumbnails.media-gallery--single {
-    grid-template-columns: minmax(0, 1fr);
+  .media-gallery {
+    gap: 0;
+  }
+
+  .media-gallery__track,
+  .media-gallery__placeholder {
+    border-radius: 0;
+  }
+}
+
+/* ---- tablets: rounded carousel inside the page width ---- */
+@media (min-width: 750px) and (max-width: 989px) {
+  .media-gallery__slide {
+    max-height: 68svh;
+  }
+}
+
+/* ---- large screens ---- */
+@media (min-width: 990px) {
+  .media-gallery {
+    --thumbs-space: 104px; /* 64px squares + gap + breathing room */
+  }
+
+  .media-gallery--single,
+  .media-gallery--stacked {
+    --thumbs-space: 0px;
   }
 
   .media-gallery--thumbnails .media-gallery__thumbs {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    order: -1;
-    /* never taller than the sticky stage, so every thumb stays reachable */
-    max-height: calc(100svh - var(--header-height) - 36px);
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    gap: var(--space-4);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
     scrollbar-width: none;
-    padding: 6px; /* room for the 2px + 3px-offset :focus-visible ring */
-    margin: -6px; /* keeps the thumbs aligned with the stage edge */
+    padding: 6px; /* room for the selected ring and the focus ring */
+    margin: -6px;
   }
 
   .media-gallery--thumbnails .media-gallery__thumbs::-webkit-scrollbar {
     display: none;
   }
 
-  /* Stage: one box; slides stack on top of each other and crossfade.
-     The leaving slide stays opaque beneath the entering one and snaps to
-     hidden once the entrance finishes, so the surface never shows through. */
+  /* centred while they fit, still scrollable from the first one when they don't */
+  .media-gallery__thumb-item:first-child {
+    margin-left: auto;
+  }
+
+  .media-gallery__thumb-item:last-child {
+    margin-right: auto;
+  }
+
+  /* Stage: one box; slides stack and crossfade. The leaving slide stays
+     opaque beneath the entering one and snaps to hidden once the entrance
+     finishes, so the surface never shows through. */
   .media-gallery--thumbnails .media-gallery__track {
     display: block;
-    aspect-ratio: 4 / 5;
-    max-height: calc(100svh - var(--header-height) - 48px);
+    aspect-ratio: 1 / 1;
+    max-height: calc(100svh - var(--header-height) - 48px - var(--thumbs-space));
+    min-height: 320px;
     overflow: hidden;
-    border-radius: var(--r-card);
-    background: rgb(var(--c-surface));
     scroll-snap-type: none;
   }
 
@@ -617,29 +815,37 @@
   .media-gallery--stacked .media-gallery__track {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-4);
     overflow: visible;
+    border-radius: 0;
+    background: none;
     scroll-snap-type: none;
   }
 
   .media-gallery--stacked .media-gallery__slide {
+    --media-radius: var(--r-card);
     flex: none;
     scroll-snap-align: none;
   }
 }
 
 /* === component: lightbox (native dialog) ===
-   Enter: opacity + scale(.98) → 1 over --dur-base with @starting-style.
-   Exit: .is-closing (added by JS) fades out faster, then dialog.close(). */
+   The dialog is a transparent full-viewport layer holding our own scrim
+   (so drag progress can fade it) and the panel.
+   Large screens: centred modal panel; enter scale .96 → 1 + fade from its
+   centre (spring in JS), exit faster along the same path.
+   Phones: full screen on the solid page colour; the image is dragged down
+   to dismiss and the background fades with it. */
 .lightbox {
+  --lb-pad: clamp(24px, 4vw, 56px);
   position: fixed;
   inset: 0;
   width: 100%;
   max-width: none;
-  height: 100dvh;
+  height: 100%;
   max-height: none;
   margin: 0;
-  padding: calc(var(--space-6) + var(--safe-top)) max(var(--space-4), var(--safe-right)) calc(var(--space-6) + var(--safe-bottom)) max(var(--space-4), var(--safe-left));
+  padding: 0;
   border: 0;
   background: transparent;
   color: rgb(var(--c-ink));
@@ -648,82 +854,268 @@
 }
 
 .lightbox[open] {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr);
-  opacity: 1;
-  transform: scale(1);
-  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  display: block;
 }
 
-@starting-style {
-  .lightbox[open] {
-    opacity: 0;
-    transform: scale(.98);
-  }
-}
-
-.lightbox.is-closing {
-  opacity: 0;
-  transform: scale(.98);
-  transition-duration: var(--dur-fast);
-}
-
-/* ::backdrop does not inherit custom properties in every engine: literal fallbacks */
 .lightbox::backdrop {
-  background: rgba(31, 42, 28, 0.78);
-  opacity: 1;
-  transition: opacity var(--dur-base, 200ms) ease;
+  background: transparent;
 }
 
-@starting-style {
-  .lightbox[open]::backdrop {
-    opacity: 0;
-  }
-}
-
-.lightbox.is-closing::backdrop {
+.lightbox__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim, rgba(0, 0, 0, 0.32));
   opacity: 0;
-  transition-duration: var(--dur-fast, 160ms);
+  transition: opacity var(--dur-fast) ease;
+}
+
+.lightbox.is-open .lightbox__scrim {
+  opacity: 1;
+  transition-duration: var(--dur-base);
+}
+
+.lightbox__panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(1080px, 100% - 96px);
+  height: min(880px, 100% - 96px);
+  margin: auto;
+  border-radius: var(--r-sheet);
+  background: rgb(var(--c-bg));
+  box-shadow: var(--shadow-sheet);
+  opacity: 0;
+  transform-origin: 50% 50%;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.lightbox.is-open .lightbox__panel {
+  opacity: 1;
+  transition-duration: var(--dur-base);
+}
+
+.lightbox.is-dismissing .lightbox__panel {
+  transition-duration: var(--dur-slow);
 }
 
 .lightbox__body {
-  display: grid;
-  place-items: center;
+  position: relative;
+  flex: 1 1 auto;
   min-height: 0;
-  min-width: 0;
 }
 
 .lightbox__img {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  /* viewport-relative: a percentage against the grid area does not clamp a replaced element reliably */
-  max-height: calc(100dvh - var(--space-9) - var(--safe-top) - var(--safe-bottom));
+  position: absolute;
+  top: var(--lb-pad);
+  left: var(--lb-pad);
+  width: calc(100% - var(--lb-pad) * 2);
+  height: calc(100% - var(--lb-pad) * 2);
+  max-width: none;
   object-fit: contain;
-  border-radius: var(--r-card);
-  background: rgb(var(--c-surface));
-  box-shadow: var(--shadow-lg);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .lightbox__close {
   position: absolute;
-  top: calc(var(--space-4) + var(--safe-top));
-  right: calc(var(--space-4) + var(--safe-right));
+  top: var(--space-4);
+  right: var(--space-4);
   z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-pill);
+  color: rgb(var(--c-ink-2));
+  background: rgba(var(--c-ink), 0.06);
+  transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease, color var(--dur-fast) ease, opacity var(--dur-fast) ease;
+}
+
+/* 44px hit area around the 36px circle */
+.lightbox__close::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+
+.lightbox__close .icon {
+  stroke-width: 2;
+}
+
+.lightbox__close:active {
+  transform: scale(0.95);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lightbox__close:hover {
+    color: rgb(var(--c-ink));
+    background: rgba(var(--c-ink), 0.1);
+  }
+}
+
+@media (max-width: 749px) {
+  .lightbox {
+    --lb-pad: var(--space-4);
+  }
+
+  .lightbox__scrim {
+    background: rgb(var(--c-bg));
+  }
+
+  .lightbox__panel {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .lightbox__body {
+    margin-top: calc(56px + var(--safe-top));
+    margin-bottom: calc(24px + var(--safe-bottom));
+    /* one-finger drags are ours; pinch-zoom stays with the browser */
+    touch-action: none;
+    touch-action: pinch-zoom;
+    cursor: grab;
+  }
+
+  .lightbox.is-dragging .lightbox__body {
+    cursor: grabbing;
+  }
+
+  /* zoomed in: let the browser pan the zoomed page */
+  .lightbox.is-zoomed .lightbox__body {
+    touch-action: auto;
+  }
+
+  .lightbox.is-dragging .lightbox__scrim,
+  .lightbox.is-dragging .lightbox__close {
+    transition: none;
+  }
+
+  .lightbox__close {
+    top: calc(var(--space-3) + var(--safe-top));
+    right: calc(var(--space-3) + var(--safe-right));
+    opacity: calc(1 - var(--lb-progress, 0));
+  }
 }
 
 body:has(.lightbox[open]) {
   overflow: hidden;
 }
 
-/* === section: related-products === */
+/* === component: sticky buy bar (phones and tablets) ===
+   Translucent toolbar material over the page (content scrolls beneath it,
+   so its top edge is a scroll-edge hairline). Rises with transform +
+   opacity, 300ms on the spring-like ease-out; leaves faster. */
+.product-sticky {
+  display: none;
+}
+
+@media (max-width: 989px) {
+  .product-sticky {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: block;
+    padding: 10px max(var(--gutter), var(--safe-right)) calc(10px + var(--safe-bottom)) max(var(--gutter), var(--safe-left));
+    background: var(--material-chrome);
+    -webkit-backdrop-filter: var(--material-blur);
+    backdrop-filter: var(--material-blur);
+    box-shadow: 0 -1px 0 rgba(var(--c-ink), 0.08);
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-base) ease, visibility 0s linear var(--dur-base);
+  }
+
+  .product-sticky.is-visible {
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    transition: transform 300ms var(--ease-out), opacity 300ms var(--ease-out), visibility 0s;
+  }
+}
+
+.product-sticky__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+.product-sticky__text {
+  min-width: 0;
+}
+
+.product-sticky__title {
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.29;
+  letter-spacing: -0.016em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: rgb(var(--c-ink));
+}
+
+/* on glass: ink at .8, never the muted grey */
+.product-sticky__price {
+  font-size: 0.875rem;
+  line-height: 1.29;
+  letter-spacing: -0.016em;
+  color: rgba(var(--c-ink), 0.8);
+  font-variant-numeric: tabular-nums;
+}
+
+.product-sticky__button {
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .product-sticky {
+    background: rgb(var(--c-bg));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .product-sticky {
+    background: rgb(var(--c-bg));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: 0 -1px 0 rgb(var(--c-line));
+  }
+}
+
+/* === section: related-products ===
+   Centred headline over product tiles (snippets/card-product.liquid). */
 .related-products {
   display: block;
 }
 
 .related-products__item {
+  display: flex;
   min-width: 0;
+}
+
+.related-products__item > .card {
+  flex: 1 1 auto;
+}
+
+@media (min-width: 990px) {
+  .related-products__grid--2 {
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
 }
 
 /* === reduced motion === */
@@ -732,35 +1124,29 @@ body:has(.lightbox[open]) {
     scroll-behavior: auto;
   }
 
+  .variant-card,
   .media-gallery__thumb,
   .media-gallery__dot,
-  .shopify-payment-button__button {
-    transition-duration: 0.01ms;
+  .lightbox__close,
+  product-form.product-form .shopify-payment-button .shopify-payment-button__button {
+    transition-property: border-color, box-shadow, background-color, color, opacity;
   }
 
+  .variant-card:active,
   .media-gallery__thumb:active,
   .media-gallery__dot:active,
-  .shopify-payment-button__button:active {
+  .lightbox__close:active,
+  product-form.product-form .shopify-payment-button .shopify-payment-button__button:active {
     transform: none;
   }
 
-  .media-gallery__dot::before {
-    transition: background-color var(--dur-fast) ease;
-  }
-
-  .media-gallery__dot[aria-current="true"]::before {
-    transform: translate(-50%, -50%);
-  }
-
-  .lightbox[open],
-  .lightbox.is-closing {
+  .product-sticky,
+  .product-sticky.is-visible {
     transform: none;
-    transition: opacity var(--dur-base) ease;
+    transition: opacity var(--dur-base) ease, visibility 0s linear var(--dur-base);
   }
 
-  @starting-style {
-    .lightbox[open] {
-      transform: none;
-    }
+  .product-sticky.is-visible {
+    transition: opacity var(--dur-base) ease, visibility 0s;
   }
 }

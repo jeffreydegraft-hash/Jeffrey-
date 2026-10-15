@@ -2,23 +2,6 @@
   "type": "header",
   "name": "Header group",
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
-      "blocks": {
-        "announcement-1": {
-          "type": "announcement",
-          "settings": {
-            "text": "Free US shipping on orders $45+. Blended and bottled in Richmond, Texas.",
-            "link": ""
-          }
-        }
-      },
-      "block_order": ["announcement-1"],
-      "settings": {
-        "color_scheme": "scheme-3",
-        "show_social": false
-      }
-    },
     "header": {
       "type": "header",
       "settings": {
@@ -28,14 +11,37 @@
         "sticky": true,
         "show_search": true,
         "color_scheme": "scheme-1",
+        "contact_url": "/pages/contact",
         "popular_1_label": "Frankincense & Myrrh",
         "popular_1_url": "/products/frankincense-myrrh-anointing-oil",
         "popular_2_label": "All oils",
         "popular_2_url": "/collections/all",
-        "popular_3_label": "Our science",
-        "popular_3_url": "/pages/our-science"
+        "popular_3_label": "100% Squalane Oil",
+        "popular_3_url": "/products/100-squalane",
+        "popular_4_label": "Our science",
+        "popular_4_url": "/pages/our-science",
+        "popular_5_label": "The Anointing Journal",
+        "popular_5_url": "/blogs/the-anointing-journal"
+      }
+    },
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement-1": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free US shipping on orders $45+. Blended and bottled in Richmond, Texas.",
+            "link": "/collections/all",
+            "link_label": "Shop the oils"
+          }
+        }
+      },
+      "block_order": ["announcement-1"],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "show_social": false
       }
     }
   },
-  "order": ["announcement-bar", "header"]
+  "order": ["header", "announcement-bar"]
 }

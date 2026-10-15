@@ -1,8 +1,14 @@
 {%- comment -%}
-  Featured blog: a heading, intro and the latest posts from one blog as
-  article cards (snippets/card-article.liquid, pages group). With no blog
-  chosen it falls back to "the-anointing-journal"; a missing or empty blog
-  keeps the heading and shows a designed empty state instead of a hole.
+  Featured blog (apple.com Newsroom tiles): a centred header (h2, muted
+  lead, "All posts ›"), then the latest posts as article tiles: the image
+  across the top of a rounded --c-surface tile (radius --r-card, 18px), then
+  a small tag, an .h5 title and a 14px muted date. The whole tile is the
+  link (title ::after overlay), so it presses as one piece. Grid: one row of
+  2–4 from 990px (5–6 posts wrap at 3), two per row on tablets with an odd
+  last tile laid out wide, one per row on phones. With no blog chosen it
+  falls back to "the-anointing-journal"; a missing or empty blog keeps the
+  header and shows a designed empty state. Motion inventory: the shared
+  reveal, the tile press (scale .985) and, on real pointers, a 3% image zoom.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -24,12 +30,19 @@
     assign has_posts = true
   endif
 
-  assign cols = 3
-  if limit == 2
-    assign cols = 2
-  elsif limit == 4
-    assign cols = 4
+  assign shown = limit
+  if has_posts and blog.articles_count < limit
+    assign shown = blog.articles_count
   endif
+
+  assign cols = 3
+  if shown == 2 or shown == 4
+    assign cols = shown
+  elsif shown == 1
+    assign cols = 1
+  endif
+  assign col_vw = 100 | divided_by: cols
+  assign image_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, (min-width: 750px) 50vw, 100vw'
 
   assign show_view_all = false
   if section.settings.show_view_all and has_posts and blog.articles_count > limit
@@ -44,35 +57,68 @@
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-blog" id="section-{{ section.id }}">
   <div class="page-width">
     {%- if has_header -%}
-      <header class="section__header section__header--row featured-blog__header" data-reveal>
-        <div class="stack stack--sm">
-          {%- if section.settings.heading != blank -%}
-            <h2 class="h2 featured-blog__heading">{{ section.settings.heading }}</h2>
-          {%- endif -%}
-          {%- if section.settings.intro != blank -%}
-            <p class="lead featured-blog__intro">{{ section.settings.intro | escape }}</p>
-          {%- endif -%}
-        </div>
+      <header class="section__header section__header--center featured-blog__header" data-reveal>
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2 featured-blog__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.intro != blank -%}
+          <p class="lead lead--muted featured-blog__intro">{{ section.settings.intro | escape }}</p>
+        {%- endif -%}
         {%- if show_view_all -%}
-          <a href="{{ blog.url }}" class="link link--arrow featured-blog__view-all">
-            {{ 'blogs.general.all_posts' | t }}
-            {%- render 'icon', name: 'arrow-right', size: 18 -%}
+          <a href="{{ blog.url }}" class="link link--chevron link--lg featured-blog__view-all">
+            {{- 'blogs.general.all_posts' | t -}}
+            {%- render 'icon', name: 'chevron-right', size: 16 -%}
           </a>
         {%- endif -%}
       </header>
     {%- endif -%}
 
     {%- if has_posts -%}
-      <ul class="grid featured-blog__grid" role="list" style="--cols-desktop: {{ cols }}; --cols-tablet: 2;">
+      <ul class="featured-blog__grid{% if cols == 1 %} featured-blog__grid--single{% endif %}" role="list" style="--featured-blog-cols: {{ cols }};">
         {%- for article in blog.articles limit: limit -%}
-          <li class="featured-blog__item">
-            {%- render 'card-article', article: article, index: forloop.index0, show_date: section.settings.show_date, show_excerpt: section.settings.show_excerpt -%}
+          {%- liquid
+            assign tag = article.tags | first
+            if tag == blank
+              assign tag = blog.title
+            endif
+          -%}
+          <li class="featured-blog__item" data-reveal>
+            <article class="featured-blog__tile">
+              <div class="media featured-blog__media" style="--ratio: 3 / 2;">
+                {%- if article.image -%}
+                  {%- render 'image', image: article.image, sizes: image_sizes, widths: '400, 600, 800, 1000, 1200', class: 'featured-blog__img', loading: 'lazy', alt: '' -%}
+                {%- else -%}
+                  <span class="featured-blog__placeholder" aria-hidden="true">
+                    {%- render 'icon', name: 'leaf', size: 40 -%}
+                  </span>
+                {%- endif -%}
+              </div>
+              <div class="featured-blog__body">
+                {%- if tag != blank -%}
+                  <p class="tag featured-blog__tag">{{ tag | escape }}</p>
+                {%- endif -%}
+                <h3 class="h5 featured-blog__title">
+                  <a href="{{ article.url }}" class="featured-blog__link">{{ article.title | escape }}</a>
+                </h3>
+                {%- if section.settings.show_excerpt -%}
+                  {%- assign excerpt = article.excerpt_or_content | replace: '</', ' </' | strip_html | strip_newlines | truncatewords: 24 -%}
+                  {%- if excerpt != blank -%}
+                    <p class="small featured-blog__excerpt">{{ excerpt }}</p>
+                  {%- endif -%}
+                {%- endif -%}
+                {%- if section.settings.show_date -%}
+                  <p class="small featured-blog__date">
+                    <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %-d, %Y' }}</time>
+                  </p>
+                {%- endif -%}
+              </div>
+            </article>
           </li>
         {%- endfor -%}
       </ul>
     {%- else -%}
       <div class="empty-state featured-blog__empty">
-        {%- render 'icon', name: 'quote', size: 36 -%}
+        {%- render 'icon', name: 'quote', size: 40 -%}
         <h3 class="h4">{{ 'blogs.general.empty' | t }}</h3>
         <p class="muted text-pretty">{{ 'blogs.general.empty_body' | t }}</p>
       </div>
@@ -124,7 +170,7 @@
       "type": "checkbox",
       "id": "show_excerpt",
       "label": "Show excerpt",
-      "default": true
+      "default": false
     },
     {
       "type": "checkbox",
@@ -137,7 +183,7 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-1"
+      "default": "scheme-2"
     },
     {
       "type": "select",

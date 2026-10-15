@@ -1,14 +1,23 @@
 {%- comment -%}
-  Header.
-  Grid: [mobile menu button | logo | desktop nav | icons].
-  <sticky-header> (theme.js) toggles .is-scrolled / .is-hidden on itself and
-  keeps --header-height in sync. The section wrapper (.section-header, set via
-  the schema "class") is the sticky element.
+  Header: Apple-style global navigation.
+  A translucent bar (always; the material lives on ::before so the bar is not
+  a backdrop root for the flyouts), content held to --content-max:
+    phone/tablet  [wordmark ............ search · bag · menu]
+                  (logo "center": [menu | wordmark | search · bag])
+    ≥ 990px       [wordmark | links, centred | search · account · bag]
+  Desktop dropdowns are Apple "flyouts": full-width translucent panels under
+  the bar (positioned against <sticky-header>), opened by click through
+  <details-disclosure>; a light scrim dims the page while one is open.
 
-  The menu and search drawers are rendered after </sticky-header>, still inside
-  this section, on purpose: the wrapper animates on transform and gets a
-  backdrop-filter when scrolled, and either would turn it into the containing
-  block of a position: fixed drawer inside it.
+  <sticky-header> (theme.js) toggles .is-scrolled / .is-hidden on itself and
+  keeps --header-height in sync. The section wrapper (.section-header, schema
+  "class") is the sticky element.
+
+  The menu and search drawers render after </sticky-header>, still inside this
+  section: <sticky-header> transforms when it hides, which would make it the
+  containing block of a position: fixed drawer inside it. Both drawers open
+  from under the bar, so the nav's own menu button (which morphs to ×) and
+  search button stay in place above them.
 {%- endcomment -%}
 {%- liquid
   assign logo_position = section.settings.logo_position | default: 'left'
@@ -30,21 +39,31 @@
     assign account_url = routes.account_url
   endif
 -%}
+
+{%- capture menu_toggle -%}
+  <button
+    type="button"
+    class="header__icon header__menu-toggle{% if logo_position == 'center' %} header__menu-toggle--start{% endif %}"
+    data-drawer-open="#MenuDrawer"
+    aria-controls="MenuDrawer"
+    aria-expanded="false"
+    aria-label="{{ 'header.menu' | t }}"
+  >
+    <span class="header__menu-icon" aria-hidden="true">
+      <span class="header__menu-line"></span>
+      <span class="header__menu-line"></span>
+    </span>
+  </button>
+{%- endcapture -%}
+
 <sticky-header
   class="header-wrapper color-{{ section.settings.color_scheme }}"
   data-sticky="{{ section.settings.sticky }}"
 >
-  <header class="header header--{{ logo_position }} header--{{ header_padding }} page-width">
-    <button
-      type="button"
-      class="header__icon header__menu-toggle"
-      data-drawer-open="#MenuDrawer"
-      aria-controls="MenuDrawer"
-      aria-expanded="false"
-      aria-label="{{ 'header.menu' | t }}"
-    >
-      {%- render 'icon', name: 'menu', size: 24 -%}
-    </button>
+  <header class="header header--{{ logo_position }} header--{{ header_padding }} page-width page-width--medium">
+    {%- if logo_position == 'center' -%}
+      {{- menu_toggle -}}
+    {%- endif -%}
 
     <div class="header__logo">
       <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ 'accessibility.logo' | t: shop: shop.name }}">
@@ -65,7 +84,7 @@
             -}}
           </span>
         {%- else -%}
-          <span class="header__wordmark serif">{{ shop.name }}</span>
+          <span class="header__wordmark">{{ shop.name }}</span>
         {%- endif -%}
       </a>
     </div>
@@ -74,70 +93,89 @@
       <nav class="header__nav" aria-label="{{ 'accessibility.menu' | t }}">
         <ul class="header__menu" role="list">
           {%- for link in menu.links -%}
-            {%- liquid
-              assign has_grandchildren = false
-              for childlink in link.links
-                if childlink.links != blank
-                  assign has_grandchildren = true
-                endif
-              endfor
-            -%}
             <li class="header__menu-item">
               {%- if link.links != blank -%}
+                {%- liquid
+                  assign flyout_id = section.id | append: '-' | append: forloop.index
+                  assign has_plain_children = false
+                  assign parent_listed = false
+                  for childlink in link.links
+                    if childlink.links == blank
+                      assign has_plain_children = true
+                    endif
+                    if childlink.url == link.url
+                      assign parent_listed = true
+                    endif
+                  endfor
+                  assign show_view_all = false
+                  if parent_listed == false and link.url != blank and link.url != '#'
+                    assign show_view_all = true
+                  endif
+                  assign primary_done = false
+                -%}
                 <details-disclosure class="header__disclosure">
-                  <details id="HeaderDetails-{{ section.id }}-{{ forloop.index }}">
+                  <details id="HeaderDetails-{{ flyout_id }}">
                     <summary
                       class="header__link{% if link.child_active %} is-current{% endif %}"
                       aria-expanded="false"
-                      aria-controls="HeaderMenu-{{ section.id }}-{{ forloop.index }}"
+                      aria-controls="HeaderMenu-{{ flyout_id }}"
                     >
                       <span class="header__link-text">{{ link.title | escape }}</span>
-                      {%- render 'icon', name: 'chevron-down', size: 14, class: 'header__chevron' -%}
                     </summary>
-                    <div
-                      class="header__dropdown{% if has_grandchildren %} header__dropdown--columns{% endif %}"
-                      id="HeaderMenu-{{ section.id }}-{{ forloop.index }}"
-                    >
-                      {%- if has_grandchildren -%}
-                        {%- liquid
-                          assign has_plain_children = false
-                          for childlink in link.links
-                            if childlink.links == blank
-                              assign has_plain_children = true
-                            endif
-                          endfor
-                        -%}
+                    <div class="header__dropdown" id="HeaderMenu-{{ flyout_id }}">
+                      <div class="header__flyout page-width page-width--medium">
                         {%- if has_plain_children -%}
-                          <div class="header__dropdown-group">
-                            <ul class="header__dropdown-list" role="list">
+                          {%- assign primary_done = true -%}
+                          {%- assign item_index = 0 -%}
+                          <div class="header__flyout-group header__flyout-group--primary">
+                            <p class="header__flyout-heading" id="HeaderMenuHeading-{{ flyout_id }}">{{ link.title | escape }}</p>
+                            <ul class="header__flyout-list" role="list" aria-labelledby="HeaderMenuHeading-{{ flyout_id }}">
                               {%- for childlink in link.links -%}
                                 {%- if childlink.links == blank -%}
-                                  <li>
+                                  <li style="--i: {{ item_index }};">
                                     <a
                                       href="{{ childlink.url }}"
-                                      class="header__dropdown-link{% if childlink.current %} is-current{% endif %}"
+                                      class="header__flyout-link{% if childlink.current %} is-current{% endif %}"
                                       {% if childlink.current %}aria-current="page"{% endif %}
                                     >{{ childlink.title | escape }}</a>
                                   </li>
+                                  {%- assign item_index = item_index | plus: 1 -%}
                                 {%- endif -%}
                               {%- endfor -%}
                             </ul>
+                            {%- if show_view_all -%}
+                              <a href="{{ link.url }}" class="link link--chevron header__flyout-all" style="--i: {{ item_index }};">
+                                <span>{{ 'header.submenu_view_all' | t: title: link.title }}</span>
+                                {%- render 'icon', name: 'chevron-right', size: 10 -%}
+                              </a>
+                            {%- endif -%}
                           </div>
                         {%- endif -%}
+
                         {%- for childlink in link.links -%}
                           {%- if childlink.links != blank -%}
-                            <div class="header__dropdown-group">
+                            {%- liquid
+                              assign group_class = 'header__flyout-group'
+                              assign link_class = 'header__flyout-sublink'
+                              if primary_done == false
+                                assign group_class = 'header__flyout-group header__flyout-group--primary'
+                                assign link_class = 'header__flyout-link'
+                                assign primary_done = true
+                              endif
+                            -%}
+                            <div class="{{ group_class }}">
                               <a
                                 href="{{ childlink.url }}"
-                                class="header__dropdown-heading eyebrow eyebrow--ink{% if childlink.current %} is-current{% endif %}"
+                                class="header__flyout-heading header__flyout-heading--link{% if childlink.current %} is-current{% endif %}"
+                                id="HeaderMenuHeading-{{ flyout_id }}-{{ forloop.index }}"
                                 {% if childlink.current %}aria-current="page"{% endif %}
                               >{{ childlink.title | escape }}</a>
-                              <ul class="header__dropdown-list" role="list">
+                              <ul class="header__flyout-list" role="list" aria-labelledby="HeaderMenuHeading-{{ flyout_id }}-{{ forloop.index }}">
                                 {%- for grandchildlink in childlink.links -%}
-                                  <li>
+                                  <li style="--i: {{ forloop.index0 }};">
                                     <a
                                       href="{{ grandchildlink.url }}"
-                                      class="header__dropdown-link{% if grandchildlink.current %} is-current{% endif %}"
+                                      class="{{ link_class }}{% if grandchildlink.current %} is-current{% endif %}"
                                       {% if grandchildlink.current %}aria-current="page"{% endif %}
                                     >{{ grandchildlink.title | escape }}</a>
                                   </li>
@@ -146,19 +184,16 @@
                             </div>
                           {%- endif -%}
                         {%- endfor -%}
-                      {%- else -%}
-                        <ul class="header__dropdown-list" role="list">
-                          {%- for childlink in link.links -%}
-                            <li>
-                              <a
-                                href="{{ childlink.url }}"
-                                class="header__dropdown-link{% if childlink.current %} is-current{% endif %}"
-                                {% if childlink.current %}aria-current="page"{% endif %}
-                              >{{ childlink.title | escape }}</a>
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-                      {%- endif -%}
+
+                        {%- if has_plain_children == false and show_view_all -%}
+                          <div class="header__flyout-group">
+                            <a href="{{ link.url }}" class="link link--chevron header__flyout-all">
+                              <span>{{ 'header.submenu_view_all' | t: title: link.title }}</span>
+                              {%- render 'icon', name: 'chevron-right', size: 10 -%}
+                            </a>
+                          </div>
+                        {%- endif -%}
+                      </div>
                     </div>
                   </details>
                 </details-disclosure>
@@ -187,13 +222,13 @@
           aria-expanded="false"
           aria-label="{{ 'header.search' | t }}"
         >
-          {%- render 'icon', name: 'search', size: 22 -%}
+          {%- render 'icon', name: 'search', size: 18 -%}
         </button>
       {%- endif -%}
 
       {%- if shop.customer_accounts_enabled -%}
         <a href="{{ account_url }}" class="header__icon header__icon--account">
-          {%- render 'icon', name: 'user', size: 22 -%}
+          {%- render 'icon', name: 'user', size: 18 -%}
           <span class="visually-hidden">
             {%- if customer -%}
               {{ 'header.account' | t }}
@@ -205,14 +240,44 @@
       {%- endif -%}
 
       <a href="{{ routes.cart_url }}" id="cart-icon-bubble" class="header__icon header__icon--cart" data-drawer-open="#CartDrawer" aria-expanded="false">{% render 'cart-icon-bubble' %}</a>
+
+      {%- if logo_position != 'center' -%}
+        {{- menu_toggle -}}
+      {%- endif -%}
     </div>
   </header>
 </sticky-header>
 
-{%- render 'header-menu-drawer', menu: menu -%}
+{%- comment -%} Dims the page while a desktop flyout is open; a click on it closes the flyout. {%- endcomment -%}
+<div class="header__scrim" aria-hidden="true"></div>
+
+{%- render 'header-menu-drawer', menu: menu, color_scheme: section.settings.color_scheme, contact_url: section.settings.contact_url -%}
 {%- if show_search -%}
-  {%- render 'header-search' -%}
+  {%- render 'header-search', color_scheme: section.settings.color_scheme -%}
 {%- endif -%}
+
+<script>
+  /* The menu and search panels open from under the bar. The ribbon may sit
+     above it, so publish where the bar really ends; capture phase, so this
+     runs before theme.js opens the drawer. */
+  (function () {
+    var Olivet = (window.Olivet = window.Olivet || {});
+    if (Olivet.headerBottomBound) return;
+    Olivet.headerBottomBound = true;
+    document.addEventListener(
+      'click',
+      function (event) {
+        var target = event.target;
+        if (!target || !target.closest || !target.closest('[data-drawer-open="#MenuDrawer"], [data-drawer-open="#SearchDrawer"]')) return;
+        var bar = document.querySelector('sticky-header');
+        if (!bar) return;
+        var bottom = Math.max(0, Math.round(bar.getBoundingClientRect().bottom));
+        document.documentElement.style.setProperty('--header-bottom', bottom + 'px');
+      },
+      true
+    );
+  })();
+</script>
 
 {% schema %}
 {
@@ -230,7 +295,7 @@
       "type": "select",
       "id": "logo_position",
       "label": "Logo position",
-      "info": "On small screens the logo is centred between the menu and the icons.",
+      "info": "Left: the menu button sits with the icons on small screens. Center: the logo is centred between the menu button and the icons.",
       "options": [
         { "value": "left", "label": "Left" },
         { "value": "center", "label": "Center" }
@@ -270,12 +335,19 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
+      "info": "The bar is translucent over the page; the menu and search panels use the same scheme.",
       "default": "scheme-1"
     },
     {
+      "type": "url",
+      "id": "contact_url",
+      "label": "Contact link",
+      "info": "Shown at the bottom of the mobile menu. When empty, the store email from Theme settings is used."
+    },
+    {
       "type": "header",
-      "content": "Popular searches",
-      "info": "Quick links shown in the search drawer before anything is typed. Leave a label empty to hide it."
+      "content": "Search quick links",
+      "info": "Shown in the search panel before anything is typed. Leave a label empty to hide it."
     },
     {
       "type": "text",
@@ -309,6 +381,26 @@
       "type": "url",
       "id": "popular_3_url",
       "label": "Link 3"
+    },
+    {
+      "type": "text",
+      "id": "popular_4_label",
+      "label": "Link 4 label"
+    },
+    {
+      "type": "url",
+      "id": "popular_4_url",
+      "label": "Link 4"
+    },
+    {
+      "type": "text",
+      "id": "popular_5_label",
+      "label": "Link 5 label"
+    },
+    {
+      "type": "url",
+      "id": "popular_5_url",
+      "label": "Link 5"
     }
   ]
 }

@@ -3,6 +3,9 @@
   (assets/product.js) fetches this section through the Product Recommendations
   API (data-url) and swaps in the rendered grid, or removes itself when there
   is nothing to show.
+  Layout: a centred headline over a grid of product tiles (card-product).
+  Default scheme is the light gray one, so the white tiles sit on #F5F5F7
+  and the section reads as separate from the white buy flow above it.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -13,6 +16,8 @@
       assign padding_class = ' section--none'
   endcase
   assign limit = section.settings.products_to_show | default: 4
+  assign count = recommendations.products.size | default: 0
+  assign cols = count | at_most: 4 | at_least: 2
 -%}
 <product-recommendations
   class="related-products"
@@ -28,12 +33,16 @@
     >
       <div class="page-width">
         {%- if section.settings.heading != blank -%}
-          <div class="section__header section__header--row related-products__header">
+          <div class="section__header section__header--center related-products__header">
             <h2 class="h2 related-products__heading" id="RelatedHeading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
           </div>
         {%- endif -%}
         <div class="product-recommendations__inner">
-          <ul class="grid grid--4 grid--mobile-2 related-products__grid" role="list">
+          <ul
+            class="grid grid--mobile-2 related-products__grid related-products__grid--{{ cols }}"
+            role="list"
+            style="--cols-desktop: {{ cols }}; --cols-tablet: 2;"
+          >
             {%- for recommendation in recommendations.products -%}
               <li class="related-products__item">
                 {%- render 'card-product', product: recommendation, index: forloop.index0, sizes: '(min-width: 990px) 25vw, 50vw' -%}
@@ -86,7 +95,8 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-1"
+      "info": "Light gray (scheme 2) puts white tiles on a gray band, separating it from the buy flow.",
+      "default": "scheme-2"
     }
   ],
   "enabled_on": {

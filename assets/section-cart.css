@@ -428,6 +428,7 @@ cart-items.is-loading .cart-lines {
 
 /* ---------- order note ---------- */
 .cart-note.accordion {
+  display: block;
   margin-top: var(--space-2);
   border-top: 1px solid var(--cart-hairline);
   border-bottom: 0;
@@ -646,6 +647,10 @@ cart-items.is-loading .cart-lines {
   letter-spacing: 0.011em;
 }
 
+.cart-items--page .cart-line__title {
+  -webkit-line-clamp: 3;
+}
+
 .cart-items--page .cart-line__price-final {
   font-weight: var(--font-body-weight-bold);
 }
@@ -776,6 +781,14 @@ cart-items.is-loading .cart-lines {
 .main-cart__empty .main-cart__login {
   margin-top: var(--space-2);
   color: rgb(var(--c-ink-2));
+}
+
+/* Headings that receive programmatic focus (sheet open, a line removed) are
+   not controls: announce them, don't ring them. */
+.cart-drawer__title:focus-visible,
+.main-cart__title:focus-visible,
+.main-cart__empty-title:focus-visible {
+  outline: none;
 }
 
 /* ---------- hover (real pointers only) ---------- */
