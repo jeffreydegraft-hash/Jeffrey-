@@ -27,7 +27,6 @@
   assign product = section.settings.product
   assign form_id = 'FeaturedProduct-' | append: section.id
   assign select_id = form_id | append: '-variant'
-  assign heading_id = 'FeaturedProductHeading-' | append: section.id
   assign variant = product.selected_or_first_available_variant
 
   assign heading = section.settings.heading
@@ -79,7 +78,7 @@
           <p class="eyebrow eyebrow--lg featured-product__eyebrow">{{ section.settings.eyebrow | escape }}</p>
         {%- endif -%}
 
-        <h2 class="h2 featured-product__heading" id="{{ heading_id }}">
+        <h2 class="h2 featured-product__heading">
           {%- if heading != blank -%}
             {{ heading }}
           {%- else -%}
@@ -137,7 +136,7 @@
                 <button
                   type="submit"
                   name="add"
-                  class="btn btn--primary featured-product__submit"
+                  class="btn btn--primary btn--lg featured-product__submit"
                   {% if unavailable %}disabled{% endif %}
                   {% if settings.cart_type == 'drawer' %}aria-haspopup="dialog"{% endif %}
                 >
@@ -154,7 +153,7 @@
           </product-form>
         {%- else -%}
           <div class="cta-row featured-product__actions">
-            <button type="button" class="btn btn--primary featured-product__submit" disabled>
+            <button type="button" class="btn btn--primary btn--lg featured-product__submit" disabled>
               <span class="btn__content"><span>{{ add_label | escape }}</span></span>
             </button>
             {%- if request.design_mode -%}
