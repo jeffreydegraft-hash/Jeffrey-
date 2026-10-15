@@ -99,10 +99,10 @@
                         assign stagger = forloop.index0 | modulo: 8
                         if item.object_type == 'article'
                           assign type_label = 'search.article' | t
-                          assign excerpt = item.excerpt_or_content | strip_html | truncatewords: 30
+                          assign excerpt = item.excerpt_or_content | replace: '</', ' </' | strip_html | strip_newlines | truncatewords: 30
                         else
                           assign type_label = 'search.page' | t
-                          assign excerpt = item.content | strip_html | truncatewords: 30
+                          assign excerpt = item.content | replace: '</', ' </' | strip_html | strip_newlines | truncatewords: 30
                         endif
                       -%}
                       <li class="search-results__item" data-reveal style="--i: {{ stagger }}">

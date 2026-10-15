@@ -28,10 +28,16 @@
   endif
   assign sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
   assign theme_word = blank
-  if settings.card_show_theme_word
-    assign theme_word = product.metafields.custom.theme_word.value | default: product.type
+  if settings.card_show_theme_word and product != blank
+    assign theme_word = product.metafields.custom.theme_word.value
   endif
 -%}
+{%- if settings.card_show_theme_word and product != blank and theme_word == blank -%}
+  {%- comment -%} Built-in theme word for launch products, then the product type {%- endcomment -%}
+  {%- capture theme_word -%}{%- render 'product-defaults', product: product, field: 'theme_word' -%}{%- endcapture -%}
+  {%- assign theme_word = theme_word | strip | default: product.type -%}
+{%- endif -%}
+
 {%- if product != blank -%}
   <article class="card card--product" {% if reveal != false %}data-reveal style="--i: {{ stagger }}"{% endif %}>
     <a href="{{ product.url }}" class="card__media-link" aria-label="{{ product.title | escape }}" tabindex="-1">

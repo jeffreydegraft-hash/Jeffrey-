@@ -321,7 +321,7 @@
         {{ product.featured_media.preview_image | image_url: width: 1200 | prepend: 'https:' | json }}
       ],
     {%- endif -%}
-    "description": {{ product.description | strip_html | truncate: 300 | json }},
+    "description": {{ product.description | replace: '</', ' </' | strip_html | strip_newlines | truncate: 300 | json }},
     {%- if variant.sku != blank -%}
       "sku": {{ variant.sku | json }},
     {%- endif -%}

@@ -201,6 +201,7 @@ export const products = copy.products.products.map((p, i) => {
     created_at: '2024-02-01',
     published_at: '2024-02-01',
     _copy: p,
+    object_type: 'product',
   };
   prod.description = prod.description;
   return prod;
@@ -248,7 +249,7 @@ export const collections = {
     filters: [sizeFilter, priceFilter],
     sort_by: 'manual',
     default_sort_by: 'manual',
-    sort_options: ['manual', 'best-selling', 'title-ascending', 'title-descending', 'price-ascending', 'price-descending', 'created-ascending', 'created-descending'].map((v) => ({ value: v, name: v.replace(/-/g, ' ') })),
+    sort_options: [['manual', 'Featured'], ['best-selling', 'Best selling'], ['title-ascending', 'Alphabetically, A-Z'], ['title-descending', 'Alphabetically, Z-A'], ['price-ascending', 'Price, low to high'], ['price-descending', 'Price, high to low'], ['created-ascending', 'Date, old to new'], ['created-descending', 'Date, new to old']].map(([value, name]) => ({ value, name })),
     all_tags: ['anointing-oil'],
     current_type: null,
     current_vendor: null,
@@ -272,6 +273,8 @@ export const collections = {
   },
 };
 collections['frontpage'] = { ...collections.all, handle: 'frontpage', title: 'Home page', url: '/collections/frontpage' };
+/* Shopify's `collections` global is iterable AND indexable by handle */
+export const collectionsList = Object.assign([collections.all, collections['nine-biblical-oil-blends']], collections);
 products.forEach((p) => (p.collections = [collections.all]));
 
 /* ---------- menus ---------- */
@@ -306,7 +309,7 @@ linklists['main-menu'].links[0].links.forEach((l) => (l.levels = 0));
 
 /* ---------- pages, blog ---------- */
 export const pages = {
-  'about-us': { id: 1, handle: 'about-us', title: 'About Mount of Olives', url: '/pages/about-us', content: copy.pages.about.sections.map((s) => `<h2>${esc(s.heading)}</h2>${s.body.map((b) => `<p>${esc(b)}</p>`).join('')}`).join(''), template_suffix: 'about' },
+  'about-us': { id: 1, object_type: 'page', handle: 'about-us', title: 'About Mount of Olives', url: '/pages/about-us', content: copy.pages.about.sections.map((s) => `<h2>${esc(s.heading)}</h2>${s.body.map((b) => `<p>${esc(b)}</p>`).join('')}`).join(''), template_suffix: 'about' },
   'our-science': { id: 2, handle: 'our-science', title: 'Our Science', url: '/pages/our-science', content: copy.pages.science.sections.map((s) => `<h2>${esc(s.heading)}</h2>${s.body.map((b) => `<p>${esc(b)}</p>`).join('')}`).join(''), template_suffix: 'science' },
   contact: { id: 3, handle: 'contact', title: 'Contact', url: '/pages/contact', content: `<p>${esc(copy.pages.contact.intro)}</p>`, template_suffix: 'contact' },
 };
@@ -327,6 +330,7 @@ export const articles = articleTitles.map((t, i) => ({
   excerpt_or_content: 'Anointing oil runs through Scripture, from the tabernacle in Exodus to the house at Bethany. Here is what it meant then, and how it is used in prayer today.',
   content: `<p>${esc(copy.home.faq[0].a)}</p><h2>In the tabernacle</h2><p>${esc(copy.pages.about.sections[1].body[0])}</p><blockquote>${esc(copy.home.scripture.quote)}<br>— ${esc(copy.home.scripture.reference)}</blockquote><p>${esc(copy.pages.science.sections[0].body[0])} ${esc(copy.pages.science.sections[0].body[1])}</p><h2>How it is used today</h2><p>${esc(copy.home.faq[1].a)}</p>`,
   tags: ['Scripture', 'Botanicals'],
+  object_type: 'article',
   comments: [],
   comments_count: 0,
   comments_enabled_q: true,
