@@ -143,7 +143,7 @@
     {%- if blog.comments_enabled? -%}
       <section class="main-article__comments" id="Comments" aria-labelledby="Comments-heading">
         {%- if article.comments_count > 0 -%}
-          <h2 class="h3 main-article__comments-title" id="Comments-heading">{{ 'blogs.article.comments' | t: count: article.comments_count }}</h2>
+          <h2 class="h4 main-article__comments-title" id="Comments-heading">{{ 'blogs.article.comments' | t: count: article.comments_count }}</h2>
           {%- paginate article.comments by 20 -%}
             <ul class="main-article__comment-list" role="list">
               {%- for comment in article.comments -%}

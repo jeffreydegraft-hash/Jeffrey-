@@ -5,7 +5,10 @@
   ≥990px. On page one without a tag filter the newest post can be the
   "top story": a full-row tile with the image left and the text right
   (≥750px). Twelve posts per page with the shared pagination; a blog with
-  no posts gets a designed empty state. A long intro left-aligns the
+  no posts gets a designed, text-only empty state (no glyph). A post
+  without an image becomes a text-only tile that also carries its excerpt,
+  so it never reads as an empty gray card beside the image tiles. Short
+  last rows centre. A long intro left-aligns the
   header on phones (never centre more than three lines). Tiles reveal on scroll with an --i
   stagger; the header stays put.
 {%- endcomment -%}
@@ -53,8 +56,10 @@
                 assign featured = true
               endif
               assign show_excerpt = false
-              if featured and section.settings.show_excerpt
-                assign show_excerpt = true
+              if section.settings.show_excerpt
+                if featured or article.image == blank
+                  assign show_excerpt = true
+                endif
               endif
             -%}
             {%- assign stagger = forloop.index0 | modulo: 8 -%}
@@ -73,7 +78,6 @@
         {%- render 'pagination', paginate: paginate, anchor: '#BlogArticles' -%}
       {%- else -%}
         <div class="empty-state main-blog__empty">
-          {%- render 'icon', name: 'quote', size: 36 -%}
           <h2 class="h3">{{ 'blogs.general.empty' | t }}</h2>
           <p class="muted text-pretty">{{ 'blogs.general.empty_body' | t }}</p>
           {%- if current_tags -%}
@@ -119,8 +123,8 @@
     {
       "type": "checkbox",
       "id": "show_excerpt",
-      "label": "Show excerpt on the top story",
-      "info": "Other tiles stay title and date only, like Apple Newsroom.",
+      "label": "Show excerpts",
+      "info": "On the top story and on posts without an image. Other tiles stay title and date only, like Apple Newsroom.",
       "default": true
     },
     {
