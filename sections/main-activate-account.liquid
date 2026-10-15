@@ -1,6 +1,7 @@
 {%- comment -%}
-  Activate account (from an invitation email). Password + confirmation,
-  an activate button and a decline button (name="decline").
+  Activate account (from an invitation email), Apple ID style: centred
+  headline and lead in a 480px column, password + confirmation, a
+  full-width primary pill and a quiet decline button (name="decline").
 {%- endcomment -%}
 {%- liquid
   assign spacing_class = ''
@@ -12,11 +13,11 @@
   endcase
 -%}
 <div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} main-activate-account" id="section-{{ section.id }}">
-  <div class="page-width page-width--medium">
+  <div class="page-width">
     <div class="customer-auth activate-account">
       <header class="customer-auth__head">
-        <h1 class="h1">{{ 'customer.activate_account.title' | t }}</h1>
-        <p class="muted text-pretty">{{ 'customer.activate_account.subtext' | t }}</p>
+        <h1 class="h2 customer-auth__title">{{ 'customer.activate_account.headline' | t }}</h1>
+        <p class="customer-auth__lead">{{ 'customer.activate_account.subtext' | t }}</p>
       </header>
 
       {%- form 'activate_customer_password', class: 'customer-form' -%}
@@ -46,8 +47,8 @@
           >
         </div>
         <div class="customer-form__actions">
-          <button type="submit" class="btn btn--primary btn--full">{{ 'customer.activate_account.submit' | t }}</button>
-          <button type="submit" name="decline" formnovalidate class="btn btn--ghost btn--full">{{ 'customer.activate_account.cancel' | t }}</button>
+          <button type="submit" class="btn btn--primary btn--lg btn--full">{{ 'customer.activate_account.submit' | t }}</button>
+          <button type="submit" name="decline" formnovalidate class="btn btn--ghost btn--full customer-form__quiet">{{ 'customer.activate_account.cancel' | t }}</button>
         </div>
       {%- endform -%}
     </div>
