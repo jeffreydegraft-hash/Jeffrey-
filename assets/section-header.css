@@ -291,8 +291,14 @@ sticky-header.header-wrapper {
     max-width: min(32vw, 400px);
   }
 
+  /* stretched to its half (not start-aligned, which sizes it to its links)
+     so a menu too long for that half is detected */
   .header--center .header__nav {
-    justify-self: start;
+    justify-self: stretch;
+  }
+
+  .header--center .header__menu {
+    justify-content: flex-start;
   }
 
   /* .header__icon (display: inline-flex) is declared later; match its
