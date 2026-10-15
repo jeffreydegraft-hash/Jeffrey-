@@ -1,0 +1,82 @@
+{%- comment -%}
+  Page template body: an optional serif title, then page.content in .rte at
+  a narrow (reading) or medium measure. When a custom template places a
+  Page hero above this section, turn "Show page title" off so the page
+  keeps a single h1. Nothing here moves; the reader is here for the text.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign width_class = ' page-width--narrow'
+  if section.settings.width == 'medium'
+    assign width_class = ' page-width--medium'
+  endif
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} main-page" id="section-{{ section.id }}">
+  <div class="page-width{{ width_class }}">
+    {%- if section.settings.show_title -%}
+      <header class="main-page__header">
+        <h1 class="h1 main-page__title">{{ page.title | escape }}</h1>
+      </header>
+    {%- endif -%}
+
+    {%- if page.content != blank -%}
+      <div class="rte main-page__content">
+        {{ page.content }}
+      </div>
+    {%- elsif request.design_mode -%}
+      <div class="empty-state main-page__empty">
+        {%- render 'icon', name: 'info', size: 36 -%}
+        <p class="muted text-pretty">{{ 'sections.main_page.empty' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show page title",
+      "info": "Turn off when a Page hero section sits above this one, so the page keeps one main heading.",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Content width",
+      "options": [
+        { "value": "narrow", "label": "Narrow (reading measure)" },
+        { "value": "medium", "label": "Medium" }
+      ],
+      "default": "narrow"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ]
+}
+{% endschema %}

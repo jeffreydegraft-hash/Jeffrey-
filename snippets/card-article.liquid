@@ -1,0 +1,71 @@
+{%- comment -%}
+  Article card on the shared .card base (components.css).
+  Accepts:
+  - article: {Object} article (required)
+  - index: {Number} position in the grid, for the reveal stagger (optional)
+  - show_date: {Boolean} show the published date
+  - show_author: {Boolean} show the author
+  - show_excerpt: {Boolean} show a 24-word excerpt
+  - featured: {Boolean} larger card: 2:1 media and an h3 title at ≥750px
+  Media is 3:2; a post without an image gets a surface panel with the
+  olive-branch ornament instead of a hole. The eyebrow is the first tag,
+  else the blog's title (derived from the article URL, so the card works
+  outside blog templates too). Reading time is always shown in the meta.
+  Usage: {% render 'card-article', article: article, index: forloop.index0, show_date: true %}
+{%- endcomment -%}
+{%- liquid
+  assign stagger = index | default: 0 | modulo: 8
+
+  assign word_count = article.content | strip_html | split: ' ' | size
+  assign reading_minutes = word_count | divided_by: 200 | at_least: 1
+
+  assign eyebrow = article.tags | first
+  if eyebrow == blank
+    assign blog_handle = article.url | split: '/blogs/' | last | split: '/' | first
+    assign eyebrow = blogs[blog_handle].title
+  endif
+
+  if featured
+    assign sizes = '(min-width: 1060px) 880px, (min-width: 750px) 100vw, 100vw'
+    assign title_class = 'h3'
+  else
+    assign sizes = '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw'
+    assign title_class = 'h4'
+  endif
+-%}
+<article class="card card--article{% if featured %} card-article--featured{% endif %}" data-reveal style="--i: {{ stagger }};">
+  <a href="{{ article.url }}" class="card__media-link" aria-label="{{ article.title | escape }}" tabindex="-1">
+    <div class="card__media media">
+      {%- if article.image -%}
+        {%- render 'image', image: article.image, sizes: sizes, loading: 'lazy', class: 'card__img card__img--primary', widths: '400, 600, 800, 1000, 1200, 1600' -%}
+      {%- else -%}
+        <div class="card-article__placeholder" aria-hidden="true">
+          {%- render 'icon', name: 'leaf', size: 40 -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </a>
+  <div class="card__body">
+    {%- if eyebrow != blank -%}
+      <p class="card__eyebrow eyebrow">{{ eyebrow | escape }}</p>
+    {%- endif -%}
+    <h3 class="card__title {{ title_class }}">
+      <a href="{{ article.url }}" class="card__link">{{ article.title | escape }}</a>
+    </h3>
+    <p class="card__meta card-article__meta">
+      {%- if show_date -%}
+        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %-d, %Y' }}</time>
+      {%- endif -%}
+      {%- if show_author and article.author != blank -%}
+        <span>{{ 'blogs.article.by' | t: author: article.author | escape }}</span>
+      {%- endif -%}
+      <span>{{ 'blogs.article.reading_time' | t: minutes: reading_minutes }}</span>
+    </p>
+    {%- if show_excerpt -%}
+      {%- assign excerpt = article.excerpt_or_content | replace: '</', ' </' | strip_html | strip_newlines | truncatewords: 24 -%}
+      {%- if excerpt != blank -%}
+        <p class="card__excerpt">{{ excerpt }}</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</article>

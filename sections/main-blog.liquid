@@ -1,0 +1,126 @@
+{%- comment -%}
+  Blog index: serif title and lead, then a 3-column grid of article cards
+  (snippets/card-article.liquid). On the first page, without a tag filter,
+  the newest post can span two columns at a 2:1 ratio. Twelve posts per
+  page with the shared pagination; a blog with no posts gets a designed
+  empty state. Cards reveal on scroll with --i stagger; the header stays.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+-%}
+{%- paginate blog.articles by 12 -%}
+  <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} main-blog" id="section-{{ section.id }}">
+    <div class="page-width">
+      <header class="section__header main-blog__header">
+        <h1 class="h1 main-blog__title">{{ blog.title | escape }}</h1>
+        {%- if section.settings.intro != blank -%}
+          <p class="lead main-blog__intro">{{ section.settings.intro | escape }}</p>
+        {%- endif -%}
+        {%- if current_tags -%}
+          <p class="main-blog__tagged">
+            <span class="badge badge--outline">{{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}</span>
+            <a href="{{ blog.url }}" class="link link--underline small">{{ 'blogs.general.all_posts' | t }}</a>
+          </p>
+        {%- endif -%}
+      </header>
+
+      {%- if blog.articles.size > 0 -%}
+        <ul class="grid grid--3 main-blog__grid" id="BlogArticles" role="list">
+          {%- for article in blog.articles -%}
+            {%- liquid
+              assign featured = false
+              if section.settings.show_featured and forloop.first and paginate.current_page == 1 and current_tags == blank
+                assign featured = true
+              endif
+            -%}
+            <li class="main-blog__item{% if featured %} main-blog__item--featured{% endif %}">
+              {%- render 'card-article',
+                article: article,
+                index: forloop.index0,
+                show_date: section.settings.show_date,
+                show_author: section.settings.show_author,
+                show_excerpt: section.settings.show_excerpt,
+                featured: featured
+              -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- render 'pagination', paginate: paginate, anchor: '#BlogArticles' -%}
+      {%- else -%}
+        <div class="empty-state main-blog__empty">
+          {%- render 'icon', name: 'quote', size: 36 -%}
+          <h2 class="h3">{{ 'blogs.general.empty' | t }}</h2>
+          <p class="muted text-pretty">{{ 'blogs.general.empty_body' | t }}</p>
+          {%- if current_tags -%}
+            <a href="{{ blog.url }}" class="btn btn--secondary">{{ 'blogs.general.all_posts' | t }}</a>
+          {%- else -%}
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary">{{ 'general.shop_now' | t }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Notes on the botanicals of Scripture, a brief history of anointing oil in the church, and why not all olives are created equal."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured",
+      "label": "Feature the newest post",
+      "info": "The first post on page one spans two columns.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ]
+}
+{% endschema %}

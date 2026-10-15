@@ -1,0 +1,55 @@
+{%- comment -%}
+  404: a quiet, centered band. "404" eyebrow, serif title, one line of
+  body, a primary button home and a text link to the oils. Above the fold,
+  so it enters with .enter (no JS) and its height is in svh, never vh.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} main-404" id="section-{{ section.id }}">
+  <div class="page-width">
+    <div class="empty-state main-404__inner">
+      <p class="eyebrow main-404__eyebrow enter" style="--i: 0;">{{ 'sections.page_404.eyebrow' | t }}</p>
+      <h1 class="h1 main-404__title enter" style="--i: 1;">{{ 'sections.page_404.title' | t }}</h1>
+      <p class="lead main-404__body enter" style="--i: 2;">{{ 'sections.page_404.body' | t }}</p>
+      <div class="cluster main-404__actions enter" style="--i: 3;">
+        <a href="{{ routes.root_url }}" class="btn btn--primary">{{ 'sections.page_404.cta' | t }}</a>
+        <a href="{{ routes.all_products_collection_url }}" class="link link--arrow">
+          {{ 'sections.page_404.secondary_cta' | t }}
+          {%- render 'icon', name: 'arrow-right', size: 18 -%}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 page",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ]
+}
+{% endschema %}

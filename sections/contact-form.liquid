@@ -1,0 +1,233 @@
+{%- comment -%}
+  Contact: heading + intro, then the Shopify contact form. At ≥990px the
+  form takes 7 of 12 columns and a surface panel with the studio's email,
+  phone and address takes 4, with one column of air between. Inputs are
+  16px on 48px rows (base.css). Success and error states render as
+  .form-status blocks that take focus. The details panel hides itself when
+  every brand setting is empty, and the social row hides with no links.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  assign show_details = false
+  if section.settings.show_details
+    if settings.brand_email != blank or settings.brand_phone != blank or settings.brand_address != blank
+      assign show_details = true
+    endif
+  endif
+
+  assign phone_href = settings.brand_phone | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' | replace: '.', ''
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} contact-form" id="section-{{ section.id }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank or section.settings.intro != blank -%}
+      <header class="section__header contact-form__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2 contact-form__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.intro != blank -%}
+          <p class="lead contact-form__intro">{{ section.settings.intro | escape }}</p>
+        {%- endif -%}
+      </header>
+    {%- else -%}
+      <h2 class="visually-hidden">{{ 'contact.form.title' | t }}</h2>
+    {%- endif -%}
+
+    <div class="contact-form__layout{% if show_details %} contact-form__layout--details{% endif %}">
+      {%- form 'contact', id: 'ContactForm', class: 'contact-form__form' -%}
+        {%- if form.posted_successfully? -%}
+          <div class="form-status form-status--success contact-form__status" role="status" tabindex="-1" autofocus>
+            {%- render 'icon', name: 'success', size: 20 -%}
+            <p>{{ 'contact.form.post_success' | t }}</p>
+          </div>
+        {%- elsif form.errors -%}
+          <div class="form-status form-status--error contact-form__status" role="alert" tabindex="-1" autofocus>
+            {%- render 'icon', name: 'error', size: 20 -%}
+            <div>
+              <p><strong>{{ 'contact.form.error_heading' | t }}</strong></p>
+              <ul>
+                {%- for field in form.errors -%}
+                  <li>
+                    {%- if field == 'email' -%}
+                      <a href="#ContactForm-email">{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</a>
+                    {%- else -%}
+                      {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="contact-form__fields">
+          <div class="contact-form__row">
+            <div class="field">
+              <label class="field__label" for="ContactForm-name">{{ 'contact.form.name' | t }}</label>
+              <input
+                class="field__input"
+                type="text"
+                id="ContactForm-name"
+                name="contact[name]"
+                autocomplete="name"
+                value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.name | escape }}{% endif %}"
+              >
+            </div>
+            <div class="field{% if form.errors contains 'email' %} field--error{% endif %}">
+              <label class="field__label" for="ContactForm-email">
+                {{- 'contact.form.email' | t }} <span aria-hidden="true">*</span>
+              </label>
+              <input
+                class="field__input"
+                type="email"
+                id="ContactForm-email"
+                name="contact[email]"
+                autocomplete="email"
+                spellcheck="false"
+                autocapitalize="off"
+                required
+                aria-required="true"
+                value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
+                {% if form.errors contains 'email' %}
+                  aria-invalid="true"
+                  aria-describedby="ContactForm-email-error"
+                {% endif %}
+              >
+              {%- if form.errors contains 'email' -%}
+                <p class="field__error" id="ContactForm-email-error">
+                  {%- render 'icon', name: 'error', size: 16 -%}
+                  <span>{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</span>
+                </p>
+              {%- endif -%}
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="ContactForm-phone">
+              {{- 'contact.form.phone' | t }} <span class="optional">({{ 'general.optional' | t }})</span>
+            </label>
+            <input
+              class="field__input"
+              type="tel"
+              id="ContactForm-phone"
+              name="contact[phone]"
+              autocomplete="tel"
+              inputmode="tel"
+              value="{% if form.phone %}{{ form.phone | escape }}{% elsif customer %}{{ customer.phone | escape }}{% endif %}"
+            >
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="ContactForm-body">
+              {{- 'contact.form.comment' | t }} <span aria-hidden="true">*</span>
+            </label>
+            <textarea
+              class="field__textarea"
+              id="ContactForm-body"
+              name="contact[body]"
+              rows="7"
+              required
+              aria-required="true"
+            >{{ form.body }}</textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary contact-form__submit">{{ 'contact.form.send' | t }}</button>
+        </div>
+      {%- endform -%}
+
+      {%- if show_details -%}
+        <aside class="contact-form__details" aria-labelledby="ContactDetails-{{ section.id }}">
+          <h3 class="eyebrow contact-form__details-title" id="ContactDetails-{{ section.id }}">{{ 'contact.details.heading' | t }}</h3>
+          <ul class="contact-form__list" role="list">
+            {%- if settings.brand_email != blank -%}
+              <li class="contact-form__item">
+                {%- render 'icon', name: 'mail', size: 20 -%}
+                <div class="contact-form__item-body">
+                  <span class="contact-form__item-label">{{ 'contact.details.email' | t }}</span>
+                  <a class="link link--underline contact-form__item-value" href="mailto:{{ settings.brand_email | escape }}">{{ settings.brand_email | escape }}</a>
+                </div>
+              </li>
+            {%- endif -%}
+            {%- if settings.brand_phone != blank -%}
+              <li class="contact-form__item">
+                {%- render 'icon', name: 'phone', size: 20 -%}
+                <div class="contact-form__item-body">
+                  <span class="contact-form__item-label">{{ 'contact.details.phone' | t }}</span>
+                  <a class="link link--underline contact-form__item-value" href="tel:{{ phone_href | escape }}">{{ settings.brand_phone | escape }}</a>
+                </div>
+              </li>
+            {%- endif -%}
+            {%- if settings.brand_address != blank -%}
+              <li class="contact-form__item">
+                {%- render 'icon', name: 'map-pin', size: 20 -%}
+                <div class="contact-form__item-body">
+                  <span class="contact-form__item-label">{{ 'contact.details.address' | t }}</span>
+                  <address class="contact-form__item-value contact-form__address">{{ settings.brand_address | escape | newline_to_br }}</address>
+                </div>
+              </li>
+            {%- endif -%}
+          </ul>
+          {%- render 'social-icons', class: 'contact-form__social' -%}
+        </aside>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Write to us"
+    },
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro",
+      "default": "We are glad to help with orders, ingredients, or choosing an oil. Email info@mountofolives.co or use the form below. Our studio is at 10193 W Grand Pkwy S, Ste. 103-225, Richmond, TX 77407."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_details",
+      "label": "Show contact details",
+      "info": "Email, phone and address come from Theme settings → Brand.",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact form"
+    }
+  ]
+}
+{% endschema %}

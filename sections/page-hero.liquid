@@ -1,0 +1,121 @@
+{%- comment -%}
+  Page hero: a reusable page header for custom page templates (about,
+  science, contact). Ornament, eyebrow, serif title (falls back to the
+  page title), lead intro. It is the first thing on the page, so it enters
+  with .enter (@starting-style in base.css, no JS) and never carries
+  data-reveal. "Remove bottom spacing" lets the next section continue the
+  page without doubling the gap.
+{%- endcomment -%}
+{%- liquid
+  assign padding_class = ''
+  case section.settings.padding
+    when 'tight'
+      assign padding_class = ' section--tight'
+    when 'none'
+      assign padding_class = ' section--none'
+  endcase
+
+  if section.settings.heading != blank
+    assign heading = section.settings.heading
+  else
+    assign heading = page.title | escape
+  endif
+
+  assign ornament_class = 'ornament'
+  if section.settings.alignment == 'left'
+    assign ornament_class = 'ornament ornament--left'
+  endif
+-%}
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} page-hero page-hero--{{ section.settings.alignment }}{% if section.settings.flush_bottom %} page-hero--flush{% endif %}" id="section-{{ section.id }}">
+  <div class="page-width page-width--medium">
+    <header class="page-hero__inner">
+      {%- if section.settings.show_ornament -%}
+        <div class="{{ ornament_class }} page-hero__ornament enter" style="--i: 0;" aria-hidden="true">
+          {%- render 'icon', name: 'leaf', size: 20 -%}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow page-hero__eyebrow enter" style="--i: 1;">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if heading != blank -%}
+        <h1 class="h1 page-hero__heading enter" style="--i: 2;">{{ heading }}</h1>
+      {%- endif -%}
+      {%- if section.settings.intro != blank -%}
+        <p class="lead page-hero__intro enter" style="--i: 3;">{{ section.settings.intro | escape }}</p>
+      {%- endif -%}
+    </header>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page hero",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "About Mount of Olives"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave empty to use the page title."
+    },
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ornament",
+      "label": "Show olive-branch ornament",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Section spacing",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "tight", "label": "Tight" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "checkbox",
+      "id": "flush_bottom",
+      "label": "Remove bottom spacing",
+      "info": "Lets the section below continue the page without a double gap.",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page hero"
+    }
+  ]
+}
+{% endschema %}
