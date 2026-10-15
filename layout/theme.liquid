@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
     {%- liquid
+      # Fallback: the first scheme (the page ground). The script after the
+      # header group retints it to the topmost bar's own scheme.
       assign scheme_light = settings.color_schemes | first
       assign theme_color = scheme_light.settings.background
     -%}
@@ -219,6 +221,34 @@
     <a class="skip-link btn btn--primary btn--sm" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
 
     {% sections 'header-group' %}
+
+    {%- comment -%}
+      theme-color follows the colour at the very top of the page: the scheme of
+      the first header-group section (the bar, or the announcement bar if the
+      merchant moves it above), so a dark bar gets a dark browser toolbar.
+      Runs during parse, before first paint, with no style reads; with no
+      known scheme class in the header group, the fallback in <head> stays.
+    {%- endcomment -%}
+    <script>
+      (function () {
+        var bg = {
+          {%- for scheme in settings.color_schemes -%}
+            {%- capture scheme_hex -%}{{ scheme.settings.background }}{%- endcapture -%}
+            {{ scheme.id | json }}: {{ scheme_hex | strip | json }}{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        };
+        var ids = Object.keys(bg);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (!meta || !ids.length) return;
+        var top = document.body.querySelector(ids.map(function (id) { return '.color-' + CSS.escape(id); }).join(','));
+        for (var i = 0; top && i < ids.length; i++) {
+          if (top.classList.contains('color-' + ids[i])) {
+            if (bg[ids[i]]) meta.setAttribute('content', bg[ids[i]]);
+            break;
+          }
+        }
+      })();
+    </script>
 
     <main id="MainContent" class="main-content" role="main" tabindex="-1" data-template="{{ template.name }}">
       {{ content_for_layout }}

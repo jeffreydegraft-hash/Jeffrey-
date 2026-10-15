@@ -103,13 +103,15 @@
     });
   }
 
+  // Freezes a running spring at its on-screen value. Returns true if one was running.
   function stop(el) {
     const anim = running.get(el);
-    if (!anim) return;
+    if (!anim) return false;
     const value = getComputedStyle(el).transform;
     anim.cancel();
     el.style.transform = value;
     running.delete(el);
+    return true;
   }
 
   /* ---------- momentum & boundaries (apple-design §6, §9) ---------- */
@@ -201,8 +203,7 @@
       this.handle = handle;
       this.captureEl = source === 'handle' ? handle : this.panel;
       // Catch a sheet that is still moving (apple-design §3): it stops under the finger
-      this.caught = running.has(this.panel);
-      if (this.caught) stop(this.panel);
+      this.caught = stop(this.panel);
       window.addEventListener('pointermove', this.onMove, { passive: true });
       window.addEventListener('pointerup', this.onUp);
       window.addEventListener('pointercancel', this.onUp);
@@ -266,17 +267,17 @@
     onUp(e) {
       if (e.pointerId !== this.pointerId) return;
       if (this.state === 'dragging') {
-        // Velocity at release (apple-design §5): only moves from the last 100ms
-        // before the pointerup count, so a finger that rested before lifting
-        // carries no stale flick. A cancelled pointer never dismisses.
+        // Velocity at release (apple-design §5), from the moves of the last 80ms.
+        // A resting finger sends no pointermove, so a pointerup more than 100ms
+        // after the last move means it stopped before lifting: no stale flick.
+        // (Measured against the moves, not a stationary pointerup sample, so
+        // sparse or coalesced events do not drag a real flick's speed down.)
+        // A cancelled pointer never dismisses.
         const cancelled = e.type === 'pointercancel';
-        const recent = this.samples.filter((s) => e.timeStamp - s.t <= 100);
-        let velocity = 0;
-        if (!cancelled && recent.length >= 2) {
-          const first = recent[0];
-          const last = recent[recent.length - 1];
-          velocity = (((last.p - first.p) * this.dir) / Math.max(1, last.t - first.t)) * 1000; // px/s toward dismiss
-        }
+        const first = this.samples[0];
+        const last = this.samples[this.samples.length - 1];
+        const rested = e.timeStamp - last.t > 100;
+        const velocity = cancelled || rested ? 0 : (((last.p - first.p) * this.dir) / Math.max(1, last.t - first.t)) * 1000; // px/s toward dismiss
         const projected = this.offset + project(velocity);
         const dismiss = !cancelled && (projected > this.size * 0.5 || velocity > 700) && velocity > -200;
         this.panel.classList.remove('is-dragging');
