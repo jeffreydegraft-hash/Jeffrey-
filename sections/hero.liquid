@@ -5,7 +5,9 @@
   - centered (default, apple.com product hero): centred eyebrow, h0 headline,
     one-line lead, CTA pair (filled pill + "Learn more ›" link), then a large
     centred product image below.
-  - split: text left, a rounded 4:5 media tile right.
+  - split: text left, a rounded 4:5 media tile right. A product shot (the
+    default image style, or the product fallback) sits whole inside it on
+    white; a photo or video fills the tile.
   - full-bleed: media as the background with text placed over it.
 
   Media, in order: the hero image (or video), else the chosen product's own
@@ -34,7 +36,6 @@
   assign image_mobile = section.settings.image_mobile
   assign hero_product = section.settings.product
   assign image_alt = ''
-  assign from_product = false
 
   if image == blank and video != blank
     assign image = video.preview_image
@@ -47,7 +48,6 @@
     assign image = hero_product.featured_media.preview_image
     assign image_style = 'product'
     assign image_alt = hero_product.featured_media.alt | default: hero_product.title
-    assign from_product = true
   endif
 
   assign has_media = false
@@ -192,7 +192,7 @@
         <div class="hero__content">
           {{ hero_content }}
         </div>
-        <div class="hero__media media{% if from_product %} hero__media--product{% endif %}" style="--ratio: 4 / 5;">
+        <div class="hero__media media{% if has_media and video == blank and image_style == 'product' %} hero__media--product{% endif %}" style="--ratio: 4 / 5;">
           {%- if has_media -%}
             {{ hero_image }}
             {{ hero_video }}
@@ -298,13 +298,13 @@
       "type": "image_picker",
       "id": "image",
       "label": "Image",
-      "info": "Centered: a product shot on white, shown whole below the text. Split: portrait (4:5). Full-bleed: landscape."
+      "info": "Centered: a product shot on white, shown whole below the text. Split: product shots are shown whole; photos fill a portrait (4:5) tile. Full-bleed: landscape."
     },
     {
       "type": "select",
       "id": "image_style",
       "label": "Image style",
-      "info": "Centered layout only. Both show the whole image, never cropped.",
+      "info": "Centered and split layouts. Product shot: shown whole on white. Photo: centered shows it whole with rounded corners; split fills the 4:5 tile.",
       "options": [
         { "value": "product", "label": "Product shot on white" },
         { "value": "photo", "label": "Photo (rounded corners)" }

@@ -10,8 +10,9 @@
    ========================================================================== */
 
 /* === section: collection-banner ===
-   Centred title + short muted description, then the collection image as a
-   wide rounded tile. Nothing here moves: the title must be legible the
+   Centred title + short muted description, then the merchant's collection
+   image (on by default) as a rounded tile at the image's own aspect ratio,
+   never cropped. Nothing here moves: the title must be legible the
    instant the page paints. The bottom spacing is handed to the grid below,
    so stacked sections never double their padding. */
 .collection-banner.section {
@@ -70,23 +71,17 @@
   text-decoration-thickness: 1px;
 }
 
-/* Wide and short: the product tiles stay close to the fold */
+/* The merchant's artwork, whole (APPLE-SPEC §0.3): the box takes the
+   image's own ratio from the inline --ratio, and the height cap keeps tall
+   art from pushing the grid far down. When the cap clamps the box,
+   media--contain letterboxes the image on the white photo ground instead
+   of cropping it. */
 .collection-banner__media {
-  --ratio: 3 / 2;
   --media-radius: var(--r-tile);
+  max-height: 680px;
+  max-height: min(72svh, 680px);
   margin-top: clamp(32px, 5vw, 64px);
-}
-
-@media (min-width: 750px) {
-  .collection-banner__media {
-    --ratio: 2 / 1;
-  }
-}
-
-@media (min-width: 990px) {
-  .collection-banner__media {
-    --ratio: 3 / 1;
-  }
+  background: rgb(var(--c-photo-ground));
 }
 
 /* === section: collection-grid (main-collection-product-grid) ===
@@ -98,6 +93,7 @@
    the sheet itself is spring-driven by the Drawer base. */
 .collection-grid__toolbar {
   display: flex;
+  flex-wrap: wrap; /* 320px: the controls drop under the count instead of squeezing the pills */
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2) var(--space-4);
@@ -119,6 +115,7 @@
 .collection-grid__controls {
   display: flex;
   flex: 0 1 auto;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-2);
@@ -156,7 +153,8 @@
 
 .collection-grid__select {
   position: relative;
-  flex: 0 1 auto;
+  flex: 0 0 auto; /* never squeezed below its own padding; wraps instead */
+  max-width: 100%;
   min-width: 0;
 }
 
@@ -164,6 +162,7 @@
 .collection-grid__select select {
   field-sizing: content; /* fits the chosen order where supported; else shrinks and clips */
   width: auto;
+  min-width: 7.5em;
   max-width: 100%;
   min-height: 36px;
   padding: 0 34px 0 16px;
@@ -758,6 +757,24 @@
 
 .card--collection .card__media {
   --ratio: 1 / 1;
+}
+
+/* No collection image of its own: the tile shows the first product's photo
+   (collection.featured_image fallback), so it is treated as a product shot
+   (APPLE-SPEC §0.3): whole, on the white it was shot on, framed by the gray
+   tile. Padding sits on the link because .media is width: 100%. Merchant
+   collection art keeps cover. The class is set by snippets/card-collection. */
+.card--collection-fit .card__media-link {
+  padding: clamp(12px, 1.6vw, 20px) clamp(12px, 1.6vw, 20px) 0;
+}
+
+.card--collection-fit .card__media {
+  border-radius: var(--r-media);
+  background: rgb(var(--c-photo-ground));
+}
+
+.card--collection-fit .card__img {
+  object-fit: contain;
 }
 
 /* Top-aligned so titles share a line across the row even when one wraps */

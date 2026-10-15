@@ -14,9 +14,13 @@
       assign pages = predictive_search.resources.pages
       assign articles = predictive_search.resources.articles
       assign queries = predictive_search.resources.queries
-      assign terms = predictive_search.terms | escape
+      # Raw on purpose: terms is only ever a `t` value, and `t` escapes values
+      # for keys without the _html suffix (escaping here too printed &amp;).
+      assign terms = predictive_search.terms
       assign total = products.size | plus: collections.size | plus: pages.size | plus: articles.size
       assign aside_count = queries.size | plus: collections.size | plus: pages.size | plus: articles.size
+      # the status line counts every option, suggestions included
+      assign option_count = total | plus: queries.size
     -%}
 
     {%- if total > 0 or queries.size > 0 -%}
@@ -123,7 +127,7 @@
           </li>
         </ul>
       </div>
-      <span hidden data-predictive-search-live>{{ 'search.results_with_count' | t: count: total, terms: terms }}</span>
+      <span hidden data-predictive-search-live>{{ 'search.results_with_count' | t: count: option_count, terms: terms }}</span>
     {%- else -%}
       <div class="predictive-search predictive-search--empty">
         <p class="predictive-search__empty">

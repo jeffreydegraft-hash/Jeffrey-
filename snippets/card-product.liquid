@@ -19,7 +19,9 @@
   span swaps to "Added", .product-form__error). A product with options links
   to its page, where the size is chosen. Sold out: no pill, "Learn more" only.
   The photo is the merchant's own media, whole (object-fit: contain) on the
-  white it was shot on; nothing is drawn, blended or filtered.
+  white it was shot on; nothing is drawn, blended or filtered. A product with
+  no media is a text-only tile (.card--text) on the live store; only the
+  editor shows Shopify's neutral placeholder (APPLE-SPEC §0.2).
 {%- endcomment -%}
 {%- liquid
   if show_secondary_image == nil
@@ -64,8 +66,12 @@
     endif
     assign variant = product.selected_or_first_available_variant
     assign form_id = 'CardProductForm-' | append: product.id | append: '-' | append: index
+    assign show_media = true
+    if product.featured_media == blank and request.design_mode == false
+      assign show_media = false
+    endif
   -%}
-  <article class="card card--product" {% if reveal != false %}data-reveal{% endif %}>
+  <article class="card card--product{% unless show_media %} card--text{% endunless %}" {% if reveal != false %}data-reveal{% endif %}>
     <div class="card__body">
       {%- if status != blank or eyebrow != blank -%}
         <p class="card__tags">
@@ -84,19 +90,21 @@
       </h3>
       {%- render 'price', product: product, price_class: 'price--card' -%}
     </div>
-    <a href="{{ product.url }}" class="card__media-link" aria-label="{{ product.title | escape }}" tabindex="-1">
-      <div class="card__media media" style="--ratio: {{ settings.card_image_ratio }};">
-        {%- if product.featured_media -%}
-          {%- render 'image', image: product.featured_media, sizes: sizes, loading: loading, class: 'card__img card__img--primary', widths: '300, 400, 500, 600, 800, 1000' -%}
-          {%- if show_secondary_image and product.media.size > 1 -%}
-            {%- assign second = product.media[1] -%}
-            {%- render 'image', image: second, sizes: sizes, loading: 'lazy', class: 'card__img card__img--secondary', widths: '300, 400, 500, 600, 800, 1000' -%}
+    {%- if show_media -%}
+      <a href="{{ product.url }}" class="card__media-link" aria-label="{{ product.title | escape }}" tabindex="-1">
+        <div class="card__media media" style="--ratio: {{ settings.card_image_ratio }};">
+          {%- if product.featured_media -%}
+            {%- render 'image', image: product.featured_media, sizes: sizes, loading: loading, class: 'card__img card__img--primary', widths: '300, 400, 500, 600, 800, 1000' -%}
+            {%- if show_secondary_image and product.media.size > 1 -%}
+              {%- assign second = product.media[1] -%}
+              {%- render 'image', image: second, sizes: sizes, loading: 'lazy', class: 'card__img card__img--secondary', widths: '300, 400, 500, 600, 800, 1000' -%}
+            {%- endif -%}
+          {%- elsif request.design_mode -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
           {%- endif -%}
-        {%- else -%}
-          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-        {%- endif -%}
-      </div>
-    </a>
+        </div>
+      </a>
+    {%- endif -%}
     <div class="card__actions">
       {%- if product.available -%}
         {%- if product.has_only_default_variant -%}
@@ -118,8 +126,7 @@
         {%- else -%}
           <a href="{{ product.url }}" class="btn btn--primary btn--sm card__buy">
             {{- 'sections.featured_product.buy' | t -}}
-            <span class="visually-hidden"> {{ product.title | escape }}</span>
-          </a>
+            <span class="visually-hidden"> {{ product.title | escape }}</span></a>
         {%- endif -%}
       {%- endif -%}
       <a href="{{ product.url }}" class="link link--chevron card__more">

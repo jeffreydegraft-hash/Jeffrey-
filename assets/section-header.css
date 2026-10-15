@@ -4,10 +4,11 @@
    (full-screen menu), header-search (search panel), predictive-search.
 
    Motion: the menu and search panels move on the Drawer base springs
-   (theme.js + motion.js); CSS only hides the bar on scroll, fades the flyout
-   in, staggers inner lists and gives press / hover feedback. Only transform
-   and opacity animate; every :hover sits behind (hover: hover) and
-   (pointer: fine); reduced motion keeps opacity and drops movement.
+   (theme.js + motion.js); CSS only hides the bar on scroll, drops the flyout
+   from under the bar (clip-path reveal + fade), staggers inner lists and
+   gives press / hover feedback. Only transform, opacity and that clip-path
+   animate; every :hover sits behind (hover: hover) and (pointer: fine);
+   reduced motion keeps opacity and drops movement.
 
    Materials (apple-design §12): text on glass is --c-ink at ≥ .8 opacity.
    Material tokens are re-declared where a colour scheme is applied, so they
@@ -114,11 +115,19 @@
 /* === section: header (global navigation) === */
 /* The section wrapper is the sticky element (schema "class": "section-header").
    Its stacking context holds, bottom to top: the flyout scrim (1), the menu
-   and search panels (2), the bar (3) — and the phone search overlay (4). */
+   and search panels (2), the bar (3) — and the phone search overlay (4).
+   The wrapper's box stays pinned at the top while the bar slides away, so it
+   lets taps through to the page and only the bar takes them; the drawers,
+   the scrim and the search viewport set their own pointer-events. */
 .section-header {
   position: sticky;
   top: 0;
   z-index: 100;
+  pointer-events: none;
+}
+
+.section-header > .header-wrapper {
+  pointer-events: auto;
 }
 
 .section-header:has(> .header-wrapper[data-sticky="false"]) {
@@ -339,19 +348,36 @@ sticky-header.header-wrapper {
   color: rgb(var(--c-ink));
 }
 
+/* The merchant's logo, intact (APPLE-SPEC §0.1). Height caps at --logo-max-h
+   (40px; 32px on phones and in the compact bar). The box is sized from the
+   logo's aspect ratio (--logo-ratio, set inline by header.liquid), so it
+   hugs the logo instead of letterboxing a narrow lockup, and its width is
+   definite before the file loads (no shift). --logo-h is resolved here, on
+   the element that carries the inline values. */
 .header__logo-media {
+  --logo-h: var(--logo-max-h, 40px);
   display: flex;
   align-items: center;
-  width: min(var(--logo-width, 140px), 42vw);
+  width: min(var(--logo-width, 140px), 42vw, calc(var(--logo-h) * var(--logo-ratio, 4)));
+}
+
+.header--compact .header__logo-media {
+  --logo-h: min(var(--logo-max-h, 40px), 32px);
+}
+
+@media (max-width: 749px) {
+  .header__logo-media {
+    --logo-h: min(var(--logo-max-h, 40px), 32px);
+  }
 }
 
 .header__logo-img {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 34px;
+  max-height: var(--logo-h, 40px);
   object-fit: contain;
-  object-position: left center;
+  object-position: left center; /* only matters if --logo-ratio is missing */
 }
 
 .header--center .header__logo-img {
@@ -400,9 +426,12 @@ details[open] > .header__link {
 }
 
 /* Flyout: a full-width translucent panel under the bar (origin: top). The
-   panel fades in over 300ms; its lists drop 8px and stagger. It fades out in
-   160ms (exits faster than entrances) where ::details-content can keep the
-   closed <details> rendered for that long; elsewhere it closes at once. */
+   panel drops from under the bar over 300ms: a clip-path reveal grows it
+   down from its top edge while it fades in; its lists drop 8px and stagger.
+   It rolls back up and fades out in 160ms (exits faster than entrances)
+   where ::details-content can keep the closed <details> rendered for that
+   long; elsewhere it closes at once. The side and bottom -80px insets keep
+   the shadow; the 0 top inset keeps it off the bar above. */
 .header__dropdown {
   position: absolute;
   top: 100%;
@@ -421,12 +450,13 @@ details[open] > .header__link {
   clip-path: inset(0 -80px -80px -80px); /* keep the shadow off the bar above */
   transform-origin: top center;
   opacity: 1;
-  transition: opacity 300ms var(--ease-out);
+  transition: opacity 300ms var(--ease-out), clip-path 300ms var(--ease-out);
 }
 
 @starting-style {
   details[open] > .header__dropdown {
     opacity: 0;
+    clip-path: inset(0 -80px 100% -80px);
   }
 }
 
@@ -436,6 +466,7 @@ details[open] > .header__link {
 
 .header__disclosure details:not([open]) > .header__dropdown {
   opacity: 0;
+  clip-path: inset(0 -80px 100% -80px);
   pointer-events: none;
   transition-duration: var(--dur-fast);
 }
@@ -544,6 +575,16 @@ a.header__flyout-heading:active {
   details[open] .header__flyout-all {
     opacity: 0;
     transform: translateY(-8px);
+  }
+}
+
+/* Touch at ≥ 990px (iPad landscape) opens flyouts by tap: 44px rows. After
+   the rules above, which are as specific, so this wins. */
+@media (pointer: coarse) {
+  .header__flyout-link,
+  .header__flyout-sublink,
+  a.header__flyout-heading {
+    min-height: 44px;
   }
 }
 
@@ -703,6 +744,7 @@ a.header__flyout-heading:active {
   --sheet-axis: y;
   --sheet-dir: -1;
   --sheet-drag: 0;
+  --sheet-open-duration: 0.45s; /* APPLE-SPEC §4 "Menu overlay open" preset */
   top: var(--header-bottom, var(--header-height));
   right: 0;
   bottom: 0;
@@ -1312,6 +1354,12 @@ h3.predictive-search__heading {
   transition: color var(--dur-fast) ease, opacity var(--dur-press) var(--ease-out);
 }
 
+@media (pointer: coarse) {
+  .search-drawer__quick-link {
+    min-height: 44px;
+  }
+}
+
 .search-drawer__quick-link .icon {
   stroke-width: 2.2;
   color: rgba(var(--c-ink), 0.8);
@@ -1622,6 +1670,13 @@ h3.predictive-search__heading {
   /* the bar stays put instead of sliding away */
   .header-wrapper.is-hidden {
     transform: none;
+  }
+
+  /* the flyout fades in place: no clip-path reveal, in either state */
+  .header__dropdown,
+  .header__disclosure details:not([open]) > .header__dropdown {
+    clip-path: inset(0 -80px -80px -80px);
+    transition-property: opacity;
   }
 
   .header__flyout-list > li,

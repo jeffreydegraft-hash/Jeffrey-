@@ -114,6 +114,14 @@
           this.updateURL(variant);
           this.updateMedia(variant);
           if (!variant) {
+            // No variant for this combination: drop the last variant's price,
+            // SKU and stock line beside "Unavailable", and any response for it
+            // still in flight (it would restore them and re-enable the button).
+            if (this.controller) this.controller.abort();
+            ['price', 'Sku', 'Inventory'].forEach((prefix) => {
+              const el = document.getElementById(`${prefix}-${this.sectionId}`);
+              if (el) el.hidden = true;
+            });
             publish(EVENTS.variantChanged, { variant: null, sectionId: this.sectionId });
             return;
           }
@@ -211,26 +219,32 @@
 
         renderSection(variant) {
           if (this.controller) this.controller.abort();
-          this.controller = new AbortController();
+          const controller = (this.controller = new AbortController());
           const sep = this.url.includes('?') ? '&' : '?';
           const url = `${this.url}${sep}variant=${variant.id}&section_id=${encodeURIComponent(this.sectionId)}`;
           const price = document.getElementById(`price-${this.sectionId}`);
           if (price) price.classList.add('is-loading');
-          fetch(url, { signal: this.controller.signal })
+          fetch(url, { signal: controller.signal })
             .then((res) => (res.ok ? res.text() : Promise.reject(new Error(String(res.status)))))
             .then((html) => {
+              if (controller.signal.aborted) return;
               const doc = new DOMParser().parseFromString(html, 'text/html');
-              this.swap(doc, `price-${this.sectionId}`);
+              // copyHidden: the server never hides the price, so this also
+              // brings it back after an unavailable combination hid it
+              this.swap(doc, `price-${this.sectionId}`, true);
               this.swap(doc, `Sku-${this.sectionId}`, true);
               this.swap(doc, `Inventory-${this.sectionId}`, true);
               this.syncButton(doc);
               this.syncQuantity(doc);
             })
             .catch(() => {
-              /* aborted or offline: the JSON-derived state above still holds */
+              /* aborted or offline: the JSON-derived state above still holds.
+                 Offline, never leave the price hidden for a real variant. */
+              if (!controller.signal.aborted && price) price.hidden = false;
             })
             .finally(() => {
-              if (price) price.classList.remove('is-loading');
+              // A superseded request must not clear the newer one's loading state
+              if (price && this.controller === controller) price.classList.remove('is-loading');
             });
         }
 
@@ -283,13 +297,15 @@
           this.lightbox = this.querySelector('[data-lightbox]');
           this.layout = this.dataset.layout || 'thumbnails';
           this.desktop = window.matchMedia('(min-width: 990px)');
-          this.phone = window.matchMedia('(max-width: 749px)');
+          // Phones in portrait or landscape; identical to the lightbox query in section-product.css
+          this.phone = window.matchMedia('(max-width: 749px), (max-height: 500px) and (pointer: coarse)');
           this.onClick = this.onClick.bind(this);
           this.onThumbKeydown = this.onThumbKeydown.bind(this);
           this.addEventListener('click', this.onClick);
           this.thumbs.forEach((thumb) => thumb.addEventListener('keydown', this.onThumbKeydown));
           this.observeSlides();
           this.bindLightbox();
+          this.setupModels();
           // Deep link to a variant whose media is not first: line the carousel up without motion.
           const active = this.activeSlide;
           if (active && this.slides.indexOf(active) > 0 && !this.desktop.matches) this.scrollToSlide(active, 'auto');
@@ -339,6 +355,11 @@
             const active = s === slide;
             s.classList.toggle('is-active', active);
             if (!active) s.querySelectorAll('video').forEach((video) => video.pause && video.pause());
+            if (!active && this.modelUIs) {
+              this.modelUIs.forEach(({ el, ui }) => {
+                if (s.contains(el) && typeof ui.pause === 'function') ui.pause();
+              });
+            }
           });
           this.thumbs.forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.mediaId === id)));
           this.dots.forEach((d) => d.setAttribute('aria-current', d.dataset.mediaId === id ? 'true' : 'false'));
@@ -355,6 +376,29 @@
           const left = slide.offsetLeft - this.track.offsetLeft;
           if (typeof this.track.scrollTo === 'function') this.track.scrollTo({ left, behavior: behavior || 'smooth' });
           else this.track.scrollLeft = left;
+        }
+
+        /* 3D models: model_viewer_tag only writes <model-viewer>; Shopify's
+           model-viewer-ui feature defines it and adds its controls. Runs from
+           connectedCallback, so a section the theme editor reloads (a new
+           element) is set up too. Shopify.loadFeatures comes from
+           content_for_header (layout head). */
+        setupModels() {
+          const models = Array.from(this.querySelectorAll('model-viewer'));
+          const Shopify = window.Shopify;
+          // Once per element: a moved (re-connected) gallery keeps its UIs
+          if (this.modelsRequested || !models.length || !Shopify || typeof Shopify.loadFeatures !== 'function') return;
+          this.modelsRequested = true;
+          Shopify.loadFeatures([
+            {
+              name: 'model-viewer-ui',
+              version: '1.0',
+              onLoad: (errors) => {
+                if (errors || typeof Shopify.ModelViewerUI !== 'function') return;
+                this.modelUIs = models.map((el) => ({ el, ui: new Shopify.ModelViewerUI(el) }));
+              },
+            },
+          ]);
         }
 
         /* Mobile carousel → dots follow the slide in view. */
@@ -727,7 +771,10 @@
           this.sync();
 
           this.unsubscribe = subscribe(EVENTS.variantChanged, (data) => {
-            if (!data || data.sectionId !== this.sectionId || !data.variant || !this.price) return;
+            if (!data || data.sectionId !== this.sectionId || !this.price) return;
+            // No variant for the chosen options: no price beside "Unavailable"
+            this.price.hidden = !data.variant;
+            if (!data.variant) return;
             const text = formatPrice(data.variant.price);
             if (text) this.price.textContent = text;
           });

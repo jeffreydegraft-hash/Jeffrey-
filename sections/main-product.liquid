@@ -4,7 +4,10 @@
   (5/12). Below 990px the gallery is a native scroll-snap carousel (full
   bleed on phones) and a translucent buy bar (<sticky-buy-bar>, product.js)
   rises from the bottom once the main "Add to Bag" button scrolls away.
-  Every block root carries block.shopify_attributes.
+  Every block root carries block.shopify_attributes. In the theme editor a
+  block with nothing to show for this product renders a .product__block--empty
+  box instead, so it stays selectable. A product with no media has no gallery
+  column on the live store (.product__grid--no-media).
 {%- endcomment -%}
 {%- liquid
   assign product_form_id = 'product-form-' | append: section.id
@@ -67,6 +70,13 @@
   else
     assign sticky_label = 'products.product.add_to_cart' | t
   endif
+
+  # No media on the live store: no gallery column, never a drawn placeholder
+  # (APPLE-SPEC §0.2). The editor keeps Shopify's neutral placeholder.
+  assign show_media = true
+  if product.media.size == 0 and request.design_mode == false
+    assign show_media = false
+  endif
 -%}
 
 <section
@@ -75,10 +85,12 @@
   data-section="{{ section.id }}"
 >
   <div class="page-width">
-    <div class="product__grid product__grid--{{ media_layout }}{% if section.settings.enable_sticky_info %} product__grid--sticky{% endif %}">
-      <div class="product__media">
-        {%- render 'product-media-gallery', product: product, layout: media_layout, enable_zoom: section.settings.enable_zoom -%}
-      </div>
+    <div class="product__grid product__grid--{{ media_layout }}{% if section.settings.enable_sticky_info %} product__grid--sticky{% endif %}{% unless show_media %} product__grid--no-media{% endunless %}">
+      {%- if show_media -%}
+        <div class="product__media">
+          {%- render 'product-media-gallery', product: product, layout: media_layout, enable_zoom: section.settings.enable_zoom -%}
+        </div>
+      {%- endif -%}
 
       <div class="product__info">
         <div class="product__info-inner">
@@ -93,6 +105,10 @@
                 {%- if theme_word != blank -%}
                   <div class="product__block product__block--theme-word" {{ block.shopify_attributes }}>
                     <p class="tag product__tag">{{ theme_word | escape }}</p>
+                  </div>
+                {%- elsif request.design_mode -%}
+                  <div class="product__block product__block--empty" {{ block.shopify_attributes }}>
+                    <p class="caption muted">{{ 'sections.main_product.empty_block' | t }}</p>
                   </div>
                 {%- endif -%}
 
@@ -189,6 +205,10 @@
                       {%- endfor -%}
                     </ul>
                   </div>
+                {%- elsif request.design_mode -%}
+                  <div class="product__block product__block--empty" {{ block.shopify_attributes }}>
+                    <p class="caption muted">{{ 'sections.main_product.empty_block' | t }}</p>
+                  </div>
                 {%- endif -%}
 
               {%- when 'scripture' -%}
@@ -208,6 +228,10 @@
                       </div>
                     {%- endif -%}
                   </div>
+                {%- elsif request.design_mode -%}
+                  <div class="product__block product__block--empty" {{ block.shopify_attributes }}>
+                    <p class="caption muted">{{ 'sections.main_product.empty_block' | t }}</p>
+                  </div>
                 {%- endif -%}
 
               {%- when 'botanical' -%}
@@ -217,6 +241,10 @@
                       <h2 class="product__copy-title">{{ 'products.product.botanical_label' | t }}</h2>
                       <p class="product__copy-text">{{ botanical | escape | newline_to_br }}</p>
                     </div>
+                  </div>
+                {%- elsif request.design_mode -%}
+                  <div class="product__block product__block--empty" {{ block.shopify_attributes }}>
+                    <p class="caption muted">{{ 'sections.main_product.empty_block' | t }}</p>
                   </div>
                 {%- endif -%}
 
@@ -228,6 +256,10 @@
                 {%- elsif default_one_liner != blank -%}
                   <div class="product__block product__block--description" {{ block.shopify_attributes }}>
                     <p class="product__description">{{ default_one_liner | escape }}</p>
+                  </div>
+                {%- elsif request.design_mode -%}
+                  <div class="product__block product__block--empty" {{ block.shopify_attributes }}>
+                    <p class="caption muted">{{ 'sections.main_product.empty_block' | t }}</p>
                   </div>
                 {%- endif -%}
 
@@ -297,6 +329,10 @@
                       </details>
                     </olivet-accordion>
                   </div>
+                {%- elsif request.design_mode -%}
+                  <div class="product__block product__block--empty" {{ block.shopify_attributes }}>
+                    <p class="caption muted">{{ 'sections.main_product.empty_block' | t }}</p>
+                  </div>
                 {%- endif -%}
 
               {%- when 'share' -%}
@@ -318,6 +354,10 @@
                 {%- if block.settings.text != blank -%}
                   <div class="product__block product__block--text" {{ block.shopify_attributes }}>
                     <div class="rte product__text">{{ block.settings.text }}</div>
+                  </div>
+                {%- elsif request.design_mode -%}
+                  <div class="product__block product__block--empty" {{ block.shopify_attributes }}>
+                    <p class="caption muted">{{ 'sections.main_product.empty_block' | t }}</p>
                   </div>
                 {%- endif -%}
             {%- endcase -%}

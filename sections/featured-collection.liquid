@@ -4,11 +4,12 @@
   2-up phone with compact tiles; a short last row centres under the full
   ones), then a centred "Shop all ›" link.
 
-  Empty cases:
-  - no collection chosen: placeholder cards (design-mode preview and a
-    graceful default on the storefront)
-  - a chosen collection with no products: placeholders in the editor, a
-    designed empty state on the storefront (never fake products to customers)
+  Empty cases (never fake products to customers, APPLE-SPEC §0.2):
+  - no collection chosen (cleared, deleted or unpublished): the storefront
+    shows the store's "all" collection; the editor shows Shopify's neutral
+    placeholder cards so the merchant sees where to pick one
+  - a collection with no products: placeholders in the editor, a designed
+    empty state on the storefront
 {%- endcomment -%}
 {%- liquid
   assign featured = section.settings.collection
@@ -26,11 +27,13 @@
       assign padding_class = ' section--none'
   endcase
 
+  if featured == blank and request.design_mode == false
+    assign featured = collections.all
+  endif
+
   assign show_placeholders = false
   assign show_empty = false
-  if featured == blank
-    assign show_placeholders = true
-  elsif featured.products_count == 0
+  if featured == blank or featured.products_count == 0
     if request.design_mode
       assign show_placeholders = true
     else

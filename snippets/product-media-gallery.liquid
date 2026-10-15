@@ -11,7 +11,7 @@
   overflow scroller: the browser owns the swipe, so no touch-action here.
   Zoom: image slides are buttons that open the native <dialog class="lightbox">:
   a centred modal on large screens, full screen with drag-down-to-dismiss on
-  phones.
+  phones, upright or on their side.
 
   Accepts:
   - product: {Object} product
@@ -39,6 +39,12 @@
   endif
   assign media_sizes = '(min-width: 1300px) 700px, (min-width: 990px) 55vw, 100vw'
 -%}
+{%- comment -%}
+  No media: nothing on the live store (no drawn product, no empty gallery
+  landmark; APPLE-SPEC §0.2). Shopify's neutral placeholder shows only in
+  the theme editor.
+{%- endcomment -%}
+{%- unless media_count == 0 and request.design_mode == false -%}
 <media-gallery
   id="MediaGallery-{{ section.id }}"
   class="media-gallery media-gallery--{{ layout }}{% if media_count < 2 %} media-gallery--single{% endif %}"
@@ -48,6 +54,7 @@
   aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
 >
   {%- if media_count == 0 -%}
+    {%- comment -%} Theme editor only (see the guard above) {%- endcomment -%}
     <div class="media-gallery__stage">
       <div class="media media-gallery__placeholder">
         {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
@@ -138,3 +145,4 @@
     {%- endif -%}
   {%- endif -%}
 </media-gallery>
+{%- endunless -%}

@@ -76,7 +76,7 @@
           "type": "text",
           "settings": {
             "text": "<p>Each oil is carefully blended, tested, and bottled by hand in our Richmond studio. Our formulas are natural, paraben-free, and vegan, and every ingredient is derived from biblical botanicals.</p>",
-            "size": "lead"
+            "size": "body"
           }
         }
       },
@@ -109,7 +109,7 @@
           "settings": {
             "icon": "sparkle",
             "title": "Polyphenol Alpha complex",
-            "body": "Our proprietary antioxidant-rich complex is derived entirely from natural botanical sources and formulated to support the skin's natural barrier."
+            "body": "Our proprietary antioxidant-rich complex, derived entirely from natural botanical sources."
           }
         },
         "value-3": {

@@ -25,7 +25,8 @@
       {%- liquid
         assign line_id = context | append: '-' | append: forloop.index
         assign quantity_id = 'Quantity-' | append: line_id
-        assign quantity_attrs = 'data-index="' | append: forloop.index | append: '" data-quantity-variant-id="' | append: item.variant_id | append: '"'
+        assign line_key = item.key | escape
+        assign quantity_attrs = 'data-index="' | append: forloop.index | append: '" data-quantity-variant-id="' | append: item.variant_id | append: '" data-line-key="' | append: line_key | append: '"'
         assign has_line_discount = false
         if item.original_line_price != item.final_line_price
           assign has_line_discount = true
@@ -47,7 +48,7 @@
             <p class="cart-line__vendor">{{ item.product.vendor | escape }}</p>
           {%- endif -%}
 
-          <a href="{{ item.url }}" class="cart-line__title clamp-2">{{ item.product.title | escape }}</a>
+          <a href="{{ item.url }}" class="cart-line__title">{{ item.product.title | escape }}</a>
 
           {%- if item.product.has_only_default_variant == false -%}
             <p class="cart-line__variant">
@@ -131,7 +132,7 @@
 
         <div class="cart-line__actions">
           <div class="cart-line__controls">
-            {%- render 'quantity-input', id: quantity_id, value: item.quantity, min: 1, size: 'sm', label: item.product.title, data_attrs: quantity_attrs -%}
+            {%- render 'quantity-input', id: quantity_id, value: item.quantity, min: item.variant.quantity_rule.min, max: item.variant.quantity_rule.max, step: item.variant.quantity_rule.increment, size: 'sm', label: item.product.title, data_attrs: quantity_attrs -%}
             <cart-remove-button class="cart-line__remove-wrap" data-index="{{ forloop.index }}">
               <button type="button" class="cart-line__remove" aria-label="{{ 'cart.general.remove_title' | t: title: item.title }}">
                 {{- 'cart.general.remove' | t -}}

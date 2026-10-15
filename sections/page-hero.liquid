@@ -5,7 +5,10 @@
   the show_ornament setting (id kept, templates reference it) now shows
   only the merchant's own square logo mark (Theme settings → Logo →
   logo_mark) through snippets/brand-logo.liquid, used intact; with no
-  mark set it renders nothing. First thing on the page, so it enters
+  mark set it renders nothing. There is no light version of the mark, so
+  on a dark ground (scheme-3 / scheme-4, or any scheme whose background is
+  dark) it shows only when settings.logo_dark_safe says the merchant's
+  logo reads well on dark. First thing on the page, so it enters
   with .enter
   (@starting-style in base.css, no JS) and never carries data-reveal.
   A long intro (over 100 characters) is set a step smaller on desktop and
@@ -46,11 +49,35 @@
   if eyebrow_key == heading_key
     assign eyebrow = ''
   endif
+
+  # Logo tone follows the scheme, as in the header and footer: the scheme's
+  # own background decides when it is known, otherwise the scheme id does
+  assign logo_tone = 'light'
+  assign scheme_id = section.settings.color_scheme.id | default: section.settings.color_scheme
+  assign scheme_bg = section.settings.color_scheme.settings.background
+  if scheme_bg != blank
+    assign scheme_brightness = scheme_bg | color_brightness
+    if scheme_brightness < 128
+      assign logo_tone = 'dark'
+    endif
+  elsif scheme_id == 'scheme-3' or scheme_id == 'scheme-4'
+    assign logo_tone = 'dark'
+  endif
+
+  # brand-logo returns an override regardless of tone, so the gate lives here:
+  # the mark has no light version, so a dark ground shows it only when the
+  # merchant has marked their logo as dark-safe
+  assign show_mark = false
+  if section.settings.show_ornament and settings.logo_mark != blank
+    if logo_tone == 'light' or settings.logo_dark_safe
+      assign show_mark = true
+    endif
+  endif
 -%}
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} {{ hero_class }}" id="section-{{ section.id }}">
   <div class="page-width page-width--medium">
     <header class="page-hero__inner">
-      {%- if section.settings.show_ornament and settings.logo_mark != blank -%}
+      {%- if show_mark -%}
         <div class="page-hero__mark enter" style="--i: 0;">
           {%- render 'brand-logo', override: settings.logo_mark, width: 48, class: 'page-hero__mark-img', alt_empty: true -%}
         </div>
@@ -106,7 +133,7 @@
       "type": "checkbox",
       "id": "show_ornament",
       "label": "Show logo mark",
-      "info": "Shows your square logo mark (Theme settings → Logo) above the heading, exactly as uploaded. Nothing shows when no mark is set.",
+      "info": "Shows your square logo mark (Theme settings → Logo) above the heading, exactly as uploaded. Nothing shows when no mark is set. Hidden on dark color schemes unless 'My main logo reads well on dark backgrounds' is on.",
       "default": true
     },
     {

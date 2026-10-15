@@ -73,6 +73,16 @@
   }
 }
 
+/* No media on the live store: no gallery column (APPLE-SPEC §0.2, text
+   only). The buy column is centred at reading width. Same specificity as
+   the rule above, so it must stay after it. */
+@media (min-width: 990px) {
+  .product__grid--no-media {
+    grid-template-columns: minmax(0, var(--text-max));
+    justify-content: center;
+  }
+}
+
 /* ---- block rhythm: grouped like the Apple Store buy column ---- */
 .product__block + .product__block {
   margin-top: var(--space-5);
@@ -96,6 +106,15 @@
 
 .product__block--price + .product__block {
   margin-top: var(--space-6);
+}
+
+/* Theme editor only (request.design_mode): a block with nothing to show for
+   this product still renders a box, so selecting it in the sidebar finds it.
+   Its own modifier keeps the adjacency rules above unchanged. */
+.product__block--empty {
+  padding: var(--space-3) var(--space-4);
+  border: 1px dashed rgb(var(--c-line));
+  border-radius: var(--r-md);
 }
 
 .product__block--quantity + .product__block--buy-buttons {
@@ -147,8 +166,12 @@
   margin-top: var(--space-2);
 }
 
+/* product.js hides these while the chosen options match no variant;
+   the author display: flex would otherwise beat [hidden] */
+.product__price[hidden],
 .product__sku[hidden],
-.product__inventory[hidden] {
+.product__inventory[hidden],
+.product-sticky__price[hidden] {
   display: none;
 }
 
@@ -226,6 +249,9 @@
   line-height: 1.24;
   letter-spacing: -0.022em;
   overflow-wrap: anywhere;
+  /* two-line names split evenly; the picker binds each number to its unit
+     with a no-break space, so "(15 ml)" never splits */
+  text-wrap: balance;
   font-variant-numeric: lining-nums;
 }
 
@@ -452,10 +478,9 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
   text-align: center;
 }
 
-.product__scripture-label {
-  color: rgb(var(--c-ink-2));
-}
-
+/* Colours come from the shared pattern, as in the scripture-quote section:
+   the label is a .tag (olive detail colour), the reference is the
+   .scripture__ref default (muted gray). */
 .product__scripture .scripture__quote {
   max-width: 30ch;
   font-size: calc(clamp(1.3125rem, 1.1rem + 0.35vw, 1.5rem) * var(--heading-scale, 1));
@@ -466,7 +491,6 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
 .product__scripture .scripture__ref {
   font-size: 0.875rem;
   letter-spacing: -0.016em;
-  color: rgb(var(--c-gold));
 }
 
 /* ---- meaning / botanical / description: 17px reading copy ---- */
@@ -626,6 +650,8 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
 
 .media-gallery__slide > iframe,
 .media-gallery__slide > model-viewer,
+.media-gallery__slide > .shopify-model-viewer-ui,
+.media-gallery__slide .shopify-model-viewer-ui model-viewer,
 .media-gallery__video {
   position: absolute;
   inset: 0;
@@ -1063,7 +1089,10 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
   }
 }
 
-@media (max-width: 749px) {
+/* Phones, portrait or landscape (a phone on its side is wider than 749px
+   but short, with a coarse pointer). Keep this query identical to
+   MediaGallery.phone in assets/product.js. */
+@media (max-width: 749px), (max-height: 500px) and (pointer: coarse) {
   .lightbox {
     --lb-pad: var(--space-4);
   }
@@ -1083,6 +1112,9 @@ product-form.product-form .shopify-payment-button .shopify-payment-button__more-
   .lightbox__body {
     margin-top: calc(56px + var(--safe-top));
     margin-bottom: calc(24px + var(--safe-bottom));
+    /* landscape: clear the notch / Dynamic Island on either side */
+    margin-left: var(--safe-left);
+    margin-right: var(--safe-right);
     /* one-finger drags are ours; pinch-zoom stays with the browser */
     touch-action: none;
     touch-action: pinch-zoom;

@@ -198,7 +198,8 @@
       const base = routes.predictive_search_url || '/search/suggest';
       const params = new URLSearchParams({
         q,
-        'resources[type]': 'product,collection,page,article',
+        // an explicit list replaces the API default, so suggestions must be asked for
+        'resources[type]': 'query,product,collection,page,article',
         'resources[limit]': '4',
         'resources[options][fields]': 'title,product_type,variants.title,vendor',
         section_id: 'predictive-search',

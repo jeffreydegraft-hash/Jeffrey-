@@ -92,8 +92,10 @@
   text-align: center;
 }
 
+/* Wide enough (~60 characters) that a one-sentence lead stays on one line
+   on desktop; balance only matters once it has to wrap */
 .hero--centered .hero__subheading {
-  max-width: var(--text-max);
+  max-width: min(100%, 30em);
   text-wrap: balance;
 }
 
@@ -375,11 +377,21 @@
 /* === section: values-strip ===
    An apple.com feature row: centred items, a 40px line icon in the accent
    detail colour (no disc), .h5 title, muted .small body. Four across from
-   990px, two on tablets, one on phones (centred lines stay short). No rules
-   between sections: the neighbouring surfaces separate it. */
+   1200px, two on tablets and small laptops, one on phones (centred lines
+   stay short). In a row, every body starts on one line whether its title
+   wraps or not (subgrid). No rules between sections: the neighbouring
+   surfaces separate it. */
 .values-strip__grid {
   row-gap: clamp(40px, 5vw, 56px);
   column-gap: clamp(16px, 3vw, 40px);
+}
+
+/* 990-1199px: four columns would be ~210-250px wide and push the centred
+   bodies past three lines, so the strip stays two across until 1200px */
+@media (min-width: 990px) and (max-width: 1199px) {
+  .values-strip__grid {
+    grid-template-columns: repeat(var(--cols-tablet, 2), minmax(0, 1fr));
+  }
 }
 
 .values-strip__item {
@@ -419,8 +431,24 @@
   text-wrap: pretty;
 }
 
+/* Side by side: each item spans two rows of the strip's grid (title, body)
+   and shares them with its neighbours, so a one-line title's body lines up
+   with the bodies under two-line titles. Without subgrid the items keep the
+   flex column above. */
+@supports (grid-template-rows: subgrid) {
+  @media (min-width: 750px) {
+    .values-strip__item {
+      display: grid;
+      grid-row: span 2;
+      grid-template-rows: subgrid;
+      justify-items: center;
+      align-items: start;
+    }
+  }
+}
+
 /* Two columns on tablets: an odd last value centres on its own row */
-@media (min-width: 750px) and (max-width: 989px) {
+@media (min-width: 750px) and (max-width: 1199px) {
   .values-strip__item:last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
@@ -434,6 +462,15 @@
   .values-strip__icon .icon {
     width: 36px;
     height: 36px;
+  }
+
+  /* Under a long centred rich-text that flows into this strip on one band
+     (flush bottom), the rich-text reads left-aligned on phones; the values
+     follow it so the band keeps one alignment */
+  .shopify-section:has(> .rich-text--long.section--bottom-none) + .shopify-section > .values-strip .values-strip__item,
+  .shopify-section:has(> .rich-text--long.section--bottom-none) + .shopify-section > .values-strip .values-strip__title {
+    align-items: flex-start;
+    text-align: left;
   }
 }
 

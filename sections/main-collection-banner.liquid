@@ -1,8 +1,11 @@
 {%- comment -%}
   Collection banner (Apple Store category header): a big centred title and a
-  short muted description, then straight into the products (APPLE-SPEC §5).
-  The collection image is optional (off by default): a wide rounded tile
-  under the description when the merchant turns it on.
+  short muted description, then the merchant's own collection image, then
+  the products (APPLE-SPEC §5).
+  The collection image is on by default and never cropped (APPLE-SPEC §0.3):
+  the box takes the image's own aspect ratio, a height cap keeps tall art
+  from pushing the grid far down, and anything the cap trims is letterboxed
+  on the white photo ground (media--contain) instead of cut off.
   The title is above the fold and must be readable the instant the page
   paints, so nothing in this section carries data-reveal.
   Centred paragraphs stay within about three lines (APPLE-SPEC §6): about
@@ -13,6 +16,7 @@
   assign show_image = false
   if section.settings.show_image and collection.image != blank
     assign show_image = true
+    assign image_alt = collection.image.alt | default: collection.title
   endif
 
   assign show_description = false
@@ -48,8 +52,8 @@
     </header>
 
     {%- if show_image -%}
-      <div class="media collection-banner__media">
-        {%- render 'image', image: collection.image, sizes: '(min-width: 1248px) 1200px, calc(100vw - 40px)', widths: '600, 900, 1200, 1600, 2000, 2400', loading: 'eager', fetchpriority: 'high', class: 'collection-banner__img', alt: collection.title -%}
+      <div class="media media--contain collection-banner__media" style="--ratio: {{ collection.image.aspect_ratio }};">
+        {%- render 'image', image: collection.image, sizes: '(min-width: 1248px) 1200px, calc(100vw - 40px)', widths: '600, 900, 1200, 1600, 2000, 2400', loading: 'eager', fetchpriority: 'high', class: 'collection-banner__img', alt: image_alt -%}
       </div>
     {%- endif -%}
   </div>
@@ -69,8 +73,8 @@
       "type": "checkbox",
       "id": "show_image",
       "label": "Show collection image",
-      "info": "A wide rounded tile under the title, when the collection has an image. Off keeps the products near the top of the page.",
-      "default": false
+      "info": "Shows the collection's own image under the title, uncropped, when the collection has one.",
+      "default": true
     },
     {
       "type": "checkbox",

@@ -41,6 +41,12 @@
   transition-duration: var(--dur-drawer);
 }
 
+/* While a finger drags the sheet the dim tracks it 1:1 (theme.js writes the
+   opacity on every move); the release animates on the transition above. */
+[data-drawer]:has(.drawer__panel.is-dragging) .drawer__backdrop {
+  transition: none;
+}
+
 .drawer__panel {
   --sheet-closed: translateX(calc(100% + 24px));
   --sheet-axis: x;
@@ -137,6 +143,32 @@
     --sheet-axis: y;
     --sheet-dir: 1;
     --sheet-drag: 1;
+    /* The material moves to ::before, which runs on below the bottom edge */
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* The sheet stays attached to the screen edge (apple-design §9): when the
+     upward rubber-band or the settle spring lifts it, this extension of the
+     material fills the gap below instead of showing the page. The panel's
+     transform makes it a stacking context, so z-index -1 sits behind its
+     content; translateY(100%) still hides the extension when closed. Phones
+     only: the inset floating sheets at 750px+ would show it below them. */
+  .drawer__panel--right::before,
+  .drawer__panel--left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -50svh;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--material-thick);
+    -webkit-backdrop-filter: var(--material-blur-thick);
+    backdrop-filter: var(--material-blur-thick);
+    pointer-events: none;
   }
 }
 
@@ -269,10 +301,27 @@
   [data-drawer].is-open .drawer__panel {
     opacity: 1;
   }
+
+  /* Nothing lifts, so the phone sheet needs no extension below its edge. The
+     material stays on the panel itself: under the fading panel (opacity < 1
+     makes it a backdrop root) a pseudo-element's blur would show nothing. */
+  .drawer__panel--right,
+  .drawer__panel--left {
+    background: var(--material-thick);
+    -webkit-backdrop-filter: var(--material-blur-thick);
+    backdrop-filter: var(--material-blur-thick);
+  }
+
+  .drawer__panel--right::before,
+  .drawer__panel--left::before {
+    content: none;
+  }
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .drawer__panel {
+  .drawer__panel,
+  .drawer__panel--right::before,
+  .drawer__panel--left::before {
     background: rgb(var(--c-bg));
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -285,6 +334,13 @@
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     box-shadow: 0 0 0 1px rgb(var(--c-line)), var(--shadow-sheet);
+  }
+
+  .drawer__panel--right::before,
+  .drawer__panel--left::before {
+    background: rgb(var(--c-bg));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
@@ -370,6 +426,12 @@
   margin-top: auto;
 }
 
+/* A product with no media on the live store is a text-only tile: the CTA row
+   takes the slack instead, so it stays at the foot of a stretched row. */
+.card--text > .card__actions {
+  margin-top: auto;
+}
+
 /* The whole photo, never cropped through a label, on the white it was shot on */
 .card--product .card__media {
   margin-bottom: clamp(14px, 1.6vw, 20px);
@@ -443,10 +505,12 @@
   text-wrap: balance;
 }
 
-/* A product name is never clipped in practice: three lines hold the longest
-   names in a 2-up phone tile; the clamp only guards runaway titles. */
+/* Product names wrap in full and are never clamped: the end of a long name
+   (", Gift Set", "Refill 50 ml") is what tells two products apart. */
 .card--product .card__title {
-  -webkit-line-clamp: 3;
+  display: block;
+  -webkit-line-clamp: none;
+  overflow: visible;
 }
 
 .card__link::after {
@@ -1016,21 +1080,4 @@ olivet-accordion[hidden] {
   .skeleton::after {
     animation: none;
   }
-}
-
-/* ---------- placeholder panel ----------
-   Neutral stand-in for a missing image: the tile surface with a quiet line
-   drawing. Static; nothing animates. */
-.ornament-panel {
-  position: absolute;
-  inset: 0;
-  color: rgba(var(--c-ink), 0.18);
-  background: rgb(var(--c-surface));
-}
-
-.ornament-panel__branch {
-  position: absolute;
-  inset: 18%;
-  width: 64%;
-  height: 64%;
 }

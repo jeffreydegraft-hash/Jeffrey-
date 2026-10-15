@@ -2,13 +2,14 @@
   Article (Apple Newsroom): a centred header — eyebrow (blog · date), the
   title as an h1 at .h2 size, the excerpt as a muted lead and a quiet 14px
   byline (author · reading time) — enters with .enter. The hero image runs
-  the full content width (--content-max) at 16:9, rounded --r-media
-  (18px), eager-loaded. The body is .rte--article (19px / 1.58 at ≥750px)
-  at the reading measure (--text-max). Then tags as small chips and a
-  quiet "Share" text button, previous / next as quiet links (no tiles),
-  "Back to the journal", and the comments list and form in the same
-  style (hairlines between comments only, Apple inputs, a pill to post).
-  BlogPosting JSON-LD at the end.
+  the full content width (--content-max) at the image's own shape (clamped
+  1:1-2:1, contained on the white photo ground, never cropped — APPLE-SPEC
+  §0.3), rounded --r-media (18px), eager-loaded. The body is .rte--article
+  (19px / 1.58 at ≥750px) at the reading measure (--text-max). Then tags
+  as small chips and a quiet "Share" text button, previous / next as quiet
+  links (no tiles), "Back to the journal", and the comments list and form
+  in the same style (hairlines between comments only, Apple inputs, a pill
+  to post). BlogPosting JSON-LD at the end.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -34,6 +35,13 @@
   endif
 
   assign lead = article.excerpt | strip_html | strip_newlines | strip
+
+  # The hero keeps the photo's own shape (clamped 1:1-2:1); anything taller
+  # or wider is letterboxed on the photo ground by media--contain, never cropped
+  assign hero_ratio = article.image.aspect_ratio | default: 1.7778 | at_least: 1 | at_most: 2
+
+  # Publisher logo for the JSON-LD follows the shared chain (APPLE-SPEC §0.1)
+  assign publisher_logo = settings.logo | default: shop.brand.logo
 -%}
 <article class="section{{ padding_class }} color-{{ section.settings.color_scheme }} main-article" id="section-{{ section.id }}">
   <header class="page-width page-width--medium main-article__header">
@@ -65,8 +73,8 @@
         widths: '600, 800, 1000, 1200, 1600, 2000',
         loading: 'eager',
         fetchpriority: 'high',
-        ratio: '16 / 9',
-        wrapper_class: 'main-article__media',
+        ratio: hero_ratio,
+        wrapper_class: 'main-article__media media--contain',
         class: 'main-article__img'
       -%}
     </div>
@@ -295,11 +303,11 @@
     "publisher": {
       "@type": "Organization",
       "name": {{ shop.name | json }}
-      {%- if settings.logo != blank -%}
+      {%- if publisher_logo != blank -%}
       ,
       "logo": {
         "@type": "ImageObject",
-        "url": {{ settings.logo | image_url: width: 600 | prepend: 'https:' | json }}
+        "url": {{ publisher_logo | image_url: width: 600 | prepend: 'https:' | json }}
       }
       {%- endif %}
     }

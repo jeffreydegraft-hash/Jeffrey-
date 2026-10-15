@@ -193,6 +193,15 @@
     );
   }
 
+  /* One /cart/change at a time, in order, for every <cart-items> on the page.
+     Each render then starts from the state the previous one left, and a
+     response can never land out of order. */
+  let changeQueue = Promise.resolve();
+  const enqueueChange = (job) => {
+    changeQueue = changeQueue.then(job).catch(() => {});
+    return changeQueue;
+  };
+
   /* ---------- cart-items ---------- */
   if (!customElements.get('cart-items')) {
     customElements.define(
@@ -200,7 +209,10 @@
       class CartItems extends HTMLElement {
         constructor() {
           super();
-          this.onQuantityChange = debounce(this.onQuantityChange.bind(this), DEBOUNCE_MS);
+          // line index → what the shopper asked for, captured at change time,
+          // so a change on one line never cancels another inside the debounce.
+          this.pending = new Map();
+          this.flush = debounce(() => this.flushPending(), DEBOUNCE_MS);
         }
 
         connectedCallback() {
@@ -213,27 +225,69 @@
         }
 
         onQuantityChange(input) {
-          if (!input || !input.isConnected) return;
+          if (!input) return;
           const line = parseInt(input.dataset.index, 10);
           if (!line) return;
           const quantity = parseInt(input.value, 10);
           if (Number.isNaN(quantity)) {
+            this.pending.delete(line);
             this.resetInput(input);
             return;
           }
           const current = parseInt(input.getAttribute('value'), 10);
-          if (quantity === current) return;
-          this.updateQuantity(line, Math.max(0, quantity), input.id, input.dataset.quantityVariantId);
+          if (quantity === current) {
+            this.pending.delete(line);
+            return;
+          }
+          this.pending.set(line, {
+            quantity: Math.max(0, quantity),
+            focusId: input.id,
+            variantId: input.dataset.quantityVariantId,
+            key: input.dataset.lineKey,
+          });
+          this.flush();
+        }
+
+        /* Highest line first, so a removal never shifts a line still waiting. */
+        flushPending() {
+          const jobs = Array.from(this.pending.entries()).sort((a, b) => b[0] - a[0]);
+          this.pending.clear();
+          jobs.forEach(([line, job]) => this.queueUpdate(line, job.quantity, job.focusId, job.variantId, job.key));
+        }
+
+        /* Queue a change. By the time it runs, an earlier one may have removed
+           a line and re-numbered the rest, so the line is found again by its
+           key; a line that is gone is skipped. */
+        queueUpdate(line, quantity, focusId, variantId, key) {
+          return enqueueChange(() => {
+            const input = this.findInput(key);
+            if (key && !input) return undefined;
+            if (input && parseInt(input.getAttribute('value'), 10) === quantity) return undefined;
+            const index = input ? parseInt(input.dataset.index, 10) : line;
+            return this.updateQuantity(index, quantity, input ? input.id : focusId, variantId, key);
+          });
+        }
+
+        /* The live <cart-items> for this context: a render replaces the element. */
+        liveRoot() {
+          if (this.isConnected) return this;
+          return document.querySelector(`cart-items[data-context="${this.context}"]`) || this;
+        }
+
+        findInput(key) {
+          if (!key) return null;
+          return Array.from(this.liveRoot().querySelectorAll('.quantity__input')).find((el) => el.dataset.lineKey === key) || null;
         }
 
         getSectionsToRender() {
           return getCartSections();
         }
 
-        updateQuantity(line, quantity, focusId, variantId) {
+        updateQuantity(line, quantity, focusId, variantId, key) {
           line = parseInt(line, 10);
           quantity = parseInt(quantity, 10);
           if (!line || Number.isNaN(quantity)) return Promise.resolve();
+          const linesBefore = this.liveRoot().querySelectorAll('.cart-line').length;
           this.setLoading(true);
           this.hideError(line);
           const body = JSON.stringify({
@@ -252,6 +306,8 @@
                 return;
               }
               this.render(data, focusId, line);
+              // After render(): it replaces the line's error slot.
+              this.reportCap(data, line, quantity, variantId, key, linesBefore);
               publish(EVENTS.cartUpdated, { source: 'cart-items', cartData: data, variantId, line, quantity });
             })
             .catch(() => {
@@ -280,6 +336,19 @@
             (context === 'drawer' ? document.querySelector('cart-drawer [data-drawer-focus]') : document.getElementById('MainCart-Title'));
           const container = context === 'drawer' && drawer && drawer.isOpen ? drawer.panel : null;
           focusElement(target, container);
+        }
+
+        /* /cart/change can succeed and quietly cap a line to the stock it has.
+           Say so on that line, but only when the response still has the same
+           line at that index: a dropped line would move the next one up. */
+        reportCap(data, line, quantity, variantId, key, linesBefore) {
+          if (quantity <= 0 || !data || !Array.isArray(data.items)) return;
+          const item = data.items[line - 1];
+          if (!item) return;
+          const sameLine = key ? item.key === key : String(item.variant_id) === String(variantId) && data.items.length === linesBefore;
+          if (!sameLine || !(item.quantity < quantity)) return;
+          const template = strings.quantityError;
+          this.showError(line, template ? template.replace('[quantity]', item.quantity) : strings.cartError || GENERIC_ERROR);
         }
 
         fail(line, message, focusId) {
@@ -316,9 +385,10 @@
         }
 
         setLoading(on) {
-          this.classList.toggle('is-loading', !!on);
-          if (on) this.setAttribute('aria-busy', 'true');
-          else this.removeAttribute('aria-busy');
+          const root = this.liveRoot();
+          root.classList.toggle('is-loading', !!on);
+          if (on) root.setAttribute('aria-busy', 'true');
+          else root.removeAttribute('aria-busy');
         }
       }
     );
@@ -336,7 +406,16 @@
             const line = parseInt(this.dataset.index, 10);
             if (!items || !line || typeof items.updateQuantity !== 'function') return;
             const input = items.querySelector(`input[data-index="${line}"]`);
-            items.updateQuantity(line, 0, input ? input.id : null, input ? input.dataset.quantityVariantId : null);
+            const focusId = input ? input.id : null;
+            const variantId = input ? input.dataset.quantityVariantId : null;
+            // Through the same queue as the steppers; Remove wins over a stepper
+            // change on this line that is still waiting.
+            if (typeof items.queueUpdate === 'function') {
+              if (items.pending) items.pending.delete(line);
+              items.queueUpdate(line, 0, focusId, variantId, input ? input.dataset.lineKey : undefined);
+            } else {
+              items.updateQuantity(line, 0, focusId, variantId);
+            }
           });
         }
       }
@@ -516,11 +595,15 @@
           this.timers.forEach(clearTimeout);
           this.timers = [];
           if (this.originalLabel == null) this.originalLabel = label.textContent;
-          const swap = (text, then) => {
+          // A variant change during the hold (product.js) disables the button
+          // and/or writes its own label ("Sold out"): that label wins, and the
+          // restore must not put "Add to Bag" back over it.
+          const superseded = () => button.disabled || label.textContent.trim() !== String(strings.added).trim();
+          const swap = (text, then, isRestore) => {
             button.classList.add('is-transitioning');
             this.timers.push(
               setTimeout(() => {
-                label.textContent = text;
+                if (!isRestore || !superseded()) label.textContent = text;
                 button.classList.remove('is-transitioning');
                 if (then) then();
               }, LABEL_SWAP_MS)
@@ -529,9 +612,17 @@
           swap(strings.added, () => {
             this.timers.push(
               setTimeout(() => {
-                swap(this.originalLabel, () => {
+                if (superseded()) {
                   this.originalLabel = null;
-                });
+                  return;
+                }
+                swap(
+                  this.originalLabel,
+                  () => {
+                    this.originalLabel = null;
+                  },
+                  true
+                );
               }, LABEL_HOLD_MS)
             );
           });

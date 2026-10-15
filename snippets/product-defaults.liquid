@@ -7,10 +7,14 @@
   Theme words and Scripture references follow the brand's own labels
   (MOUNT OF OLIVES™ / [oil] / THE ANOINTING OIL / theme word / botanical /
   verse; brand/BRAND-ASSETS.md §2 and §4.6): Frankincense & Myrrh Restore,
-  Pomegranate Eternal, Spikenard Renewal (John 12:1-8), Hyssop
-  Purification & Protection, Rose of Sharon Radiance, Latter Rain
-  Revitalize (Joel 2:23). The other handles keep the launch copy. A live
-  metafield always wins over these defaults.
+  Gethsemane Restore (homepage tiles), Pomegranate Eternal, Spikenard
+  Renewal (John 12:1-8), Hyssop Purification & Protection, Rose of Sharon
+  Radiance, Latter Rain Revitalize (Joel 2:23). Frankincense Presence, Myrrh
+  Purification, Lily of the Valley Purity and 100% Squalane Hydration come
+  from the live site's product copy; no label or tile word exists for them
+  yet, so confirm them with the owner after G1. (Do not blank them: an empty
+  default falls through to product.type.) A live metafield always wins over
+  these defaults.
 
   Snippets cannot hand variables back to the caller, so this snippet OUTPUTS
   one field. Capture it:
@@ -60,7 +64,7 @@
       assign default_ingredients = "Olive oil, olive-derived squalane, Commiphora myrrha (Myrrh), olive polyphenols"
 
     when 'gethsemane-anointing-oil-unscented'
-      assign default_theme_word = "Intercession"
+      assign default_theme_word = "Restore"
       assign default_one_liner = "Unscented anointing oil of olive and squalane, for prayer and intercession."
       assign default_scripture_quote = "Then cometh Jesus with them unto a place called Gethsemane, and saith unto the disciples, Sit ye here, while I go and pray yonder."
       assign default_scripture_reference = "Matthew 26:36"

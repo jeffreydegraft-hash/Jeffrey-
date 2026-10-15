@@ -9,8 +9,16 @@
   outside it so it survives re-renders; the header is a drag zone too.
 {%- endcomment -%}
 {%- liquid
+  # The threshold is in the shop's base currency and the copy promises US
+  # shipping. Liquid has no exchange rate, so the bar only shows when the cart
+  # is priced in that currency for a US shopper; otherwise it hides rather
+  # than compare two currencies.
   assign show_shipping_bar = false
-  if settings.cart_show_free_shipping and settings.cart_free_shipping_threshold > 0 and cart.item_count > 0
+  assign shipping_applies = false
+  if cart.currency.iso_code == shop.currency and localization.country.iso_code == 'US'
+    assign shipping_applies = true
+  endif
+  if settings.cart_show_free_shipping and settings.cart_free_shipping_threshold > 0 and cart.item_count > 0 and shipping_applies
     assign show_shipping_bar = true
     assign shipping_threshold = settings.cart_free_shipping_threshold | times: 100
     assign shipping_remaining = shipping_threshold | minus: cart.total_price

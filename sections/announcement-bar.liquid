@@ -31,8 +31,22 @@
         <ul class="announcement-bar__list" role="list">
           {%- for block in section.blocks -%}
             {%- if block.settings.text != blank -%}
+              {%- liquid
+                # Rich text may already hold a link: never wrap it in another <a>
+                # (the parser would close the outer link early). Then the block's
+                # Link gets its own chevron link, labelled "Learn more" if unnamed.
+                assign has_inline_link = false
+                if block.settings.text contains '<a'
+                  assign has_inline_link = true
+                endif
+                assign custom_label = block.settings.link_label | strip
+                assign link_label = custom_label
+                if link_label == blank
+                  assign link_label = 'general.learn_more' | t
+                endif
+              -%}
               <li class="announcement-bar__item" {{ block.shopify_attributes }}>
-                {%- if block.settings.link != blank and block.settings.link_label == blank -%}
+                {%- if block.settings.link != blank and custom_label == blank and has_inline_link == false -%}
                   <a href="{{ block.settings.link }}" class="link link--chevron announcement-bar__link">
                     {{- block.settings.text -}}
                     {%- render 'icon', name: 'chevron-right', size: 10 -%}
@@ -41,7 +55,7 @@
                   <span class="announcement-bar__text">{{ block.settings.text }}</span>
                   {%- if block.settings.link != blank %}
                     <a href="{{ block.settings.link }}" class="link link--chevron announcement-bar__link">
-                      {{- block.settings.link_label | escape -}}
+                      {{- link_label | escape -}}
                       {%- render 'icon', name: 'chevron-right', size: 10 -%}
                     </a>
                   {%- endif -%}
@@ -106,7 +120,7 @@
           "type": "text",
           "id": "link_label",
           "label": "Link label",
-          "info": "Shown after the text with a chevron, e.g. “Shop the oils”. When empty, the whole announcement becomes the link."
+          "info": "Shown after the text with a chevron, e.g. “Shop the oils”. When empty, the whole announcement becomes the link; if the text already contains a link, a separate “Learn more” link is shown instead."
         }
       ]
     }

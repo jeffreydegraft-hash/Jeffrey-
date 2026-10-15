@@ -27,9 +27,7 @@
     <meta name="theme-color" content="{{ scheme.settings.background }}">
     <meta name="color-scheme" content="light">
     <link rel="canonical" href="{{ canonical_url }}">
-    {%- if settings.favicon != blank -%}
-      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
-    {%- endif -%}
+    {%- render 'brand-icons' -%}
     {%- unless settings.use_system_font or settings.type_header_font.system? and settings.type_body_font.system? -%}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}

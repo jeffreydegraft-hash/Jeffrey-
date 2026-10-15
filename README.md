@@ -23,7 +23,14 @@ shopify theme push --unpublished --theme "Olivet" --store mount-of-olives.myshop
 
 ## After installing: five-minute setup
 
-1. **Logo and favicon** — Theme settings → Logo.
+1. **Logo and favicon** — Theme settings → Logo. The theme shows your own artwork exactly as uploaded and never redraws, inverts or recolours it.
+   - *Logo image* is used in the header, footer, password page and gift card.
+   - *Logo for dark backgrounds* is your own light or reversed version, used on dark color schemes. If you leave it empty, dark schemes show the store name as text. To use your main logo there instead, turn on *My main logo reads well on dark backgrounds*, but only if it has enough contrast.
+   - *Logo mark (square)* is used in tight spaces. It is also the favicon when *Favicon* is empty.
+   - *Favicon* is scaled to 32 × 32 px.
+   - *Social sharing image* is used only when a page has no image of its own and Online Store → Preferences has no social sharing image. Both of those come first.
+
+   Empty slots fall back to Settings → Brand (logo, square logo, cover image), then to the store name. The theme cannot reach two logo slots, so set them in admin. For checkout and customer accounts, use **Settings → Checkout → Customize** and set the logo in the editor's branding settings. For notification emails, use **Settings → Notifications → Customer notifications → Customize email templates** and set the logo there.
 2. **Menus** — the header reads `main-menu`; the footer uses `main-menu` for "Shop" and `footer` for "Company". Create them under Navigation if they don't exist.
 3. **Pages and templates** — assign templates in the page editor: *About us* → `page.about`, *Our science* → `page.science`, *Contact* → `page.contact`.
 4. **Homepage sections** — the home template ships with the brand copy pre-filled (hero, nine blends, values, story, science, scripture, how to use, squalane, journal, FAQ, newsletter). Pick the featured collection and product, and add images in the editor.
@@ -31,7 +38,7 @@ shopify theme push --unpublished --theme "Olivet" --store mount-of-olives.myshop
 
    | Key | Type | Used for |
    | --- | --- | --- |
-   | `theme_word` | Single line text | The one-word theme on cards and product pages (e.g. *Reverence*) |
+   | `theme_word` | Single line text | The one-word theme on cards and product pages (e.g. *Restore*) |
    | `scripture_quote` | Multi-line text | The verse on the product page |
    | `scripture_reference` | Single line text | e.g. *Matthew 2:11* |
    | `meaning` | Multi-line text | Biblical significance paragraph |

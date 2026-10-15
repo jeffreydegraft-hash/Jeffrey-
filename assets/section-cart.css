@@ -260,6 +260,11 @@ cart-items.is-loading .cart-lines {
   color: var(--cart-muted);
 }
 
+.cart-line__variant,
+.cart-line__plan {
+  overflow-wrap: anywhere;
+}
+
 .cart-line__properties {
   display: flex;
   flex-direction: column;
@@ -288,10 +293,19 @@ cart-items.is-loading .cart-lines {
   color: rgb(var(--c-accent));
 }
 
+/* A discount code is one unbroken word: it wraps anywhere inside the
+   details column instead of running past it. The 14px check sits centred
+   on the first 20px line. */
 .cart-line__discount {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  align-items: flex-start;
   gap: var(--space-1);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cart-line__discount .icon {
+  margin-top: 3px;
 }
 
 .cart-line__price {
@@ -569,6 +583,18 @@ cart-items.is-loading .cart-lines {
   overflow-wrap: break-word;
 }
 
+/* Only the discount row may break mid-word: a code is one long word and
+   must wrap before it reaches the amount. Subtotal, Shipping and Total keep
+   whole words. */
+.cart-totals__row--discount .cart-totals__label {
+  align-items: flex-start;
+  overflow-wrap: anywhere;
+}
+
+.cart-totals__row--discount .cart-totals__label .icon {
+  margin-top: 0.2em;
+}
+
 .cart-totals__value {
   flex-shrink: 0;
   text-align: right;
@@ -658,16 +684,13 @@ cart-items.is-loading .cart-lines {
   padding-top: 0;
 }
 
-/* Phones keep the sheet's 17px rows (APPLE-SPEC §5) so a long name wraps to
-   two lines, not three; the page grows to 19px and then 21px with the room. */
-.cart-items--page .cart-line__title {
-  -webkit-line-clamp: 3;
-}
-
 .cart-items--page .cart-line__price-final {
   font-weight: var(--font-body-weight-bold);
 }
 
+/* Phones keep the sheet's 17px rows (APPLE-SPEC §5); the page grows to 19px
+   and then 21px with the room. Names are never clamped: the bag is where the
+   customer checks exactly what they are buying. */
 @media (min-width: 750px) {
   .cart-items--page .cart-line {
     --cart-media: 120px;

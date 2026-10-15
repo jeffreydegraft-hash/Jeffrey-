@@ -504,11 +504,21 @@
   gap: var(--space-2) var(--space-4);
 }
 
+/* The tagged-view badge can hold several tags ("Tagged "a, b""), so unlike
+   the base .badge it wraps inside the column instead of pushing the phone
+   page sideways; still a capsule because the radius is --r-pill. */
 .main-blog__tag {
   font-size: 0.875rem;
   font-weight: var(--font-body-weight);
   padding: 6px 14px;
   background: rgb(var(--c-surface));
+  white-space: normal;
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  text-align: inherit;
 }
 
 .main-blog__grid {

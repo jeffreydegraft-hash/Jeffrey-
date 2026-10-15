@@ -48,7 +48,7 @@
           "settings": {
             "icon": "sparkle",
             "title": "Polyphenol Alpha complex",
-            "body": "Our proprietary antioxidant-rich complex is derived entirely from natural botanical sources and formulated to support the skin's natural barrier."
+            "body": "Our proprietary antioxidant-rich complex, derived entirely from natural botanical sources."
           }
         },
         "value-3": {
@@ -129,7 +129,7 @@
       "settings": {
         "eyebrow": "Our science",
         "heading": "Cosmeceuticals from biblical botanicals.",
-        "intro": "Every Mount of Olives oil is built on three things: a squalane base, polyphenols drawn from the olive and the pomegranate, and our Polyphenol Alpha complex.",
+        "intro": "Every Mount of Olives oil is built on squalane and polyphenols from the olive and the pomegranate.",
         "button_label": "Learn more about our science",
         "button_link": "/pages/our-science",
         "color_scheme": "scheme-3",
@@ -190,7 +190,7 @@
         "product": "100-squalane",
         "eyebrow": "100% Squalane Oil",
         "heading": "Hydration from head to toe.",
-        "text": "<p>Our 100% Squalane Oil is sustainable, vegan, derived from olives, and steeped in biblical tradition. One ingredient and nothing else, in a 4 oz bottle.</p>",
+        "text": "<p>Sustainable, vegan, and derived from olives. One ingredient and nothing else, in a 4 oz bottle.</p>",
         "show_price": true,
         "button_label": "",
         "layout": "stacked",
@@ -203,7 +203,7 @@
       "type": "featured-blog",
       "settings": {
         "heading": "The Anointing Journal",
-        "intro": "Notes on the botanicals of Scripture, a brief history of anointing oil in the church, and why not all olives are created equal.",
+        "intro": "Notes on the botanicals of Scripture and a brief history of anointing oil.",
         "blog": "the-anointing-journal",
         "posts_to_show": 3,
         "show_date": true,

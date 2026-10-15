@@ -92,31 +92,8 @@
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>Ingredients are listed in descending order by weight, so the first name on the label is the largest part of the formula. On our bottles that is olive oil or olive-derived squalane.</p><p>Botanicals appear by their Latin names, with the common name in parentheses: Boswellia serrata (Frankincense), Commiphora myrrha (Myrrh), Nardostachys jatamansi (Spikenard).</p><p>Every oil is natural, paraben-free, and vegan, and for external use only. If a word is unfamiliar, write to us and we will explain it.</p>",
+            "text": "<p>Ingredients are listed in descending order by weight, so the first name on the label is the largest part of the formula. On our bottles that is olive oil or olive-derived squalane.</p><p>Botanicals appear by their Latin names, with the common name in parentheses: Boswellia serrata (Frankincense), Commiphora myrrha (Myrrh), Nardostachys jatamansi (Spikenard).</p><p>Every oil is natural, paraben-free, and vegan, and for external use only. If irritation occurs, stop use. If a word is unfamiliar, write to us and we will explain it.</p>",
             "size": "body"
-          }
-        }
-      },
-      "block_order": [
-        "eyebrow",
-        "heading",
-        "text"
-      ],
-      "settings": {
-        "alignment": "left",
-        "width": "narrow",
-        "color_scheme": "scheme-1",
-        "padding": "default"
-      }
-    },
-    "closing": {
-      "type": "rich-text",
-      "blocks": {
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Mount of Olives oils are cosmetic products for external use only. They are not intended to diagnose, treat, cure, or prevent any disease. If irritation occurs, stop use.</p>",
-            "size": "small"
           }
         },
         "button": {
@@ -129,14 +106,16 @@
         }
       },
       "block_order": [
+        "eyebrow",
+        "heading",
         "text",
         "button"
       ],
       "settings": {
-        "alignment": "center",
+        "alignment": "left",
         "width": "narrow",
-        "color_scheme": "scheme-2",
-        "padding": "tight"
+        "color_scheme": "scheme-1",
+        "padding": "default"
       }
     }
   },
@@ -144,7 +123,6 @@
     "hero",
     "pillars",
     "olive-tree",
-    "label",
-    "closing"
+    "label"
   ]
 }
