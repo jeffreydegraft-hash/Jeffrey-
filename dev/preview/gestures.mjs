@@ -100,11 +100,19 @@ if (box) {
   await openDrawer();
   await page.evaluate((sel) => document.querySelector(sel).close(), drawer);
   await page.waitForTimeout(90);
-  const before = await state();
-  await page.evaluate((sel) => document.querySelector(sel).open(), drawer);
-  await page.waitForTimeout(16);
-  const after = await state();
-  check('re-open mid-close continues from the on-screen position', after.y <= before.y + 2 && after.y < before.h * 0.9, `closing y=${before.y} → reopening y=${after.y} (sheet ${before.h}px)`);
+  // Read the on-screen position and re-open in the same task (no frame can pass in between),
+  // then sample one frame later: the open spring must start from where the sheet was.
+  const { before, after } = await page.evaluate(async (sel) => {
+    const d = document.querySelector(sel);
+    const p = d.querySelector('[data-drawer-panel]');
+    const y = () => Math.round(new DOMMatrixReadOnly(getComputedStyle(p).transform).m42);
+    const h = Math.round(p.getBoundingClientRect().height);
+    const before = { y: y(), h, closing: d.classList.contains('is-closing') };
+    d.open();
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    return { before, after: { y: y(), h } };
+  }, drawer);
+  check('re-open mid-close continues from the on-screen position', before.closing && before.y > 0 && after.y <= before.y + 2 && after.y < before.h * 0.9, `closing y=${before.y} → reopening y=${after.y} (sheet ${before.h}px)`);
   await page.waitForTimeout(800);
   s = await state();
   check('…and settles open', s.open && Math.abs(s.y) <= 1, JSON.stringify(s));
