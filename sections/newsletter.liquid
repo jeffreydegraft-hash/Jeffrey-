@@ -1,9 +1,14 @@
 {%- comment -%}
-  Newsletter: a serif heading, a line of text and a customer form. Centered
-  by default; "split" puts the words on the left and the form on the right
-  from 990px. Subscribers are added as customers tagged "newsletter". After
-  a post the form is replaced by a success status (or shows the email error
-  inline). Status messages enter with the no-JS @starting-style fade.
+  Newsletter: a quiet light-gray band (scheme-2 by default) holding a
+  centred .h3, one line of muted text and an inline form: a 52px email field
+  beside a pill (they stack under 480px, base.css .inline-form). "Show as
+  tile" draws the same content on a rounded --c-surface tile inside the
+  page width, for pages whose neighbouring sections share the band colour.
+  "Heading beside form" puts the words left and the form right from 990px.
+  Subscribers are added as customers tagged "newsletter". After a post the
+  form is replaced by a success status (or shows the email error inline).
+  Motion inventory: the shared reveal, the pill press, and status messages
+  entering with the no-JS @starting-style fade (.enter).
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -26,22 +31,21 @@
     assign has_header = true
   endif
 -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} newsletter newsletter--{{ section.settings.layout }}" id="section-{{ section.id }}">
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} newsletter newsletter--{{ section.settings.layout }}{% if section.settings.show_as_tile %} newsletter--tile{% endif %}" id="section-{{ section.id }}">
   <div class="page-width">
     <div class="newsletter__inner">
       {%- if has_header -%}
         <header class="newsletter__header" data-reveal>
-          <span class="newsletter__rule" aria-hidden="true"></span>
           {%- if section.settings.heading != blank -%}
-            <h2 class="h2 newsletter__heading" id="{{ form_id }}-heading">{{ section.settings.heading }}</h2>
+            <h2 class="h3 newsletter__heading" id="{{ form_id }}-heading">{{ section.settings.heading }}</h2>
           {%- endif -%}
           {%- if section.settings.text != blank -%}
-            <p class="lead newsletter__text">{{ section.settings.text | escape }}</p>
+            <p class="newsletter__text">{{ section.settings.text | escape }}</p>
           {%- endif -%}
         </header>
       {%- endif -%}
 
-      <div class="newsletter__form-wrap" data-reveal style="--i: 1">
+      <div class="newsletter__form-wrap" data-reveal>
         {%- form 'customer', id: form_id, class: 'newsletter__form', novalidate: 'novalidate' -%}
           <input type="hidden" name="contact[tags]" value="newsletter">
           {%- if form.posted_successfully? -%}
@@ -74,7 +78,7 @@
                   {% endif %}
                 >
               </div>
-              <button type="submit" class="btn btn--primary newsletter__button" name="commit">{{ button_label | escape }}</button>
+              <button type="submit" class="btn btn--primary btn--lg newsletter__button" name="commit">{{ button_label | escape }}</button>
             </div>
             {%- if form.errors -%}
               <p class="form-status form-status--error newsletter__status enter" id="{{ form_id }}-error" role="alert">
@@ -135,10 +139,17 @@
       "default": "center"
     },
     {
+      "type": "checkbox",
+      "id": "show_as_tile",
+      "label": "Show as tile",
+      "info": "Draws the content on a rounded panel inside the page width.",
+      "default": false
+    },
+    {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-5"
+      "default": "scheme-2"
     },
     {
       "type": "select",

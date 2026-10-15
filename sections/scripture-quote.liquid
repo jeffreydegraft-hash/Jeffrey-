@@ -1,6 +1,8 @@
 {%- comment -%}
-  Scripture quote: a short eyebrow between two gold hairlines, a large serif
-  italic verse (30ch wide), and the reference in gold small caps. Centred by
+  Scripture quote as an Apple "statement": an optional eyebrow, the verse set
+  as a headline (system font, semibold, upright, curly quotes added by
+  .scripture__quote), and the reference below it as a quiet eyebrow. No
+  ornament lines; the generous padding does the separating. Centred by
   default, or set left to sit against the gutter.
   Motion: the whole figure reveals once on scroll (data-reveal).
 {%- endcomment -%}
@@ -20,15 +22,13 @@
     <div class="page-width">
       <figure class="scripture scripture-quote__figure" data-reveal>
         {%- if section.settings.eyebrow != blank -%}
-          <div class="ornament{% if alignment == 'left' %} ornament--left{% endif %} scripture-quote__ornament">
-            <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
-          </div>
+          <p class="eyebrow scripture-quote__eyebrow">{{ section.settings.eyebrow | escape }}</p>
         {%- endif -%}
         <blockquote class="scripture-quote__blockquote">
           <p class="scripture__quote scripture-quote__text">{{ section.settings.quote | escape | newline_to_br }}</p>
         </blockquote>
         {%- if section.settings.reference != blank -%}
-          <figcaption class="scripture__ref scripture-quote__ref">{{ section.settings.reference | escape }}</figcaption>
+          <figcaption class="eyebrow eyebrow--ink scripture-quote__ref">{{ section.settings.reference | escape }}</figcaption>
         {%- endif -%}
       </figure>
     </div>
@@ -46,7 +46,7 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
-      "default": "From Scripture"
+      "info": "Optional short label above the verse."
     },
     {
       "type": "textarea",
@@ -75,7 +75,7 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-5"
+      "default": "scheme-1"
     },
     {
       "type": "select",

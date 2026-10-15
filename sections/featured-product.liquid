@@ -1,10 +1,17 @@
 {%- comment -%}
-  Featured product: one product, two columns. Media on one side; on the
-  other an eyebrow, serif heading, price, short text and an add-to-cart form
-  handled by <product-form> (assets/cart.js, cart group). Products with
-  variants get a native <select name="id"> listing each variant with its
-  price; single-variant products post a hidden id. With no product chosen
-  the section renders a placeholder so the editor never shows a hole.
+  Featured product: an apple.com product "mini hero". Stacked (default): a
+  centred eyebrow, headline, one or two lines of text, the price line and the
+  CTA pair (a "Buy" pill that submits the add-to-cart form + "Learn more ›"
+  to the product), then a large centred product image below. "Side by side"
+  keeps the same content left-aligned next to the image (image_position).
+
+  The add-to-cart form keeps the <product-form> contract (assets/cart.js):
+  .product-form__error, {% form 'product' %} with name="id" (a native
+  <select> when the product has variants, a hidden input otherwise) and a
+  submit button whose first plain label span swaps to "Added". With no
+  product chosen the section renders a placeholder so the editor never shows
+  a hole. Motion inventory: the shared reveal (text, then image) and the
+  pill/link press from base.css; nothing else moves.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -15,9 +22,12 @@
       assign padding_class = ' section--none'
   endcase
 
+  assign layout = section.settings.layout | default: 'stacked'
+
   assign product = section.settings.product
   assign form_id = 'FeaturedProduct-' | append: section.id
   assign select_id = form_id | append: '-variant'
+  assign heading_id = 'FeaturedProductHeading-' | append: section.id
   assign variant = product.selected_or_first_available_variant
 
   assign heading = section.settings.heading
@@ -25,9 +35,24 @@
     assign heading = product.title | escape
   endif
 
+  assign has_media = false
   assign media_alt = ''
-  if product != blank
+  assign media_ratio = 1
+  if product != blank and product.featured_media != blank
+    assign has_media = true
     assign media_alt = product.featured_media.alt | default: product.title
+    assign media_ratio = product.featured_media.preview_image.aspect_ratio | default: 1
+    if media_ratio < 0.66
+      assign media_ratio = 0.66
+    elsif media_ratio > 1.8
+      assign media_ratio = 1.8
+    endif
+  endif
+
+  if layout == 'split'
+    assign media_sizes = '(min-width: 990px) 50vw, 100vw'
+  else
+    assign media_sizes = '(min-width: 750px) 640px, 100vw'
   endif
 
   assign unavailable = false
@@ -42,30 +67,23 @@
   elsif section.settings.button_label != blank
     assign add_label = section.settings.button_label
   else
-    assign add_label = 'products.product.add_to_cart' | t
+    assign add_label = 'sections.featured_product.buy' | t
+  endif
+
+  assign align_class = ' featured-product--center'
+  if layout == 'split'
+    assign align_class = ' featured-product--start'
   endif
 -%}
-<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-product featured-product--image-{{ section.settings.image_position }}" id="section-{{ section.id }}">
+<div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-product featured-product--{{ layout }}{{ align_class }} featured-product--image-{{ section.settings.image_position }}" id="section-{{ section.id }}">
   <div class="page-width">
     <div class="featured-product__grid">
-      <div class="featured-product__media" data-reveal>
-        {%- if product != blank and product.featured_media != blank -%}
-          <a href="{{ product.url }}" class="featured-product__media-link" aria-label="{{ product.title | escape }}" tabindex="-1">
-            {%- render 'image', image: product.featured_media, sizes: '(min-width: 990px) 50vw, 100vw', widths: '400, 600, 800, 1000, 1200, 1600', class: 'featured-product__img', loading: 'lazy', ratio: '4 / 5', wrapper_class: 'featured-product__figure', alt: media_alt -%}
-          </a>
-        {%- else -%}
-          <div class="media featured-product__figure" style="--ratio: 4 / 5;">
-            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-          </div>
-        {%- endif -%}
-      </div>
-
-      <div class="featured-product__content" data-reveal style="--i: 1">
+      <div class="featured-product__content" data-reveal>
         {%- if section.settings.eyebrow != blank -%}
-          <p class="eyebrow featured-product__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          <p class="eyebrow eyebrow--lg featured-product__eyebrow">{{ section.settings.eyebrow | escape }}</p>
         {%- endif -%}
 
-        <h2 class="h2 featured-product__heading">
+        <h2 class="h2 featured-product__heading" id="{{ heading_id }}">
           {%- if heading != blank -%}
             {{ heading }}
           {%- else -%}
@@ -73,12 +91,16 @@
           {%- endif -%}
         </h2>
 
+        {%- if section.settings.text != blank -%}
+          <div class="featured-product__text">{{ section.settings.text }}</div>
+        {%- endif -%}
+
         {%- if section.settings.show_price -%}
           <div class="featured-product__price">
             {%- if product != blank -%}
-              {%- render 'price', product: product, show_badges: true, price_class: 'price--large' -%}
+              {%- render 'price', product: product, show_badges: true -%}
             {%- else -%}
-              <div class="price price--large">
+              <div class="price">
                 <div class="price__container">
                   <div class="price__regular">
                     <span class="price__item price__item--regular money">{{ 2398 | money }}</span>
@@ -89,10 +111,6 @@
           </div>
         {%- endif -%}
 
-        {%- if section.settings.text != blank -%}
-          <div class="rte featured-product__text">{{ section.settings.text }}</div>
-        {%- endif -%}
-
         {%- if product != blank -%}
           <product-form class="product-form featured-product__form-wrap" data-section-id="{{ section.id }}">
             <p class="product-form__error form-status form-status--error" role="alert" hidden></p>
@@ -101,7 +119,7 @@
                 <input type="hidden" name="id" value="{{ variant.id }}"{% if unavailable %} disabled{% endif %}>
               {%- else -%}
                 <div class="field featured-product__field">
-                  <label class="field__label" for="{{ select_id }}">{{ product.options | join: ' / ' | escape }}</label>
+                  <label class="field__label visually-hidden" for="{{ select_id }}">{{ product.options | join: ' / ' | escape }}</label>
                   <div class="select">
                     <select id="{{ select_id }}" name="id" class="field__select featured-product__select">
                       {%- for option_variant in product.variants -%}
@@ -119,31 +137,54 @@
                   </div>
                 </div>
               {%- endif -%}
-              <button
-                type="submit"
-                name="add"
-                class="btn btn--primary btn--lg featured-product__submit"
-                {% if unavailable %}disabled{% endif %}
-                {% if settings.cart_type == 'drawer' %}aria-haspopup="dialog"{% endif %}
-              >
-                <span class="btn__content"><span data-add-label>{{ add_label | escape }}</span></span>
-                {%- render 'loading-spinner' -%}
-              </button>
+              <div class="cta-row featured-product__actions">
+                <button
+                  type="submit"
+                  name="add"
+                  class="btn btn--primary featured-product__submit"
+                  {% if unavailable %}disabled{% endif %}
+                  {% if settings.cart_type == 'drawer' %}aria-haspopup="dialog"{% endif %}
+                >
+                  <span class="btn__content"><span data-add-label>{{ add_label | escape }}</span><span class="visually-hidden"> {{ product.title | escape }}</span></span>
+                  {%- render 'loading-spinner' -%}
+                </button>
+                <a href="{{ product.url }}" class="link link--chevron link--lg featured-product__details">
+                  {{- 'general.learn_more' | t -}}
+                  <span class="visually-hidden">: {{ product.title | escape }}</span>
+                  {%- render 'icon', name: 'chevron-right', size: 16 -%}
+                </a>
+              </div>
             {%- endform -%}
           </product-form>
-          <a href="{{ product.url }}" class="link link--arrow featured-product__details">
-            {{ 'products.product.view_full_details' | t }}
-            {%- render 'icon', name: 'arrow-right', size: 18 -%}
-          </a>
         {%- else -%}
-          <div class="featured-product__form">
-            <button type="button" class="btn btn--primary btn--lg featured-product__submit" disabled>
+          <div class="cta-row featured-product__actions">
+            <button type="button" class="btn btn--primary featured-product__submit" disabled>
               <span class="btn__content"><span>{{ add_label | escape }}</span></span>
             </button>
+            {%- if request.design_mode -%}
+              <span class="link link--chevron link--lg featured-product__details" aria-hidden="true">
+                {{- 'general.learn_more' | t -}}
+                {%- render 'icon', name: 'chevron-right', size: 16 -%}
+              </span>
+            {%- endif -%}
           </div>
           {%- if request.design_mode -%}
             <p class="caption featured-product__hint">{{ 'sections.featured_product.no_product' | t }}</p>
           {%- endif -%}
+        {%- endif -%}
+      </div>
+
+      <div class="featured-product__media" data-reveal>
+        {%- if has_media -%}
+          <a href="{{ product.url }}" class="featured-product__media-link" aria-label="{{ product.title | escape }}" tabindex="-1" style="--fp-ratio: {{ media_ratio }};">
+            {%- render 'image', image: product.featured_media, sizes: media_sizes, widths: '400, 600, 800, 1000, 1200, 1600', class: 'featured-product__img', loading: 'lazy', ratio: media_ratio, wrapper_class: 'featured-product__figure', alt: media_alt -%}
+          </a>
+        {%- else -%}
+          <div class="featured-product__media-link" style="--fp-ratio: 1;">
+            <div class="media featured-product__figure featured-product__figure--placeholder" style="--ratio: 1 / 1;">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          </div>
         {%- endif -%}
       </div>
     </div>
@@ -191,13 +232,23 @@
       "type": "text",
       "id": "button_label",
       "label": "Add-to-cart button label",
-      "info": "Leave empty to use “Add to cart”. Sold-out products always read “Sold out”.",
-      "default": "Shop 100% Squalane"
+      "info": "Leave empty to use “Buy”. Sold-out products always read “Sold out”."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "stacked", "label": "Centered, image below" },
+        { "value": "split", "label": "Image beside text" }
+      ],
+      "default": "stacked"
     },
     {
       "type": "select",
       "id": "image_position",
       "label": "Image position",
+      "info": "Applies to the “Image beside text” layout.",
       "options": [
         { "value": "left", "label": "Left" },
         { "value": "right", "label": "Right" }
@@ -208,7 +259,7 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-2"
+      "default": "scheme-1"
     },
     {
       "type": "select",

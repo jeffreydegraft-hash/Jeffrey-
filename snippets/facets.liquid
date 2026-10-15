@@ -14,8 +14,9 @@
   - <form data-section> ids: #FacetFiltersForm (sidebar) / #FacetFiltersFormMobile (drawer)
   - each filter group: [data-facet-group="n"] with [data-facet-selected] in the
     summary and a [data-facet-values] fieldset that can be re-rendered
-  - drawer sort select: [data-sort-select]; the desktop toolbar select #SortBy
-    is associated with the primary form through its form attribute
+  - sheet sort value: hidden [data-sort-select] (the visible control is the
+    toolbar pill #SortBy, shown at every breakpoint and associated with the
+    primary form through its form attribute); facets.js keeps them in sync
 {%- endcomment -%}
 {%- liquid
   assign sort_by = results.sort_by | default: results.default_sort_by
@@ -46,17 +47,7 @@
     {%- endif -%}
 
     {%- if enable_sorting and context == 'drawer' -%}
-      <div class="field facets__sort">
-        <label class="field__label" for="SortByDrawer">{{ 'products.facets.sort_by_label' | t }}</label>
-        <div class="select">
-          <select id="SortByDrawer" name="sort_by" class="field__select" data-sort-select>
-            {%- for option in results.sort_options -%}
-              <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name | escape }}</option>
-            {%- endfor -%}
-          </select>
-          {%- render 'icon', name: 'chevron-down', size: 18 -%}
-        </div>
-      </div>
+      <input type="hidden" name="sort_by" value="{{ sort_by | escape }}" data-sort-select>
     {%- endif -%}
 
     {%- if has_filters -%}
@@ -75,17 +66,17 @@
               assign is_open = true
             endif
           -%}
-          <olivet-accordion class="accordion facets__group" data-facet-group="{{ group_index }}">
+          <olivet-accordion class="accordion accordion--compact facets__group" data-facet-group="{{ group_index }}">
             <details{% if is_open %} open{% endif %}>
               <summary class="accordion__summary facets__summary">
                 <span class="facets__summary-label">
-                  <span>{{ filter.label | escape }}</span>
+                  <span class="facets__summary-text">{{ filter.label | escape }}</span>
                   <span class="facets__selected{% if active_count == 0 %} is-empty{% endif %}" data-facet-selected>
                     <span aria-hidden="true">{{ active_count }}</span>
                     <span class="visually-hidden">{{ 'products.facets.filters_selected' | t: count: active_count }}</span>
                   </span>
                 </span>
-                {%- render 'icon', name: 'chevron-down', size: 18 -%}
+                {%- render 'icon', name: 'chevron-down', size: 14 -%}
               </summary>
               <div class="accordion__content" data-accordion-content>
                 <div class="accordion__inner">
@@ -133,7 +124,7 @@
                       -%}
                       <fieldset class="facets__fieldset facets__fieldset--price" data-facet-values>
                         <legend class="visually-hidden">{{ filter.label | escape }}</legend>
-                        <p class="facets__hint caption">{{ 'products.facets.max_price' | t: price: max_price_money }}</p>
+                        <p class="facets__hint">{{ 'products.facets.max_price' | t: price: max_price_money }}</p>
                         <div class="facets__price">
                           <div class="field facets__price-field">
                             <label class="field__label" for="{{ min_id }}">{{ 'products.facets.from' | t }}</label>
@@ -184,7 +175,7 @@
     {%- endif -%}
 
     <noscript>
-      <button type="submit" class="btn btn--secondary btn--sm facets__apply">{{ 'products.facets.apply' | t }}</button>
+      <button type="submit" class="btn btn--primary btn--sm facets__apply">{{ 'products.facets.apply' | t }}</button>
     </noscript>
   </form>
 </facet-filters-form>

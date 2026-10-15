@@ -1,6 +1,7 @@
 {%- comment -%}
-  Featured collection: a header row (eyebrow, heading, description left; a
-  "view all" arrow link right) over a product grid.
+  Featured collection (apple.com store grid): a centred header (eyebrow, h2,
+  muted lead), product tiles in a grid (3-up desktop by default, 2-up tablet,
+  2-up phone with compact tiles), then a centred "Shop all ›" link.
 
   Empty cases:
   - no collection chosen: placeholder cards (design-mode preview and a
@@ -10,11 +11,11 @@
 {%- endcomment -%}
 {%- liquid
   assign featured = section.settings.collection
-  assign limit = section.settings.products_to_show | default: 8
-  assign cols = section.settings.columns_desktop | default: 4
-  assign cols_tablet = cols | at_most: 3
+  assign limit = section.settings.products_to_show | default: 9
+  assign cols = section.settings.columns_desktop | default: 3
+  assign cols_tablet = cols | at_most: 2
   assign col_vw = 100 | divided_by: cols
-  assign card_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, (min-width: 750px) 33vw, 50vw'
+  assign card_sizes = '(min-width: 990px) ' | append: col_vw | append: 'vw, 50vw'
 
   assign padding_class = ''
   case section.settings.padding
@@ -46,40 +47,32 @@
   endif
 
   assign has_header = false
-  if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.description != blank or section.settings.show_view_all
+  if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.description != blank
     assign has_header = true
   endif
 -%}
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} featured-collection" id="section-{{ section.id }}">
   <div class="page-width">
     {%- if has_header -%}
-      <header class="section__header section__header--row featured-collection__header" data-reveal>
-        <div class="stack stack--sm featured-collection__intro">
-          {%- if section.settings.eyebrow != blank -%}
-            <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
-          {%- endif -%}
-          {%- if section.settings.heading != blank -%}
-            <h2 class="h2 featured-collection__heading">{{ section.settings.heading }}</h2>
-          {%- endif -%}
-          {%- if section.settings.description != blank -%}
-            <p class="muted text-pretty featured-collection__description">{{ section.settings.description | escape }}</p>
-          {%- endif -%}
-        </div>
-        {%- if section.settings.show_view_all -%}
-          <a href="{{ view_all_url }}" class="link link--arrow featured-collection__view-all">
-            {{ view_all_label | escape }}
-            {%- render 'icon', name: 'arrow-right', size: 18 -%}
-          </a>
+      <header class="section__header section__header--center featured-collection__header" data-reveal>
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2 featured-collection__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <p class="lead lead--muted featured-collection__description">{{ section.settings.description | escape }}</p>
         {%- endif -%}
       </header>
     {%- endif -%}
 
     {%- if show_empty -%}
       <div class="empty-state featured-collection__empty">
-        {%- render 'icon', name: 'olive', size: 36 -%}
+        {%- render 'icon', name: 'olive', size: 40 -%}
         <p class="h4">{{ 'collections.general.empty' | t }}</p>
         <p class="muted text-pretty">{{ 'sections.featured_collection.empty' | t }}</p>
-        <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary">{{ 'general.shop_now' | t }}</a>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'general.shop_now' | t }}</a>
       </div>
     {%- else -%}
       <ul
@@ -102,6 +95,14 @@
           {%- endfor -%}
         {%- endif -%}
       </ul>
+      {%- if section.settings.show_view_all -%}
+        <div class="featured-collection__footer">
+          <a href="{{ view_all_url }}" class="link link--chevron link--lg featured-collection__view-all">
+            {{- view_all_label | escape -}}
+            {%- render 'icon', name: 'chevron-right', size: 16 -%}
+          </a>
+        </div>
+      {%- endif -%}
     {%- endif -%}
   </div>
 </div>
@@ -116,20 +117,19 @@
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "The collection"
+      "label": "Eyebrow"
     },
     {
       "type": "inline_richtext",
       "id": "heading",
       "label": "Heading",
-      "default": "Nine biblical blends, one olive base."
+      "default": "Nine biblical blends."
     },
     {
       "type": "text",
       "id": "description",
       "label": "Description",
-      "default": "From Frankincense & Myrrh to Spikenard and Hyssop, each oil carries a botanical named in Scripture and a meaning of its own."
+      "default": "One olive base."
     },
     {
       "type": "collection",
@@ -143,34 +143,35 @@
       "min": 2,
       "max": 12,
       "step": 1,
-      "default": 8
+      "default": 9
     },
     {
       "type": "range",
       "id": "columns_desktop",
       "label": "Columns on desktop",
+      "info": "Tiles show 2-up on tablets and phones.",
       "min": 2,
       "max": 5,
       "step": 1,
-      "default": 4
+      "default": 3
     },
     {
       "type": "checkbox",
       "id": "show_view_all",
-      "label": "Show “View all” link",
+      "label": "Show “Shop all” link",
       "default": true
     },
     {
       "type": "text",
       "id": "view_all_label",
-      "label": "“View all” label",
+      "label": "“Shop all” label",
       "default": "Shop all oils"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-1"
+      "default": "scheme-2"
     },
     {
       "type": "select",

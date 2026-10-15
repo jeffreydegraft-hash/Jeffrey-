@@ -1,5 +1,6 @@
 {%- comment -%}
-  Collection banner: optional soft media band, eyebrow, title, description.
+  Collection banner (Apple Store category header): a big centred title, a
+  short muted description, then the collection image as a wide rounded tile.
   The title is above the fold and must be readable the instant the page
   paints, so nothing in this section carries data-reveal.
 {%- endcomment -%}
@@ -23,21 +24,23 @@
   endcase
 -%}
 <div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} collection-banner{% if show_image %} collection-banner--has-image{% endif %}" id="section-{{ section.id }}">
-  {%- if show_image -%}
-    <div class="collection-banner__media page-width">
-      <div class="media collection-banner__figure">
-        {%- render 'image', image: collection.image, sizes: '(min-width: 1400px) 1320px, 100vw', widths: '600, 900, 1200, 1600, 2000', loading: 'eager', fetchpriority: 'high', class: 'collection-banner__img', alt: collection.title -%}
-      </div>
-    </div>
-  {%- endif -%}
+  <div class="page-width">
+    <header class="collection-banner__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow collection-banner__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h1 class="h1 collection-banner__title">{{ collection.title | escape }}</h1>
+      {%- if show_description -%}
+        <div class="lead lead--muted collection-banner__description">{{ collection.description }}</div>
+      {%- endif -%}
+    </header>
 
-  <header class="collection-banner__header page-width">
-    <p class="eyebrow collection-banner__eyebrow">{{ 'collections.general.collection_label' | t }}</p>
-    <h1 class="h1 collection-banner__title">{{ collection.title | escape }}</h1>
-    {%- if show_description -%}
-      <div class="lead collection-banner__description">{{ collection.description }}</div>
+    {%- if show_image -%}
+      <div class="media collection-banner__media">
+        {%- render 'image', image: collection.image, sizes: '(min-width: 1248px) 1200px, calc(100vw - 40px)', widths: '600, 900, 1200, 1600, 2000, 2400', loading: 'eager', fetchpriority: 'high', class: 'collection-banner__img', alt: collection.title -%}
+      </div>
     {%- endif -%}
-  </header>
+  </div>
 </div>
 
 {% schema %}
@@ -45,10 +48,16 @@
   "name": "Collection banner",
   "settings": [
     {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Optional short label above the title, e.g. “Mount of Olives”."
+    },
+    {
       "type": "checkbox",
       "id": "show_image",
       "label": "Show collection image",
-      "info": "A wide band above the title, when the collection has an image.",
+      "info": "A wide rounded tile under the title, when the collection has an image.",
       "default": true
     },
     {

@@ -1,8 +1,12 @@
 {%- comment -%}
   Rich text: a column of blocks (eyebrow, heading, text, buttons) at a chosen
-  measure and alignment. Every block carries data-reveal with its own index,
-  so the column staggers in. Button blocks always render last, together in
-  one row, so two buttons sit side by side instead of stacking.
+  measure, centred by default (apple.com statement blocks). Headings follow
+  the type scale (.h1/.h2/.h3), text comes in lead / body / small, and the
+  button blocks always render last, together in one .cta-row: a pill
+  (primary or outline) and/or a "Learn more ›" text link with a chevron.
+  "Remove bottom spacing" lets the column flow straight into the next
+  section of the same colour. Motion inventory: the shared reveal on each
+  block (batch stagger from theme.js) and the pill/link press.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -12,6 +16,9 @@
     when 'none'
       assign padding_class = ' section--none'
   endcase
+  if section.settings.flush_bottom
+    assign padding_class = padding_class | append: ' section--bottom-none'
+  endif
 
   assign width_class = ''
   case section.settings.width
@@ -21,8 +28,12 @@
       assign width_class = ' page-width--medium'
   endcase
 
+  assign cta_class = 'cta-row'
+  if section.settings.alignment == 'left'
+    assign cta_class = 'cta-row cta-row--start'
+  endif
+
   assign buttons = section.blocks | where: 'type', 'button'
-  assign content_count = section.blocks.size | minus: buttons.size
 -%}
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} rich-text rich-text--{{ section.settings.alignment }}" id="section-{{ section.id }}">
   <div class="page-width{{ width_class }}">
@@ -32,35 +43,35 @@
           {%- case block.type -%}
             {%- when 'eyebrow' -%}
               {%- if block.settings.text != blank -%}
-                <p class="eyebrow rich-text__eyebrow" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
+                <p class="eyebrow rich-text__eyebrow" data-reveal {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
               {%- endif -%}
             {%- when 'heading' -%}
               {%- if block.settings.heading != blank -%}
-                <h2 class="{{ block.settings.size }} rich-text__heading" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+                <h2 class="{{ block.settings.size }} rich-text__heading" data-reveal {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
               {%- endif -%}
             {%- when 'text' -%}
               {%- if block.settings.text != blank -%}
-                <div class="rte rich-text__text rich-text__text--{{ block.settings.size }}" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+                <div class="rte rich-text__text rich-text__text--{{ block.settings.size }}" data-reveal {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
               {%- endif -%}
           {%- endcase -%}
         {%- endfor -%}
 
         {%- if buttons.size > 0 -%}
-          <div class="cluster rich-text__buttons" data-reveal style="--i: {{ content_count | modulo: 8 }}">
+          <div class="{{ cta_class }} rich-text__buttons" data-reveal>
             {%- for block in buttons -%}
               {%- if block.settings.label != blank -%}
                 {%- if block.settings.style == 'link' -%}
                   <a
-                    class="link link--arrow rich-text__link"
+                    class="link link--chevron link--lg rich-text__link"
                     {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
                     {{ block.shopify_attributes }}
                   >
-                    {{ block.settings.label | escape }}
-                    {%- render 'icon', name: 'arrow-right', size: 18 -%}
+                    {{- block.settings.label | escape -}}
+                    {%- render 'icon', name: 'chevron-right', size: 16 -%}
                   </a>
                 {%- else -%}
                   <a
-                    class="btn btn--{{ block.settings.style }} rich-text__button"
+                    class="btn btn--{{ block.settings.style }} btn--lg rich-text__button"
                     {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
                     {{ block.shopify_attributes }}
                   >{{ block.settings.label | escape }}</a>
@@ -72,7 +83,7 @@
       </div>
     {%- elsif request.design_mode -%}
       <div class="empty-state rich-text__empty">
-        {%- render 'icon', name: 'info', size: 36 -%}
+        {%- render 'icon', name: 'info', size: 40 -%}
         <p class="muted text-pretty">{{ 'sections.general.add_blocks' | t }}</p>
       </div>
     {%- endif -%}
@@ -104,7 +115,7 @@
           "label": "Center"
         }
       ],
-      "default": "left"
+      "default": "center"
     },
     {
       "type": "select",
@@ -151,6 +162,13 @@
         }
       ],
       "default": "default"
+    },
+    {
+      "type": "checkbox",
+      "id": "flush_bottom",
+      "label": "Remove bottom spacing",
+      "info": "Lets the text flow straight into the next section when both use the same color scheme.",
+      "default": false
     }
   ],
   "blocks": [
@@ -263,7 +281,7 @@
             },
             {
               "value": "link",
-              "label": "Text link with arrow"
+              "label": "Text link with chevron"
             }
           ],
           "default": "primary"

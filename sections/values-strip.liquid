@@ -1,9 +1,11 @@
 {%- comment -%}
-  Values strip: up to four short brand promises, each an icon in a soft
-  circle, a title and a line of body text. A description list, so the items
-  stay semantic without claiming a heading level between the hero and the
-  first real h2.
-  Motion: items reveal with a 50ms stagger (data-reveal + --i).
+  Values strip: up to four short brand promises as an apple.com feature row.
+  Centred items: a 40px line icon in the accent detail colour (no circle
+  behind it), a .h5 title and a line of muted .small body. No colour band
+  by default (scheme-1); separation comes from the neighbouring sections.
+  A description list, so the items stay semantic without claiming a heading
+  level between the hero and the first real h2 (an optional heading adds one).
+  Motion: items reveal with a stagger (data-reveal; theme.js sets --i).
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -21,16 +23,25 @@
   if section.settings.divider_bottom
     assign strip_class = strip_class | append: ' values-strip--divider-bottom'
   endif
+
+  assign count = section.blocks.size | at_least: 1
+  assign cols_tablet = count | at_most: 2
+  assign cols_desktop = count | at_most: 4
 -%}
 {%- if section.blocks.size > 0 or request.design_mode -%}
   <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} values-strip{{ strip_class }}" id="section-{{ section.id }}">
     <div class="page-width">
+      {%- if section.settings.heading != blank -%}
+        <header class="section__header section__header--center values-strip__header" data-reveal>
+          <h2 class="h2 values-strip__heading">{{ section.settings.heading }}</h2>
+        </header>
+      {%- endif -%}
       {%- if section.blocks.size > 0 -%}
-        <dl class="grid grid--4 grid--mobile-2 values-strip__grid">
+        <dl class="grid grid--mobile-2 values-strip__grid" style="--cols-desktop: {{ cols_desktop }}; --cols-tablet: {{ cols_tablet }};">
           {%- for block in section.blocks -%}
             <div class="values-strip__item" data-reveal style="--i: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
               <span class="values-strip__icon" aria-hidden="true">
-                {%- render 'icon', name: block.settings.icon, size: 20 -%}
+                {%- render 'icon', name: block.settings.icon, size: 40 -%}
               </span>
               <dt class="h5 values-strip__title">{{ block.settings.title | escape }}</dt>
               <dd class="small muted values-strip__body">{{ block.settings.body | escape }}</dd>
@@ -39,7 +50,7 @@
         </dl>
       {%- else -%}
         <div class="empty-state values-strip__empty">
-          {%- render 'icon', name: 'info', size: 36 -%}
+          {%- render 'icon', name: 'info', size: 40 -%}
           <p class="muted text-pretty">{{ 'sections.values_strip.empty' | t }}</p>
         </div>
       {%- endif -%}
@@ -56,15 +67,22 @@
   "max_blocks": 4,
   "settings": [
     {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Optional. Shown centred above the values."
+    },
+    {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-2"
+      "default": "scheme-1"
     },
     {
       "type": "checkbox",
       "id": "divider_top",
       "label": "Show top divider",
+      "info": "Off by default: alternating color schemes separate sections more quietly than a line.",
       "default": false
     },
     {
@@ -82,7 +100,7 @@
         { "value": "tight", "label": "Tight" },
         { "value": "none", "label": "None" }
       ],
-      "default": "tight"
+      "default": "default"
     }
   ],
   "blocks": [

@@ -1,9 +1,13 @@
 {%- comment -%}
-  FAQ: a heading and a list of <olivet-accordion> questions (assets/theme.js
-  animates grid-template-rows 0fr → 1fr, the one tolerated layout animation).
-  One column keeps everything in a 46rem measure; two columns pin the heading
-  on the left from 990px while the questions scroll on the right. Emits
-  FAQPage JSON-LD for the questions that have text.
+  FAQ (apple.com "Questions? Answers." style): a centred headline and
+  optional muted lead, then a single list of <olivet-accordion> questions
+  held to --text-max. Questions are 21px semibold with a plus that turns
+  into ×; hairlines sit between items only; answers are 17px muted
+  (accordion base in components.css; assets/theme.js animates
+  grid-template-rows 0fr → 1fr, the one tolerated layout animation).
+  "Heading beside questions" is kept as an option: the header pins on the
+  left from 990px while the questions scroll on the right. Emits FAQPage
+  JSON-LD for the questions that have text.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -15,8 +19,10 @@
   endcase
 
   assign layout_class = ' faq--one-column'
+  assign header_class = ' section__header--center'
   if section.settings.layout == 'two_column'
     assign layout_class = ' faq--two-column'
+    assign header_class = ''
   endif
 
   assign question_count = 0
@@ -35,12 +41,12 @@
   <div class="page-width">
     <div class="faq__layout">
       {%- if has_header -%}
-        <header class="section__header faq__header" data-reveal>
+        <header class="section__header{{ header_class }} faq__header" data-reveal>
           {%- if section.settings.heading != blank -%}
             <h2 class="h2 faq__heading" id="FaqHeading-{{ section.id }}">{{ section.settings.heading }}</h2>
           {%- endif -%}
           {%- if section.settings.intro != blank -%}
-            <p class="lead faq__intro">{{ section.settings.intro | escape }}</p>
+            <p class="lead lead--muted faq__intro">{{ section.settings.intro | escape }}</p>
           {%- endif -%}
         </header>
       {%- endif -%}
@@ -49,7 +55,7 @@
         <div class="faq__list">
           {%- for block in section.blocks -%}
             {%- if block.settings.question != blank or request.design_mode -%}
-              <olivet-accordion class="accordion faq__item" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>
+              <olivet-accordion class="accordion faq__item" data-reveal {{ block.shopify_attributes }}>
                 <details id="faq-{{ block.id }}">
                   <summary class="accordion__summary">
                     <span class="faq__question">{{ block.settings.question | escape }}</span>
@@ -67,7 +73,7 @@
         </div>
       {%- elsif request.design_mode -%}
         <div class="empty-state faq__empty">
-          {%- render 'icon', name: 'info', size: 36 -%}
+          {%- render 'icon', name: 'info', size: 40 -%}
           <p class="muted text-pretty">{{ 'sections.general.add_blocks' | t }}</p>
         </div>
       {%- endif -%}
@@ -143,7 +149,7 @@
         { "value": "one_column", "label": "One column" },
         { "value": "two_column", "label": "Heading beside questions" }
       ],
-      "default": "two_column"
+      "default": "one_column"
     },
     {
       "type": "color_scheme",

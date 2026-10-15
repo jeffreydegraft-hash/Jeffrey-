@@ -1,16 +1,17 @@
 {%- comment -%}
-  Collection card.
+  Collection card: a flat rounded tile with the collection image and a
+  centred title and product count. The title link covers the whole tile.
   Accepts:
   - collection: {Object} collection (optional; renders a placeholder card when blank)
   - index: {Number} position in the grid, used for the reveal stagger (optional)
   - sizes: {String} sizes attribute for the image (optional)
   - placeholder: {String} placeholder_svg_tag name used when there is no image, default 'collection-1'
   - reveal: {Boolean} add data-reveal, default true
-  Usage: {% render 'card-collection', collection: collection, index: forloop.index0, sizes: '(min-width: 990px) 33vw, 100vw' %}
+  Usage: {% render 'card-collection', collection: collection, index: forloop.index0, sizes: '(min-width: 990px) 33vw, 50vw' %}
 {%- endcomment -%}
 {%- liquid
   assign stagger = index | default: 0 | modulo: 8
-  assign sizes = sizes | default: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw'
+  assign sizes = sizes | default: '(min-width: 990px) 33vw, 50vw'
   assign placeholder = placeholder | default: 'collection-1'
 -%}
 {%- if collection != blank -%}
@@ -29,13 +30,10 @@
       </div>
     </a>
     <div class="card__body">
-      <div class="card-collection__row">
-        <h3 class="card__title card-collection__title h4">
-          <a href="{{ collection.url }}" class="card__link">{{ collection.title | escape }}</a>
-        </h3>
-        <span class="card-collection__arrow" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 20 %}</span>
-      </div>
-      <p class="card-collection__count caption tnum">{{ 'products.facets.product_count_simple' | t: count: collection.all_products_count }}</p>
+      <h3 class="card__title card-collection__title h5">
+        <a href="{{ collection.url }}" class="card__link">{{ collection.title | escape }}</a>
+      </h3>
+      <p class="card-collection__count tnum">{{ 'products.facets.product_count_simple' | t: count: collection.all_products_count }}</p>
     </div>
   </article>
 {%- else -%}
@@ -44,11 +42,8 @@
       {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
     </div>
     <div class="card__body">
-      <div class="card-collection__row">
-        <h3 class="card__title card-collection__title h4">{{ 'collections.list.title' | t }}</h3>
-        <span class="card-collection__arrow" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 20 %}</span>
-      </div>
-      <p class="card-collection__count caption tnum">{{ 'products.facets.product_count_simple' | t: count: 0 }}</p>
+      <h3 class="card__title card-collection__title h5">{{ 'collections.list.title' | t }}</h3>
+      <p class="card-collection__count tnum">{{ 'products.facets.product_count_simple' | t: count: 0 }}</p>
     </div>
   </article>
 {%- endif -%}

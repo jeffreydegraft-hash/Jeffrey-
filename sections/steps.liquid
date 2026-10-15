@@ -1,9 +1,11 @@
 {%- comment -%}
-  Steps ("How to use"): a centred heading and intro, then up to three columns
-  (one on phones). Each step: optional image, a big gold serif numeral
-  (01, 02, 03), a hairline, the title and a short body. A footnote under the
-  grid carries the external-use line.
-  Motion: steps reveal with a 50ms stagger (data-reveal + --i).
+  Steps ("How to use"): a centred heading and intro, then up to three flat
+  tiles per row (one column on phones). Each tile: optional image, a large
+  numeral (.h1 size, semibold, accent detail colour), a .h4 title and a short
+  muted body. Tiles use --c-surface, so they are #F5F5F7 on a white section
+  and white on a scheme-2 section. A centred caption under the grid carries
+  the external-use line.
+  Motion: tiles reveal with a stagger (data-reveal; theme.js sets --i).
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -30,7 +32,7 @@
             <h2 class="h2 steps__heading">{{ section.settings.heading }}</h2>
           {%- endif -%}
           {%- if section.settings.intro != blank -%}
-            <p class="lead steps__intro">{{ section.settings.intro | escape }}</p>
+            <p class="lead lead--muted steps__intro">{{ section.settings.intro | escape }}</p>
           {%- endif -%}
         </header>
       {%- endif -%}
@@ -38,22 +40,18 @@
       {%- if section.blocks.size > 0 -%}
         <ol class="grid steps__grid" role="list" style="--cols-desktop: {{ cols }}; --cols-tablet: {{ cols }};">
           {%- for block in section.blocks -%}
-            {%- liquid
-              assign numeral = forloop.index | prepend: '0' | slice: -2, 2
-            -%}
-            <li class="steps__item" data-reveal style="--i: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
+            <li class="tile tile--center steps__item" data-reveal style="--i: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
               {%- if block.settings.image != blank -%}
                 <div class="media steps__media" style="--ratio: 4 / 3;">
                   {%- render 'image', image: block.settings.image, sizes: '(min-width: 990px) 33vw, 100vw', widths: '400, 600, 800, 1200', loading: 'lazy', class: 'steps__img' -%}
                 </div>
               {%- endif -%}
-              <span class="steps__numeral" aria-hidden="true">{{ numeral }}</span>
-              <span class="steps__rule" aria-hidden="true"></span>
+              <span class="h1 steps__numeral" aria-hidden="true">{{ forloop.index }}</span>
               {%- if block.settings.title != blank -%}
                 <h3 class="h4 steps__title">{{ block.settings.title | escape }}</h3>
               {%- endif -%}
               {%- if block.settings.body != blank -%}
-                <p class="small muted steps__body">{{ block.settings.body | escape }}</p>
+                <p class="muted steps__body">{{ block.settings.body | escape }}</p>
               {%- endif -%}
             </li>
           {%- endfor -%}
@@ -61,7 +59,7 @@
         <p class="caption steps__footnote">{{ 'products.product.external_use' | t }}</p>
       {%- else -%}
         <div class="empty-state steps__empty">
-          {%- render 'icon', name: 'info', size: 36 -%}
+          {%- render 'icon', name: 'info', size: 40 -%}
           <p class="muted text-pretty">{{ 'sections.steps.empty' | t }}</p>
         </div>
       {%- endif -%}
@@ -92,7 +90,7 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-1"
+      "default": "scheme-2"
     },
     {
       "type": "select",
@@ -127,7 +125,7 @@
           "type": "image_picker",
           "id": "image",
           "label": "Image",
-          "info": "Optional. Shown above the numeral at 4:3."
+          "info": "Optional. Shown at the top of the tile at 4:3."
         }
       ]
     }

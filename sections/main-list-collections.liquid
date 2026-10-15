@@ -1,6 +1,7 @@
 {%- comment -%}
-  Collections list page (/collections). Cards reveal on scroll; the title
-  does not.
+  Collections list page (/collections): a centred title and optional lead,
+  then collection tiles (image + centred title). Tiles reveal on scroll; the
+  title does not.
 {%- endcomment -%}
 {%- liquid
   case section.settings.sort
@@ -23,13 +24,16 @@
 -%}
 <div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} list-collections" id="section-{{ section.id }}">
   <div class="page-width">
-    <header class="section__header list-collections__header">
+    <header class="section__header section__header--center list-collections__header">
       <h1 class="h1">{{ section.settings.title | escape }}</h1>
+      {%- if section.settings.subheading != blank -%}
+        <p class="lead lead--muted list-collections__lead">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
     </header>
 
     {%- paginate collections by 24 -%}
       {%- if collections.size > 0 -%}
-        <ul class="grid grid--3 grid--mobile-2 list-collections__grid" role="list" style="--cols-desktop: {{ section.settings.columns_desktop }};">
+        <ul class="grid grid--3 grid--mobile-2 list-collections__grid{% if collections.size < section.settings.columns_desktop %} list-collections__grid--few{% endif %}" role="list" style="--cols-desktop: {{ section.settings.columns_desktop }}; --count: {{ collections.size }};">
           {%- for collection in collections -%}
             <li>
               {%- render 'card-collection', collection: collection, index: forloop.index0, sizes: card_sizes -%}
@@ -39,10 +43,11 @@
         {%- render 'pagination', paginate: paginate -%}
       {%- else -%}
         <div class="empty-state list-collections__empty">
-          {%- render 'icon', name: 'leaf', size: 36 -%}
           <h2 class="h3">{{ 'collections.list.empty' | t }}</h2>
-          <p class="muted text-pretty">{{ 'collections.list.empty_body' | t }}</p>
-          <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary">{{ 'collections.general.all' | t }}</a>
+          <p class="list-collections__empty-body">{{ 'collections.list.empty_body' | t }}</p>
+          <div class="cta-row">
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'collections.general.all' | t }}</a>
+          </div>
         </div>
       {%- endif -%}
     {%- endpaginate -%}
@@ -58,6 +63,12 @@
       "id": "title",
       "label": "Heading",
       "default": "Collections"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "info": "One short line under the heading."
     },
     {
       "type": "select",

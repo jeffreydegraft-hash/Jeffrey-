@@ -1,8 +1,13 @@
 {%- comment -%}
-  Science pillars: a dark editorial band. Eyebrow, serif heading and intro on
-  the left (44rem), then a row of numbered pillars (01, 02, 03…) each set
-  under a thin hairline, lifting into view with a staggered reveal. The gold
-  serif numerals do the decorating; nothing else moves.
+  Science pillars (apple.com dark feature band, scheme-3 by default): a
+  centred eyebrow, headline and muted lead, then the pillars as flat dark
+  tiles (--c-surface on --c-bg, radius --r-tile). Each tile opens with a big
+  numeral in the accent detail colour, then an .h4 title and muted body.
+  A centred "Learn more ›" link (or a pill, per setting) closes the band.
+  Columns: 1–3 tiles sit in one row from 990px (4 make a 2×2 grid); on
+  tablets two tiles share a row and an odd last tile spans the full width;
+  phones stack. Motion inventory: the shared scroll reveal (fade-up, batch
+  stagger from theme.js) and the link/pill press from base.css.
 {%- endcomment -%}
 {%- liquid
   assign padding_class = ''
@@ -14,11 +19,11 @@
   endcase
 
   assign pillar_count = section.blocks.size
-  assign cols_desktop = pillar_count | at_most: 4 | at_least: 1
-  if pillar_count == 3
-    assign cols_tablet = 3
-  else
-    assign cols_tablet = pillar_count | at_most: 2 | at_least: 1
+  assign cols_desktop = 3
+  if pillar_count < 3
+    assign cols_desktop = pillar_count | at_least: 1
+  elsif pillar_count == 4
+    assign cols_desktop = 2
   endif
 
   assign has_header = false
@@ -34,26 +39,24 @@
 <div class="section{{ padding_class }} color-{{ section.settings.color_scheme }} science-pillars" id="section-{{ section.id }}">
   <div class="page-width">
     {%- if has_header -%}
-      <header class="section__header science-pillars__header" data-reveal>
+      <header class="section__header section__header--center science-pillars__header" data-reveal>
         {%- if section.settings.eyebrow != blank -%}
-          <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          <p class="eyebrow eyebrow--lg science-pillars__eyebrow">{{ section.settings.eyebrow | escape }}</p>
         {%- endif -%}
         {%- if section.settings.heading != blank -%}
           <h2 class="h2 science-pillars__heading">{{ section.settings.heading }}</h2>
         {%- endif -%}
         {%- if section.settings.intro != blank -%}
-          <p class="lead science-pillars__intro">{{ section.settings.intro | escape }}</p>
+          <p class="lead lead--muted science-pillars__intro">{{ section.settings.intro | escape }}</p>
         {%- endif -%}
       </header>
     {%- endif -%}
 
     {%- if pillar_count > 0 -%}
-      <ol class="science-pillars__grid" role="list" style="--pillars-cols: {{ cols_desktop }}; --pillars-cols-tablet: {{ cols_tablet }};">
+      <ol class="science-pillars__grid" role="list" style="--pillars-cols: {{ cols_desktop }};">
         {%- for block in section.blocks -%}
-          <li class="science-pillars__pillar" data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>
-            <span class="science-pillars__numeral" aria-hidden="true">
-              {%- if forloop.index < 10 -%}0{%- endif -%}{{ forloop.index }}
-            </span>
+          <li class="tile science-pillars__tile" data-reveal {{ block.shopify_attributes }}>
+            <span class="h2 science-pillars__numeral" aria-hidden="true">{{ forloop.index }}</span>
             {%- if block.settings.title != blank -%}
               <h3 class="h4 science-pillars__title">{{ block.settings.title | escape }}</h3>
             {%- endif -%}
@@ -65,14 +68,21 @@
       </ol>
     {%- elsif request.design_mode -%}
       <div class="empty-state science-pillars__empty">
-        {%- render 'icon', name: 'info', size: 36 -%}
+        {%- render 'icon', name: 'info', size: 40 -%}
         <p class="muted text-pretty">{{ 'sections.general.add_blocks' | t }}</p>
       </div>
     {%- endif -%}
 
     {%- if has_cta -%}
-      <div class="science-pillars__cta" data-reveal>
-        <a href="{{ section.settings.button_link }}" class="btn btn--primary">{{ section.settings.button_label | escape }}</a>
+      <div class="cta-row science-pillars__cta" data-reveal>
+        {%- if section.settings.button_style == 'primary' -%}
+          <a href="{{ section.settings.button_link }}" class="btn btn--primary btn--lg science-pillars__button">{{ section.settings.button_label | escape }}</a>
+        {%- else -%}
+          <a href="{{ section.settings.button_link }}" class="link link--chevron link--lg science-pillars__link">
+            {{- section.settings.button_label | escape -}}
+            {%- render 'icon', name: 'chevron-right', size: 16 -%}
+          </a>
+        {%- endif -%}
       </div>
     {%- endif -%}
   </div>
@@ -117,6 +127,22 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "link",
+          "label": "Text link with chevron"
+        },
+        {
+          "value": "primary",
+          "label": "Pill button"
+        }
+      ],
+      "default": "link"
     },
     {
       "type": "color_scheme",

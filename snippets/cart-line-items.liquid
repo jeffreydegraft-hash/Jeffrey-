@@ -1,5 +1,8 @@
 {%- comment -%}
   Cart line items, shared by the cart drawer and the cart page.
+  Apple bag rows: rounded product image on the surface tone, title and
+  options on the left, price on the right, then a pill stepper with a quiet
+  "Remove" text link under the price.
   Accepts:
   - context: {String} 'drawer' | 'page' (default 'page'). Sets the media size,
     prefixes every id so both can live on the same page, and tells cart.js
@@ -9,9 +12,11 @@
 {%- liquid
   assign context = context | default: 'page'
   if context == 'drawer'
-    assign media_sizes = '72px'
+    assign media_sizes = '80px'
+    assign media_widths = '80, 160, 240'
   else
-    assign media_sizes = '96px'
+    assign media_sizes = '(min-width: 750px) 120px, 88px'
+    assign media_widths = '88, 120, 176, 240, 360'
   endif
 -%}
 <cart-items class="cart-items cart-items--{{ context }}" data-context="{{ context }}">
@@ -29,7 +34,7 @@
       <li class="cart-line" id="CartLine-{{ line_id }}" data-line="{{ forloop.index }}">
         <a href="{{ item.url }}" class="cart-line__media" tabindex="-1" aria-hidden="true">
           {%- if item.image -%}
-            {%- render 'image', image: item.image, sizes: media_sizes, widths: '100, 150, 200, 300', ratio: '1 / 1', wrapper_class: 'cart-line__media-box', class: 'cart-line__img', loading: 'lazy', alt: item.image.alt -%}
+            {%- render 'image', image: item.image, sizes: media_sizes, widths: media_widths, ratio: '1 / 1', wrapper_class: 'cart-line__media-box media--contain', class: 'cart-line__img', loading: 'lazy', alt: item.image.alt -%}
           {%- else -%}
             <div class="media cart-line__media-box" style="--ratio: 1 / 1;">
               {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
@@ -39,13 +44,13 @@
 
         <div class="cart-line__details">
           {%- if settings.cart_show_vendor and item.product.vendor != blank -%}
-            <p class="cart-line__vendor eyebrow eyebrow--ink">{{ item.product.vendor | escape }}</p>
+            <p class="cart-line__vendor">{{ item.product.vendor | escape }}</p>
           {%- endif -%}
 
           <a href="{{ item.url }}" class="cart-line__title clamp-2">{{ item.product.title | escape }}</a>
 
           {%- if item.product.has_only_default_variant == false -%}
-            <p class="cart-line__variant caption">
+            <p class="cart-line__variant">
               {%- for option in item.options_with_values -%}
                 {{ option.value | escape }}
                 {%- unless forloop.last %} · {% endunless -%}
@@ -63,7 +68,7 @@
             endfor
           -%}
           {%- if visible_properties > 0 -%}
-            <dl class="cart-line__properties caption">
+            <dl class="cart-line__properties">
               {%- for property in item.properties -%}
                 {%- assign first_char = property.first | slice: 0 -%}
                 {%- if property.last != blank and first_char != '_' -%}
@@ -83,11 +88,11 @@
           {%- endif -%}
 
           {%- if item.selling_plan_allocation != null -%}
-            <p class="cart-line__plan caption">{{ item.selling_plan_allocation.selling_plan.name | escape }}</p>
+            <p class="cart-line__plan">{{ item.selling_plan_allocation.selling_plan.name | escape }}</p>
           {%- endif -%}
 
           {%- if item.unit_price_measurement -%}
-            <p class="cart-line__unit caption money">
+            <p class="cart-line__unit money">
               <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
               {{ item.unit_price | money }}
               <span aria-hidden="true">/</span>
@@ -100,7 +105,7 @@
           {%- endif -%}
 
           {%- if item.line_level_discount_allocations.size > 0 -%}
-            <ul class="cart-line__discounts caption" role="list" aria-label="{{ 'cart.general.discounts' | t }}">
+            <ul class="cart-line__discounts" role="list" aria-label="{{ 'cart.general.discounts' | t }}">
               {%- for discount in item.line_level_discount_allocations -%}
                 <li class="cart-line__discount">
                   {%- render 'icon', name: 'check', size: 14 -%}
@@ -109,18 +114,6 @@
               {%- endfor -%}
             </ul>
           {%- endif -%}
-
-          <div class="cart-line__controls">
-            {%- render 'quantity-input', id: quantity_id, value: item.quantity, min: 1, size: 'sm', label: item.product.title, data_attrs: quantity_attrs -%}
-            <cart-remove-button data-index="{{ forloop.index }}">
-              <button type="button" class="cart-line__remove" aria-label="{{ 'cart.general.remove_title' | t: title: item.title }}">
-                {%- render 'icon', name: 'close', size: 16 -%}
-                <span class="cart-line__remove-text{% if context == 'drawer' %} visually-hidden{% endif %}">{{ 'cart.general.remove' | t }}</span>
-              </button>
-            </cart-remove-button>
-          </div>
-
-          <p class="cart-line__error field__error" id="Line-error-{{ line_id }}" role="alert" hidden></p>
         </div>
 
         <div class="cart-line__price money">
@@ -132,8 +125,20 @@
           <span class="cart-line__price-final">{{ item.final_line_price | money }}</span>
           {%- if item.quantity > 1 -%}
             {%- assign each_price = item.final_price | money -%}
-            <span class="cart-line__each caption">{{ 'cart.general.each_html' | t: price: each_price }}</span>
+            <span class="cart-line__each">{{ 'cart.general.each_html' | t: price: each_price }}</span>
           {%- endif -%}
+        </div>
+
+        <div class="cart-line__actions">
+          <div class="cart-line__controls">
+            {%- render 'quantity-input', id: quantity_id, value: item.quantity, min: 1, size: 'sm', label: item.product.title, data_attrs: quantity_attrs -%}
+            <cart-remove-button class="cart-line__remove-wrap" data-index="{{ forloop.index }}">
+              <button type="button" class="cart-line__remove" aria-label="{{ 'cart.general.remove_title' | t: title: item.title }}">
+                {{- 'cart.general.remove' | t -}}
+              </button>
+            </cart-remove-button>
+          </div>
+          <p class="cart-line__error field__error" id="Line-error-{{ line_id }}" role="alert" hidden></p>
         </div>
       </li>
     {%- endfor -%}

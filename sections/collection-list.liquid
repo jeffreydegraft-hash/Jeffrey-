@@ -1,5 +1,6 @@
 {%- comment -%}
-  Collection list: a heading and a grid of hand-picked collections.
+  Collection list: a centred heading and a grid of hand-picked collection
+  tiles.
   Each block is a collection picker; an unassigned block renders a
   placeholder card so the editor never shows a hole.
 {%- endcomment -%}
@@ -19,26 +20,24 @@
   <div class="section{{ spacing_class }} color-{{ section.settings.color_scheme }} collection-list" id="section-{{ section.id }}">
     <div class="page-width">
       {%- if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.show_view_all -%}
-        <header class="section__header section__header--row collection-list__header" data-reveal>
-          <div class="stack stack--sm">
-            {%- if section.settings.eyebrow != blank -%}
-              <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
-            {%- endif -%}
-            {%- if section.settings.heading != blank -%}
-              <h2 class="h2">{{ section.settings.heading | escape }}</h2>
-            {%- endif -%}
-          </div>
+        <header class="section__header section__header--center collection-list__header" data-reveal>
+          {%- if section.settings.eyebrow != blank -%}
+            <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="h2">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
           {%- if section.settings.show_view_all -%}
-            <a href="{{ routes.collections_url }}" class="link link--arrow collection-list__view-all">
-              {{ 'general.view_all' | t }}
-              {%- render 'icon', name: 'arrow-right', size: 18 -%}
+            <a href="{{ routes.collections_url }}" class="link link--chevron link--lg collection-list__view-all">
+              {{- 'general.view_all' | t -}}
+              {%- render 'icon', name: 'chevron-right', size: 12 -%}
             </a>
           {%- endif -%}
         </header>
       {%- endif -%}
 
       {%- if section.blocks.size > 0 -%}
-        <ul class="grid grid--3 grid--mobile-2 collection-list__grid" role="list" style="--cols-desktop: {{ section.settings.columns_desktop }};">
+        <ul class="grid grid--3 grid--mobile-2 collection-list__grid{% if section.blocks.size < section.settings.columns_desktop %} collection-list__grid--few{% endif %}" role="list" style="--cols-desktop: {{ section.settings.columns_desktop }}; --count: {{ section.blocks.size }};">
           {%- for block in section.blocks -%}
             <li {{ block.shopify_attributes }}>
               {%- render 'card-collection', collection: block.settings.collection, index: forloop.index0, sizes: card_sizes -%}
@@ -47,8 +46,7 @@
         </ul>
       {%- else -%}
         <div class="empty-state collection-list__empty">
-          {%- render 'icon', name: 'info', size: 36 -%}
-          <p class="muted text-pretty">{{ 'sections.collection_list.empty' | t }}</p>
+          <p class="collection-list__empty-body">{{ 'sections.collection_list.empty' | t }}</p>
         </div>
       {%- endif -%}
     </div>
