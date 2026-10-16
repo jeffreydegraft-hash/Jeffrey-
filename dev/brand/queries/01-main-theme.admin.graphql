@@ -1,0 +1,13 @@
+query MainTheme {
+  themes(first: 5, roles: [MAIN]) {
+    nodes {
+      id
+      name
+      role
+      prefix
+      themeStoreId
+      processing
+      updatedAt
+    }
+  }
+}

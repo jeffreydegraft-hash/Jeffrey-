@@ -1,0 +1,41 @@
+query ShopBrand {
+  shop {
+    name
+    brand {
+      slogan
+      shortDescription
+      logo {
+        image {
+          url
+          width
+          height
+          altText
+        }
+      }
+      squareLogo {
+        image {
+          url
+          width
+          height
+        }
+      }
+      coverImage {
+        image {
+          url
+          width
+          height
+        }
+      }
+      colors {
+        primary {
+          background
+          foreground
+        }
+        secondary {
+          background
+          foreground
+        }
+      }
+    }
+  }
+}

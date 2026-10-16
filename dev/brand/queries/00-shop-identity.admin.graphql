@@ -1,0 +1,10 @@
+query ShopIdentity {
+  shop {
+    name
+    myshopifyDomain
+    primaryDomain {
+      host
+      url
+    }
+  }
+}

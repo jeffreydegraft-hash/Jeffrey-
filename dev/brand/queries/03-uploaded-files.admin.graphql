@@ -1,0 +1,33 @@
+query UploadedBrandFiles($after: String, $query: String) {
+  files(first: 50, after: $after, query: $query, sortKey: CREATED_AT, reverse: true) {
+    nodes {
+      __typename
+      id
+      alt
+      fileStatus
+      createdAt
+      ... on MediaImage {
+        mimeType
+        image {
+          url
+          width
+          height
+          altText
+        }
+        originalSource {
+          url
+          fileSize
+        }
+      }
+      ... on GenericFile {
+        url
+        mimeType
+        originalFileSize
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

@@ -1,0 +1,50 @@
+query ThemeBrandFiles($themeId: ID!, $after: String) {
+  theme(id: $themeId) {
+    id
+    name
+    role
+    files(
+      first: 50
+      after: $after
+      filenames: [
+        "config/settings_data.json"
+        "config/settings_schema.json"
+        "templates/*.json"
+        "sections/*.json"
+        "layout/*.liquid"
+        "assets/*.svg"
+        "assets/*.png"
+        "assets/*.jpg"
+        "assets/*.webp"
+      ]
+    ) {
+      nodes {
+        filename
+        contentType
+        size
+        checksumMd5
+        updatedAt
+        body {
+          __typename
+          ... on OnlineStoreThemeFileBodyText {
+            content
+          }
+          ... on OnlineStoreThemeFileBodyBase64 {
+            contentBase64
+          }
+          ... on OnlineStoreThemeFileBodyUrl {
+            url
+          }
+        }
+      }
+      userErrors {
+        code
+        filename
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}

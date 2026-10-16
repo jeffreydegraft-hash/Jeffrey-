@@ -1,0 +1,45 @@
+query CheckoutBrandingLogo {
+  checkoutAndAccountsConfigurations(first: 5) {
+    nodes {
+      id
+      name
+      isPublished
+      branding {
+        components {
+          favicon {
+            ... on CheckoutAndAccountsConfigurationBrandingImage {
+              image {
+                url
+                altText
+                width
+                height
+              }
+            }
+          }
+        }
+        surfaces {
+          checkout {
+            components {
+              header {
+                logo {
+                  maxWidth
+                  visibility
+                  image {
+                    ... on CheckoutAndAccountsConfigurationBrandingImage {
+                      image {
+                        url
+                        altText
+                        width
+                        height
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
