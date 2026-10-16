@@ -421,7 +421,8 @@ function parseFile(file) {
   let sch = null;
   if (sm) {
     try {
-      sch = JSON.parse(sm[1]);
+      /* Shopify accepts trailing commas in section schemas */
+      sch = JSON.parse(sm[1].replace(/,(\s*[}\]])/g, '$1'));
     } catch (e) {
       warn(`schema JSON error in ${path.relative(ROOT, file)}: ${e.message}`);
     }

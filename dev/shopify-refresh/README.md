@@ -36,7 +36,7 @@ The look stays the same brand: deep olive `#2C3227`, cream `#FAF7F2`, linen `#F0
 - New "text with icons" band for the four pillars: Rooted in Scripture, Set Apart for You, Clean Ingredients, Anointed with Purpose. The pillar copy comes from the store's own product descriptions and labels.
 - Featured collection: three products per row. The photos blend into the page instead of sitting in white boxes.
 - "Find your oil": the eight oil collections, each with its theme word (Radiance, Revitalize, …). The grey overlay is gone and the text sits below each photo.
-- Squalane serum now has its own image-and-text section. Before, it was a full-width photo with small text over it.
+- Squalane serum now has its own section: the face photo with the 100% Olive Squalane bottle stepping over its corner, beside the text. Both photos and the button open the product page. This uses Prestige's "Multiple media with text" section. Its image blocks gained an optional Link setting; nothing else in that file changed. Before, the serum was a full-width photo with small text over it.
 - Featured product (Frankincense & Myrrh) now shows its name, price and short description. Before, it showed neither name nor price.
 - Psalm 23:5 scripture band on olive.
 - Journal heading renamed to "The Anointing Journal".
