@@ -19,6 +19,22 @@ Design rules: `dev/docs/APPLE-SPEC.md` (§0 Brand integrity is binding) and
 - The olive accent in `config/settings_data.json` (#4A5A2A / #5F7034) is provisional:
   replace it with colours sampled from the real logo and labels (step 4).
 
+## The owner prefers the current live site (Oct 2026)
+After seeing the Apple-first rebuild, the owner said the current site looks better.
+The live theme ("Updated copy of Mount of Olives") is the reference for the brand:
+- Palette measured from the live homepage: deep green #2C3327 (announcement bar),
+  cream #F8F7F3 / #FBF7F3 (top bars), gold #C5A263 (primary button), light grey #EFEFEF.
+- Type: classic serif display set in uppercase with wide tracking ("THE ANOINTING OIL
+  COLLECTION"), small uppercase tracked labels and navigation.
+- Artwork: the hero is a photo of all eight amber bottles with hand-illustrated
+  watercolour floral labels, each scent in its own colours (Rose of Sharon pink,
+  Latter Rain blue, Hyssop purple, Spikenard green, Lily of the Valley lavender,
+  Frankincense & Myrrh green and gold, Pomegranate red, Gethsemane yellow-green).
+- Labels: "MOUNT of OLIVES™" wordmark, oil name in serif, "THE ANOINTING OIL" gold band,
+  theme word in script (Radiance, Revitalize, Purification & Protection, Renewal,
+  Illuminate, Restore, Eternal, Unscented), botanical and verse.
+Any further work keeps this look; improvements go under the hood unless the owner asks.
+
 ## Steps once the Shopify connector is connected (read-only)
 1. Run `queries/00-shop-identity.admin.graphql` and `queries/01-main-theme.admin.graphql`.
 2. Run `queries/02-theme-brand-files.admin.graphql` with the MAIN theme id. It returns
