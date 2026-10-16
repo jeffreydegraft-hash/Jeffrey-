@@ -145,6 +145,7 @@
 
 .mo-hero__media {
   display: block;
+  position: relative;
   max-width: var(--mo-hero-media-max-width);
   margin-inline: auto;
   /* the photo multiplies onto this, so its white background turns cream */
@@ -159,15 +160,22 @@
   aspect-ratio: calc(var(--mo-hero-ratio, 2.3907) * 100 / var(--mo-hero-frame-height));
 }
 
+/* The frame is exactly the photo's box, so the bottle links can be placed in photo percentages */
+.mo-hero__frame {
+  display: block;
+  position: absolute;
+  inset-inline-start: 0;
+  width: 100%;
+  aspect-ratio: var(--mo-hero-ratio, 2.3907);
+  /* top% resolves against the row's height */
+  top: calc(-100% * var(--mo-hero-frame-top) / var(--mo-hero-frame-height));
+}
+
 .mo-hero__image {
   display: block;
   width: 100%;
   max-width: none;
   height: auto;
-  position: absolute;
-  inset-inline-start: 0;
-  /* top% resolves against the row's height */
-  top: calc(-100% * var(--mo-hero-frame-top) / var(--mo-hero-frame-height));
   mix-blend-mode: multiply;
   filter: brightness(1.012);
   /* the photo's outermost pixel column is grey */
@@ -176,6 +184,64 @@
 
 .mo-hero__row--second {
   display: none;
+}
+
+.mo-hero__media-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* ---------- One link per bottle, with a visible Shop button under it ---------- */
+.mo-hero__spot {
+  --mo-spot-width: calc((var(--mo-hero-spots-right) - var(--mo-hero-spots-left)) / var(--mo-hero-spots-count) * 1%);
+  position: absolute;
+  z-index: 1;
+  /* from just above the caps to just below the bottle, where the button sits */
+  top: 17%;
+  height: 69%;
+  width: var(--mo-spot-width);
+  inset-inline-start: calc(var(--mo-hero-spots-left) * 1% + var(--i) * var(--mo-spot-width));
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mo-hero__spot-label {
+  font-family: var(--text-font-family);
+  font-size: .625rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgb(var(--mo-olive));
+  border: 1px solid rgb(var(--mo-olive) / .45);
+  padding: .55rem .9rem .55rem calc(.9rem + .2em);
+  transition: background-color .2s var(--mo-ease-out), color .2s var(--mo-ease-out), border-color .2s var(--mo-ease-out);
+  pointer-events: none;
+}
+
+/* hovering anywhere on the bottle fills its button, so the whole bottle reads as the link */
+@media (hover: hover) and (pointer: fine) {
+  .mo-hero__spot:hover .mo-hero__spot-label {
+    color: rgb(var(--mo-cream));
+    background: rgb(var(--mo-olive));
+    border-color: rgb(var(--mo-olive));
+  }
+}
+
+.mo-hero__spot:active .mo-hero__spot-label,
+.mo-hero__spot:focus-visible .mo-hero__spot-label {
+  color: rgb(var(--mo-cream));
+  background: rgb(var(--mo-olive));
+  border-color: rgb(var(--mo-olive));
+}
+
+.mo-hero__spot:focus-visible {
+  outline: 2px solid rgb(var(--mo-gold-ink));
+  outline-offset: -2px;
 }
 
 /* Phones: two rows of four bottles cut from the same photo */
@@ -199,13 +265,35 @@
     margin-block-start: .5rem;
   }
 
-  .mo-hero--rows .mo-hero__image {
+  .mo-hero--rows .mo-hero__frame {
     width: 200%;
     top: calc(-100% * var(--mo-hero-row-top) / var(--mo-hero-row-height));
   }
 
-  .mo-hero--rows .mo-hero__row--second .mo-hero__image {
+  .mo-hero--rows .mo-hero__row--second .mo-hero__frame {
     inset-inline-start: -100%;
+  }
+
+  .mo-hero__spot {
+    height: 71.5%;
+  }
+
+  .mo-hero__spot-label {
+    font-size: .5625rem;
+    letter-spacing: .16em;
+    padding: .5rem .65rem .5rem calc(.65rem + .16em);
+  }
+
+  /* each bottle link lives in the row where its bottle is shown */
+  .mo-hero--rows .mo-hero__row:not(.mo-hero__row--second) .mo-hero__spot--second-row,
+  .mo-hero--rows .mo-hero__row--second .mo-hero__spot--first-row {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mo-hero__spot-label {
+    transition: none;
   }
 }
 

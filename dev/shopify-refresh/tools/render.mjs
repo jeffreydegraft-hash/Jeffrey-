@@ -525,11 +525,12 @@ const PAGES = {
   index: () => globalsFor('index', { path: '/', page_title: 'Mount of Olives' }),
   product: () => globalsFor('product', { product: FM, collection: null, path: FM.url, page_title: FM.title, recommendations: { performed: true, products: D.collections.all.products.filter((p) => p !== FM).slice(0, 4), products_count: 4 } }),
   collection: () => globalsFor('collection', { collection: D.collections['all-products'], path: '/collections/all-products', page_title: 'All Anointing Oil Products' }),
+  'collection-fm': () => globalsFor('collection', { collection: D.collections['frankincense-myrrh'], path: '/collections/frankincense-myrrh', page_title: 'Frankincense & Myrrh' }),
 };
 
 async function renderPage(name) {
   const globals = PAGES[name]();
-  const tplFile = path.join(ROOT, 'templates', `${name}.json`);
+  const tplFile = path.join(ROOT, 'templates', `${name.replace(/-fm$/, '')}.json`);
   const tpl = readJson(tplFile);
   let content = '';
   let i = 0;

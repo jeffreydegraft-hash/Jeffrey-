@@ -24,6 +24,14 @@ The look stays the same brand: deep olive `#2C3227`, cream `#FAF7F2`, linen `#F0
 - On phones, the line-up shows as two rows of four bottles.
 - The original slideshow hero is still in the homepage template, only hidden. It can be switched back on in the editor.
 
+**Bottle links**
+- Each bottle in the hero photo is a link with a visible Shop button under it. On a computer, hovering a bottle fills its button.
+- Seven bottles open their product page directly.
+- Frankincense & Myrrh opens its collection, where shoppers choose Frankincense, Myrrh or the blend.
+- The links are "Bottle link" blocks in the hero section, one per bottle, left to right. A block can point at a collection instead of a product.
+- The "Find your oil" tiles also open the product page. Frankincense & Myrrh is the exception: it opens its collection.
+- Collection pages now show each collection's own description under the title.
+
 **Below the hero**
 - New "text with icons" band for the four pillars: Rooted in Scripture, Set Apart for You, Clean Ingredients, Anointed with Purpose. The pillar copy comes from the store's own product descriptions and labels.
 - Featured collection: three products per row. The photos blend into the page instead of sitting in white boxes.
@@ -59,6 +67,6 @@ When no logo image is set, the shop name is split around " of " and set as the w
 
 ## Tools
 
-`tools/` renders a theme folder locally with liquidjs and the store's data, then screenshots it with Chromium (`render.mjs`, `data.mjs`, `shoot.mjs`, `measure.mjs`). It also runs Shopify Theme Check (`tc.mjs`).
+`tools/` renders a theme folder locally with liquidjs and the store's data, then screenshots it with Chromium (`render.mjs`, `data.mjs`, `shoot.mjs`, `measure.mjs`). It also runs Shopify Theme Check (`tc.mjs`). `clicktest.mjs` clicks every bottle at desktop, tablet and phone widths and checks which page opens.
 
 The theme source and the store export are not in this repo. Prestige is a licensed theme, and the export holds store data. `extract_theme.py` writes theme files saved from Admin API responses into a folder.

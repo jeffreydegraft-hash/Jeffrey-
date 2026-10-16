@@ -5,12 +5,22 @@ MOUNT OF OLIVES HERO
 Headline and button above the bottle line-up, so the text never covers the label artwork. On phones the line-up can
 be shown as two rows of four bottles (left and right halves of the same photo), so every bottle stays large enough
 to read.
+
+Each "Bottle link" block puts an invisible link over one bottle, left to right, so a click on a bottle opens its
+product page. The links are spread evenly between the two "bottle area" edges set in the section settings.
 {%- endcomment -%}
 
 {%- liquid
   assign color_scheme = section.settings.color_scheme
   assign color_scheme_hash = color_scheme.settings.background_gradient | default: color_scheme.settings.background | md5
   assign image = section.settings.image
+  assign bottle_blocks = section.blocks | where: 'type', 'bottle'
+  assign bottle_count = bottle_blocks.size
+  assign spots_span = section.settings.bottles_right | minus: section.settings.bottles_left | times: 1.0
+  assign spot_width = 0
+  if bottle_count > 0
+    assign spot_width = spots_span | divided_by: bottle_count
+  endif
 -%}
 
 <style>
@@ -20,6 +30,9 @@ to read.
     --mo-hero-frame-height: {{ section.settings.desktop_crop_height }};
     --mo-hero-row-top: {{ section.settings.mobile_crop_top }};
     --mo-hero-row-height: {{ section.settings.mobile_crop_height }};
+    --mo-hero-spots-left: {{ section.settings.bottles_left }};
+    --mo-hero-spots-right: {{ section.settings.bottles_right }};
+    --mo-hero-spots-count: {{ bottle_count | at_least: 1 }};
     {%- if image != blank %}
     --mo-hero-ratio: {{ image.aspect_ratio }};
     {%- endif %}
@@ -51,17 +64,52 @@ to read.
 
   {%- if image != blank -%}
     {%- capture alt -%}{{ image.alt | default: section.settings.title | strip_html | escape }}{%- endcapture -%}
-    <a class="mo-hero__media" {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% endif %} tabindex="-1" aria-hidden="true">
+
+    {%- capture bottle_links -%}
+      {%- for block in bottle_blocks -%}
+        {%- liquid
+          assign spot_url = ''
+          assign spot_title = ''
+          # on phones, bottles left of the photo's middle go in the first row
+          assign spot_center = forloop.index0 | plus: 0.5 | times: spot_width | plus: section.settings.bottles_left
+          if block.settings.collection != blank
+            assign spot_url = block.settings.collection.url
+            assign spot_title = block.settings.collection.title
+          elsif block.settings.product != blank
+            assign spot_url = block.settings.product.url
+            assign spot_title = block.settings.product.title
+          endif
+        -%}
+        {%- if spot_url != blank -%}
+          <a href="{{ spot_url }}" class="mo-hero__spot {% if spot_center < 50 %}mo-hero__spot--first-row{% else %}mo-hero__spot--second-row{% endif %}" style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+            <span class="sr-only">{{ spot_title | escape }}</span>
+            <span class="mo-hero__spot-label" aria-hidden="true">{{ section.settings.bottle_label | escape }}</span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    <div class="mo-hero__media">
       <span class="mo-hero__row">
-        {{- image | image_url: width: 3200 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(max-width: 699px) 200vw, min(100vw, 1680px)', widths: '600,800,1000,1200,1600,2000,2400,3200', alt: alt, class: 'mo-hero__image' -}}
+        <span class="mo-hero__frame">
+          {{- image | image_url: width: 3200 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(max-width: 699px) 200vw, min(100vw, 1680px)', widths: '600,800,1000,1200,1600,2000,2400,3200', alt: alt, class: 'mo-hero__image' -}}
+          {{- bottle_links -}}
+        </span>
       </span>
 
       {%- if section.settings.mobile_two_rows -%}
-        <span class="mo-hero__row mo-hero__row--second" aria-hidden="true">
-          {{- image | image_url: width: 3200 | image_tag: loading: 'eager', sizes: '200vw', widths: '600,800,1000,1200,1600,2000,2400,3200', alt: '', class: 'mo-hero__image' -}}
+        <span class="mo-hero__row mo-hero__row--second">
+          <span class="mo-hero__frame">
+            {{- image | image_url: width: 3200 | image_tag: loading: 'eager', sizes: '200vw', widths: '600,800,1000,1200,1600,2000,2400,3200', alt: '', class: 'mo-hero__image' -}}
+            {{- bottle_links -}}
+          </span>
         </span>
       {%- endif -%}
-    </a>
+
+      {%- if bottle_count == 0 and section.settings.button_link != blank -%}
+        <a class="mo-hero__media-link" href="{{ section.settings.button_link }}" tabindex="-1" aria-hidden="true"></a>
+      {%- endif -%}
+    </div>
   {%- else -%}
     <div class="mo-hero__media">
       {{- 'hero-apparel-1' | placeholder_svg_tag: 'placeholder' -}}
@@ -147,7 +195,7 @@ to read.
       "step": 1,
       "unit": "%",
       "label": "Height kept",
-      "default": 69
+      "default": 77
     },
     {
       "type": "header",
@@ -192,6 +240,57 @@ to read.
       "id": "button_text_color",
       "label": "Button text",
       "default": "#2c3227"
+    },
+    {
+      "type": "header",
+      "content": "Bottle links",
+      "info": "Add one Bottle link block per bottle, in the order they stand in the photo, left to right."
+    },
+    {
+      "type": "text",
+      "id": "bottle_label",
+      "label": "Label shown when hovering a bottle",
+      "default": "Shop"
+    },
+    {
+      "type": "range",
+      "id": "bottles_left",
+      "min": 0,
+      "max": 10,
+      "step": 0.1,
+      "unit": "%",
+      "label": "Bottle area starts at",
+      "default": 2.6
+    },
+    {
+      "type": "range",
+      "id": "bottles_right",
+      "min": 90,
+      "max": 100,
+      "step": 0.1,
+      "unit": "%",
+      "label": "Bottle area ends at",
+      "default": 97.9
+    }
+  ],
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "bottle",
+      "name": "Bottle link",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection instead",
+          "info": "Use when one bottle stands for several products, so shoppers can choose. Replaces the product link."
+        }
+      ]
     }
   ],
   "presets": [
