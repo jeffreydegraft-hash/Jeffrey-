@@ -1,0 +1,13 @@
+{
+  "name": "prestige-preview",
+  "private": true,
+  "type": "module",
+  "description": "Local preview of the store's Prestige theme: liquidjs render with the store's data, Chromium screenshots, Shopify Theme Check.",
+  "dependencies": {
+    "@fontsource/cormorant": "5.2.5",
+    "@fontsource/montserrat": "5.2.6",
+    "@shopify/theme-check-node": "3.30.1",
+    "liquidjs": "10.21.0",
+    "playwright-core": "1.55.0"
+  }
+}

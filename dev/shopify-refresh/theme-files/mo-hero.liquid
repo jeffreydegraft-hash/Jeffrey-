@@ -1,0 +1,203 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+MOUNT OF OLIVES HERO
+----------------------------------------------------------------------------------------------------------------------
+Headline and button above the bottle line-up, so the text never covers the label artwork. On phones the line-up can
+be shown as two rows of four bottles (left and right halves of the same photo), so every bottle stays large enough
+to read.
+{%- endcomment -%}
+
+{%- liquid
+  assign color_scheme = section.settings.color_scheme
+  assign color_scheme_hash = color_scheme.settings.background_gradient | default: color_scheme.settings.background | md5
+  assign image = section.settings.image
+-%}
+
+<style>
+  #shopify-section-{{ section.id }} {
+    --mo-hero-media-max-width: {{ section.settings.image_max_width }}px;
+    --mo-hero-frame-top: {{ section.settings.desktop_crop_top }};
+    --mo-hero-frame-height: {{ section.settings.desktop_crop_height }};
+    --mo-hero-row-top: {{ section.settings.mobile_crop_top }};
+    --mo-hero-row-height: {{ section.settings.mobile_crop_height }};
+    {%- if image != blank %}
+    --mo-hero-ratio: {{ image.aspect_ratio }};
+    {%- endif %}
+  }
+</style>
+
+<div class="mo-hero color-scheme color-scheme--{{ color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }}{% if section.settings.mobile_two_rows %} mo-hero--rows{% endif %}">
+  <div class="mo-hero__content container">
+    <div class="mo-hero__text prose text-center">
+      {%- if section.settings.subheading != blank -%}
+        <p class="mo-eyebrow">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="mo-hero__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.content != blank -%}
+        <div class="mo-hero__copy">{{ section.settings.content }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.button_text != blank -%}
+        <div class="button-group justify-center">
+          {%- render 'button', content: section.settings.button_text, href: section.settings.button_link, background: section.settings.button_background, text_color: section.settings.button_text_color -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if image != blank -%}
+    {%- capture alt -%}{{ image.alt | default: section.settings.title | strip_html | escape }}{%- endcapture -%}
+    <a class="mo-hero__media" {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% endif %} tabindex="-1" aria-hidden="true">
+      <span class="mo-hero__row">
+        {{- image | image_url: width: 3200 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(max-width: 699px) 200vw, min(100vw, 1680px)', widths: '600,800,1000,1200,1600,2000,2400,3200', alt: alt, class: 'mo-hero__image' -}}
+      </span>
+
+      {%- if section.settings.mobile_two_rows -%}
+        <span class="mo-hero__row mo-hero__row--second" aria-hidden="true">
+          {{- image | image_url: width: 3200 | image_tag: loading: 'eager', sizes: '200vw', widths: '600,800,1000,1200,1600,2000,2400,3200', alt: '', class: 'mo-hero__image' -}}
+        </span>
+      {%- endif -%}
+    </a>
+  {%- else -%}
+    <div class="mo-hero__media">
+      {{- 'hero-apparel-1' | placeholder_svg_tag: 'placeholder' -}}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Mount of Olives hero",
+  "class": "shopify-section--mo-hero",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Bottle line-up photo",
+      "info": "Works best with a wide photo on a white background."
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "min": 900,
+      "max": 2400,
+      "step": 20,
+      "unit": "px",
+      "label": "Photo maximum width",
+      "default": 1680
+    },
+    {
+      "type": "range",
+      "id": "desktop_crop_top",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "label": "Trim above the bottles",
+      "info": "Removes blank space at the top of the photo.",
+      "default": 9
+    },
+    {
+      "type": "range",
+      "id": "desktop_crop_height",
+      "min": 40,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Height kept",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Phone layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_two_rows",
+      "label": "Show the line-up as two rows on phones",
+      "info": "Splits the photo into its left and right halves so every bottle stays large.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "mobile_crop_top",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "label": "Trim above the bottles",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "mobile_crop_height",
+      "min": 40,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Height kept",
+      "default": 69
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "With cosmeceuticals derived from biblical botanicals"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "The Anointing Oil Collection"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#c4a265"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#2c3227"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mount of Olives hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,302 @@
+/* ==========================================================================
+   MOUNT OF OLIVES: brand layer for the Prestige theme
+   Colours, fonts and spacing live in Theme settings (colour schemes, typography);
+   this file only adds what those settings cannot express.
+   ========================================================================== */
+
+:root {
+  --mo-olive: 44 50 39;        /* #2C3227 */
+  --mo-cream: 250 247 242;     /* #FAF7F2 */
+  --mo-linen: 240 235 227;     /* #F0EBE3 */
+  --mo-gold: 196 162 101;      /* #C4A265 */
+  --mo-gold-ink: 122 95 48;    /* #7A5F30, gold that reads on cream */
+  --mo-ease-out: cubic-bezier(.23, 1, .32, 1);
+}
+
+::selection {
+  background: rgb(var(--mo-gold));
+  color: rgb(var(--mo-olive));
+}
+
+*:focus-visible {
+  outline-color: rgb(var(--mo-gold-ink));
+}
+
+/* ---------- Small uppercase labels (eyebrows) ---------- */
+.mo-eyebrow,
+.section-header .h6,
+.prose > p.h6:first-child {
+  font-family: var(--text-font-family);
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgb(var(--mo-gold-ink));
+}
+
+.color-scheme--scheme-3 .mo-eyebrow,
+.color-scheme--scheme-3 .section-header .h6,
+.color-scheme--scheme-3 .prose > p.h6:first-child {
+  color: rgb(var(--mo-gold));
+}
+
+/* ---------- Announcement bar ---------- */
+.announcement-bar .prose.heading {
+  font-family: var(--text-font-family);
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+/* ---------- Header ---------- */
+.header__primary-nav-item > a,
+.header__primary-nav-item summary,
+.header__secondary-nav .link-faded {
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+/* The shop name set like the bottle labels: MOUNT of OLIVES */
+.mo-wordmark {
+  font-family: var(--heading-font-family);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: block;
+}
+
+.mo-wordmark__of {
+  font-size: .6em;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: lowercase;
+  vertical-align: .14em;
+  margin-inline: .1em;
+}
+
+/* Phones: the wordmark scales with the screen so the search and bag icons stay on one line */
+@media screen and (max-width: 699px) {
+  .mo-wordmark {
+    font-size: clamp(.9375rem, 4.3vw, 1.25rem);
+    letter-spacing: .12em;
+  }
+
+  .header {
+    column-gap: .75rem;
+  }
+
+  .header__secondary-nav {
+    flex-wrap: nowrap;
+    column-gap: .75rem;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .mo-wordmark {
+    font-size: 1.625rem;
+  }
+}
+
+/* ---------- Buttons: square, tracked, like the original gold button ---------- */
+.button {
+  padding: .875rem 2.25rem;
+  font-weight: 600;
+}
+
+/* ---------- Hero ---------- */
+.mo-hero {
+  background: rgb(var(--background));
+  overflow: hidden;
+}
+
+.mo-hero__content {
+  padding-block: 2.75rem 1.5rem;
+}
+
+.mo-hero__text {
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.mo-hero__title {
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  font-size: clamp(2rem, 1.35rem + 2.8vw, 3.75rem);
+  line-height: 1.08;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  margin-block: .75rem 0;
+}
+
+.mo-hero__copy {
+  max-width: 34rem;
+  margin-inline: auto;
+}
+
+.mo-hero .button-group {
+  margin-block-start: 1.75rem;
+}
+
+.mo-hero__media {
+  display: block;
+  max-width: var(--mo-hero-media-max-width);
+  margin-inline: auto;
+  /* the photo multiplies onto this, so its white background turns cream */
+  background: rgb(var(--background));
+}
+
+/* Each row frames a band of the photo: the blank margins above and below the bottles are trimmed */
+.mo-hero__row {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: calc(var(--mo-hero-ratio, 2.3907) * 100 / var(--mo-hero-frame-height));
+}
+
+.mo-hero__image {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  position: absolute;
+  inset-inline-start: 0;
+  /* top% resolves against the row's height */
+  top: calc(-100% * var(--mo-hero-frame-top) / var(--mo-hero-frame-height));
+  mix-blend-mode: multiply;
+  filter: brightness(1.012);
+  /* the photo's outermost pixel column is grey */
+  clip-path: inset(0 0 0 1px);
+}
+
+.mo-hero__row--second {
+  display: none;
+}
+
+/* Phones: two rows of four bottles cut from the same photo */
+@media screen and (max-width: 699px) {
+  .mo-hero__content {
+    padding-block: 2rem 1rem;
+  }
+
+  .mo-hero--rows .mo-hero__media {
+    padding-inline: .75rem;
+    padding-block-end: 1.5rem;
+  }
+
+  .mo-hero--rows .mo-hero__row {
+    /* half the photo's width */
+    aspect-ratio: calc(var(--mo-hero-ratio, 2.3907) / 2 * 100 / var(--mo-hero-row-height));
+  }
+
+  .mo-hero--rows .mo-hero__row--second {
+    display: block;
+    margin-block-start: .5rem;
+  }
+
+  .mo-hero--rows .mo-hero__image {
+    width: 200%;
+    top: calc(-100% * var(--mo-hero-row-top) / var(--mo-hero-row-height));
+  }
+
+  .mo-hero--rows .mo-hero__row--second .mo-hero__image {
+    inset-inline-start: -100%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mo-hero__text > * {
+    animation: mo-rise .7s var(--mo-ease-out) both;
+  }
+
+  .mo-hero__text > :nth-child(2) { animation-delay: .06s; }
+  .mo-hero__text > :nth-child(3) { animation-delay: .12s; }
+  .mo-hero__text > :nth-child(4) { animation-delay: .18s; }
+
+  .mo-hero__media {
+    animation: mo-fade 1s var(--mo-ease-out) .15s both;
+  }
+}
+
+@keyframes mo-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes mo-fade {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Product prices in the body font, easier to read than the display serif ---------- */
+.price-list,
+.price-list sale-price,
+.price-list regular-price {
+  font-family: var(--text-font-family);
+  letter-spacing: .04em;
+}
+
+/* ---------- Photos on white backgrounds melt into the cream page ----------
+   multiply turns white into the page colour; the slight brightening lifts the
+   photos' near-white backgrounds (255 253 254) to pure white first */
+.collection-list--text-outside .collection-card img,
+.product-card__media img {
+  mix-blend-mode: multiply;
+  filter: brightness(1.012);
+}
+
+/* the card media is an isolated group, so it needs the page colour to blend onto */
+.product-card__media {
+  background: rgb(var(--background));
+}
+
+/* ---------- Scripture band ---------- */
+[id$="__mo-scripture"] .h2 {
+  text-transform: none;
+  letter-spacing: .01em;
+  line-height: 1.35;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+  text-wrap: balance;
+}
+
+[id$="__mo-scripture"] p.h6 {
+  font-family: var(--text-font-family);
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .2em;
+  color: rgb(var(--mo-gold));
+}
+
+/* ---------- Product page gallery: same seamless photos ---------- */
+.product-gallery__media,
+.product-gallery__thumbnail {
+  background: rgb(var(--background));
+}
+
+.product-gallery__media img,
+.product-gallery__thumbnail img {
+  mix-blend-mode: multiply;
+  filter: brightness(1.012);
+}
+
+/* ---------- "Find your oil" tiles: keep names whole on narrow screens ---------- */
+.collection-list--text-outside .collection-card__content .h3 {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: manual;
+  font-size: clamp(1.0625rem, .9rem + .55vw, 1.375rem);
+  line-height: 1.3;
+}
+
+.collection-list--text-outside .collection-card__content .h6 {
+  font-family: var(--text-font-family);
+  font-size: .625rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  color: rgb(var(--mo-gold-ink));
+}
