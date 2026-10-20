@@ -70,3 +70,13 @@ When no logo image is set, the shop name is split around " of " and set as the w
 `tools/` renders a theme folder locally with liquidjs and the store's data, then screenshots it with Chromium (`render.mjs`, `data.mjs`, `shoot.mjs`, `measure.mjs`). It also runs Shopify Theme Check (`tc.mjs`). `clicktest.mjs` clicks every bottle at desktop, tablet and phone widths and checks which page opens.
 
 The theme source and the store export are not in this repo. Prestige is a licensed theme, and the export holds store data. `extract_theme.py` writes theme files saved from Admin API responses into a folder.
+
+## Patterns borrowed from design galleries (Oct 20)
+
+The owner shared a list of ten design-inspiration galleries (land-book, supahero, pricingpages.design, socialproofexamples, reallygoodemails, deck.gallery, posts.design, adfolio, navbar.gallery, ogimage.gallery). The ones about decks, social posts, ads and emails are not about the website. From the rest, applied in the unpublished copy, in the same minimal style:
+
+- **Shop mega menu** (navbar.gallery): the header's "Shop" opens a panel listing every oil by name in columns (Anointing oils, Frankincense & Myrrh, Serums) with two product photos on the right. It uses Prestige's own mega-menu block. It needs a new navigation menu in Shopify, `main-menu-refresh`, defined in `menu-refresh.json`; the live `main-menu` is untouched. On phones the drawer shows Shop with a sub-level.
+- **Compare sizes** (pricingpages.design): under the size picker on product pages, a small table shows each size's price and price per ounce, and marks the best value with the saving. It is a Liquid block in `templates/product.json`; the ounces come from the size names ("4 ounce (118 ml)"), so products without ounce sizes show nothing.
+- **Questions, answered** (land-book, pricing pages): five of the store's own FAQ answers on the homepage, before the footer, with a link to the full FAQ page. Prestige's FAQ section, no new code.
+- **Share image** (ogimage.gallery): `assets/mo-share-image.jpg`, a 1200×630 card with the wordmark and the bottle line-up, used by `snippets/social-meta-tags.liquid` for any page without its own image, such as the homepage. Source: `theme-files/share-image-source.html`.
+- **Social proof** (socialproofexamples): not added. The store has Junip reviews installed but no review data was available to check, and nothing invented goes on the site.

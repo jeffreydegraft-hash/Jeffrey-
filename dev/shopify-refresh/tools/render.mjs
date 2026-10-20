@@ -388,6 +388,19 @@ class SectionTag extends Tag {
     emitter.write(yield renderSection(this.name, this.name, {}, ctx.getAll(), { index: 1 }));
   }
 }
+/* Shopify renders "liquid" type settings as Liquid in the surrounding context */
+class EvalLiquidTag extends Tag {
+  constructor(token, remain, liquid) {
+    super(token, remain, liquid);
+    this.value = new Value(token.args, liquid);
+  }
+  *render(ctx, emitter) {
+    const src = yield this.value.value(ctx);
+    if (!src) return;
+    const tpl = this.liquid.parse(preprocess(String(src)));
+    yield this.liquid.renderer.renderTemplates(tpl, ctx, emitter);
+  }
+}
 class NoopTag extends Tag {
   *render() {
     return '';
@@ -403,10 +416,12 @@ engine.registerTag('paginate', PaginateTag);
 engine.registerTag('sections', SectionsTag);
 engine.registerTag('section', SectionTag);
 engine.registerTag('content_for', NoopTag);
+engine.registerTag('eval_liquid', EvalLiquidTag);
 
 function preprocess(src) {
   return src
     .replace(/\{%-?\s*render\s+block\s*-?%\}/g, '{{ block | app_block_placeholder }}')
+    .replace(/\{\{-?\s*block\.settings\.liquid\s*-?\}\}/g, '{% eval_liquid block.settings.liquid %}')
     .replace(/\.(\w+)\?(?=[\s%}|)\],])/g, '.$1_q')
     .replace(/\b([\w.]+)\s*(==|!=)\s*empty\b/g, (m, v, op) => (op === '==' ? `${v}.size == 0` : `${v}.size > 0`))
     .replace(/\{%-?\s*#[^%]*-?%\}/g, '')

@@ -1,0 +1,118 @@
+{
+ "handle": "main-menu-refresh",
+ "title": "Main menu (refresh)",
+ "items": [
+  {
+   "title": "Shop",
+   "url": "/collections/all-products",
+   "type": "HTTP",
+   "items": [
+    {
+     "title": "Anointing Oils",
+     "url": "/collections/all-products",
+     "type": "HTTP",
+     "items": [
+      {
+       "title": "Rose of Sharon",
+       "url": "/products/rose-of-sharon",
+       "type": "PRODUCT"
+      },
+      {
+       "title": "Latter Rain",
+       "url": "/products/latter-rain-anointing-oil",
+       "type": "PRODUCT"
+      },
+      {
+       "title": "Hyssop",
+       "url": "/products/hyssop",
+       "type": "PRODUCT"
+      },
+      {
+       "title": "Spikenard",
+       "url": "/products/spikenard-anointing-oil",
+       "type": "PRODUCT"
+      },
+      {
+       "title": "Lily of the Valley",
+       "url": "/products/lily-of-the-valley",
+       "type": "PRODUCT"
+      },
+      {
+       "title": "Pomegranate",
+       "url": "/products/pomegranate-anointing-oil",
+       "type": "PRODUCT"
+      },
+      {
+       "title": "Gethsemane (Unscented)",
+       "url": "/products/gethsemane-anointing-oil-unscented",
+       "type": "PRODUCT"
+      },
+      {
+       "title": "Shop all oils",
+       "url": "/collections/all-products",
+       "type": "HTTP"
+      }
+     ]
+    },
+    {
+     "title": "Frankincense & Myrrh",
+     "url": "/collections/frankincense-myrrh",
+     "type": "COLLECTION",
+     "items": [
+      {
+       "title": "Frankincense & Myrrh",
+       "url": "/products/frankincense-myrrh-anointing-oil",
+       "type": "PRODUCT"
+      },
+      {
+       "title": "Frankincense",
+       "url": "/products/frankincense",
+       "type": "PRODUCT"
+      },
+      {
+       "title": "Myrrh",
+       "url": "/products/myrrh-anointing-oil-1",
+       "type": "PRODUCT"
+      }
+     ]
+    },
+    {
+     "title": "Serums",
+     "url": "/collections/serums",
+     "type": "COLLECTION",
+     "items": [
+      {
+       "title": "100% Squalane Oil",
+       "url": "/products/100-squalane",
+       "type": "PRODUCT"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Our Story",
+   "url": "/pages/about-us",
+   "type": "PAGE",
+   "items": []
+  },
+  {
+   "title": "Contact",
+   "url": "/pages/contact",
+   "type": "PAGE",
+   "items": []
+  },
+  {
+   "title": "Journal",
+   "url": "/blogs/the-anointing-journal",
+   "type": "BLOG",
+   "items": []
+  },
+  {
+   "title": "Science",
+   "url": "/pages/our-science",
+   "type": "PAGE",
+   "items": []
+  }
+ ]
+}
