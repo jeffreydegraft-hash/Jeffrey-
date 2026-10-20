@@ -150,6 +150,25 @@ export function shopImage(ref) {
 /* ---------- money ---------- */
 const cents = (amount) => Math.round(Number(amount || 0) * 100);
 
+/* ---------- product metafields (review data exported from the store) ---------- */
+const MF_FILE = path.join(HERE, 'metafields.json');
+const allMetafields = fs.existsSync(MF_FILE) ? JSON.parse(fs.readFileSync(MF_FILE, 'utf8')) : {};
+function productMetafields(handle) {
+  const out = {};
+  for (const [ns, fields] of Object.entries(allMetafields[handle] || {})) {
+    out[ns] = {};
+    for (const [key, f] of Object.entries(fields)) {
+      let value = f.value;
+      if (f.type === 'json' || f.type === 'rating') value = JSON.parse(value);
+      /* Shopify exposes a rating metafield as { rating, scale_min, scale_max } */
+      if (f.type === 'rating' && value && value.value !== undefined) value = { rating: Number(value.value), scale_min: Number(value.scale_min), scale_max: Number(value.scale_max) };
+      else if (f.type === 'number_integer') value = Number(value);
+      out[ns][key] = { type: f.type, value };
+    }
+  }
+  return out;
+}
+
 /* ---------- products ---------- */
 const productNodes = store.products.nodes;
 export const products = productNodes.map((p) => {
@@ -238,7 +257,7 @@ export const products = productNodes.map((p) => {
     template_suffix: null,
     published_at: p.publishedAt,
     created_at: p.createdAt,
-    metafields: {},
+    metafields: productMetafields(p.handle),
     collections: [],
     quantity_price_breaks_configured_q: false,
     status: p.status,

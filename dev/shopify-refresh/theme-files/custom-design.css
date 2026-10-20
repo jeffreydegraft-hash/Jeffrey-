@@ -334,12 +334,13 @@
 }
 
 /* ---------- Photos on white backgrounds melt into the cream page ----------
-   multiply turns white into the page colour; the slight brightening lifts the
-   photos' near-white backgrounds (255 253 254) to pure white first */
+   multiply turns white into the page colour. The photos' backgrounds are 255 253 254, which lands
+   within two levels of the page cream. No filter on these: Safari drops the blend when a filter
+   sits on the same element. */
 .collection-list--text-outside .collection-card img,
-.product-card__media img {
+.product-card__media img,
+.line-item__media {
   mix-blend-mode: multiply;
-  filter: brightness(1.012);
 }
 
 /* the card media is an isolated group, so it needs the page colour to blend onto */
@@ -373,10 +374,15 @@
 .product-gallery__media img,
 .product-gallery__thumbnail img {
   mix-blend-mode: multiply;
-  filter: brightness(1.012);
 }
 
 /* ---------- "Find your oil" tiles: keep names whole on narrow screens ---------- */
+/* the text sits at the bottom of each tile, so the names line up across a row even when a
+   theme word above wraps to two lines */
+.collection-list--text-outside .collection-card {
+  grid-template-rows: auto 1fr;
+}
+
 .collection-list--text-outside .collection-card__content .h3 {
   overflow-wrap: normal;
   word-break: normal;
@@ -429,7 +435,7 @@
 .mo-sizes__badge {
   grid-column: 1 / -1;
   justify-self: start;
-  font-size: .625rem;
+  font-size: .6875rem;
   font-weight: 600;
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -449,10 +455,21 @@
   }
 }
 
+/* ---------- Featured collection tabs: both names fit on a phone screen ---------- */
+@media screen and (max-width: 699px) {
+  .featured-collections-navigation {
+    column-gap: 1.5rem;
+  }
+
+  .featured-collections-navigation > .h2 {
+    font-size: clamp(.9375rem, .4rem + 2.6vw, 1.25rem);
+    letter-spacing: .1em;
+  }
+}
+
 /* ---------- Shop menu: product photos melt into the menu panel ---------- */
 .mega-menu__promo img {
   mix-blend-mode: multiply;
-  filter: brightness(1.012);
 }
 
 .mega-menu__linklist a[href="/collections/all-products"]:not(.h6) {
