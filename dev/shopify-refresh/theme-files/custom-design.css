@@ -283,9 +283,8 @@
   }
 
   .mo-hero__spot-label {
-    font-size: .5625rem;
-    letter-spacing: .16em;
-    padding: .5rem .65rem .5rem calc(.65rem + .16em);
+    letter-spacing: .14em;
+    padding: .5rem .65rem .5rem calc(.65rem + .14em);
   }
 
   /* each bottle link lives in the row where its bottle is shown */
@@ -378,9 +377,17 @@
 
 /* ---------- "Find your oil" tiles: keep names whole on narrow screens ---------- */
 /* the text sits at the bottom of each tile, so the names line up across a row even when a
-   theme word above wraps to two lines */
+   theme word above wraps to two lines; min-width 0 keeps a long name from pushing a tile
+   out of its half of the row on narrow phones */
 .collection-list--text-outside .collection-card {
   grid-template-rows: auto 1fr;
+  min-width: 0;
+}
+
+@media screen and (max-width: 359px) {
+  .collection-list--text-outside .collection-card__content .h3 {
+    font-size: .9375rem;
+  }
 }
 
 .collection-list--text-outside .collection-card__content .h3 {
@@ -458,12 +465,48 @@
 /* ---------- Featured collection tabs: both names fit on a phone screen ---------- */
 @media screen and (max-width: 699px) {
   .featured-collections-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     column-gap: 1.5rem;
+    row-gap: .25rem;
   }
 
   .featured-collections-navigation > .h2 {
-    font-size: clamp(.9375rem, .4rem + 2.6vw, 1.25rem);
+    font-size: clamp(.875rem, .4rem + 2.6vw, 1.25rem);
     letter-spacing: .1em;
+  }
+}
+
+/* ---------- Other phone-width fixes ---------- */
+/* the review carousel is as tall as its longest quote; centre each quote in that space instead of
+   leaving all the spare room under the short ones */
+.testimonial-item {
+  align-content: center;
+}
+
+/* headings in the pillars and product names on cards break into two even lines instead of
+   leaving one word alone on the last line */
+.shopify-section--text-with-icons .h6,
+.product-card .product-title {
+  text-wrap: balance;
+}
+
+/* the product descriptions were pasted with their own indents; use the theme's list indent */
+.product-info .prose [style*="padding-left"],
+.product-content-below-gallery__description [style*="padding-left"] {
+  padding-left: 0 !important;
+}
+
+@media screen and (max-width: 359px) {
+  /* the announcement message stays on one line */
+  .announcement-bar .prose.heading {
+    letter-spacing: .12em;
+  }
+
+  /* two size boxes fit side by side */
+  .block-swatch {
+    --swatch-padding: calc(var(--input-padding-block) - var(--swatch-border-size) * 2) .625rem;
   }
 }
 
