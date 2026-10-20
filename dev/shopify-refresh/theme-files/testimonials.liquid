@@ -24,27 +24,39 @@
       <div class="section-stack">
         {%- if section.settings.title != blank or section.settings.subheading != blank or section.settings.content != blank -%}
           {%- liquid
-            # Mount of Olives: "{count}" in the heading becomes the live number of five-star reviews, read from the
-            # review metafields (Etsy reviews synced into ReputonEtsyReviews::ProductReviews, and Junip's counts)
+            # Mount of Olives: "{count}" in the heading becomes the live number of reviews rated 4 stars and up, read
+            # from the review metafields: Etsy reviews (ReputonEtsyReviews::ProductReviews), Amazon reviews pasted into
+            # the custom.amazon_reviews metafield (same shape: {"reviews": [{"rating": 5, ...}]}, on products or the shop),
+            # and Junip's counts for reviews left on the store itself
             assign heading = section.settings.title
             if heading contains '{count}'
-              assign five_star_total = 0
+              assign review_total = 0
               for product in collections['all-products'].products
                 for field in product.metafields['ReputonEtsyReviews::ProductReviews']
                   for review in field.last.value.reviews
-                    if review.rating == 5
-                      assign five_star_total = five_star_total | plus: 1
+                    if review.rating >= 4
+                      assign review_total = review_total | plus: 1
                     endif
                   endfor
                 endfor
+                for review in product.metafields.custom.amazon_reviews.value.reviews
+                  if review.rating >= 4
+                    assign review_total = review_total | plus: 1
+                  endif
+                endfor
                 assign junip_count = product.metafields.junip.rating_count.value | default: 0
                 assign junip_average = product.metafields.junip.rating_average.value | default: 0 | times: 1.0
-                if junip_count > 0 and junip_average >= 5
-                  assign five_star_total = five_star_total | plus: junip_count
+                if junip_count > 0 and junip_average >= 4
+                  assign review_total = review_total | plus: junip_count
                 endif
               endfor
-              if five_star_total > 0
-                assign heading = heading | replace: '{count}', five_star_total
+              for review in shop.metafields.custom.amazon_reviews.value.reviews
+                if review.rating >= 4
+                  assign review_total = review_total | plus: 1
+                endif
+              endfor
+              if review_total > 0
+                assign heading = heading | replace: '{count}', review_total
               else
                 assign heading = 'Loved by our customers'
               endif
@@ -190,7 +202,7 @@
       "type": "inline_richtext",
       "id": "title",
       "label": "t:global.text.heading",
-      "info": "Write {count} to show the live number of five-star reviews."
+      "info": "Write {count} to show the live number of reviews rated 4 stars and up (Etsy, Amazon and store reviews)."
     },
     {
       "type": "richtext",
