@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Encyclopedia of Polyphenols – LinkedIn single image</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  :root{--green:#1E3A2B;--cream:#F5EFE3;--plum:#6B2A52;--ochre:#C89B2A;--ochre-soft:#E3C56A;--sage:#8FAE8C;--ink:#1B1A17}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#fff}
+  body{font-family:'DM Sans',Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .slide{width:1080px;height:1080px;position:relative;overflow:hidden;background:var(--green);color:var(--cream);padding:76px 84px 72px;display:flex;flex-direction:column}
+  .top{display:flex;justify-content:space-between;align-items:center;font-size:22px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;position:relative;z-index:2}
+  .top .right{font-family:'Fraunces',serif;text-transform:none;letter-spacing:0;font-style:italic;font-size:26px;font-weight:400;opacity:.85}
+  .art{position:absolute;right:30px;top:100px;width:740px;height:640px;transform:scale(.64);transform-origin:top right;z-index:1;opacity:.95}
+  .copy{margin-top:auto;position:relative;z-index:2}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:78px;line-height:1.0;letter-spacing:-.02em;max-width:880px;font-variation-settings:'opsz' 144}
+  h1 em{font-style:italic;font-weight:400;color:var(--ochre-soft)}
+  .lead{font-size:31px;line-height:1.35;margin-top:30px;max-width:760px;color:rgba(245,239,227,.86)}
+  .bar{margin-top:46px;display:flex;align-items:center;justify-content:space-between;gap:30px;background:var(--cream);color:var(--ink);border-radius:20px;padding:26px 32px;position:relative;z-index:2}
+  .bar .t{font-family:'Fraunces',serif;font-size:36px;font-weight:600;color:var(--green);letter-spacing:-.015em;line-height:1.05}
+  .bar .s{font-size:22px;color:#5B655B;margin-top:6px}
+  .bar .pill{flex:none;background:var(--plum);color:var(--cream);border-radius:999px;padding:18px 28px;font-size:24px;font-weight:600;white-space:nowrap}
+  .sprig{position:absolute;left:70px;top:150px;z-index:1;opacity:.9}
+</style>
+</head>
+<body>
+<section class="slide">
+  <div class="top"><span>Food Curiosity</span><span class="right">The Encyclopedia of Polyphenols</span></div>
+  <div class="art" id="molecule-1"></div>
+  <div class="sprig" id="sprig-1"></div>
+  <div class="copy">
+    <h1>What do you <em>actually</em> know about the plant compounds in your food?</h1>
+    <p class="lead">Food sources. Absorption. Metabolism. The research behind the claim. 500 compounds in one illustrated reference.</p>
+    <div class="bar">
+      <div><div class="t">Read a sample on Amazon</div><div class="s">amazon.com/dp/B0HMVCQSFP</div></div>
+      <div class="pill">Link in post &rarr;</div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  function el(name, attrs){const e=document.createElementNS(NS,name);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
+  function hex(cx,cy,s){const pts=[];for(let i=0;i<6;i++){const a=(30+60*i)*Math.PI/180;pts.push([cx+s*Math.cos(a),cy-s*Math.sin(a)]);}return pts;}
+  function poly(g,pts,stroke,w){g.appendChild(el('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:'none',stroke:stroke,'stroke-width':w,'stroke-linejoin':'round'}));}
+  function line(g,a,b,stroke,w){g.appendChild(el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:stroke,'stroke-width':w,'stroke-linecap':'round'}));}
+  function inner(g,c,pts,idx,stroke,w){idx.forEach(i=>{const a=pts[i],b=pts[(i+1)%6];const f=0.78;const p=[c[0]+(a[0]-c[0])*f,c[1]+(a[1]-c[1])*f],q=[c[0]+(b[0]-c[0])*f,c[1]+(b[1]-c[1])*f];const sh=0.15;const p2=[p[0]+(q[0]-p[0])*sh,p[1]+(q[1]-p[1])*sh],q2=[q[0]-(q[0]-p[0])*sh,q[1]-(q[1]-p[1])*sh];line(g,p2,q2,stroke,w);});}
+  function label(g,x,y,txt,fill,size){const t=el('text',{x:x,y:y,fill:fill,'font-family':"'DM Sans',Inter,sans-serif",'font-size':size,'font-weight':600,'text-anchor':'middle','dominant-baseline':'middle'});t.textContent=txt;g.appendChild(t);}
+  function substituent(g,from,dir,len,txt,stroke,fill,size,w,bg){const to=[from[0]+Math.cos(dir)*len,from[1]-Math.sin(dir)*len];line(g,from,to,stroke,w);const lx=to[0]+Math.cos(dir)*size*0.9,ly=to[1]-Math.sin(dir)*size*0.9;g.appendChild(el('circle',{cx:lx,cy:ly,r:size*0.95,fill:bg}));label(g,lx,ly+1,txt,fill,size);}
+  function molecule(target,opts){
+    const svg=el('svg',{viewBox:'0 -70 740 640',width:'740',height:'640'});const g=el('g',{});svg.appendChild(g);
+    const s=84,w=5,stroke=opts.stroke,acc=opts.accent,bg=opts.bg;
+    const A=[190,280],C=[A[0]+s*Math.sqrt(3),A[1]];const pa=hex(A[0],A[1],s),pc=hex(C[0],C[1],s);
+    const c2=pc[0];const dir=30*Math.PI/180;const bond=s*0.95;const B=[c2[0]+Math.cos(dir)*(bond+s),c2[1]-Math.sin(dir)*(bond+s)];const pb=hex(B[0],B[1],s);
+    g.appendChild(el('circle',{cx:(A[0]+B[0])/2,cy:(A[1]+B[1])/2,r:290,fill:acc,opacity:0.07}));
+    poly(g,pa,stroke,w);poly(g,pc,stroke,w);poly(g,pb,stroke,w);inner(g,A,pa,[1,3,5],stroke,w*0.8);inner(g,B,pb,[0,2,4],stroke,w*0.8);line(g,c2,pb[3],stroke,w);inner(g,C,pc,[5],stroke,w*0.8);
+    const o=pc[1];g.appendChild(el('circle',{cx:o[0],cy:o[1],r:26,fill:bg}));label(g,o[0],o[1]+1,'O',acc,34);
+    const c4=pc[4];const k1=[c4[0]-5,c4[1]+8],k2=[c4[0]-5,c4[1]+8+s*0.62];line(g,k1,k2,stroke,w);line(g,[k1[0]+10,k1[1]],[k2[0]+10,k2[1]],stroke,w);label(g,c4[0]+2,k2[1]+40,'O',acc,34);
+    substituent(g,pa[4],270*Math.PI/180,s*0.62,'OH',stroke,acc,30,w,bg);substituent(g,pa[2],150*Math.PI/180,s*0.62,'OH',stroke,acc,30,w,bg);substituent(g,pc[5],330*Math.PI/180,s*0.62,'OH',stroke,acc,30,w,bg);substituent(g,pb[1],90*Math.PI/180,s*0.62,'OH',stroke,acc,30,w,bg);substituent(g,pb[0],30*Math.PI/180,s*0.62,'OH',stroke,acc,30,w,bg);
+    target.appendChild(svg);
+  }
+  function sprig(target,opts){
+    const W=opts.w,H=opts.h;const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,width:W,height:H});
+    const g=el('g',{fill:'none',stroke:opts.stroke,'stroke-width':4,'stroke-linecap':'round','stroke-linejoin':'round'});svg.appendChild(g);
+    if(opts.rotate){g.setAttribute('transform',`rotate(${opts.rotate} ${W/2} ${H/2})`);}
+    g.appendChild(el('path',{d:`M ${W*0.15} ${H*0.98} C ${W*0.3} ${H*0.75}, ${W*0.45} ${H*0.5}, ${W*0.7} ${H*0.12}`}));
+    const leaves=[[0.26,0.80,-70,1.0],[0.36,0.62,-20,1.05],[0.42,0.58,-110,0.9],[0.52,0.40,-30,1.0],[0.56,0.38,-120,0.85],[0.64,0.24,-40,0.9]];
+    leaves.forEach(([fx,fy,rot,sc])=>{const x=W*fx,y=H*fy;const L=78*sc,Wd=34*sc;g.appendChild(el('path',{d:`M 0 0 C ${L*0.35} ${-Wd}, ${L*0.75} ${-Wd}, ${L} 0 C ${L*0.75} ${Wd}, ${L*0.35} ${Wd}, 0 0 Z`,transform:`translate(${x} ${y}) rotate(${rot})`,fill:opts.leafFill,'fill-opacity':0.9}));g.appendChild(el('path',{d:`M 0 0 L ${L*0.92} 0`,transform:`translate(${x} ${y}) rotate(${rot})`,'stroke-width':2.5,opacity:0.7}));});
+    const tip=[W*0.70,H*0.12];[[0,0,22],[34,18,20],[14,40,18],[-22,30,16]].forEach(([dx,dy,r])=>{g.appendChild(el('circle',{cx:tip[0]+dx,cy:tip[1]+dy,r:r,fill:opts.berryFill,stroke:opts.stroke}));g.appendChild(el('circle',{cx:tip[0]+dx-r*0.3,cy:tip[1]+dy-r*0.3,r:r*0.22,fill:opts.highlight,stroke:'none'}));});
+    target.appendChild(svg);
+  }
+  molecule(document.getElementById('molecule-1'),{bg:'#1E3A2B',stroke:'#F5EFE3',accent:'#E3C56A'});
+  sprig(document.getElementById('sprig-1'),{stroke:'#F5EFE3',leafFill:'#8FAE8C',berryFill:'#6B2A52',highlight:'#F5EFE3',w:220,h:280,rotate:-10});
+})();
+</script>
+</body>
+</html>

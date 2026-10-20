@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Encyclopedia of Polyphenols – LinkedIn carousel</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  :root{
+    --green:#1E3A2B;
+    --green-deep:#152B20;
+    --green-line:rgba(245,239,227,.22);
+    --cream:#F5EFE3;
+    --cream-2:#EAE1CC;
+    --plum:#6B2A52;
+    --ochre:#C89B2A;
+    --ochre-soft:#E3C56A;
+    --sage:#8FAE8C;
+    --ink:#1B1A17;
+    --muted:#5B655B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @page{size:1080px 1350px;margin:0}
+  html,body{background:#ffffff}
+  body{font-family:'DM Sans',Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+  .slide{
+    width:1080px;height:1350px;position:relative;overflow:hidden;
+    padding:84px 88px 80px;display:flex;flex-direction:column;
+    page-break-after:always;break-after:page;
+  }
+  .slide:last-of-type{page-break-after:auto;break-after:auto}
+  .bg-green{background:var(--green);color:var(--cream)}
+  .bg-cream{background:var(--cream);color:var(--ink)}
+
+  /* header + footer */
+  .top{display:flex;justify-content:space-between;align-items:center;font-size:22px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;position:relative;z-index:2}
+  .top .count{font-family:'Fraunces',serif;font-weight:400;letter-spacing:.06em;font-size:26px;text-transform:none;opacity:.85}
+  .bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;font-size:24px;position:relative;z-index:2}
+  .bottom .brand{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:30px;letter-spacing:-.005em}
+  .bottom .cue{font-weight:600;letter-spacing:.02em}
+  .bg-cream .bottom .cue{color:var(--plum)}
+  .bg-green .bottom .cue{color:var(--ochre-soft)}
+  .rule{height:2px;background:currentColor;opacity:.18;margin-top:26px}
+
+  /* type */
+  h1{font-family:'Fraunces',serif;font-weight:500;line-height:1.0;letter-spacing:-.02em;font-variation-settings:'opsz' 144}
+  h1 em{font-style:italic;font-weight:400}
+  .bg-green h1 em{color:var(--ochre-soft)}
+  .bg-cream h1 em{color:var(--plum)}
+  .lead{font-size:34px;line-height:1.35;font-weight:400}
+  .bg-cream .lead{color:var(--muted)}
+  .bg-green .lead{color:rgba(245,239,227,.86)}
+  .eyebrow-plain{font-size:22px;letter-spacing:.24em;text-transform:uppercase;font-weight:600}
+
+  /* ---------- slide 1 ---------- */
+  .s1 .art{position:absolute;right:40px;top:104px;width:740px;height:640px;z-index:1;transform:scale(.9);transform-origin:top right}
+  .s1 .copy{margin-top:auto;position:relative;z-index:2}
+  .s1 .bottom{margin-top:88px}
+  .s1 h1{font-size:86px;max-width:900px}
+  .s1 .lead{margin-top:34px;max-width:780px}
+  .s1 .sprig-a{position:absolute;left:60px;top:230px;z-index:1;opacity:.9}
+
+  /* ---------- slide 2 ---------- */
+  .s2 h1{font-size:104px;margin-top:150px;max-width:900px}
+  .s2 .chips{display:flex;flex-wrap:wrap;gap:18px 18px;margin-top:70px;max-width:900px}
+  .chip{font-family:'Fraunces',serif;font-size:36px;line-height:1;padding:22px 34px 24px;border-radius:999px;border:3px solid var(--green);color:var(--green);font-weight:500;letter-spacing:-.01em}
+  .chip.fill{background:var(--green);color:var(--cream)}
+  .chip.plum{background:var(--plum);border-color:var(--plum);color:var(--cream)}
+  .chip.ochre{border-color:var(--ochre);color:#7a5a0e}
+  .s2 .lead{margin-top:70px;max-width:860px;font-size:36px}
+  .s2 .lead strong{color:var(--ink);font-weight:600}
+
+  /* ---------- slide 3 ---------- */
+  .s3 h1{font-size:80px;margin-top:60px;max-width:900px}
+  .qlist{margin-top:62px;display:flex;flex-direction:column}
+  .q{display:grid;grid-template-columns:70px 88px 1fr;gap:0 28px;align-items:start;padding:32px 0 30px;border-top:2px solid rgba(27,26,23,.14)}
+  .q:last-child{border-bottom:2px solid rgba(27,26,23,.14)}
+  .q .n{font-family:'Fraunces',serif;font-size:34px;color:var(--ochre);font-weight:600;padding-top:6px;letter-spacing:.02em}
+  .q .ico{width:88px;height:88px}
+  .q .ico svg{width:88px;height:88px;display:block}
+  .q h3{font-family:'Fraunces',serif;font-weight:600;font-size:44px;line-height:1.05;letter-spacing:-.01em;color:var(--green)}
+  .q p{font-size:30px;line-height:1.35;color:var(--muted);margin-top:10px;max-width:700px}
+
+  /* ---------- slide 4 ---------- */
+  .s4 h1{font-size:88px;margin-top:60px;max-width:880px}
+  .s4 .lead{margin-top:30px;max-width:840px;font-size:32px}
+  .ladder{position:relative;margin-top:56px;height:560px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:end}
+  .step{position:relative;display:flex;flex-direction:column;justify-content:flex-start;border-radius:12px 12px 0 0;padding:24px 18px 0}
+  .step .lab{font-size:26px;line-height:1.2;font-weight:600}
+  .step .sub{font-size:20px;line-height:1.3;opacity:.72;margin-top:8px}
+  .step.l1{height:260px;background:rgba(245,239,227,.10);border:2px solid var(--green-line);border-bottom:0}
+  .step.l2{height:350px;background:rgba(245,239,227,.16);border:2px solid var(--green-line);border-bottom:0}
+  .step.l3{height:445px;background:rgba(143,174,140,.42)}
+  .step.l4{height:540px;background:var(--ochre);color:var(--green-deep)}
+  .step.l4 .sub{opacity:.85}
+  .ladder-base{height:3px;background:var(--cream);opacity:.5}
+  .s4 .note{margin-top:34px;font-size:30px;line-height:1.35;color:rgba(245,239,227,.86)}
+  .s4 .note strong{color:var(--ochre-soft);font-weight:600}
+  .arrow-up{position:absolute;right:-6px;top:0;height:560px;width:10px}
+
+  /* ---------- slide 5 ---------- */
+  .s5 h1{font-size:92px;margin-top:60px;max-width:900px}
+  .s5 .lead{margin-top:28px;max-width:860px;font-size:32px}
+  .fam{margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .card{background:#fff;border-radius:22px;padding:34px 34px 36px;border:2px solid rgba(30,58,43,.12);min-height:300px;display:flex;flex-direction:column}
+  .card h3{font-family:'Fraunces',serif;font-size:42px;font-weight:600;color:var(--green);letter-spacing:-.01em;line-height:1}
+  .card .ex{font-size:26px;line-height:1.4;color:var(--muted);margin-top:16px}
+  .card .ex b{color:var(--ink);font-weight:600}
+  .card .tag{margin-top:auto;padding-top:22px;font-size:20px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--plum)}
+  .card.a{background:#fff}
+  .card.b{background:#F0E8D6}
+  .card.c{background:#F0E8D6}
+  .card.d{background:#fff}
+  .card .dot{width:18px;height:18px;border-radius:50%;display:inline-block;margin-right:14px;vertical-align:middle;position:relative;top:-4px}
+
+  /* ---------- slide 6 ---------- */
+  .s6 .title{margin-top:70px}
+  .s6 .eyebrow-plain{color:var(--ochre-soft)}
+  .s6 h1{font-size:112px;margin-top:22px;line-height:.95;max-width:920px}
+  .s6 h1 .the{display:block;font-size:54px;font-style:italic;font-weight:400;letter-spacing:0;color:rgba(245,239,227,.8);margin-bottom:10px}
+  .s6 .lead{margin-top:40px;max-width:860px;font-size:33px}
+  .cta{margin-top:56px;background:var(--cream);color:var(--ink);border-radius:26px;padding:38px 40px;display:grid;grid-template-columns:1fr 250px;gap:36px;align-items:center}
+  .cta .big{font-family:'Fraunces',serif;font-size:48px;font-weight:600;color:var(--green);line-height:1.02;letter-spacing:-.015em}
+  .cta .url{font-size:28px;margin-top:20px;color:var(--plum);font-weight:600;word-break:break-all}
+  .cta .small{font-size:23px;color:var(--muted);margin-top:14px;line-height:1.35}
+  .cta img{width:250px;height:250px;display:block;border-radius:14px}
+  .s6 .tags{margin-top:auto;font-size:26px;color:var(--ochre-soft);font-weight:600;letter-spacing:.01em}
+  .s6 .sprig-b{position:absolute;right:50px;top:1030px;opacity:.9}
+</style>
+</head>
+<body>
+
+<!-- ============ SLIDE 1 : HOOK ============ -->
+<section class="slide bg-green s1">
+  <div class="top"><span>Food Curiosity</span><span class="count">01 / 06</span></div>
+  <div class="art" id="molecule-1"></div>
+  <div class="sprig-a" id="sprig-1"></div>
+  <div class="copy">
+    <h1>What do you <em>actually</em> know about the plant compounds in your food?</h1>
+    <p class="lead">A name is a starting point. The fuller picture takes a few more questions.</p>
+  </div>
+  <div class="bottom"><span class="brand">The Encyclopedia of Polyphenols</span><span class="cue">Swipe &rarr;</span></div>
+</section>
+
+<!-- ============ SLIDE 2 : A NAME IS A STARTING POINT ============ -->
+<section class="slide bg-cream s2">
+  <div class="top"><span>Food Curiosity</span><span class="count">02 / 06</span></div>
+  <h1>A name is only a <em>starting point.</em></h1>
+  <div class="chips">
+    <span class="chip">Quercetin</span>
+    <span class="chip plum">Resveratrol</span>
+    <span class="chip ochre">Chlorogenic acid</span>
+    <span class="chip fill">Catechin</span>
+    <span class="chip">Ellagic acid</span>
+    <span class="chip ochre">Anthocyanins</span>
+    <span class="chip plum">Curcumin</span>
+  </div>
+  <p class="lead">You have seen them on labels, in headlines, maybe on a supplement bottle. <strong>On their own, they say very little</strong> about what happens once that compound is on your plate.</p>
+  <div class="bottom"><span class="brand">The Encyclopedia of Polyphenols</span><span class="cue">Four questions that help &rarr;</span></div>
+</section>
+
+<!-- ============ SLIDE 3 : FOUR QUESTIONS ============ -->
+<section class="slide bg-cream s3">
+  <div class="top"><span>Food Curiosity</span><span class="count">03 / 06</span></div>
+  <h1>Four questions that build a <em>fuller picture</em></h1>
+  <div class="qlist">
+    <div class="q">
+      <div class="n">01</div>
+      <div class="ico">
+        <svg viewBox="0 0 88 88" fill="none" stroke="#1E3A2B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M44 30c-9-6-22-4-26 7-5 13 2 32 14 38 4 2 8 1 12-1 4 2 8 3 12 1 12-6 19-25 14-38-4-11-17-13-26-7z"/>
+          <path d="M44 30c0-7 3-13 8-17"/>
+          <path d="M52 16c7-3 13-1 16 3-5 4-11 4-16-3z" fill="#8FAE8C" stroke="#1E3A2B"/>
+        </svg>
+      </div>
+      <div><h3>Food sources</h3><p>Where does the compound actually show up, and in what amounts?</p></div>
+    </div>
+    <div class="q">
+      <div class="n">02</div>
+      <div class="ico">
+        <svg viewBox="0 0 88 88" fill="none" stroke="#1E3A2B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="14" width="36" height="60" rx="14"/>
+          <path d="M10 44h28"/>
+          <path d="M30 34l10 10-10 10"/>
+          <circle cx="58" cy="44" r="6" fill="#C89B2A" stroke="none"/>
+        </svg>
+      </div>
+      <div><h3>Absorption</h3><p>How much of it makes it past the gut and into the bloodstream?</p></div>
+    </div>
+    <div class="q">
+      <div class="n">03</div>
+      <div class="ico">
+        <svg viewBox="0 0 88 88" fill="none" stroke="#1E3A2B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M66 32A26 26 0 0 0 20 38"/>
+          <path d="M22 56a26 26 0 0 0 46-6"/>
+          <path d="M20 26v12h12"/>
+          <path d="M68 62V50H56"/>
+          <circle cx="44" cy="44" r="6" fill="#6B2A52" stroke="none"/>
+        </svg>
+      </div>
+      <div><h3>Metabolism</h3><p>What does the body turn it into, and is that what the studies measured?</p></div>
+    </div>
+    <div class="q">
+      <div class="n">04</div>
+      <div class="ico">
+        <svg viewBox="0 0 88 88" fill="none" stroke="#1E3A2B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M36 12h16"/>
+          <path d="M40 12v22L20 68c-3 6 1 10 7 10h34c6 0 10-4 7-10L48 34V12"/>
+          <path d="M30 56h28" />
+          <path d="M26 64c6-4 12 0 18 0s12-4 18 0" fill="#8FAE8C" stroke="none"/>
+          <circle cx="50" cy="66" r="3" fill="#1E3A2B" stroke="none"/>
+        </svg>
+      </div>
+      <div><h3>The research</h3><p>Is the claim built on a lab dish, an animal study, or a human trial?</p></div>
+    </div>
+  </div>
+  <div class="bottom"><span class="brand">The Encyclopedia of Polyphenols</span><span class="cue">Why the last one matters &rarr;</span></div>
+</section>
+
+<!-- ============ SLIDE 4 : EVIDENCE LADDER ============ -->
+<section class="slide bg-green s4">
+  <div class="top"><span>Food Curiosity</span><span class="count">04 / 06</span></div>
+  <h1>Not all evidence <em>weighs the same.</em></h1>
+  <p class="lead">A compound that looks promising in a petri dish has a long way to go before it means anything for the person eating it.</p>
+  <div class="ladder">
+    <div class="step l1"><div class="lab">Cells in a dish</div><div class="sub">In vitro. What it can do, not what it does in you.</div></div>
+    <div class="step l2"><div class="lab">Animal studies</div><div class="sub">Often at doses far above what food provides.</div></div>
+    <div class="step l3"><div class="lab">Human observational</div><div class="sub">Patterns in populations. Association, not cause.</div></div>
+    <div class="step l4"><div class="lab">Human clinical trials</div><div class="sub">The strongest test of whether an effect is real.</div></div>
+  </div>
+  <div class="ladder-base"></div>
+  <p class="note">A headline rarely says which step a claim came from. <strong>A good reference does.</strong></p>
+  <div class="bottom"><span class="brand">The Encyclopedia of Polyphenols</span><span class="cue">Not one thing &rarr;</span></div>
+</section>
+
+<!-- ============ SLIDE 5 : FAMILIES ============ -->
+<section class="slide bg-cream s5">
+  <div class="top"><span>Food Curiosity</span><span class="count">05 / 06</span></div>
+  <h1>Polyphenols are not <em>one thing.</em></h1>
+  <p class="lead">Thousands of known compounds, grouped into a handful of major families. Four of the biggest:</p>
+  <div class="fam">
+    <div class="card a">
+      <h3><span class="dot" style="background:#6B2A52"></span>Flavonoids</h3>
+      <p class="ex">The largest family. <b>Tea, berries, onions, cocoa, citrus, apples.</b></p>
+      <div class="tag">Quercetin &middot; Catechins</div>
+    </div>
+    <div class="card b">
+      <h3><span class="dot" style="background:#C89B2A"></span>Phenolic acids</h3>
+      <p class="ex">Everyday staples. <b>Coffee, whole grains, berries, plums.</b></p>
+      <div class="tag">Chlorogenic &middot; Ferulic acid</div>
+    </div>
+    <div class="card c">
+      <h3><span class="dot" style="background:#1E3A2B"></span>Stilbenes</h3>
+      <p class="ex">A small family with a famous member. <b>Grapes, red wine, peanuts.</b></p>
+      <div class="tag">Resveratrol</div>
+    </div>
+    <div class="card d">
+      <h3><span class="dot" style="background:#8FAE8C"></span>Lignans</h3>
+      <p class="ex">Found in seeds and grains. <b>Flaxseed, sesame, whole grains.</b></p>
+      <div class="tag">Secoisolariciresinol</div>
+    </div>
+  </div>
+  <div class="bottom"><span class="brand">The Encyclopedia of Polyphenols</span><span class="cue">500 of them, in one place &rarr;</span></div>
+</section>
+
+<!-- ============ SLIDE 6 : CTA ============ -->
+<section class="slide bg-green s6">
+  <div class="top"><span>Food Curiosity</span><span class="count">06 / 06</span></div>
+  <div class="sprig-b" id="sprig-2"></div>
+  <div class="title">
+    <div class="eyebrow-plain">An illustrated reference &middot; 500 compounds</div>
+    <h1><span class="the">The</span>Encyclopedia of Polyphenols</h1>
+  </div>
+  <p class="lead">Food sources, absorption, metabolism, and the research behind each claim. A way to explore familiar foods while looking more closely at the science behind them.</p>
+  <div class="cta">
+    <div>
+      <div class="big">Curious about the approach? Read a sample on Amazon.</div>
+      <div class="url">amazon.com/dp/B0HMVCQSFP</div>
+      <div class="small">Scan the code, or use the link in the post.</div>
+    </div>
+    <img src="qr-amazon.png" alt="QR code to the Amazon sample">
+  </div>
+  <div class="tags">#Polyphenols &nbsp; #NutritionScience</div>
+</section>
+
+<script>
+// ---- Generative illustrations: a quercetin-style flavonoid skeleton and botanical sprigs ----
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  function el(name, attrs){const e=document.createElementNS(NS,name);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
+  function hex(cx,cy,s){ // pointy-top hexagon vertices, angles 30,90,...330
+    const pts=[];for(let i=0;i<6;i++){const a=(30+60*i)*Math.PI/180;pts.push([cx+s*Math.cos(a),cy-s*Math.sin(a)]);}return pts;
+  }
+  function poly(g,pts,stroke,w){g.appendChild(el('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:'none',stroke:stroke,'stroke-width':w,'stroke-linejoin':'round'}));}
+  function line(g,a,b,stroke,w){g.appendChild(el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:stroke,'stroke-width':w,'stroke-linecap':'round'}));}
+  function inner(g,c,pts,idx,stroke,w){ // inner double-bond lines for aromatic rings
+    idx.forEach(i=>{const a=pts[i],b=pts[(i+1)%6];const f=0.78;const p=[c[0]+(a[0]-c[0])*f,c[1]+(a[1]-c[1])*f],q=[c[0]+(b[0]-c[0])*f,c[1]+(b[1]-c[1])*f];
+      const sh=0.15;const p2=[p[0]+(q[0]-p[0])*sh,p[1]+(q[1]-p[1])*sh],q2=[q[0]-(q[0]-p[0])*sh,q[1]-(q[1]-p[1])*sh];line(g,p2,q2,stroke,w);});
+  }
+  function label(g,x,y,txt,fill,size){const t=el('text',{x:x,y:y,fill:fill,'font-family':"'DM Sans',Inter,sans-serif",'font-size':size,'font-weight':600,'text-anchor':'middle','dominant-baseline':'middle'});t.textContent=txt;g.appendChild(t);}
+  function substituent(g,from,dir,len,txt,stroke,fill,size,w){const to=[from[0]+Math.cos(dir)*len,from[1]-Math.sin(dir)*len];line(g,from,to,stroke,w);const lx=to[0]+Math.cos(dir)*size*0.9,ly=to[1]-Math.sin(dir)*size*0.9;
+    // knock out background behind the label
+    g.appendChild(el('circle',{cx:lx,cy:ly,r:size*0.95,fill:g.dataset?g.dataset.bg:'#1E3A2B'}));label(g,lx,ly+1,txt,fill,size);}
+
+  function molecule(target,opts){
+    const svg=el('svg',{viewBox:'0 -70 740 640',width:'740',height:'640'});
+    const g=el('g',{});g.dataset.bg=opts.bg;svg.appendChild(g);
+    const s=opts.s||84, w=opts.w||5, stroke=opts.stroke, acc=opts.accent, bg=opts.bg;
+    const A=[190,280], C=[A[0]+s*Math.sqrt(3),A[1]];
+    const pa=hex(A[0],A[1],s), pc=hex(C[0],C[1],s);
+    // ring B attached at C2 (vertex at 30deg of ring C)
+    const c2=pc[0]; const dir=30*Math.PI/180; const bond=s*0.95;
+    const B=[c2[0]+Math.cos(dir)*(bond+s),c2[1]-Math.sin(dir)*(bond+s)];
+    const pb=hex(B[0],B[1],s);
+    // soft halo
+    g.appendChild(el('circle',{cx:(A[0]+B[0])/2,cy:(A[1]+B[1])/2,r:290,fill:acc,opacity:0.07}));
+    poly(g,pa,stroke,w); poly(g,pc,stroke,w); poly(g,pb,stroke,w);
+    inner(g,A,pa,[1,3,5],stroke,w*0.8); inner(g,B,pb,[0,2,4],stroke,w*0.8);
+    line(g,c2,pb[3],stroke,w); // C2–C1' bond
+    // C2=C3 double bond inside ring C (edge between vertex 0 and 5)
+    inner(g,C,pc,[5],stroke,w*0.8);
+    // Heteroatom O at ring C top vertex (index 1) with background knockout
+    const o=pc[1]; g.appendChild(el('circle',{cx:o[0],cy:o[1],r:26,fill:bg})); label(g,o[0],o[1]+1,'O',acc,34);
+    // Ketone at C4 (bottom vertex, index 4): C=O pointing down
+    const c4=pc[4]; const k1=[c4[0]-5,c4[1]+8],k2=[c4[0]-5,c4[1]+8+s*0.62]; line(g,k1,k2,stroke,w); line(g,[k1[0]+10,k1[1]],[k2[0]+10,k2[1]],stroke,w);
+    label(g,c4[0]+2,k2[1]+40,'O',acc,34);
+    // Hydroxyls: A ring C5 (bottom, idx4) and C7 (upper-left, idx2); C ring C3 (lower-right idx5); B ring 3' (top idx1) and 4' (upper-right idx0)
+    substituent(g,pa[4],270*Math.PI/180,s*0.62,'OH',stroke,acc,30,w);
+    substituent(g,pa[2],150*Math.PI/180,s*0.62,'OH',stroke,acc,30,w);
+    substituent(g,pc[5],330*Math.PI/180,s*0.62,'OH',stroke,acc,30,w);
+    substituent(g,pb[1],90*Math.PI/180,s*0.62,'OH',stroke,acc,30,w);
+    substituent(g,pb[0],30*Math.PI/180,s*0.62,'OH',stroke,acc,30,w);
+    // caption
+    const cap=el('text',{x:A[0]-s-10,y:A[1]+s+150,fill:stroke,'font-family':"'Fraunces',serif",'font-style':'italic','font-size':26,opacity:0.75});
+    cap.textContent='Quercetin, a flavonoid in onions and apples';g.appendChild(cap);
+    target.appendChild(svg);
+  }
+
+  function sprig(target,opts){
+    const W=opts.w||360,H=opts.h||420;
+    const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,width:W,height:H});
+    const g=el('g',{fill:'none',stroke:opts.stroke,'stroke-width':4,'stroke-linecap':'round','stroke-linejoin':'round'});
+    svg.appendChild(g);
+    if(opts.rotate){g.setAttribute('transform',`rotate(${opts.rotate} ${W/2} ${H/2})`);}
+    // main stem
+    g.appendChild(el('path',{d:`M ${W*0.15} ${H*0.98} C ${W*0.3} ${H*0.75}, ${W*0.45} ${H*0.5}, ${W*0.7} ${H*0.12}`}));
+    // leaves along stem
+    const leaves=[[0.26,0.80,-70,1.0],[0.36,0.62,-20,1.05],[0.42,0.58,-110,0.9],[0.52,0.40,-30,1.0],[0.56,0.38,-120,0.85],[0.64,0.24,-40,0.9]];
+    leaves.forEach(([fx,fy,rot,sc])=>{
+      const x=W*fx,y=H*fy;const L=78*sc,Wd=34*sc;
+      const leaf=el('path',{d:`M 0 0 C ${L*0.35} ${-Wd}, ${L*0.75} ${-Wd}, ${L} 0 C ${L*0.75} ${Wd}, ${L*0.35} ${Wd}, 0 0 Z`,transform:`translate(${x} ${y}) rotate(${rot})`,fill:opts.leafFill,'fill-opacity':0.9});
+      g.appendChild(leaf);
+      g.appendChild(el('path',{d:`M 0 0 L ${L*0.92} 0`,transform:`translate(${x} ${y}) rotate(${rot})`,'stroke-width':2.5,opacity:0.7}));
+    });
+    // berry cluster near the tip
+    const tip=[W*0.70,H*0.12];
+    [[0,0,22],[34,18,20],[14,40,18],[-22,30,16]].forEach(([dx,dy,r])=>{
+      g.appendChild(el('circle',{cx:tip[0]+dx,cy:tip[1]+dy,r:r,fill:opts.berryFill,stroke:opts.stroke}));
+      g.appendChild(el('circle',{cx:tip[0]+dx-r*0.3,cy:tip[1]+dy-r*0.3,r:r*0.22,fill:opts.highlight,stroke:'none'}));
+    });
+    target.appendChild(svg);
+  }
+
+  molecule(document.getElementById('molecule-1'),{bg:'#1E3A2B',stroke:'#F5EFE3',accent:'#E3C56A'});
+  sprig(document.getElementById('sprig-1'),{stroke:'#F5EFE3',leafFill:'#8FAE8C',berryFill:'#6B2A52',highlight:'#F5EFE3',w:230,h:300,rotate:-8});
+  sprig(document.getElementById('sprig-2'),{stroke:'#F5EFE3',leafFill:'#8FAE8C',berryFill:'#6B2A52',highlight:'#F5EFE3',w:230,h:290,rotate:20});
+})();
+</script>
+</body>
+</html>
