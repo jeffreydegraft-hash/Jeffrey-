@@ -513,6 +513,23 @@
   --branding-color: var(--background);
 }
 
+/* collections page: the photos keep their brightness; only a soft shade at the bottom carries the
+   white names (the flat 30% overlay is off in the template) */
+.shopify-section--main-list-collections .content-over-media {
+  --content-over-media-gradient-overlay: linear-gradient(to top, rgb(0 0 0 / .5), rgb(0 0 0 / 0) 45%);
+}
+
+/* the cart's Remove link gets a thumb-sized tap area without moving its underline */
+line-item-quantity .link {
+  position: relative;
+}
+
+line-item-quantity .link::before {
+  content: "";
+  position: absolute;
+  inset: -.5rem -.25rem;
+}
+
 /* a comfortable tap area for "Read more" without moving its underline */
 .blog-post-card__read-more {
   position: relative;

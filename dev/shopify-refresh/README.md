@@ -111,3 +111,17 @@ The owner's iPhone screenshot showed the two rows of bottles in the hero out of 
 - The "(NaN)" review count and the empty cart drawer seen in the local render were renderer artefacts (the mock rating metafield lacked Shopify's `rating` key; the drawer is rendered with an empty cart). `tools/data.mjs` now mirrors Shopify's rating object.
 
 All checked again in Chromium at 320 and 390px; Theme Check reports the same 15 pre-existing offences as before.
+
+### Phone audit, round two (Oct 20, later)
+
+Three more reviewer agents covered the cart, account, journal, search, 404, contact, FAQ, about and collections pages, each followed by a skeptic that re-checked every finding. Fixes, all in the phone-fixes copy:
+
+- **Cart**: the size line under each item ("1 ounce (30 ml)") was 10px, now 11px; names break evenly at 320px; the Remove link has a thumb-sized tap area (pseudo-element, underline unchanged). The cart drawer shares the snippet.
+- **Buttons**: Prestige paints the button fill as a gradient image sized 101%; on 2x and 3x screens a 1px light seam showed inside the right edge of olive and gold buttons. `background-origin: border-box` on `.button` closes it (verified by pixel sampling at DPR 2 and 3).
+- **Journal**: card titles and the article title use `text-wrap: balance` (the card title is an inline link, so it is also made `display: block`); "Read more" links have a larger tap area; the article's share tiles are olive with cream icons instead of Facebook blue, X blue and Pinterest red; the article hero band uses the "small" image size so the 3:2 post photos are barely cropped on phones (`templates/article.json`).
+- **Account pages**: `templates/customers/login.json` and `register.json` had no "fields" block, and Prestige renders the forms only inside that block, so both pages showed a heading and nothing else. The block is added. The store uses Shopify's new customer accounts (`customerAccountsV2.customerAccountsVersion = NEW_CUSTOMER_ACCOUNTS`), so these theme pages are not normally shown; the fix is insurance.
+- **Collections page** (`templates/list-collections.json`): every tile was dimmed by the section's 30% black overlay, and the "All Anointing Oil Products" collection appeared as a tenth tile showing one bottle with its name printed across the label. The overlay is 0, a soft gradient at the bottom of each tile carries the white names (`--content-over-media-gradient-overlay`), and the section lists the nine real collections in the homepage order.
+- **Contact page** (`templates/page.contact.json`): the form section printed the schema default title "Contact" under the page's own "Get in Touch" heading; the title is blank now. Left for the owner: the mailing address on this page says "Suite 103" while the footer says "Ste. 103-225"; one of them needs correcting in the editor.
+- Rejected by the skeptic as taste: one full-width collection tile per row on phones (Prestige's default, nothing hidden).
+
+Theme Check: the same 15 pre-existing offences. The themes table at the top names the copy to publish.
