@@ -55,6 +55,10 @@
                   assign review_total = review_total | plus: 1
                 endif
               endfor
+              assign amazon_count = section.settings.amazon_review_count | default: 0
+              if amazon_count > 0
+                assign review_total = review_total | plus: amazon_count
+              endif
               if review_total > 0
                 assign heading = heading | replace: '{count}', review_total
               else
@@ -203,6 +207,12 @@
       "id": "title",
       "label": "t:global.text.heading",
       "info": "Write {count} to show the live number of reviews rated 4 stars and up (Etsy, Amazon and store reviews)."
+    },
+    {
+      "type": "number",
+      "id": "amazon_review_count",
+      "label": "Amazon reviews rated 4 stars and up",
+      "info": "Added to the live count. Enter the number your Amazon listings show, and keep it current."
     },
     {
       "type": "richtext",
