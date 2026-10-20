@@ -106,6 +106,9 @@
 .button {
   padding: .875rem 2.25rem;
   font-weight: 600;
+  /* the fill is a gradient image; drawing it from the border box closes the 1px seam that shows
+     inside the right edge on high-density phone screens */
+  background-origin: border-box;
 }
 
 /* ---------- Hero ---------- */
@@ -488,8 +491,37 @@
 /* headings in the pillars and product names on cards break into two even lines instead of
    leaving one word alone on the last line */
 .shopify-section--text-with-icons .h6,
-.product-card .product-title {
+.product-card .product-title,
+.line-item-info .h6,
+.article__wrapper .h1 {
   text-wrap: balance;
+}
+
+.blog-post-card__title {
+  display: block;
+  text-wrap: balance;
+}
+
+/* the cart's size line was the smallest text on the page */
+.line-item .smallcaps {
+  font-size: .6875rem;
+}
+
+/* the article share tiles use the brand's olive instead of Facebook blue and Pinterest red */
+.social-media--block .social-media__item {
+  --branding-background: var(--text-color);
+  --branding-color: var(--background);
+}
+
+/* a comfortable tap area for "Read more" without moving its underline */
+.blog-post-card__read-more {
+  position: relative;
+}
+
+.blog-post-card__read-more::before {
+  content: "";
+  position: absolute;
+  inset: -.75rem 0;
 }
 
 /* the product descriptions were pasted with their own indents; use the theme's list indent */
