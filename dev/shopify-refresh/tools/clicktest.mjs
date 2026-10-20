@@ -16,13 +16,14 @@ for (const v of [{ w: 1440, h: 900, m: false }, { w: 1024, h: 768, m: false }, {
     const out = [];
     const rows = [...document.querySelectorAll('.mo-hero__row')].filter((r) => r.offsetParent !== null);
     for (const row of rows) {
+      /* a row can sit below the first screen on short phones: bring it into view before sampling */
+      row.scrollIntoView({ block: 'center' });
       const rr = row.getBoundingClientRect();
       const f = row.querySelector('.mo-hero__frame').getBoundingClientRect();
       centres.forEach((c, i) => {
         for (const yPct of [0.30, 0.49, 0.70]) {
           const x = f.left + (c / 100) * f.width, y = f.top + yPct * f.height;
           if (x < rr.left || x > rr.right || y < rr.top || y > rr.bottom) continue;
-          window.scrollTo(0, 0);
           const el = document.elementFromPoint(x, y);
           const a = el && el.closest('a');
           out.push({ i, yPct, href: a ? a.getAttribute('href') : null });

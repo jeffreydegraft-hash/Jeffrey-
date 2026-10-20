@@ -1,0 +1,13 @@
+import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path'; import { chromium } from 'playwright-core';
+const root = path.resolve(process.argv[2]); const out = process.argv[3]; const w = +(process.argv[4] || 1440);
+const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.woff2': 'font/woff2' };
+const server = http.createServer((req, res) => { const u = decodeURIComponent(req.url.split('?')[0]); const p = path.join(root, u === '/' ? 'index.html' : u); if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { res.writeHead(404); return res.end(); } res.writeHead(200, { 'content-type': types[path.extname(p)] || 'application/octet-stream' }); fs.createReadStream(p).pipe(res); });
+await new Promise((r) => server.listen(0, r));
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, deviceScaleFactor: 1 });
+const page = await ctx.newPage(); await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
+await page.goto(`http://127.0.0.1:${server.address().port}/`, { waitUntil: 'load' }); await page.evaluate(() => document.fonts.ready); await page.waitForTimeout(1300);
+await page.locator('.mo-hero').screenshot({ path: out });
+const m = await page.evaluate(() => { const r = document.querySelector('.mo-hero__row').getBoundingClientRect(); const f = document.querySelector('.mo-hero__frame').getBoundingClientRect(); return { row: [r.left, r.top, r.width, r.height].map(Math.round), frame: [f.left, f.top, f.width, f.height].map(Math.round), spots: [...document.querySelectorAll('.mo-hero__spot')].filter((a) => getComputedStyle(a).display !== 'none').length }; });
+console.log(JSON.stringify(m));
+await browser.close(); server.close();

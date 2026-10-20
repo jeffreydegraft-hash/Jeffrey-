@@ -537,16 +537,49 @@ function globalsFor(pageType, extra = {}) {
 }
 
 const FM = D.productsByHandle['frankincense-myrrh-anointing-oil'];
+
+/* a cart line for a product's first variant, with the fields Prestige's line-item snippet reads */
+function lineItem(handle, quantity, index) {
+  const product = D.productsByHandle[handle];
+  const variant = product.selected_or_first_available_variant;
+  const unit = variant.price;
+  return {
+    id: variant.id, key: `${variant.id}:${index}`, product_id: product.id, variant_id: variant.id, index,
+    title: product.has_only_default_variant ? product.title : `${product.title} - ${variant.title}`, product_title: product.title, variant_title: product.has_only_default_variant ? null : variant.title,
+    product, variant, vendor: product.vendor, sku: variant.sku, url: variant.url, image: product.featured_image, quantity,
+    price: unit, final_price: unit, original_price: unit, line_price: unit * quantity, final_line_price: unit * quantity, original_line_price: unit * quantity,
+    total_discount: 0, discounts: [], line_level_discount_allocations: [], line_level_total_discount: 0, properties: {}, selling_plan_allocation: null,
+    options_with_values: product.has_only_default_variant ? [] : product.options.map((name, i) => ({ name, value: variant.options[i] })),
+    unit_price: null, unit_price_measurement: null, gift_card: false, requires_shipping: true, taxable: true, grams: 0, message: null,
+    url_to_remove: `/cart/change?line=${index}&quantity=0`,
+  };
+}
+const CART_ITEMS = [lineItem('hyssop', 1, 1), lineItem('frankincense-myrrh-anointing-oil', 2, 2)];
+const JOURNAL = D.blogs['the-anointing-journal'];
+const FIRST_ARTICLE = JOURNAL.articles[0];
+const SEARCH_RESULTS = D.collections['all-products'].products.filter((p) => /hyssop|rose|latter/i.test(p.title));
+
 const PAGES = {
   index: () => globalsFor('index', { path: '/', page_title: 'Mount of Olives' }),
   product: () => globalsFor('product', { product: FM, collection: null, path: FM.url, page_title: FM.title, recommendations: { performed: true, products: D.collections.all.products.filter((p) => p !== FM).slice(0, 4), products_count: 4 } }),
   collection: () => globalsFor('collection', { collection: D.collections['all-products'], path: '/collections/all-products', page_title: 'All Anointing Oil Products' }),
   'collection-fm': () => globalsFor('collection', { collection: D.collections['frankincense-myrrh'], path: '/collections/frankincense-myrrh', page_title: 'Frankincense & Myrrh' }),
+  cart: () => globalsFor('cart', { cart: D.makeCart(CART_ITEMS), path: '/cart', page_title: 'Your cart' }),
+  'page-contact': () => globalsFor('page', { __template: 'page.contact', page: D.pages['contact'], path: '/pages/contact', page_title: D.pages['contact'].title }),
+  'page-faq': () => globalsFor('page', { __template: 'page.faq', page: D.pages['faqs'], path: '/pages/faqs', page_title: D.pages['faqs'].title }),
+  'page-about': () => globalsFor('page', { __template: 'page', page: D.pages['about-us'], path: '/pages/about-us', page_title: D.pages['about-us'].title }),
+  blog: () => globalsFor('blog', { blog: JOURNAL, path: JOURNAL.url, page_title: JOURNAL.title }),
+  article: () => globalsFor('article', { blog: JOURNAL, article: FIRST_ARTICLE, path: FIRST_ARTICLE.url, page_title: FIRST_ARTICLE.title }),
+  search: () => globalsFor('search', { path: '/search?q=hyssop', page_title: 'Search', search: { performed: true, terms: 'hyssop', results: SEARCH_RESULTS, results_count: SEARCH_RESULTS.length, types: ['product'], sort_by: 'relevance', default_sort_by: 'relevance', sort_options: [{ name: 'Relevance', value: 'relevance' }, { name: 'Price, low to high', value: 'price-ascending' }], filters: [] } }),
+  '404': () => globalsFor('404', { path: '/missing', page_title: 'Page not found' }),
+  'list-collections': () => globalsFor('list-collections', { path: '/collections', page_title: 'Collections' }),
+  'customers-login': () => globalsFor('customers/login', { __template: 'customers/login', path: '/account/login', page_title: 'Login' }),
+  'customers-register': () => globalsFor('customers/register', { __template: 'customers/register', path: '/account/register', page_title: 'Create account' })
 };
 
 async function renderPage(name) {
   const globals = PAGES[name]();
-  const tplFile = path.join(ROOT, 'templates', `${name.replace(/-fm$/, '')}.json`);
+  const tplFile = path.join(ROOT, 'templates', `${globals.__template || name.replace(/-fm$/, '')}.json`);
   const tpl = readJson(tplFile);
   let content = '';
   let i = 0;

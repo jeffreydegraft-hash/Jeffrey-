@@ -148,8 +148,10 @@
   position: relative;
   max-width: var(--mo-hero-media-max-width);
   margin-inline: auto;
-  /* the photo multiplies onto this, so its white background turns cream */
+  /* the photo multiplies onto this, so its white background turns cream; isolated so the blend
+     stops here in every browser */
   background: rgb(var(--background));
+  isolation: isolate;
 }
 
 /* Each row frames a band of the photo: the blank margins above and below the bottles are trimmed */
@@ -169,17 +171,18 @@
   aspect-ratio: var(--mo-hero-ratio, 2.3907);
   /* top% resolves against the row's height */
   top: calc(-100% * var(--mo-hero-frame-top) / var(--mo-hero-frame-height));
+  background: rgb(var(--background));
+  /* the photo's outermost pixel column is grey */
+  clip-path: inset(0 0 0 1px);
 }
 
+/* Only the blend sits on the image: Safari drops mix-blend-mode when a filter or clip-path is on the same element */
 .mo-hero__image {
   display: block;
   width: 100%;
   max-width: none;
   height: auto;
   mix-blend-mode: multiply;
-  filter: brightness(1.012);
-  /* the photo's outermost pixel column is grey */
-  clip-path: inset(0 0 0 1px);
 }
 
 .mo-hero__row--second {
@@ -244,7 +247,7 @@
   outline-offset: -2px;
 }
 
-/* Phones: two rows of four bottles cut from the same photo */
+/* Phones: two rows cut from the same photo, each centred on its own bottles so the columns line up */
 @media screen and (max-width: 699px) {
   .mo-hero__content {
     padding-block: 2rem 1rem;
@@ -256,8 +259,8 @@
   }
 
   .mo-hero--rows .mo-hero__row {
-    /* half the photo's width */
-    aspect-ratio: calc(var(--mo-hero-ratio, 2.3907) / 2 * 100 / var(--mo-hero-row-height));
+    /* the row shows --mo-hero-row-span % of the photo's width */
+    aspect-ratio: calc(var(--mo-hero-ratio, 2.3907) * var(--mo-hero-row-span, 50) / var(--mo-hero-row-height));
   }
 
   .mo-hero--rows .mo-hero__row--second {
@@ -266,12 +269,13 @@
   }
 
   .mo-hero--rows .mo-hero__frame {
-    width: 200%;
+    width: calc(100% * 100 / var(--mo-hero-row-span, 50));
+    inset-inline-start: calc(-100% * var(--mo-hero-row-one-start, 0) / var(--mo-hero-row-span, 50));
     top: calc(-100% * var(--mo-hero-row-top) / var(--mo-hero-row-height));
   }
 
   .mo-hero--rows .mo-hero__row--second .mo-hero__frame {
-    inset-inline-start: -100%;
+    inset-inline-start: calc(-100% * var(--mo-hero-row-two-start, 50) / var(--mo-hero-row-span, 50));
   }
 
   .mo-hero__spot {
