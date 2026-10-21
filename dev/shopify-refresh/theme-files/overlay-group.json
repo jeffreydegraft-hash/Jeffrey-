@@ -1,0 +1,49 @@
+{
+  "type": "custom.overlay",
+  "name": "Overlay group",
+  "sections": {
+    "cart-drawer": {
+      "type": "cart-drawer",
+      "settings": {
+        "show_cart_note": true,
+        "show_shipping_text": true,
+        "show_view_cart_button": false,
+        "show_checkout_button": true,
+        "show_price_in_checkout_button": true
+      }
+    },
+    "newsletter-popup": {
+      "type": "newsletter-popup",
+      "settings": {
+        "color_scheme": "scheme-3",
+        "apparition_delay": 6,
+        "show_only_on_index": false,
+        "hide_for_account_holders": true,
+        "show_only_once": true,
+        "show_newsletter_form": true,
+        "image": "shopify://shop_images/4_oz_in_the_line_copy.jpg",
+        "title": "10% off your first order",
+        "content": "Join the Mount of Olives list and your code appears right here. Scripture-rooted anointing oils, occasional news, nothing more.",
+        "button_text": "Get my 10% off",
+        "decline_text": "No thanks",
+        "discount_code": "WELCOME10",
+        "success_title": "Your 10% off is ready",
+        "success_text": "Tap the button and 10% comes off at checkout. Your code is WELCOME10 if you ever need it.",
+        "success_button_text": "Shop with 10% off",
+        "success_link": "shopify://collections/all"
+      }
+    },
+    "privacy-banner": {
+      "type": "privacy-banner",
+      "settings": {
+        "title": "🍪 Cookie policy",
+        "content": "<p>We use cookies and similar technologies to provide the best experience on our website. Refer to our Privacy Policy for more information.</p>"
+      }
+    }
+  },
+  "order": [
+    "cart-drawer",
+    "newsletter-popup",
+    "privacy-banner"
+  ]
+}

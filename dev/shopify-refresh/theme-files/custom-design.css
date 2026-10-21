@@ -575,8 +575,15 @@ line-item-quantity .link::before {
   width: 26rem;
   padding: 0;
   overflow: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* never taller than the window: the close button stays reachable on short screens */
+  max-height: calc(100vh - 3rem);
+  max-height: calc(100dvh - 3rem);
   inset-inline-start: 2rem;
   inset-inline-end: auto;
+  /* above the cookie banner, which shares this corner */
+  z-index: 11;
 }
 
 .newsletter-popup__media {
@@ -589,6 +596,8 @@ line-item-quantity .link::before {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* keeps the close button off the last bottle */
+  object-position: 35% center;
 }
 
 .newsletter-popup__body {
@@ -628,7 +637,9 @@ line-item-quantity .link::before {
   justify-self: center;
   background: none;
   border: 0;
-  padding: .25rem;
+  padding: .75rem 1.25rem;
+  min-height: 2.75rem;
+  margin-block: -.5rem;
   font: inherit;
   font-size: .75rem;
   color: inherit;
@@ -644,6 +655,13 @@ line-item-quantity .link::before {
     inset-inline: .75rem;
     /* clears the chat bubble in the bottom corner */
     inset-block-end: 5.5rem;
+    max-height: calc(100vh - 6.5rem);
+    max-height: calc(100dvh - 6.5rem);
+  }
+
+  /* 16px stops iOS Safari zooming the page when the field is tapped */
+  .newsletter-popup .input {
+    font-size: 1rem;
   }
 
   .newsletter-popup__media {
@@ -658,3 +676,25 @@ line-item-quantity .link::before {
     font-size: 1.5rem;
   }
 }
+
+/* short screens (small phones, phones held sideways, small laptop windows) give up the photo strip first */
+@media screen and (max-height: 700px) {
+  .newsletter-popup__media {
+    display: none;
+  }
+}
+
+/* ---------- Our Science page ---------- */
+/* the botanical cards share one 3:2 frame whatever the photo's own shape */
+.shopify-section[id$="__botanicals"] .multi-column img {
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* "See every ingredient" lands below the sticky header */
+#ingredients {
+  display: block;
+  scroll-margin-top: 7rem;
+}
+

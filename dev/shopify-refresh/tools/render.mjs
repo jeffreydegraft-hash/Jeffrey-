@@ -568,6 +568,7 @@ const PAGES = {
   'page-contact': () => globalsFor('page', { __template: 'page.contact', page: D.pages['contact'], path: '/pages/contact', page_title: D.pages['contact'].title }),
   'page-faq': () => globalsFor('page', { __template: 'page.faq', page: D.pages['faqs'], path: '/pages/faqs', page_title: D.pages['faqs'].title }),
   'page-about': () => globalsFor('page', { __template: 'page', page: D.pages['about-us'], path: '/pages/about-us', page_title: D.pages['about-us'].title }),
+  'page-our-science': () => globalsFor('page', { __template: 'page.our-science', page: D.pages['our-science'], path: '/pages/our-science', page_title: D.pages['our-science'].title }),
   blog: () => globalsFor('blog', { blog: JOURNAL, path: JOURNAL.url, page_title: JOURNAL.title }),
   article: () => globalsFor('article', { blog: JOURNAL, article: FIRST_ARTICLE, path: FIRST_ARTICLE.url, page_title: FIRST_ARTICLE.title }),
   search: () => globalsFor('search', { path: '/search?q=hyssop', page_title: 'Search', search: { performed: true, terms: 'hyssop', results: SEARCH_RESULTS, results_count: SEARCH_RESULTS.length, types: ['product'], sort_by: 'relevance', default_sort_by: 'relevance', sort_options: [{ name: 'Relevance', value: 'relevance' }, { name: 'Price, low to high', value: 'price-ascending' }], filters: [] } }),

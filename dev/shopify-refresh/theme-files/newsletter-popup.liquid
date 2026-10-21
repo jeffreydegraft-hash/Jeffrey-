@@ -1,16 +1,59 @@
 {%- comment -%}Mount of Olives: welcome offer. Not on the cart page, hidden for signed-in customers, shows the discount code once the form is sent.{%- endcomment -%}
-{%- unless request.page_type == 'captcha' or request.page_type == 'cart' or section.settings.show_only_on_index and template != 'index' -%}
-  {%- unless section.settings.hide_for_account_holders and customer -%}
+{%- liquid
+  assign skip = false
+  if request.page_type == 'captcha' or request.page_type == 'cart' or request.page_type == 'gift_card' or request.page_type == 'policy' or request.page_type == '404'
+    assign skip = true
+  endif
+  if request.page_type contains 'customers/'
+    assign skip = true
+  endif
+  if section.settings.show_only_on_index and template != 'index'
+    assign skip = true
+  endif
+  if section.settings.hide_for_account_holders and customer
+    assign skip = true
+  endif
+-%}
+{%- unless skip -%}
     {%- assign posted_successfully = false -%}
+    {%- assign form_has_errors = false -%}
     {%- assign newsletter_id = 'newsletter-' | append: section.id -%}
 
     {%- capture _temporary -%}
       {%- form 'customer', id: newsletter_id, class: 'form' -%}
         {%- assign posted_successfully = form.posted_successfully? -%}
+        {%- if form.errors -%}{%- assign form_has_errors = true -%}{%- endif -%}
       {%- endform -%}
     {%- endcapture -%}
 
-    <newsletter-popup class="pop-in newsletter-popup color-scheme color-scheme--{{ section.settings.color_scheme.id }}" title="Newsletter popup" {% if section.settings.show_only_once %}only-once{% endif %} apparition-delay="{{ section.settings.apparition_delay }}" {% if posted_successfully %}open{% endif %} handle-editor-events>
+    {%- liquid
+      comment
+        Product pages get a longer delay so the visitor can read the product first; the sticky add-to-cart bar already takes the bottom of a phone screen.
+      endcomment
+      assign delay = section.settings.apparition_delay
+      if request.page_type == 'product' and delay < 12
+        assign delay = 12
+      endif
+      if posted_successfully
+        assign dialog_name = section.settings.success_title | strip_html
+      else
+        assign dialog_name = section.settings.title | strip_html
+      endif
+      assign dialog_name = dialog_name | default: 'Welcome offer'
+    -%}
+
+    {%- comment -%}The earlier newsletter pop-up stored the same "already shown" flags; clear them once so returning visitors see the new offer.{%- endcomment -%}
+    <script>
+      try {
+        if (!localStorage.getItem('theme:welcome-offer-v1')) {
+          localStorage.removeItem('theme:popup-appeared');
+          localStorage.removeItem('theme:popup-filled');
+          localStorage.setItem('theme:welcome-offer-v1', '1');
+        }
+      } catch (e) {}
+    </script>
+
+    <newsletter-popup id="welcome-offer" class="pop-in newsletter-popup color-scheme color-scheme--{{ section.settings.color_scheme.id }}" aria-label="{{ dialog_name | escape }}" {% if section.settings.show_only_once %}only-once{% endif %} apparition-delay="{{ delay }}" {% if posted_successfully or form_has_errors %}open{% endif %} handle-editor-events>
       <dialog-close-button class="contents">
         <button class="pop-in__close-button tap-area">
           <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
@@ -20,7 +63,7 @@
 
       {%- if section.settings.image != blank -%}
         <div class="newsletter-popup__media">
-          {{- section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '440px', widths: '440,660,880,1000', alt: '' -}}
+          {{- section.settings.image | image_url: width: 1000 | image_tag: loading: 'eager', fetchpriority: 'low', sizes: '440px', widths: '440,660,880,1000', alt: '' -}}
         </div>
       {%- endif -%}
 
@@ -53,12 +96,22 @@
                   <div class="prose text-sm">{{ section.settings.success_text }}</div>
                 {%- endif -%}
 
-                {%- if section.settings.discount_code != blank -%}
-                  <p class="newsletter-popup__code">{{ section.settings.discount_code | escape }}</p>
+                {%- assign discount_code = section.settings.discount_code | strip -%}
+                {%- if discount_code != blank -%}
+                  <p class="newsletter-popup__code">{{ discount_code | escape }}</p>
 
                   {%- if section.settings.success_button_text != blank -%}
-                    {%- comment -%}Shopify's /discount/CODE link applies the code to the visitor's checkout before sending them on{%- endcomment -%}
-                    {%- assign code_link = '/discount/' | append: section.settings.discount_code | append: '?redirect=' | append: section.settings.success_link -%}
+                    {%- liquid
+                      comment
+                        Shopify's /discount/CODE link applies the code to the visitor's checkout before sending them on. Someone who signed up on a product or collection page goes back to that page.
+                      endcomment
+                      assign return_path = section.settings.success_link | default: routes.all_products_collection_url
+                      if request.page_type == 'product' or request.page_type == 'collection'
+                        assign return_path = request.path
+                      endif
+                      assign code_segment = discount_code | url_escape
+                      assign code_link = '/discount/' | append: code_segment | append: '?redirect=' | append: return_path
+                    -%}
                     {%- render 'button', content: section.settings.success_button_text, href: code_link -%}
                   {%- endif -%}
                 {%- else -%}
@@ -68,7 +121,13 @@
               </div>
 
               <script>
-                localStorage.setItem('theme:popup-filled', 'true');
+                try {
+                  localStorage.setItem('theme:popup-filled', 'true');
+                  {%- if discount_code != blank -%}
+                  // Apply the code right away so it still counts at checkout if the card is closed without tapping the button
+                  fetch('/discount/{{ discount_code | url_escape }}?redirect=/', { credentials: 'same-origin' }).catch(function () {});
+                  {%- endif -%}
+                } catch (e) {}
               </script>
             {%- else -%}
               {%- if form.errors -%}
@@ -79,8 +138,8 @@
               <div class="fieldset">
                 <input type="hidden" name="contact[tags]" value="newsletter">
 
-                {%- assign label = 'blog.comments.email' | t -%}
-                {%- render 'input', type: 'email', name: 'contact[email]', label: label, value: customer.email, required: true, autocomplete: 'email' -%}
+                {%- assign label = 'general.newsletter.email' | t -%}
+                {%- render 'input', type: 'email', name: 'contact[email]', label: label, value: customer.email, required: true, autocomplete: 'email', enterkeyhint: 'go' -%}
               </div>
 
               {%- render 'button', content: section.settings.button_text, type: 'submit' -%}
@@ -95,7 +154,6 @@
         {%- endif -%}
       </div>
     </newsletter-popup>
-  {%- endunless -%}
 {%- endunless -%}
 
 {% schema %}

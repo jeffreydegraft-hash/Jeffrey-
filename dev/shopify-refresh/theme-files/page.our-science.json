@@ -1,0 +1,773 @@
+{
+  "sections": {
+    "hero": {
+      "type": "rich-text",
+      "blocks": {
+        "sub": {
+          "type": "subheading",
+          "settings": {
+            "text": "Our science"
+          }
+        },
+        "head": {
+          "type": "heading",
+          "settings": {
+            "text": "The science of sacred botanicals",
+            "heading_tag": "h1"
+          }
+        },
+        "text": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p><em>Where cosmeceutical science meets the wisdom of Scripture.</em></p><p>At Mount of Olives we formulate where modern dermatological science meets the botanical wisdom found throughout Scripture. Every product in our collection begins with the same plants, resins and extracts that have been revered for millennia: <strong>frankincense, myrrh, spikenard, hyssop, pomegranate, rose of Sharon and lily of the valley</strong>. We then elevate them through evidence-based cosmeceutical formulation.</p><p>The result is a line of anointing oils that honors the sacred tradition of biblical anointing while delivering clinically meaningful concentrations of polyphenols, terpenes and bioactive compounds to the skin.</p>"
+          }
+        },
+        "shop": {
+          "type": "button",
+          "settings": {
+            "style": "solid",
+            "text": "Shop the oils",
+            "url": "shopify://collections/all"
+          }
+        },
+        "glossary": {
+          "type": "liquid",
+          "settings": {
+            "liquid": "<a class=\"link\" href=\"#ingredients\">See every ingredient</a>"
+          }
+        }
+      },
+      "block_order": [
+        "sub",
+        "head",
+        "text",
+        "shop",
+        "glossary"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "separate_section_with_border": false,
+        "content_width": "md",
+        "text_position": "center",
+        "remove_vertical_spacing": false
+      }
+    },
+    "standards": {
+      "type": "text-with-icons",
+      "blocks": {
+        "std-1": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-leaf",
+            "icon_width": 32,
+            "mobile_icon_width": 28,
+            "title": "Naturally derived actives",
+            "content": "<p>Every bioactive compound comes from a plant, resin, fruit or seed. Nothing is synthesized in a lab.</p>"
+          }
+        },
+        "std-2": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-not-allowed",
+            "icon_width": 32,
+            "mobile_icon_width": 28,
+            "title": "Free from the usual suspects",
+            "content": "<p>No parabens, phthalates, sulfates or synthetic fragrances.</p>"
+          }
+        },
+        "std-3": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-shield",
+            "icon_width": 32,
+            "mobile_icon_width": 28,
+            "title": "Kind to skin",
+            "content": "<p>Non-comedogenic and formulated with the skin’s natural microbiome in mind.</p>"
+          }
+        },
+        "std-4": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-love",
+            "icon_width": 32,
+            "mobile_icon_width": 28,
+            "title": "Cruelty-free",
+            "content": "<p>We honor all of God’s creation and never test on animals.</p>"
+          }
+        },
+        "std-5": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-recycle",
+            "icon_width": 32,
+            "mobile_icon_width": 28,
+            "title": "Honest and sustainable",
+            "content": "<p>Recyclable, biodegradable packaging, and every compound published with its botanical origin.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "std-1",
+        "std-2",
+        "std-3",
+        "std-4",
+        "std-5"
+      ],
+      "settings": {
+        "color_scheme": "scheme-5",
+        "separate_section_with_border": false,
+        "stack_on_mobile": false,
+        "text_alignment": "center"
+      }
+    },
+    "how": {
+      "type": "timeline",
+      "blocks": {
+        "step-1": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/ornate-ancient-vessels-of-gold-frankincense-resin-and-myrrh-presented-as-gifts-on-rich-fabric-glowing-star-of-bethlehem-in-the-night-sky-through-an-open-window-warm-golden-candlelight.png",
+            "label": "01",
+            "subheading": "Rooted in Scripture",
+            "title": "The plants come first",
+            "content": "<p>Every product begins with the plants, resins and extracts Scripture names: frankincense, myrrh, spikenard, hyssop, pomegranate, rose of Sharon and lily of the valley.</p>",
+            "link_text": "",
+            "link_style": "link",
+            "mobile_text_color": "#ffffff"
+          }
+        },
+        "step-2": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/ancient-sacred-anointing-oil-ingredients-from-exodus-30-arranged-on-a-stone-altar-myrrh-resin-cinnamon-sticks-cassia-bark-and-olive-oil-in-a-golden-vessel-warm-candlelight-holy-tabern.png",
+            "label": "02",
+            "subheading": "Extracted, not synthesized",
+            "title": "The real compounds of the plant",
+            "content": "<p>We extract, purify and concentrate the actives from the same botanical sources God placed in creation. They are the authentic molecular constituents of the plants, not lab-made substitutes.</p>",
+            "link_text": "",
+            "link_style": "link",
+            "mobile_text_color": "#ffffff"
+          }
+        },
+        "step-3": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/squalane1oz.jpg",
+            "label": "03",
+            "subheading": "Carried by olive squalane",
+            "title": "Deeper, with nothing synthetic",
+            "content": "<p>Each extract is carried in 100% olive-derived squalane, a lipid bioidentical to the squalene in your own skin. It takes the botanical compounds deeper, without synthetic penetration enhancers, chemical solvents or artificial emulsifiers.</p>",
+            "link_text": "About 100% Squalane",
+            "link_style": "link",
+            "mobile_text_color": "#ffffff",
+            "link_url": "/products/100-squalane"
+          }
+        },
+        "step-4": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/praying-with-frankincense-myrrh.jpg",
+            "label": "04",
+            "subheading": "Made for anointing",
+            "title": "Science in service of faith",
+            "content": "<p>The result honors the sacred tradition of biblical anointing while nourishing the skin with clinically meaningful concentrations of polyphenols, terpenes and bioactive compounds.</p>",
+            "link_text": "Shop the collection",
+            "link_style": "link",
+            "mobile_text_color": "#ffffff",
+            "link_url": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3",
+        "step-4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "item_color_scheme": "scheme-2",
+        "separate_section_with_border": false
+      }
+    },
+    "inside": {
+      "type": "tabs",
+      "blocks": {
+        "squalane": {
+          "type": "tab",
+          "settings": {
+            "title": "Olive squalane base",
+            "content": "<p>We formulate our anointing oils in a base of <strong>100% olive-derived squalane</strong>, a naturally occurring lipid that is bioidentical to the squalene already present in human skin. This is not a coincidence. It is by design.</p><p>Squalane is far more than a moisturizer. As a <strong>high-performance delivery vehicle</strong> it improves the <strong>bioavailability</strong> of every botanical extract in our formulations. Its molecular weight and lipophilic structure let it move through the stratum corneum efficiently, carrying our polyphenol complex and active botanical compounds deeper into the skin, where they can do their full work. The result is better absorption, longer-lasting hydration and measurably greater efficacy, without synthetic penetration enhancers, chemical solvents or artificial emulsifiers.</p><p>Squalane comes from the fruit of the olive tree, a tree that appears in Scripture more than any other. It ties our delivery science directly to the biblical tradition of olive oil anointing.</p><p><a href=\"/products/100-squalane\">Shop 100% Squalane</a></p>",
+            "open_on_mobile": true
+          }
+        },
+        "complex": {
+          "type": "tab",
+          "settings": {
+            "title": "The polyphenol complex",
+            "content": "<p>Central to every Mount of Olives formulation is <strong>Polyphenol Alpha (α)™</strong>, our proprietary antioxidant-rich polyphenol complex, derived entirely from natural botanical sources. This carefully calibrated blend harnesses the combined activity of multiple polyphenolic compounds: flavonoids, phenolic acids, stilbenes and lignans. Each was selected for its demonstrated capacity to neutralize free radicals, support the skin’s natural barrier function and promote cellular vitality.</p><p>Polyphenol Alpha (α)™ is not a single ingredient. It is an <strong>orchestrated matrix of bioactives</strong> working in concert, much the way Scripture describes the body: <em>“many parts, but one body”</em> (1 Corinthians 12:20). Each compound amplifies the others through complementary mechanisms of action, so the complex is greater than the sum of its parts.</p><p><a href=\"#ingredients\">Read the full ingredient glossary</a></p>",
+            "open_on_mobile": false
+          }
+        },
+        "botanicals": {
+          "type": "tab",
+          "settings": {
+            "title": "The botanicals",
+            "content": "<p>Every active compound in our formulations is a <strong>natural derivative</strong> of a plant, resin, fruit or seed with deep biblical significance.</p><ul><li><strong>Boswellic acids</strong> from <em>Boswellia serrata</em> (<a href=\"/products/frankincense\">frankincense</a>): anti-inflammatory terpenes from the resin of the Magi</li><li><strong>Terpenoids and sesquiterpenes</strong> from <em>Commiphora myrrha</em> (<a href=\"/products/myrrh-anointing-oil-1\">myrrh</a>): antimicrobial and regenerative compounds from the resin of purification</li><li><strong>Ellagitannins and punicalagins</strong> from <em>Punica granatum</em> (<a href=\"/products/pomegranate-anointing-oil\">pomegranate</a>): potent antioxidants from one of the seven blessed fruits of the Promised Land</li><li><strong>Hydroxytyrosol and oleuropein</strong> from <em>Olea europaea</em> (<a href=\"/products/100-squalane\">olive</a>): among the most powerful natural antioxidants ever measured, from the tree of peace</li><li><strong>Apigenin and flavonoids</strong> from <em>Hyssopus officinalis</em> (<a href=\"/products/hyssop\">hyssop</a>): anti-inflammatory actives from the herb of purification (Psalm 51:7)</li><li><strong>Jatamansone and sesquiterpenes</strong> from <em>Nardostachys jatamansi</em> (<a href=\"/products/spikenard-anointing-oil\">spikenard</a>): neuroprotective and skin-soothing compounds from the precious oil of Mary of Bethany</li><li><strong>Labdanum and polyphenols</strong> from <em>Cistus ladaniferus</em> (<a href=\"/products/rose-of-sharon\">rose of Sharon</a>): regenerative and astringent actives from the flower of Song of Solomon</li></ul><p>These are not synthetic analogs or lab-created substitutes. They are the <strong>authentic molecular constituents</strong> of the very plants Scripture names, isolated, concentrated and formulated for optimal dermal delivery.</p>",
+            "open_on_mobile": false
+          }
+        },
+        "standards": {
+          "type": "tab",
+          "settings": {
+            "title": "Our standards",
+            "content": "<p>We do not synthesize our actives in a laboratory. We extract, purify and concentrate them from the same botanical sources that God placed in creation.</p><p>What we place on our bodies, temples of the Holy Spirit, should meet the highest standards of both purity and performance. Our commitment:</p><ul><li><strong>100% naturally derived active ingredients.</strong> Every bioactive compound originates from a botanical source.</li><li><strong>Free from parabens, phthalates, sulfates and synthetic fragrances.</strong> We exclude ingredients that do not align with our values or our science.</li><li><strong>Non-comedogenic, dermatologist-conscious formulation.</strong> Designed to nourish without disrupting the skin’s natural microbiome.</li><li><strong>Cruelty-free.</strong> We honor all of God’s creation and never test on animals.</li><li><strong>Sustainable, eco-conscious packaging.</strong> Recyclable and biodegradable materials, as part of our stewardship of the earth.</li><li><strong>Full ingredient transparency.</strong> We publish every compound and its botanical origin, because informed customers are empowered customers.</li></ul>",
+            "open_on_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "squalane",
+        "complex",
+        "botanicals",
+        "standards"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "separate_section_with_border": false,
+        "subheading": "Inside every bottle",
+        "title": "Two things make our oils different",
+        "text_alignment": "center"
+      }
+    },
+    "botanicals": {
+      "type": "multi-column",
+      "blocks": {
+        "plant-1": {
+          "type": "image_with_text",
+          "settings": {
+            "image": "shopify://shop_images/olive-trees-gethsemane-mount-of-olives.jpg",
+            "title": "Olive",
+            "heading_tag": "h3",
+            "content": "<p><em>Olea europaea</em></p><p>Hydroxytyrosol and oleuropein, among the most powerful natural antioxidants ever measured, from the tree Scripture names more than any other. Also the source of our squalane base.</p>",
+            "link_url": "/products/100-squalane",
+            "link_text": "Shop 100% Squalane"
+          }
+        },
+        "plant-2": {
+          "type": "image_with_text",
+          "settings": {
+            "image": "shopify://shop_images/frankincense-bible-sacred-resin-anointing-spiritual-healing.jpg",
+            "title": "Frankincense",
+            "heading_tag": "h3",
+            "content": "<p><em>Boswellia serrata</em></p><p>Boswellic acids, anti-inflammatory terpenes from the resin the Magi brought (Matthew 2:11).</p>",
+            "link_url": "/products/frankincense",
+            "link_text": "Shop Frankincense"
+          }
+        },
+        "plant-3": {
+          "type": "image_with_text",
+          "settings": {
+            "image": "shopify://shop_images/myrrh-bible-ancient-oil-healing-anointing.jpg",
+            "title": "Myrrh",
+            "heading_tag": "h3",
+            "content": "<p><em>Commiphora myrrha</em></p><p>Terpenoids and sesquiterpenes, antimicrobial and regenerative compounds from the resin of purification.</p>",
+            "link_url": "/products/myrrh-anointing-oil-1",
+            "link_text": "Shop Myrrh"
+          }
+        },
+        "plant-4": {
+          "type": "image_with_text",
+          "settings": {
+            "image": "shopify://shop_images/a-beautiful-ripe-pomegranate-split-open-revealing-ruby-red-seeds-on-a-rustic-wooden-surface-with-a-small-glass-bottle-of-golden-anointing-oil-beside-it-warm-golden-light-biblical-abun.png",
+            "title": "Pomegranate",
+            "heading_tag": "h3",
+            "content": "<p><em>Punica granatum</em></p><p>Ellagitannins and punicalagins, potent antioxidants from one of the seven blessed fruits of the Promised Land (Deuteronomy 8:8).</p>",
+            "link_url": "/products/pomegranate-anointing-oil",
+            "link_text": "Shop Pomegranate"
+          }
+        },
+        "plant-5": {
+          "type": "image_with_text",
+          "settings": {
+            "image": "shopify://shop_images/hyssop-bible-sacred-herb-purification-cleansing.jpg",
+            "title": "Hyssop",
+            "heading_tag": "h3",
+            "content": "<p><em>Hyssopus officinalis</em></p><p>Apigenin and flavonoids, anti-inflammatory actives from the herb of purification (Psalm 51:7).</p>",
+            "link_url": "/products/hyssop",
+            "link_text": "Shop Hyssop"
+          }
+        },
+        "plant-6": {
+          "type": "image_with_text",
+          "settings": {
+            "image": "shopify://shop_images/spikenard-bible-precious-oil-mary-anointed-jesus.jpg",
+            "title": "Spikenard",
+            "heading_tag": "h3",
+            "content": "<p><em>Nardostachys jatamansi</em></p><p>Jatamansone and sesquiterpenes, neuroprotective and skin-soothing compounds from the precious oil of Mary of Bethany (John 12:3).</p>",
+            "link_url": "/products/spikenard-anointing-oil",
+            "link_text": "Shop Spikenard"
+          }
+        },
+        "plant-7": {
+          "type": "image_with_text",
+          "settings": {
+            "image": "shopify://shop_images/rose-of-sharon-biblical-flower-healing.jpg",
+            "title": "Rose of Sharon",
+            "heading_tag": "h3",
+            "content": "<p><em>Cistus ladaniferus</em></p><p>Labdanum and polyphenols, regenerative and astringent actives from the flower of Song of Solomon 2:1.</p>",
+            "link_url": "/products/rose-of-sharon",
+            "link_text": "Shop Rose of Sharon"
+          }
+        },
+        "plant-8": {
+          "type": "image_with_text",
+          "settings": {
+            "image": "shopify://shop_images/beautiful-lily-of-the-valley-flowers-with-delicate-white-bell-shaped-blossoms-on-green-stems-soft-golden-light-a-small-glass-bottle-of-anointing-oil-nearby-warm-spiritual-atmosphere-b.png",
+            "title": "Lily of the Valley",
+            "heading_tag": "h3",
+            "content": "<p><em>Song of Solomon 2:1</em></p><p>Named in the same verse as the rose of Sharon. Carried on the same olive squalane base as every oil in the line.</p>",
+            "link_url": "/products/lily-of-the-valley",
+            "link_text": "Shop Lily of the Valley"
+          }
+        }
+      },
+      "block_order": [
+        "plant-1",
+        "plant-2",
+        "plant-3",
+        "plant-4",
+        "plant-5",
+        "plant-6",
+        "plant-7",
+        "plant-8"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "separate_section_with_border": false,
+        "columns_per_row": 4,
+        "stack_on_mobile": false,
+        "overlap_image": false,
+        "content_alignment": "start",
+        "text_alignment": "start",
+        "spacing": "md",
+        "subheading": "From creation",
+        "title": "The plants Scripture names",
+        "content": "<p>Each oil carries the real compounds of its plant. Tap a botanical to shop its oil.</p>"
+      }
+    },
+    "look": {
+      "type": "shop-the-look",
+      "blocks": {
+        "look-1": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/mo-science-look-1.jpg",
+            "hot_spots_background": "#c4a265",
+            "product_1": "rose-of-sharon",
+            "product_1_horizontal_position": 17,
+            "product_1_vertical_position": 33,
+            "product_2": "latter-rain-anointing-oil",
+            "product_2_horizontal_position": 41,
+            "product_2_vertical_position": 33,
+            "product_3": "hyssop",
+            "product_3_horizontal_position": 65,
+            "product_3_vertical_position": 33,
+            "product_4": "spikenard-anointing-oil",
+            "product_4_horizontal_position": 88,
+            "product_4_vertical_position": 33
+          }
+        },
+        "look-2": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/mo-science-look-2.jpg",
+            "hot_spots_background": "#c4a265",
+            "product_1": "lily-of-the-valley",
+            "product_1_horizontal_position": 11,
+            "product_1_vertical_position": 33,
+            "product_2": "frankincense-myrrh-anointing-oil",
+            "product_2_horizontal_position": 37,
+            "product_2_vertical_position": 33,
+            "product_3": "pomegranate-anointing-oil",
+            "product_3_horizontal_position": 60,
+            "product_3_vertical_position": 33,
+            "product_4": "gethsemane-anointing-oil-unscented",
+            "product_4_horizontal_position": 84,
+            "product_4_vertical_position": 33
+          }
+        }
+      },
+      "block_order": [
+        "look-1",
+        "look-2"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "separate_section_with_border": false,
+        "subheading": "The collection",
+        "title": "Tap a bottle",
+        "content": "<p>Every oil is built on the same olive squalane base. Tap a dot to see the oil and add it to your cart.</p>",
+        "popover_title": "Shop the oils"
+      }
+    },
+    "anchor": {
+      "type": "custom-liquid",
+      "settings": {
+        "liquid": "<span id=\"ingredients\"></span>",
+        "color_scheme": "scheme-1",
+        "remove_vertical_spacing": true,
+        "remove_horizontal_spacing": true
+      }
+    },
+    "glossary": {
+      "type": "faq",
+      "blocks": {
+        "cat-1": {
+          "type": "category",
+          "settings": {
+            "title": "From the olive",
+            "icon": "picto-tree",
+            "icon_width": 20
+          }
+        },
+        "ing-1-1": {
+          "type": "question",
+          "settings": {
+            "question": "Hydroxytyrosol",
+            "answer": "<p>An ortho-diphenol found mainly in olives and olive oil. Regarded as one of the most potent natural antioxidants measured by ORAC value, with exceptional capacity for neutralizing reactive oxygen species and protecting lipid membranes from peroxidation.</p>"
+          }
+        },
+        "ing-1-2": {
+          "type": "question",
+          "settings": {
+            "question": "Tyrosol",
+            "answer": "<p>A phenolic antioxidant found in olives, olive oil and wine. It protects against lipid peroxidation and oxidative stress, supporting long-term skin health and resilience.</p>"
+          }
+        },
+        "ing-1-3": {
+          "type": "question",
+          "settings": {
+            "question": "Oleuropein-aglycone dialdehyde",
+            "answer": "<p>A secoiridoid polyphenol from olives with potent antioxidant and anti-inflammatory properties. It helps protect dermal collagen and elastin fibers.</p>"
+          }
+        },
+        "ing-1-4": {
+          "type": "question",
+          "settings": {
+            "question": "Oleuropein-aglycone mono-aldehyde",
+            "answer": "<p>A structurally related olive secoiridoid with complementary antioxidant activity. It strengthens the polyphenolic defense matrix in our formulations.</p>"
+          }
+        },
+        "ing-1-5": {
+          "type": "question",
+          "settings": {
+            "question": "Ligstroside-aglycone di-aldehyde",
+            "answer": "<p>A secoiridoid compound found in olives and extra virgin olive oil. It scavenges peroxyl radicals and supports protection against environmentally induced oxidative damage.</p>"
+          }
+        },
+        "ing-1-6": {
+          "type": "question",
+          "settings": {
+            "question": "Pinoresinol",
+            "answer": "<p>A lignan found in olives, olive oil and sesame seeds. It has antioxidant activity and may support the skin’s resistance to environmental aging by moderating oxidative stress pathways.</p>"
+          }
+        },
+        "ing-1-7": {
+          "type": "question",
+          "settings": {
+            "question": "Olive oil (Olea europaea)",
+            "answer": "<p>Cold-pressed from the fruit of the olive tree, the most frequently referenced tree in all of Scripture. Rich in oleic acid, squalene, hydroxytyrosol and tocopherols. It is both a nourishing emollient and a natural source of the bioactive compounds central to our Polyphenol Alpha (α)™ complex.</p>"
+          }
+        },
+        "ing-1-8": {
+          "type": "question",
+          "settings": {
+            "question": "Squalane (olive-derived)",
+            "answer": "<p>A fully saturated, stable hydrocarbon obtained by hydrogenating squalene extracted from Olea europaea (olive). Bioidentical to the squalene naturally present in human sebum, it works as a superior emollient, an occlusive moisturizer and a lipophilic delivery vehicle that greatly improves the absorption and bioavailability of our botanical actives. Non-comedogenic, odorless and oxidatively stable: the ideal carrier for our Polyphenol Alpha (α)™ complex.</p>"
+          }
+        },
+        "cat-2": {
+          "type": "category",
+          "settings": {
+            "title": "Resins: frankincense and myrrh",
+            "icon": "picto-gift",
+            "icon_width": 20
+          }
+        },
+        "ing-2-1": {
+          "type": "question",
+          "settings": {
+            "question": "Boswellia serrata (frankincense)",
+            "answer": "<p>A pentacyclic triterpenic resin from the bark of the Boswellia serrata tree, native to India and the Middle East. It contains boswellic acids (AKBA and KBA), potent inhibitors of 5-lipoxygenase with demonstrated anti-inflammatory and analgesic properties. One of the three gifts the Magi presented to the Christ child (Matthew 2:11) and a cornerstone of ancient anointing formulations.</p>"
+          }
+        },
+        "ing-2-2": {
+          "type": "question",
+          "settings": {
+            "question": "Commiphora myrrha (myrrh)",
+            "answer": "<p>An oleoresin harvested from the Commiphora myrrha tree of the Arabian Peninsula and northeastern Africa. It contains terpenoids (curzerene, furanoeudesma-1,3-diene), sesquiterpenes and flavonoids with validated anti-inflammatory, antioxidant and antimicrobial efficacy. A gift of the Magi and a biblical symbol of purification, consecration and healing.</p>"
+          }
+        },
+        "ing-2-3": {
+          "type": "question",
+          "settings": {
+            "question": "Botanical resins",
+            "answer": "<p>Natural oleoresins from frankincense, myrrh and labdanum. They contain complex mixtures of terpenes, sesquiterpenes and phenolic acids with astringent, antimicrobial and wound-healing properties, used in traditional formulations for millennia.</p>"
+          }
+        },
+        "cat-3": {
+          "type": "category",
+          "settings": {
+            "title": "Herbs and flowers",
+            "icon": "picto-leaf",
+            "icon_width": 20
+          }
+        },
+        "ing-3-1": {
+          "type": "question",
+          "settings": {
+            "question": "Hyssopus officinalis (hyssop)",
+            "answer": "<p>The biblical herb of purification named in Psalm 51:7: “Purge me with hyssop, and I shall be clean.” It contains apigenin, rosmarinic acid and essential oil terpenes with demonstrated antioxidant, anti-inflammatory and antimicrobial properties for skin health.</p>"
+          }
+        },
+        "ing-3-2": {
+          "type": "question",
+          "settings": {
+            "question": "Nardostachys jatamansi (spikenard)",
+            "answer": "<p>The precious aromatic rhizome Mary of Bethany used to anoint Jesus before his burial (John 12:3). It contains jatamansone, nardosinone and sesquiterpene compounds with documented neuroprotective, anti-inflammatory and skin-soothing properties. One of the rarest and most valued botanicals in our collection.</p>"
+          }
+        },
+        "ing-3-3": {
+          "type": "question",
+          "settings": {
+            "question": "Cistus ladaniferus (rose of Sharon)",
+            "answer": "<p>The labdanum-producing Mediterranean shrub referenced as the rose of Sharon in Song of Solomon 2:1. Rich in polyphenolic compounds with documented astringent, antimicrobial and tissue-regenerative properties.</p>"
+          }
+        },
+        "cat-4": {
+          "type": "category",
+          "settings": {
+            "title": "Pomegranate",
+            "icon": "picto-star",
+            "icon_width": 20
+          }
+        },
+        "ing-4-1": {
+          "type": "question",
+          "settings": {
+            "question": "Punica granatum (pomegranate)",
+            "answer": "<p>One of the seven species blessed in the Torah (Deuteronomy 8:8). The fruit and seed contain ellagitannins, punicalagins A and B, punicalin, gallic acid and ellagic acid: a remarkably dense polyphenolic profile with antioxidant, anti-inflammatory and collagen-supportive benefits for skin elasticity and firmness.</p>"
+          }
+        },
+        "ing-4-2": {
+          "type": "question",
+          "settings": {
+            "question": "Ellagitannins",
+            "answer": "<p>Hydrolyzable tannins found in pomegranates, raspberries and walnuts. They are metabolized to ellagic acid and urolithins, which show potent antioxidant, anti-inflammatory and anti-aging activity through modulation of NF-κB signaling pathways.</p>"
+          }
+        },
+        "cat-5": {
+          "type": "category",
+          "settings": {
+            "title": "The wider polyphenol family",
+            "icon": "picto-shield",
+            "icon_width": 20
+          }
+        },
+        "ing-5-1": {
+          "type": "question",
+          "settings": {
+            "question": "Apigenin",
+            "answer": "<p>A flavonoid naturally present in parsley (Petroselinum crispum), chamomile (Matricaria chamomilla), celery (Apium graveolens) and hyssop (Hyssopus officinalis). It has antioxidant and anti-inflammatory activity that helps reduce oxidative stress and inflammation in skin tissue.</p>"
+          }
+        },
+        "ing-5-2": {
+          "type": "question",
+          "settings": {
+            "question": "Caffeic acid",
+            "answer": "<p>A hydroxycinnamic acid found in coffee, wine and many botanical sources. It acts as an antioxidant through free radical scavenging and metal chelation, supporting the skin’s defense against photooxidative damage.</p>"
+          }
+        },
+        "ing-5-3": {
+          "type": "question",
+          "settings": {
+            "question": "Catechin",
+            "answer": "<p>A flavan-3-ol polyphenol abundant in tea (Camellia sinensis) and many fruits. It provides broad-spectrum antioxidant protection and supports collagen integrity by inhibiting matrix metalloproteinases (MMPs).</p>"
+          }
+        },
+        "ing-5-4": {
+          "type": "question",
+          "settings": {
+            "question": "Chlorogenic acid",
+            "answer": "<p>A phenolic compound found in coffee and stone fruits. An antioxidant and UV-absorbing agent that contributes photoprotective and anti-inflammatory skin benefits.</p>"
+          }
+        },
+        "ing-5-5": {
+          "type": "question",
+          "settings": {
+            "question": "Epicatechin",
+            "answer": "<p>A flavanol found in tea and cocoa with demonstrated antioxidant capacity. It supports skin barrier integrity and microcirculation.</p>"
+          }
+        },
+        "ing-5-6": {
+          "type": "question",
+          "settings": {
+            "question": "Ferulic acid",
+            "answer": "<p>A phenolic compound from rice bran, wheat and oats. A potent UV-absorbing antioxidant that improves the stability and efficacy of the other antioxidants in a formulation. A key component of our Polyphenol Alpha (α)™ complex.</p>"
+          }
+        },
+        "ing-5-7": {
+          "type": "question",
+          "settings": {
+            "question": "Gallic acid",
+            "answer": "<p>A trihydroxybenzoic acid found in grapes, tea leaves and oak bark. It has antioxidant, anti-inflammatory and antiproliferative properties that contribute to comprehensive skin protection.</p>"
+          }
+        },
+        "ing-5-8": {
+          "type": "question",
+          "settings": {
+            "question": "Homovanillic acid",
+            "answer": "<p>A phenolic compound found in vanilla beans and select botanical sources. Its antioxidant activity may contribute to free radical defense in skin tissue.</p>"
+          }
+        },
+        "ing-5-9": {
+          "type": "question",
+          "settings": {
+            "question": "Isoquercitrin",
+            "answer": "<p>A quercetin glycoside found in apples, onions and various botanical sources. It is more bioavailable than free quercetin, with antioxidant and anti-inflammatory activity that supports skin resilience.</p>"
+          }
+        },
+        "ing-5-10": {
+          "type": "question",
+          "settings": {
+            "question": "Luteolin",
+            "answer": "<p>A flavone found in celery, parsley and thyme. It has potent anti-inflammatory activity through inhibition of pro-inflammatory cytokines and supports the skin’s UV-protective mechanisms.</p>"
+          }
+        },
+        "ing-5-11": {
+          "type": "question",
+          "settings": {
+            "question": "Quercetin",
+            "answer": "<p>One of the most abundant dietary flavonoids, found in apples, onions, berries and tea. A powerful antioxidant and anti-inflammatory agent that moderates histamine release and supports the skin’s defense against UV-induced photodamage.</p>"
+          }
+        },
+        "ing-5-12": {
+          "type": "question",
+          "settings": {
+            "question": "Quercitrin (quercetin-3-rhamnoside)",
+            "answer": "<p>A quercetin glycoside with enhanced bioavailability, found in citrus fruits and berries. It adds complementary antioxidant and anti-inflammatory activity within our polyphenol matrix.</p>"
+          }
+        },
+        "ing-5-13": {
+          "type": "question",
+          "settings": {
+            "question": "Rutin",
+            "answer": "<p>A flavonoid glycoside found in buckwheat, apples and citrus. It supports capillary integrity and provides antioxidant protection, contributing to an even, healthy-looking complexion.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "cat-1",
+        "ing-1-1",
+        "ing-1-2",
+        "ing-1-3",
+        "ing-1-4",
+        "ing-1-5",
+        "ing-1-6",
+        "ing-1-7",
+        "ing-1-8",
+        "cat-2",
+        "ing-2-1",
+        "ing-2-2",
+        "ing-2-3",
+        "cat-3",
+        "ing-3-1",
+        "ing-3-2",
+        "ing-3-3",
+        "cat-4",
+        "ing-4-1",
+        "ing-4-2",
+        "cat-5",
+        "ing-5-1",
+        "ing-5-2",
+        "ing-5-3",
+        "ing-5-4",
+        "ing-5-5",
+        "ing-5-6",
+        "ing-5-7",
+        "ing-5-8",
+        "ing-5-9",
+        "ing-5-10",
+        "ing-5-11",
+        "ing-5-12",
+        "ing-5-13"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "separate_section_with_border": false,
+        "show_categories": true,
+        "subheading": "Reference",
+        "title": "Our anthology of ingredients",
+        "content": "<p>The naturally occurring bioactive compounds found across our formulations. Each one is derived from plants, resins, fruits and seeds with documented use in both biblical tradition and modern dermatological research. Tap a name to read about it.</p>"
+      }
+    },
+    "closing": {
+      "type": "rich-text",
+      "blocks": {
+        "head": {
+          "type": "heading",
+          "settings": {
+            "text": "Where the science of nature meets the nature of faith",
+            "heading_tag": "h2"
+          }
+        },
+        "text": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Scripture describes the body as “many parts, but one body” (1 Corinthians 12:20). Our oils work the same way: many compounds, one complex, carried in one olive base.</p>"
+          }
+        },
+        "shop": {
+          "type": "button",
+          "settings": {
+            "style": "solid",
+            "text": "Shop the collection",
+            "url": "shopify://collections/all"
+          }
+        },
+        "faq": {
+          "type": "link",
+          "settings": {
+            "text": "Questions? Read the FAQ",
+            "url": "shopify://pages/faqs"
+          }
+        }
+      },
+      "block_order": [
+        "head",
+        "text",
+        "shop",
+        "faq"
+      ],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "separate_section_with_border": false,
+        "content_width": "sm",
+        "text_position": "center",
+        "remove_vertical_spacing": false
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "standards",
+    "how",
+    "inside",
+    "botanicals",
+    "look",
+    "anchor",
+    "glossary",
+    "closing"
+  ]
+}
