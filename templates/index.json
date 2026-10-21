@@ -5,7 +5,7 @@
       "settings": {
         "layout": "overlay",
         "image": "shopify://shop_images/Hero_banner.png",
-        "min_height": 78,
+        "min_height": 80,
         "eyebrow": "Handcrafted anointing oils",
         "heading": "You anoint my head with oil; <em>my cup runs over.</em>",
         "text": "<p>Premium anointing oils handcrafted from pure olive oil and biblical botanicals. Ethically sourced blends for worship, prayer and home blessings, prepared with prayer before they reach your hands.</p>",
