@@ -19,7 +19,7 @@
         "text": {
           "type": "richtext",
           "settings": {
-            "content": "<p><em>Where the wisdom of Scripture meets careful cosmeceutical craft.</em></p><p>Anointing with oil runs through the whole of Scripture: the holy anointing oil of Exodus 30, the horn of oil that anointed David, the oil of gladness of the Psalms, the alabaster jar broken at Bethany. Every Mount of Olives oil begins with the plants, resins, and extracts those pages name, revered for millennia: <strong>frankincense, myrrh, spikenard, hyssop, pomegranate, rose of Sharon, and lily of the valley</strong>.</p><p>We prepare them with care in a base of olive squalane, so that an oil made for prayer, worship, and blessing also nourishes the skin. This page explains what is in every bottle.</p>"
+            "content": "<p><em>Where the wisdom of Scripture meets careful craft.</em></p><p>Anointing with oil runs through the whole of Scripture: the holy anointing oil of Exodus 30, the horn of oil that anointed David, the oil of gladness of the Psalms, the alabaster jar broken at Bethany. Every Mount of Olives oil begins with the plants, resins, and extracts those pages name, revered for millennia: <strong>frankincense, myrrh, spikenard, hyssop, pomegranate, rose of Sharon, and lily of the valley</strong>.</p><p>We prepare them with care in a base of olive squalane, so that an oil made for prayer, worship, and blessing also nourishes the skin. This page explains what is in every bottle.</p>"
           }
         },
         "shop": {
@@ -156,7 +156,7 @@
             "label": "03",
             "subheading": "Carried by olive squalane",
             "title": "The oil of Scripture",
-            "content": "<p>Each extract is carried in 100% olive-derived squalane, from the tree that lit the tabernacle and anointed kings. A light, stable oil, with no synthetic penetration enhancers, chemical solvents, or artificial emulsifiers.</p>",
+            "content": "<p>Each extract is carried in 100% olive-derived squalane, from the tree that lit the tabernacle and anointed kings. A light, stable oil, with no chemical solvents or artificial emulsifiers.</p>",
             "link_text": "Shop 100% Squalane",
             "link_style": "link",
             "mobile_text_color": "#ffffff",
@@ -197,7 +197,7 @@
           "type": "tab",
           "settings": {
             "title": "Olive squalane base",
-            "content": "<p>We formulate our anointing oils in a base of <strong>100% olive-derived squalane</strong>, a naturally occurring lipid closely related to the squalene found in human skin. This is not a coincidence. It is by design.</p><p>Squalane is a light, stable oil. It spreads easily, carries the botanical extracts with it, and leaves the skin feeling hydrated rather than greasy. We use no synthetic penetration enhancers, chemical solvents, or artificial emulsifiers.</p><p>Squalane comes from the fruit of the olive tree, a tree that appears in Scripture more than any other: the oil that lit the lamps of the tabernacle (Exodus 27:20), the base of the holy anointing oil (Exodus 30:22-25), and the oil with which Samuel anointed David (1 Samuel 16:13). Our name comes from the same tree: the Mount of Olives, where Jesus prayed in the garden of Gethsemane.</p><p><a href=\"/products/100-squalane\">Shop 100% Squalane</a></p>",
+            "content": "<p>We formulate our anointing oils in a base of <strong>100% olive-derived squalane</strong>, a naturally occurring lipid closely related to the squalene found in human skin.</p><p>Squalane is a light, stable oil. It spreads easily, carries the botanical extracts with it, and leaves the skin feeling hydrated rather than greasy. We use no chemical solvents or artificial emulsifiers.</p><p>Squalane comes from the fruit of the olive tree, a tree that appears in Scripture more than any other: the oil that lit the lamps of the tabernacle (Exodus 27:20), the base of the holy anointing oil (Exodus 30:22-25), and the oil with which Samuel anointed David (1 Samuel 16:13). Our name comes from the same tree: the Mount of Olives, where Jesus prayed in the garden of Gethsemane.</p><p><a href=\"/products/100-squalane\">Shop 100% Squalane</a></p>",
             "open_on_mobile": true
           }
         },
@@ -435,7 +435,7 @@
           "type": "question",
           "settings": {
             "question": "Hydroxytyrosol",
-            "answer": "<p>A polyphenol found mainly in olives and olive oil, and one of the most studied natural antioxidants.</p>"
+            "answer": "<p>A polyphenol found mainly in olives and olive oil. An antioxidant.</p>"
           }
         },
         "ing-1-2": {
@@ -557,14 +557,14 @@
           "type": "question",
           "settings": {
             "question": "Punica granatum (pomegranate)",
-            "answer": "<p>One of the seven species blessed in the Torah (Deuteronomy 8:8). The fruit and seed contain ellagitannins, punicalagins A and B, punicalin, gallic acid, and ellagic acid, a remarkably dense polyphenol profile.</p>"
+            "answer": "<p>One of the seven species blessed in the Torah (Deuteronomy 8:8). The fruit and seed contain ellagitannins, punicalagins A and B, punicalin, gallic acid, and ellagic acid, all polyphenols.</p>"
           }
         },
         "ing-4-2": {
           "type": "question",
           "settings": {
             "question": "Ellagitannins",
-            "answer": "<p>Tannins found in pomegranates, raspberries, and walnuts. Polyphenols with antioxidant activity.</p>"
+            "answer": "<p>Tannins found in pomegranates, raspberries, and walnuts. Antioxidant polyphenols.</p>"
           }
         },
         "cat-5": {
@@ -614,7 +614,7 @@
           "type": "question",
           "settings": {
             "question": "Ferulic acid",
-            "answer": "<p>A phenolic compound from rice bran, wheat, and oats. An antioxidant that helps keep the other antioxidants in a formula stable. A key component of our Polyphenol Alpha (α)™ complex.</p>"
+            "answer": "<p>A phenolic compound from rice bran, wheat, and oats. An antioxidant. A key component of our Polyphenol Alpha (α)™ complex.</p>"
           }
         },
         "ing-5-7": {

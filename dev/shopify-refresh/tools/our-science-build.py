@@ -10,7 +10,7 @@ P = {  # products
 PA = 'Polyphenol Alpha (α)™'
 
 hero_text = (
-  '<p><em>Where the wisdom of Scripture meets careful cosmeceutical craft.</em></p>'
+  '<p><em>Where the wisdom of Scripture meets careful craft.</em></p>'
   '<p>Anointing with oil runs through the whole of Scripture: the holy anointing oil of Exodus 30, the horn of oil that anointed David, the oil of gladness of the Psalms, the alabaster jar broken at Bethany. '
   'Every Mount of Olives oil begins with the plants, resins, and extracts those pages name, revered for millennia: '
   '<strong>frankincense, myrrh, spikenard, hyssop, pomegranate, rose of Sharon, and lily of the valley</strong>.</p>'
@@ -26,9 +26,9 @@ standards = [
 ]
 
 squalane_tab = (
-  '<p>We formulate our anointing oils in a base of <strong>100% olive-derived squalane</strong>, a naturally occurring lipid closely related to the squalene found in human skin. This is not a coincidence. It is by design.</p>'
+  '<p>We formulate our anointing oils in a base of <strong>100% olive-derived squalane</strong>, a naturally occurring lipid closely related to the squalene found in human skin.</p>'
   '<p>Squalane is a light, stable oil. It spreads easily, carries the botanical extracts with it, and leaves the skin feeling hydrated rather than greasy. '
-  'We use no synthetic penetration enhancers, chemical solvents, or artificial emulsifiers.</p>'
+  'We use no chemical solvents or artificial emulsifiers.</p>'
   '<p>Squalane comes from the fruit of the olive tree, a tree that appears in Scripture more than any other: the oil that lit the lamps of the tabernacle (Exodus 27:20), the base of the holy anointing oil (Exodus 30:22-25), and the oil with which Samuel anointed David (1 Samuel 16:13). Our name comes from the same tree: the Mount of Olives, where Jesus prayed in the garden of Gethsemane.</p>'
   f'<p><a href="{P["olive"]}">Shop 100% Squalane</a></p>'
 )
@@ -80,14 +80,14 @@ timeline = [  # (image, label, subheading, title, content, link text, link url)
   ('ancient-sacred-anointing-oil-ingredients-from-exodus-30-arranged-on-a-stone-altar-myrrh-resin-cinnamon-sticks-cassia-bark-and-olive-oil-in-a-golden-vessel-warm-candlelight-holy-tabern.png', '02', 'Extracted, not synthesized', 'The plant’s own compounds',
    '<p>The actives are extracted, purified, and concentrated from the plants themselves, the same botanical sources God placed in creation, not made in a laboratory.</p>', '', ''),
   ('squalane1oz.jpg', '03', 'Carried by olive squalane', 'The oil of Scripture',
-   '<p>Each extract is carried in 100% olive-derived squalane, from the tree that lit the tabernacle and anointed kings. A light, stable oil, with no synthetic penetration enhancers, chemical solvents, or artificial emulsifiers.</p>', 'Shop 100% Squalane', P['olive']),
+   '<p>Each extract is carried in 100% olive-derived squalane, from the tree that lit the tabernacle and anointed kings. A light, stable oil, with no chemical solvents or artificial emulsifiers.</p>', 'Shop 100% Squalane', P['olive']),
   ('praying-with-frankincense-myrrh.jpg', '04', 'Made for anointing', 'For prayer, worship, and blessing',
    '<p>An oil for the moments Scripture describes: consecration, intercession, worship, and prayer for healing. It honors that tradition and nourishes the skin.</p>', 'Shop the collection', 'shopify://collections/all'),
 ]
 
 glossary = {
   ('From the olive', 'picto-tree'): [
-    ('Hydroxytyrosol', 'A polyphenol found mainly in olives and olive oil, and one of the most studied natural antioxidants.'),
+    ('Hydroxytyrosol', 'A polyphenol found mainly in olives and olive oil. An antioxidant.'),
     ('Tyrosol', 'A phenolic antioxidant found in olives, olive oil, and wine.'),
     ('Oleuropein-aglycone dialdehyde', 'A secoiridoid polyphenol from olives. An antioxidant.'),
     ('Oleuropein-aglycone mono-aldehyde', 'A closely related olive secoiridoid, also an antioxidant, that rounds out the olive polyphenols in our formulations.'),
@@ -107,8 +107,8 @@ glossary = {
     ('Cistus ladaniferus (rose of Sharon)', 'The labdanum-producing Mediterranean shrub referenced as the rose of Sharon in Song of Solomon 2:1. Rich in polyphenols.'),
   ],
   ('Pomegranate', 'picto-star'): [
-    ('Punica granatum (pomegranate)', 'One of the seven species blessed in the Torah (Deuteronomy 8:8). The fruit and seed contain ellagitannins, punicalagins A and B, punicalin, gallic acid, and ellagic acid, a remarkably dense polyphenol profile.'),
-    ('Ellagitannins', 'Tannins found in pomegranates, raspberries, and walnuts. Polyphenols with antioxidant activity.'),
+    ('Punica granatum (pomegranate)', 'One of the seven species blessed in the Torah (Deuteronomy 8:8). The fruit and seed contain ellagitannins, punicalagins A and B, punicalin, gallic acid, and ellagic acid, all polyphenols.'),
+    ('Ellagitannins', 'Tannins found in pomegranates, raspberries, and walnuts. Antioxidant polyphenols.'),
   ],
   ('The wider polyphenol family', 'picto-shield'): [
     ('Apigenin', 'A flavonoid naturally present in parsley (<em>Petroselinum crispum</em>), chamomile (<em>Matricaria chamomilla</em>), celery (<em>Apium graveolens</em>), and hyssop (<em>Hyssopus officinalis</em>). An antioxidant.'),
@@ -116,7 +116,7 @@ glossary = {
     ('Catechin', 'A flavan-3-ol polyphenol abundant in tea (<em>Camellia sinensis</em>) and many fruits. An antioxidant.'),
     ('Chlorogenic acid', 'A phenolic compound found in coffee and stone fruits. An antioxidant.'),
     ('Epicatechin', 'A flavanol found in tea and cocoa. An antioxidant.'),
-    ('Ferulic acid', 'A phenolic compound from rice bran, wheat, and oats. An antioxidant that helps keep the other antioxidants in a formula stable. A key component of our ' + PA + ' complex.'),
+    ('Ferulic acid', 'A phenolic compound from rice bran, wheat, and oats. An antioxidant. A key component of our ' + PA + ' complex.'),
     ('Gallic acid', 'A trihydroxybenzoic acid found in grapes, tea leaves, and oak bark. An antioxidant.'),
     ('Homovanillic acid', 'A phenolic compound found in vanilla beans and select botanical sources. An antioxidant.'),
     ('Isoquercitrin', 'A quercetin glycoside found in apples, onions, and various plants. An antioxidant.'),
