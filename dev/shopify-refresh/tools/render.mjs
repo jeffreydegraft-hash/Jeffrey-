@@ -343,7 +343,7 @@ class FormTag extends Tag {
     }
     const actions = { product: '/cart/add', customer: '/contact#newsletter', contact: '/contact', localization: '/localization', cart: '/cart' };
     emitter.write(`<form method="post" action="${actions[type] || '/'}" accept-charset="UTF-8" ${attrs(kv)}><input type="hidden" name="form_type" value="${type}">`);
-    ctx.push({ form: { errors: null, posted_successfully_q: false, email: '', body: '', id: 'new' } });
+    ctx.push({ form: { errors: null, posted_successfully_q: process.env.FORM_POSTED === '1', email: '', body: '', id: 'new' } });
     yield this.liquid.renderer.renderTemplates(this.templates, ctx, emitter);
     ctx.pop();
     emitter.write('</form>');

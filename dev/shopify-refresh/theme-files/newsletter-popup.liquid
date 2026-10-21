@@ -1,0 +1,217 @@
+{%- comment -%}Mount of Olives: welcome offer. Not on the cart page, hidden for signed-in customers, shows the discount code once the form is sent.{%- endcomment -%}
+{%- unless request.page_type == 'captcha' or request.page_type == 'cart' or section.settings.show_only_on_index and template != 'index' -%}
+  {%- unless section.settings.hide_for_account_holders and customer -%}
+    {%- assign posted_successfully = false -%}
+    {%- assign newsletter_id = 'newsletter-' | append: section.id -%}
+
+    {%- capture _temporary -%}
+      {%- form 'customer', id: newsletter_id, class: 'form' -%}
+        {%- assign posted_successfully = form.posted_successfully? -%}
+      {%- endform -%}
+    {%- endcapture -%}
+
+    <newsletter-popup class="pop-in newsletter-popup color-scheme color-scheme--{{ section.settings.color_scheme.id }}" title="Newsletter popup" {% if section.settings.show_only_once %}only-once{% endif %} apparition-delay="{{ section.settings.apparition_delay }}" {% if posted_successfully %}open{% endif %} handle-editor-events>
+      <dialog-close-button class="contents">
+        <button class="pop-in__close-button tap-area">
+          <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
+          {%- render 'icon' with 'close' -%}
+        </button>
+      </dialog-close-button>
+
+      {%- if section.settings.image != blank -%}
+        <div class="newsletter-popup__media">
+          {{- section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '440px', widths: '440,660,880,1000', alt: '' -}}
+        </div>
+      {%- endif -%}
+
+      <div class="v-stack gap-6 newsletter-popup__body">
+        {%- unless posted_successfully -%}
+          {%- if section.settings.title != blank or section.settings.content != blank -%}
+            <div class="v-stack gap-3 text-center">
+              {%- if section.settings.title != blank -%}
+                <p class="h4 newsletter-popup__title">{{ section.settings.title }}</p>
+              {%- endif -%}
+
+              {%- if section.settings.content != blank -%}
+                <div class="prose text-sm">
+                  {{ section.settings.content }}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endunless -%}
+
+        {%- if section.settings.show_newsletter_form -%}
+          {%- form 'customer', id: newsletter_id, class: 'form' -%}
+            {%- if form.posted_successfully? -%}
+              <div class="v-stack gap-4 text-center">
+                {%- if section.settings.success_title != blank -%}
+                  <p class="h4 newsletter-popup__title">{{ section.settings.success_title }}</p>
+                {%- endif -%}
+
+                {%- if section.settings.success_text != blank -%}
+                  <div class="prose text-sm">{{ section.settings.success_text }}</div>
+                {%- endif -%}
+
+                {%- if section.settings.discount_code != blank -%}
+                  <p class="newsletter-popup__code">{{ section.settings.discount_code | escape }}</p>
+
+                  {%- if section.settings.success_button_text != blank -%}
+                    {%- comment -%}Shopify's /discount/CODE link applies the code to the visitor's checkout before sending them on{%- endcomment -%}
+                    {%- assign code_link = '/discount/' | append: section.settings.discount_code | append: '?redirect=' | append: section.settings.success_link -%}
+                    {%- render 'button', content: section.settings.success_button_text, href: code_link -%}
+                  {%- endif -%}
+                {%- else -%}
+                  {%- capture success_message -%}{{ 'general.newsletter.subscribed_successfully' | t }}{%- endcapture -%}
+                  {%- render 'banner', content: success_message, status: 'success', text_alignment: 'center' -%}
+                {%- endif -%}
+              </div>
+
+              <script>
+                localStorage.setItem('theme:popup-filled', 'true');
+              </script>
+            {%- else -%}
+              {%- if form.errors -%}
+                {%- assign content = form.errors | default_errors -%}
+                {%- render 'banner', status: 'error', content: content, text_alignment: 'center' -%}
+              {%- endif -%}
+
+              <div class="fieldset">
+                <input type="hidden" name="contact[tags]" value="newsletter">
+
+                {%- assign label = 'blog.comments.email' | t -%}
+                {%- render 'input', type: 'email', name: 'contact[email]', label: label, value: customer.email, required: true, autocomplete: 'email' -%}
+              </div>
+
+              {%- render 'button', content: section.settings.button_text, type: 'submit' -%}
+            {%- endif -%}
+          {%- endform -%}
+        {%- endif -%}
+
+        {%- if section.settings.decline_text != blank and posted_successfully == false -%}
+          <dialog-close-button class="contents">
+            <button type="button" class="newsletter-popup__decline">{{ section.settings.decline_text | escape }}</button>
+          </dialog-close-button>
+        {%- endif -%}
+      </div>
+    </newsletter-popup>
+  {%- endunless -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "t:sections.newsletter_popup.name",
+  "class": "shopify-section--popup",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.newsletter_popup.instructions"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:global.colors.scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "range",
+      "id": "apparition_delay",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "unit": "sec",
+      "label": "t:sections.newsletter_popup.delay",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_on_index",
+      "label": "t:sections.newsletter_popup.show_only_on_home_page",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_for_account_holders",
+      "label": "t:sections.newsletter_popup.hide_for_account_holders",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_once",
+      "label": "t:sections.newsletter_popup.show_only_once",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter_form",
+      "label": "t:sections.newsletter_popup.show_newsletter_form",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:global.text.heading",
+      "default": "Signup for our newsletter"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "content",
+      "label": "t:global.text.content",
+      "default": "Describe what your customers will receive when subscribing to your newsletter."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "t:global.text.button_text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "decline_text",
+      "label": "Decline link",
+      "info": "A small link that closes the pop-up. Leave empty to show only the close button.",
+      "default": "No thanks"
+    },
+    {
+      "type": "header",
+      "content": "Welcome offer",
+      "info": "Shown after the form is sent. Create the discount code under Discounts first."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo at the top"
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Discount code",
+      "info": "Must match a code under Discounts. The button applies it to the visitor's checkout automatically."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "success_title",
+      "label": "Heading after signing up",
+      "default": "Your code is ready"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "success_text",
+      "label": "Text after signing up",
+      "default": "Use the code below, or tap the button and it is applied for you at checkout."
+    },
+    {
+      "type": "text",
+      "id": "success_button_text",
+      "label": "Button after signing up",
+      "default": "Start shopping"
+    },
+    {
+      "type": "url",
+      "id": "success_link",
+      "label": "Button link",
+      "info": "Where the button sends people, with the code applied."
+    }
+  ]
+}
+{% endschema %}
