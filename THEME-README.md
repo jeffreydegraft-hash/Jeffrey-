@@ -51,9 +51,15 @@ editable in the Shopify theme editor.
    four "Shop by purpose" tiles to collections, add Instagram images to the Social grid.
 4. Preview, then **Publish**.
 
-### Option B — connect from GitHub
-Online Store → Themes → Add theme → **Connect from GitHub** → this repo, branch
-`claude/blissful-goldberg-qe772g`, folder `theme/`. Pushes to the branch then update the theme automatically.
+### Option B — connect from GitHub (recommended, keeps the theme in sync)
+Online Store → Themes → Add theme → **Connect from GitHub** → repository
+`jeffreydegraft-hash/Jeffrey-`, branch `claude/blissful-goldberg-qe772g`. The theme files live at the
+root of that branch, which is what Shopify's GitHub integration requires. Every push to the branch then
+updates the theme in Shopify automatically.
+
+### Option C — Admin API
+`themeCreate` with the public zip URL:
+`https://raw.githubusercontent.com/jeffreydegraft-hash/Jeffrey-/claude/blissful-goldberg-qe772g/my-cup-runneth-over-theme.zip`
 
 ### Menus the theme expects
 * `main-menu` — top navigation (add a "Shop" item with collection sub-links to get the dropdown)
