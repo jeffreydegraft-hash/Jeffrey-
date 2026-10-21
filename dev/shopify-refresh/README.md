@@ -130,3 +130,9 @@ Theme Check: the same 15 pre-existing offences. The themes table at the top name
 
 - The owner asked for the mailing address to go altogether. It is removed from the footer text block (`sections/footer-group.json`), the contact page (`templates/page.contact.json`) and the legacy footer block in `config/settings_data.json`; email and phone stay. Uploaded to the phone-fixes copy.
 - The owner's praying photo (Files: `praying-with-frankincense-myrrh.jpg`) now replaces the sunflower-field photo in the product galleries of the seven oils that carried it (Hyssop, Rose of Sharon, Latter Rain, Gethsemane, Pomegranate, Lily of the Valley, Spikenard), at the same position (sixth image, under the oil-drop photo). Done with `productUpdate` (media), `productReorderMedia` and `fileUpdate` (reference removed from the product; the sunflower file itself stays in Files). Product media is store data, not theme data, so this is live immediately. Frankincense & Myrrh had no sunflower photo; the Frankincense and Myrrh singles carry a different prayer image and were left alone.
+
+### Oct 21: favicon
+
+The owner supplied the round "Mount of Olives Anointing Oils" logo for the favicon. It is cropped to the circle with a transparent outside, saved at 512px (`theme-files/mo-favicon-logo.png`), uploaded to Files as `mo-favicon-logo.png`, and set as `favicon` in `config/settings_data.json` in the phone-fixes copy (the previous `mo-favicon.png` in Files is fully transparent, which is why tabs showed no icon). At tab size the circle, ring and olive sprig read; the lettering does not, as with any wordmark favicon.
+
+`tools/bottle-composite.py` places a real product bottle (cut out of its white-background product photo) into the generated praying photo, keeping the hands in front; it is offered to the owner, not applied.
