@@ -31,11 +31,11 @@ Home
 2. **Shop by oil**: eleven image tiles at 1500 x 1500, `images/tile-<oil>-1500x1500.jpg`, in this order: Frankincense & Myrrh, Hyssop, Spikenard, Latter Rain, Rose of Sharon, Lily of the Valley, Pomegranate, Gethsemane, Frankincense, Myrrh, 100% Olive Squalane. Set each tile's link to that oil's product page (ASIN) and type the oil name as the link title. Each tile already carries the oil's word (Restore, Purification, Renewal...), one line of its meaning in Scripture, and the verse, with the bottom 12 percent left clear for Amazon's link-title band.
 3. **Scripture band**: medium tile `images/tile-scripture-1500x750.jpg` (Psalm 23:5), no link, beside the **Our story** tile `images/tile-story-1500x750.jpg` linking to the Our Story page.
 4. **What is in every bottle**: medium tile `images/tile-inside-1500x750.jpg` linking to the Our Story page (or to the 100% Olive Squalane page).
-5. **Best sellers**: a product grid tile. Store Builder fills it from your listings; pick the 4 oz Frankincense & Myrrh, Hyssop, Spikenard and Rose of Sharon.
+5. **Featured oils**: a product grid tile with ASINs added by hand (the 4 oz Frankincense & Myrrh, Hyssop, Spikenard and Rose of Sharon), headed "Featured oils". Amazon's Stores policy does not allow a "Best sellers" heading unless the grid is Amazon's own automatic best-seller widget.
 
 ### Shop All Anointing Oils
 
-- Hero `images/hero-shop-3000x600.jpg` ("Eight oils, one olive base"), then a product grid of every listing. Store Builder's "Product grid" tile lets you add ASINs by hand in a chosen order; use the same order as the Shop by oil tiles.
+- Hero `images/hero-shop-3000x600.jpg` ("Every oil, one olive base"), then a product grid of every listing. Store Builder's "Product grid" tile lets you add ASINs by hand in a chosen order; use the same order as the Shop by oil tiles.
 
 ### Frankincense & Myrrh, 100% Olive Squalane
 
@@ -82,5 +82,4 @@ Amazon's Stores policy forbids customer reviews or testimonials, time-bound prom
 ## What Claude needs from you to go further
 
 - **Connect the "Amazon Selling Partner" connector** in claude.ai (Settings > Connectors). With it, Claude can read your current Amazon listings, rewrite titles, bullets and descriptions in the same claim-free voice, update them, and create A+ Content for each product page through the Selling Partner API. Building the Store pages themselves stays a Store Builder job.
-- **Brand Registry status**: whether "Mount of Olives" is enrolled (it needs a trademark). If not, the first step is the trademark application; Amazon's IP Accelerator can shorten the wait.
 - **ASINs**: the product grid and the tile links need them. The connector returns them, or they are on each listing in Seller Central.

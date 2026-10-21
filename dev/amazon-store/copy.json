@@ -1,21 +1,117 @@
 {
   "brand": "Mount of Olives",
-  "hero_home": {"eyebrow": "Anointing oils rooted in Scripture", "title": "The Anointing Oil Collection", "line": "Biblical botanicals in a base of olive squalane. Blended by hand in Texas."},
-  "hero_shop": {"eyebrow": "Shop the collection", "title": "Eight oils, one olive base", "line": "Frankincense & Myrrh, Hyssop, Spikenard, Latter Rain, Rose of Sharon, Lily of the Valley, Pomegranate, Gethsemane."},
+  "hero_home": {
+    "eyebrow": "Anointing oils rooted in Scripture",
+    "title": "The Anointing Oil Collection",
+    "line": "Biblical botanicals in a base of olive squalane. Blended by hand in Texas."
+  },
+  "hero_shop": {
+    "eyebrow": "Shop the collection",
+    "title": "Every oil, one olive base",
+    "line": "Frankincense & Myrrh, Hyssop, Spikenard, Latter Rain, Rose of Sharon, Lily of the Valley, Pomegranate, Gethsemane, Frankincense, Myrrh, and 100% Olive Squalane."
+  },
   "oils": [
-    {"key": "frankincense-myrrh", "name": "Frankincense & Myrrh", "word": "Restore", "line": "The gifts of the Magi, for prayer, worship, and healing prayer.", "verse": "Matthew 2:11", "image": "p-frankincense-myrrh.jpg"},
-    {"key": "hyssop", "name": "Hyssop", "word": "Purification", "line": "The herb of purification. Purge me with hyssop, and I shall be clean.", "verse": "Psalm 51:7", "image": "p-hyssop.jpg"},
-    {"key": "spikenard", "name": "Spikenard", "word": "Renewal", "line": "The precious oil Mary poured out at Bethany in extravagant worship.", "verse": "John 12:3", "image": "p-spikenard.jpg"},
-    {"key": "latter-rain", "name": "Latter Rain", "word": "Revitalize", "line": "The outpouring of the Holy Spirit, for revival and renewal.", "verse": "Joel 2:23", "image": "p-latter-rain.jpg"},
-    {"key": "rose-of-sharon", "name": "Rose of Sharon", "word": "Radiance", "line": "I am the rose of Sharon. The flower of the Song of Solomon.", "verse": "Song of Solomon 2:1", "image": "p-rose-of-sharon.jpg"},
-    {"key": "lily-of-the-valley", "name": "Lily of the Valley", "word": "Illuminate", "line": "A symbol of purity and peace, the lily of the valleys.", "verse": "Song of Solomon 2:1", "image": "p-lily-of-the-valley.jpg"},
-    {"key": "pomegranate", "name": "Pomegranate", "word": "Eternal", "line": "A symbol of fruitfulness and abundance, one of the seven blessed fruits.", "verse": "Deuteronomy 8:8", "image": "p-pomegranate.jpg"},
-    {"key": "gethsemane", "name": "Gethsemane", "word": "Unscented", "line": "Pure olive squalane, in the simplicity of the garden where Jesus prayed.", "verse": "Psalm 23:5", "image": "p-gethsemane.jpg"},
-    {"key": "frankincense", "name": "Frankincense", "word": "Protect", "line": "A symbol of prayer rising before God like incense.", "verse": "Song of Solomon 4:6", "image": "p-frankincense.jpg"},
-    {"key": "myrrh", "name": "Myrrh", "word": "Transform", "line": "A symbol of purification and of Christ's sacrifice.", "verse": "Esther 2:12", "image": "p-myrrh.jpg"},
-    {"key": "squalane", "name": "100% Olive Squalane", "word": "Hydrate", "line": "The base of every oil we make, from the tree of Gethsemane.", "verse": "Exodus 27:20", "image": "p-squalane.jpg"}
+    {
+      "key": "frankincense-myrrh",
+      "name": "Frankincense & Myrrh",
+      "word": "Restore",
+      "line": "Two gifts of the Magi, for prayer, worship, and blessing.",
+      "verse": "Matthew 2:11",
+      "image": "p-frankincense-myrrh.jpg"
+    },
+    {
+      "key": "hyssop",
+      "name": "Hyssop",
+      "word": "Purification",
+      "line": "The herb of purification. Purge me with hyssop, and I shall be clean.",
+      "verse": "Psalm 51:7",
+      "image": "p-hyssop.jpg"
+    },
+    {
+      "key": "spikenard",
+      "name": "Spikenard",
+      "word": "Renewal",
+      "line": "The precious oil Mary poured out at Bethany in extravagant worship.",
+      "verse": "John 12:3",
+      "image": "p-spikenard.jpg"
+    },
+    {
+      "key": "latter-rain",
+      "name": "Latter Rain",
+      "word": "Revitalize",
+      "line": "The rain before the harvest, a picture of renewal and the outpouring of the Spirit.",
+      "verse": "Joel 2:23",
+      "image": "p-latter-rain.jpg"
+    },
+    {
+      "key": "rose-of-sharon",
+      "name": "Rose of Sharon",
+      "word": "Radiance",
+      "line": "I am the rose of Sharon. The flower of the Song of Solomon.",
+      "verse": "Song of Solomon 2:1",
+      "image": "p-rose-of-sharon.jpg"
+    },
+    {
+      "key": "lily-of-the-valley",
+      "name": "Lily of the Valley",
+      "word": "Illuminate",
+      "line": "A symbol of purity and peace, the lily of the valleys.",
+      "verse": "Song of Solomon 2:1",
+      "image": "p-lily-of-the-valley.jpg"
+    },
+    {
+      "key": "pomegranate",
+      "name": "Pomegranate",
+      "word": "Eternal",
+      "line": "A symbol of fruitfulness and abundance, one of the seven blessed fruits.",
+      "verse": "Deuteronomy 8:8",
+      "image": "p-pomegranate.jpg"
+    },
+    {
+      "key": "gethsemane",
+      "name": "Gethsemane",
+      "word": "Unscented",
+      "line": "Pure olive squalane, in the simplicity of the garden where Jesus prayed.",
+      "verse": "Matthew 26:36",
+      "image": "p-gethsemane.jpg"
+    },
+    {
+      "key": "frankincense",
+      "name": "Frankincense",
+      "word": "Prayer",
+      "line": "A symbol of prayer rising before God like incense.",
+      "verse": "Psalm 141:2",
+      "image": "p-frankincense.jpg"
+    },
+    {
+      "key": "myrrh",
+      "name": "Myrrh",
+      "word": "Transform",
+      "line": "A symbol of purification and of Christ's sacrifice.",
+      "verse": "Esther 2:12",
+      "image": "p-myrrh.jpg"
+    },
+    {
+      "key": "squalane",
+      "name": "100% Olive Squalane",
+      "word": "Hydrate",
+      "line": "The base of every oil we make, from the olive, pure oil for the light.",
+      "verse": "Exodus 27:20",
+      "image": "p-squalane.jpg"
+    }
   ],
-  "scripture": {"quote": "You anoint my head with oil; my cup runneth over.", "ref": "Psalm 23:5"},
-  "story": {"eyebrow": "Our story", "title": "Rooted in Scripture. Blended in Texas.", "line": "Every oil begins with the plants Scripture names, carried in olive squalane."},
-  "inside": {"eyebrow": "What is in every bottle", "title": "Biblical botanicals in olive squalane", "line": "Frankincense, myrrh, spikenard, hyssop, pomegranate, rose of Sharon, and lily of the valley. Naturally derived. Cruelty-free. No parabens, phthalates, sulfates, or synthetic fragrance."}
+  "scripture": {
+    "quote": "Thou anointest my head with oil; my cup runneth over.",
+    "ref": "Psalm 23:5"
+  },
+  "story": {
+    "eyebrow": "Our story",
+    "title": "Rooted in Scripture. Blended in Texas.",
+    "line": "Every oil begins with the plants Scripture names, carried in olive squalane."
+  },
+  "inside": {
+    "eyebrow": "What is in every bottle",
+    "title": "Biblical botanicals in olive squalane",
+    "line": "Frankincense, myrrh, spikenard, hyssop, pomegranate, rose of Sharon, and lily of the valley. Naturally derived. Cruelty-free. No parabens, phthalates, sulfates, or synthetic fragrance."
+  }
 }

@@ -10,8 +10,8 @@ Every line below is claim-free and dash-free. Paste as the tile text or link tit
 
 ## Shop All hero (`images/hero-shop-3000x600.jpg`)
 - Eyebrow: Shop the collection
-- Title: Eight oils, one olive base
-- Line: Frankincense & Myrrh, Hyssop, Spikenard, Latter Rain, Rose of Sharon, Lily of the Valley, Pomegranate, Gethsemane.
+- Title: Every oil, one olive base
+- Line: Frankincense & Myrrh, Hyssop, Spikenard, Latter Rain, Rose of Sharon, Lily of the Valley, Pomegranate, Gethsemane, Frankincense, Myrrh, and 100% Olive Squalane.
 
 ## Oil tiles (1500 x 1500, `images/tile-<oil>-1500x1500.jpg`)
 
@@ -19,20 +19,20 @@ Link title to type into Store Builder: the oil name. The tile image already carr
 
 | Tile | Word | Line | Verse |
 |---|---|---|---|
-| Frankincense & Myrrh | Restore | The gifts of the Magi, for prayer, worship, and healing prayer. | Matthew 2:11 |
+| Frankincense & Myrrh | Restore | Two gifts of the Magi, for prayer, worship, and blessing. | Matthew 2:11 |
 | Hyssop | Purification | The herb of purification. Purge me with hyssop, and I shall be clean. | Psalm 51:7 |
 | Spikenard | Renewal | The precious oil Mary poured out at Bethany in extravagant worship. | John 12:3 |
-| Latter Rain | Revitalize | The outpouring of the Holy Spirit, for revival and renewal. | Joel 2:23 |
+| Latter Rain | Revitalize | The rain before the harvest, a picture of renewal and the outpouring of the Spirit. | Joel 2:23 |
 | Rose of Sharon | Radiance | I am the rose of Sharon. The flower of the Song of Solomon. | Song of Solomon 2:1 |
 | Lily of the Valley | Illuminate | A symbol of purity and peace, the lily of the valleys. | Song of Solomon 2:1 |
 | Pomegranate | Eternal | A symbol of fruitfulness and abundance, one of the seven blessed fruits. | Deuteronomy 8:8 |
-| Gethsemane | Unscented | Pure olive squalane, in the simplicity of the garden where Jesus prayed. | Psalm 23:5 |
-| Frankincense | Protect | A symbol of prayer rising before God like incense. | Song of Solomon 4:6 |
+| Gethsemane | Unscented | Pure olive squalane, in the simplicity of the garden where Jesus prayed. | Matthew 26:36 |
+| Frankincense | Prayer | A symbol of prayer rising before God like incense. | Psalm 141:2 |
 | Myrrh | Transform | A symbol of purification and of Christ's sacrifice. | Esther 2:12 |
-| 100% Olive Squalane | Hydrate | The base of every oil we make, from the tree of Gethsemane. | Exodus 27:20 |
+| 100% Olive Squalane | Hydrate | The base of every oil we make, from the olive, pure oil for the light. | Exodus 27:20 |
 
 ## Scripture tile (1500 x 750, `images/tile-scripture-1500x750.jpg`)
-- “You anoint my head with oil; my cup runneth over.” Psalm 23:5
+- “Thou anointest my head with oil; my cup runneth over.” Psalm 23:5
 
 ## Our story tile (1500 x 750, `images/tile-story-1500x750.jpg`)
 - Eyebrow: Our story
