@@ -125,3 +125,8 @@ Three more reviewer agents covered the cart, account, journal, search, 404, cont
 - Rejected by the skeptic as taste: one full-width collection tile per row on phones (Prestige's default, nothing hidden).
 
 Theme Check: the same 15 pre-existing offences. The themes table at the top names the copy to publish.
+
+### Oct 21: address removed; praying photo in the product galleries
+
+- The owner asked for the mailing address to go altogether. It is removed from the footer text block (`sections/footer-group.json`), the contact page (`templates/page.contact.json`) and the legacy footer block in `config/settings_data.json`; email and phone stay. Uploaded to the phone-fixes copy.
+- The owner's praying photo (Files: `praying-with-frankincense-myrrh.jpg`) now replaces the sunflower-field photo in the product galleries of the seven oils that carried it (Hyssop, Rose of Sharon, Latter Rain, Gethsemane, Pomegranate, Lily of the Valley, Spikenard), at the same position (sixth image, under the oil-drop photo). Done with `productUpdate` (media), `productReorderMedia` and `fileUpdate` (reference removed from the product; the sunflower file itself stays in Files). Product media is store data, not theme data, so this is live immediately. Frankincense & Myrrh had no sunflower photo; the Frankincense and Myrrh singles carry a different prayer image and were left alone.
