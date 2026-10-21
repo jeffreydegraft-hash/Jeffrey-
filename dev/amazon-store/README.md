@@ -62,6 +62,10 @@ Amazon's creative guidelines for Stores give these limits: hero 3000 x 600 (up t
 
 The bottle photographs in the tiles are the 900 px copies this repository could reach; the originals in Shopify (Products > each oil > first image, 1866 px) are sharper. To regenerate the tiles from the originals, put them in a folder under the same names as the `image` field of `copy.json` and run `node tools/amazon-tiles-bold.mjs copy.json <that folder> images` (the bold set reads white-background copies named `<image>-white.jpg`; the quiet set is `tools/amazon-tiles-quiet.mjs`) (needs the `@fontsource/cormorant` and `@fontsource/montserrat` packages and Playwright's Chromium, as `dev/shopify-refresh/tools/package.json` lists).
 
+## Status
+
+Brand Registry for "Mount of Olives" is already approved (owner confirmed, Oct 2026), so Store Builder lists the brand and the Store can be built straight away. `brand-registry.md` is kept for reference only.
+
 ## Building it in Store Builder, step by step
 
 1. Seller Central > Stores > Manage Stores > Create Store. Choose the brand "Mount of Olives" (it appears only once Brand Registry is approved).
