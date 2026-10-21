@@ -1,0 +1,74 @@
+# Amazon Brand Store kit for Mount of Olives
+
+Everything needed to build the Mount of Olives storefront on Amazon, prepared the same way as the website work: the page plan, every tile's copy, and every image at Amazon's exact sizes in the brand's own typefaces (Cormorant and Montserrat, deep olive on cream, gold eyebrows).
+
+## What an Amazon storefront is, and what it needs
+
+- A **Brand Store** is Amazon's multi-page brand site at `amazon.com/stores/<brand>`. It is built in **Store Builder** (Seller Central > Stores > Manage Stores, or the Amazon Ads console), a drag-and-drop editor behind the seller login. Amazon offers no API for building Store pages, so the pages are assembled by hand from this kit; it is about half an hour of dragging tiles once the images and text are ready.
+- It requires **Amazon Brand Registry** for "Mount of Olives" (a registered or, in some cases, pending trademark that matches the brand name on the bottles). Brand Registry also unlocks A+ Content on the product pages and Sponsored Brands ads that point at the Store.
+- After you press Publish, Amazon moderates the Store (allow up to 72 hours).
+
+## Page plan
+
+```
+Home
+├── Shop All Anointing Oils      (product grid of every listing)
+├── Frankincense & Myrrh         (the three F&M listings, 1 oz, 2 oz, 4 oz, plus Frankincense and Myrrh singles)
+├── 100% Olive Squalane          (the squalane listing and the unscented Gethsemane oil)
+└── Our Story                    (text and photo tiles, no products needed)
+```
+
+### Home
+
+1. **Hero**: `images/hero-home-3000x600.jpg`. The wordmark, "Anointing oils rooted in Scripture", "The Anointing Oil Collection" and the eight bottles. Everything important sits inside Amazon's safe zone (the centre 70 percent), so the phone crop keeps the wordmark, the title and the bottles.
+2. **Shop by oil**: eleven image tiles at 1500 x 1500, `images/tile-<oil>-1500x1500.jpg`, in this order: Frankincense & Myrrh, Hyssop, Spikenard, Latter Rain, Rose of Sharon, Lily of the Valley, Pomegranate, Gethsemane, Frankincense, Myrrh, 100% Olive Squalane. Set each tile's link to that oil's product page (ASIN) and type the oil name as the link title. Each tile already carries the oil's word (Restore, Purification, Renewal...), one line of its meaning in Scripture, and the verse, with the bottom 12 percent left clear for Amazon's link-title band.
+3. **Scripture band**: medium tile `images/tile-scripture-1500x750.jpg` (Psalm 23:5), no link, beside the **Our story** tile `images/tile-story-1500x750.jpg` linking to the Our Story page.
+4. **What is in every bottle**: medium tile `images/tile-inside-1500x750.jpg` linking to the Our Story page (or to the 100% Olive Squalane page).
+5. **Best sellers**: a product grid tile. Store Builder fills it from your listings; pick the 4 oz Frankincense & Myrrh, Hyssop, Spikenard and Rose of Sharon.
+
+### Shop All Anointing Oils
+
+- Hero `images/hero-shop-3000x600.jpg` ("Eight oils, one olive base"), then a product grid of every listing. Store Builder's "Product grid" tile lets you add ASINs by hand in a chosen order; use the same order as the Shop by oil tiles.
+
+### Frankincense & Myrrh, 100% Olive Squalane
+
+- Hero `images/hero-shop-3000x600.jpg`, the matching oil tile(s), then a product grid of the sizes.
+
+### Our Story
+
+- Text tiles from `copy.md` (Our Story, What is in every bottle, How we use it), the praying photo tile, the Scripture tile, and the full line-up as an image tile (`images/hero-home-3000x600.jpg` also works as a full-width image).
+
+## Images
+
+| File | Size | Use |
+|---|---|---|
+| `images/logo-400x400.png` | 400 x 400 | Store logo (Brand display name: Mount of Olives) |
+| `images/hero-home-3000x600.jpg` | 3000 x 600 | Home hero |
+| `images/hero-shop-3000x600.jpg` | 3000 x 600 | Hero of every shop page |
+| `images/tile-<oil>-1500x1500.jpg` x 11 | 1500 x 1500 | Shop by oil tiles, link to the product page |
+| `images/tile-scripture-1500x750.jpg` | 1500 x 750 | Scripture band, no link |
+| `images/tile-story-1500x750.jpg` | 1500 x 750 | Our Story link tile |
+| `images/tile-inside-1500x750.jpg` | 1500 x 750 | What is in every bottle link tile |
+
+Amazon's creative guidelines for Stores give these limits: hero 3000 x 600 (up to 30 percent cropped, 15 percent from each side), logo 400 x 400, image tiles Full Width 3000 x 1500, Large 1500 x 1500, Medium 1500 x 750, Small 750 x 750, 5 MB each; a link title covers about 19 percent of the bottom of a rectangular tile and 12 percent of a square one. Every file here respects those sizes and keeps the bottom band empty.
+
+The bottle photographs in the tiles are the 900 px copies this repository could reach; the originals in Shopify (Products > each oil > first image, 1866 px) are sharper. To regenerate the tiles from the originals, put them in a folder under the same names as the `image` field of `copy.json` and run `node tools/amazon-tiles.mjs copy.json <that folder> images` (needs the `@fontsource/cormorant` and `@fontsource/montserrat` packages and Playwright's Chromium, as `dev/shopify-refresh/tools/package.json` lists).
+
+## Building it in Store Builder, step by step
+
+1. Seller Central > Stores > Manage Stores > Create Store. Choose the brand "Mount of Olives" (it appears only once Brand Registry is approved).
+2. Brand display name: Mount of Olives. Brand logo: `images/logo-400x400.png`.
+3. Home page: template "Marquee" (or "Blank"). Add the hero, then tiles as in the page plan. For each oil tile: Image tile > upload > choose "Link to a product" > search the ASIN > link title = the oil name.
+4. Add pages (Page settings > Add page): Shop All Anointing Oils, Frankincense & Myrrh, 100% Olive Squalane, Our Story. Each page's meta description can use the first line of its hero.
+5. Preview on the phone view in Store Builder: the hero keeps its centre, the tiles stack in one column.
+6. Submit for publishing. Amazon reviews it; typical turnaround is a day, up to 72 hours.
+
+## Store content rules to keep in mind
+
+Amazon's Stores policy forbids customer reviews or testimonials, time-bound promotions, claims of being the best or cheapest, Amazon-styled buttons, and health or treatment claims. Nothing in this kit does any of those; the copy is the same claim-free, Scripture-first wording as the website's Our Science page.
+
+## What Claude needs from you to go further
+
+- **Connect the "Amazon Selling Partner" connector** in claude.ai (Settings > Connectors). With it, Claude can read your current Amazon listings, rewrite titles, bullets and descriptions in the same claim-free voice, update them, and create A+ Content for each product page through the Selling Partner API. Building the Store pages themselves stays a Store Builder job.
+- **Brand Registry status**: whether "Mount of Olives" is enrolled (it needs a trademark). If not, the first step is the trademark application; Amazon's IP Accelerator can shorten the wait.
+- **ASINs**: the product grid and the tile links need them. The connector returns them, or they are on each listing in Seller Central.
