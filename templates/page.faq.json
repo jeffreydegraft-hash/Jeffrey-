@@ -1,1 +1,78 @@
-{ "sections": { "main": { "type": "main-page", "settings": { "eyebrow": "Help" } }, "faq": { "type": "faq", "blocks": { "q1": { "type": "qa", "settings": { "question": "What is anointing oil used for?", "answer": "<p>Throughout Scripture, oil is used to set apart people, places and moments for God: prayer, blessing a home, anointing the sick (James 5:14), consecration and worship.</p>" } }, "q2": { "type": "qa", "settings": { "question": "What is in your oils?", "answer": "<p>A pure olive oil base and the botanicals named in the Bible. No synthetic fragrance oils, no fillers.</p>" } }, "q3": { "type": "qa", "settings": { "question": "How do I use it?", "answer": "<p>Place a small drop on your fingertip and apply to the forehead, hands or doorposts as you pray. Patch-test first if you have sensitive skin.</p>" } }, "q4": { "type": "qa", "settings": { "question": "How long does shipping take?", "answer": "<p>Orders ship within 1–2 business days. Most U.S. orders arrive in 3–5 business days. Free U.S. shipping over $50.</p>" } } }, "block_order": [ "q1", "q2", "q3", "q4" ], "settings": { "eyebrow": "Good questions", "heading": "Everything you want to know", "open_first": true, "contact_text": "Still have a question?", "contact_label": "Send us a message", "contact_link": "/pages/contact" } } }, "order": [ "main", "faq" ] }
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "eyebrow": "Help"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "qa",
+          "settings": {
+            "question": "What is anointing oil used for?",
+            "answer": "<p>Anointing oil is a sacred substance used in prayer, worship, and spiritual ceremonies. Rooted in biblical tradition, it is applied to the forehead, hands, or other areas as an act of faith, consecration, and blessing. Christians use anointing oil for personal prayer, healing prayers, anointing the sick (James 5:14), dedicating homes and spaces, ordaining ministers, and as a point of contact for faith during spiritual warfare.</p>"
+          }
+        },
+        "q2": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I use anointing oil for prayer?",
+            "answer": "<p>Begin by setting an atmosphere of worship. Place a small amount of oil on your fingertip and apply it to your forehead, hands, or the area you wish to anoint while speaking your prayer aloud or silently. You can anoint yourself, pray over loved ones, or dedicate objects and spaces. There is no single “right” way. The oil is a tool of faith that accompanies your sincere prayer to God.</p>"
+          }
+        },
+        "q3": {
+          "type": "qa",
+          "settings": {
+            "question": "What ingredients are in your anointing oils?",
+            "answer": "<p>Our anointing oils are crafted from 100% natural ingredients. Each blend starts with a base of premium olive oil, the same oil referenced throughout Scripture for anointing. Depending on the blend, we add pure essential oils and natural fragrances such as frankincense, myrrh, spikenard, hyssop, rose, pomegranate, and lily extracts. We never use artificial chemicals, synthetic fillers, or harsh additives. Full ingredient details are listed on each product page.</p>"
+          }
+        },
+        "q4": {
+          "type": "qa",
+          "settings": {
+            "question": "Are your oils safe for skin?",
+            "answer": "<p>Yes. Our anointing oils are made with gentle, skin-safe natural ingredients and are designed for topical application on the forehead, hands, and wrists. As with any product containing essential oils, do a small patch test on the inside of your wrist before first use, especially if you have sensitive skin or known allergies. If irritation occurs, discontinue use. Our Classic Unscented oil is ideal for those with fragrance sensitivities.</p>"
+          }
+        },
+        "q5": {
+          "type": "qa",
+          "settings": {
+            "question": "What is the shelf life?",
+            "answer": "<p>Stored in a cool, dry place away from direct sunlight, our anointing oils keep for approximately 12 to 18 months. Keep the cap tightly sealed after use to preserve the fragrance and quality of your oil.</p>"
+          }
+        },
+        "q6": {
+          "type": "qa",
+          "settings": {
+            "question": "Can I order for my church or ministry?",
+            "answer": "<p>Yes. Our 4 oz bottles are well suited to congregational use, and we work with churches and ministries on larger orders. Send us a message through the contact page with what you need and we will reply with options.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ],
+      "settings": {
+        "eyebrow": "Good questions",
+        "heading": "Frequently asked questions",
+        "text": "",
+        "open_first": true,
+        "contact_text": "Still have a question?",
+        "contact_label": "Send us a message",
+        "contact_link": "/pages/contact"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "faq"
+  ]
+}

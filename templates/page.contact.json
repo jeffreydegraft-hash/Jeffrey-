@@ -1,1 +1,49 @@
-{ "sections": { "main": { "type": "main-contact", "settings": { "eyebrow": "We'd love to hear from you", "hours": "Monday–Friday, 9am–5pm CT" } }, "faq": { "type": "faq", "blocks": { "q1": { "type": "qa", "settings": { "question": "How long does shipping take?", "answer": "<p>Orders ship within 1–2 business days. Most U.S. orders arrive in 3–5 business days.</p>" } }, "q2": { "type": "qa", "settings": { "question": "Can I order for my church or ministry?", "answer": "<p>Yes. We offer ministry pricing on bulk orders of our 4 oz bottles. Tell us what you need in the form above.</p>" } } }, "block_order": [ "q1", "q2" ], "settings": { "eyebrow": "Quick answers", "heading": "Before you write", "open_first": false, "contact_text": "" } } }, "order": [ "main", "faq" ] }
+{
+  "sections": {
+    "main": {
+      "type": "main-contact",
+      "settings": {
+        "eyebrow": "We'd love to hear from you",
+        "email": "info@mycuprunnethoverinc.com",
+        "phone": "",
+        "hours": ""
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "qa",
+          "settings": {
+            "question": "Can I order for my church or ministry?",
+            "answer": "<p>Yes. Our 4 oz bottles are well suited to congregational use, and we work with churches and ministries on larger orders. Send us a message through the contact page with what you need and we will reply with options.</p>"
+          }
+        },
+        "q2": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I use anointing oil for prayer?",
+            "answer": "<p>Begin by setting an atmosphere of worship. Place a small amount of oil on your fingertip and apply it to your forehead, hands, or the area you wish to anoint while speaking your prayer aloud or silently. You can anoint yourself, pray over loved ones, or dedicate objects and spaces. There is no single “right” way. The oil is a tool of faith that accompanies your sincere prayer to God.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2"
+      ],
+      "settings": {
+        "eyebrow": "Quick answers",
+        "heading": "Before you write",
+        "text": "",
+        "open_first": false,
+        "contact_text": "",
+        "contact_label": "",
+        "contact_link": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "faq"
+  ]
+}

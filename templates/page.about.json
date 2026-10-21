@@ -1,8 +1,66 @@
 {
   "sections": {
-    "main": { "type": "main-page", "settings": { "eyebrow": "Our story" } },
-    "story": { "type": "image-with-text", "blocks": { "s1": { "type": "stat", "settings": { "value": "100%", "label": "Biblical botanicals, no fillers" } }, "s2": { "type": "stat", "settings": { "value": "Small", "label": "batches, hand-blended" } }, "s3": { "type": "stat", "settings": { "value": "Ps. 23", "label": "The promise in every bottle" } } }, "block_order": [ "s1", "s2", "s3" ], "settings": { "image_position": "right", "eyebrow": "How we make it", "heading": "From the olive press to your prayer closet", "text": "<p>Every blend begins with a pure olive oil base, then the resins, flowers and spices named in Scripture are added by hand in small batches. Each batch is prayed over before it is bottled.</p>", "cta_label": "Shop the oils", "surface": true } },
-    "scripture": { "type": "scripture-banner", "settings": { "quote": "Thou anointest my head with oil; my cup runneth over.", "reference": "Psalm 23:5", "dark": true, "cta_label": "Shop the oils" } }
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "eyebrow": "Our story"
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "blocks": {
+        "s1": {
+          "type": "stat",
+          "settings": {
+            "value": "100%",
+            "label": "natural ingredients, olive oil base"
+          }
+        },
+        "s2": {
+          "type": "stat",
+          "settings": {
+            "value": "Ps. 23",
+            "label": "the verse behind the name"
+          }
+        },
+        "s3": {
+          "type": "stat",
+          "settings": {
+            "value": "8",
+            "label": "blends, each rooted in Scripture"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Spieknard.png",
+        "image_position": "right",
+        "eyebrow": "How we make it",
+        "heading": "Handcrafted with prayer",
+        "text": "<p>Every bottle is prepared in an atmosphere of worship and intercession and blessed before it reaches your hands. Each blend starts with a base of premium olive oil, the same oil referenced throughout Scripture, and adds pure essential oils and natural fragrances such as frankincense, myrrh, spikenard, hyssop, rose, pomegranate and lily. No artificial chemicals, synthetic fillers or harsh additives.</p>",
+        "cta_label": "Shop the oils",
+        "cta_link": "/collections/sacred-anointing-oils",
+        "surface": true
+      }
+    },
+    "scripture": {
+      "type": "scripture-banner",
+      "settings": {
+        "quote": "You anoint my head with oil; my cup runs over.",
+        "reference": "Psalm 23:5",
+        "dark": true,
+        "cta_label": "Shop the oils",
+        "cta_link": "/collections/sacred-anointing-oils"
+      }
+    }
   },
-  "order": [ "main", "story", "scripture" ]
+  "order": [
+    "main",
+    "story",
+    "scripture"
+  ]
 }

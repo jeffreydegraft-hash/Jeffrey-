@@ -5,17 +5,50 @@
     "announcement-bar": {
       "type": "announcement-bar",
       "blocks": {
-        "m1": { "type": "message", "settings": { "text": "Free U.S. shipping on orders over $50" } },
-        "m2": { "type": "message", "settings": { "text": "“Thou anointest my head with oil; my cup runneth over.” — Psalm 23:5" } },
-        "m3": { "type": "message", "settings": { "text": "Hand-blended in small batches · Scripture-inspired" } }
+        "m1": {
+          "type": "message",
+          "settings": {
+            "text": "Handcrafted anointing oils, rooted in Scripture"
+          }
+        },
+        "m2": {
+          "type": "message",
+          "settings": {
+            "text": "“You anoint my head with oil; my cup runs over.” — Psalm 23:5"
+          }
+        },
+        "m3": {
+          "type": "message",
+          "settings": {
+            "text": "Every bottle prepared with prayer · 100% natural oils"
+          }
+        }
       },
-      "block_order": [ "m1", "m2", "m3" ],
-      "settings": { "style": "dark", "interval": 5 }
+      "block_order": [
+        "m1",
+        "m2",
+        "m3"
+      ],
+      "settings": {
+        "style": "dark",
+        "interval": 5
+      }
     },
     "header": {
       "type": "header",
-      "settings": { "menu": "main-menu", "sticky": true, "show_wordmark_sub": true, "wordmark_sub": "Anointing Oils", "show_cta": true, "cta_label": "Shop oils" }
+      "settings": {
+        "menu": "new-site-main-menu",
+        "sticky": true,
+        "show_wordmark_sub": true,
+        "wordmark_sub": "Anointing Oils",
+        "show_cta": true,
+        "cta_label": "Shop oils",
+        "cta_link": "/collections/sacred-anointing-oils"
+      }
     }
   },
-  "order": [ "announcement-bar", "header" ]
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
 }

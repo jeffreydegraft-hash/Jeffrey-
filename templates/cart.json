@@ -1,1 +1,29 @@
-{ "sections": { "main": { "type": "main-cart", "settings": {} }, "featured": { "type": "featured-collection", "settings": { "eyebrow": "Before you go", "heading": "Complete the set", "limit": 4, "columns": "4", "show_view_all": true, "view_all_label": "View all oils", "surface": true } } }, "order": [ "main", "featured" ] }
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {
+        "note_label": "Order note or prayer request",
+        "note_placeholder": "Anything we should know? A prayer request is always welcome.",
+        "show_dynamic": true
+      }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "sacred-anointing-oils",
+        "eyebrow": "Before you go",
+        "heading": "Complete the set",
+        "limit": 4,
+        "columns": "4",
+        "show_view_all": true,
+        "view_all_label": "View all oils",
+        "surface": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "featured"
+  ]
+}

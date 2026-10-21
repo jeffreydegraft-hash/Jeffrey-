@@ -6,22 +6,50 @@
       "type": "newsletter",
       "settings": {
         "eyebrow": "Join the table",
-        "heading": "Get 10% off your first order",
-        "text": "<p>Scripture reflections, new blends and member-only offers. No noise, just what fills the cup.</p>",
-        "button_label": "Claim 10% off",
-        "fine_print": "By subscribing you agree to receive emails from us. Unsubscribe anytime."
+        "heading": "Scripture, new blends and early access",
+        "text": "<p>A short note when a new oil is ready, a verse worth sitting with, and first word on gift sets. No noise, just what fills the cup.</p>",
+        "button_label": "Subscribe",
+        "fine_print": "By subscribing you agree to receive emails from My Cup Runneth Over. Unsubscribe anytime."
       }
     },
     "footer": {
       "type": "footer",
       "blocks": {
-        "shop": { "type": "menu", "settings": { "heading": "Shop", "menu": "main-menu" } },
-        "help": { "type": "menu", "settings": { "heading": "Help", "menu": "footer" } },
-        "contact": { "type": "text", "settings": { "heading": "Contact", "text": "<p>Questions about an oil, an order, or a prayer need? Reach out — we read every message.</p>" } }
+        "shop": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "new-site-shop"
+          }
+        },
+        "help": {
+          "type": "menu",
+          "settings": {
+            "heading": "Help",
+            "menu": "new-site-footer"
+          }
+        },
+        "contact": {
+          "type": "text",
+          "settings": {
+            "heading": "Contact",
+            "text": "<p>Questions about an oil, an order, or a ministry need? Email <a href=\"mailto:info@mycuprunnethoverinc.com\">info@mycuprunnethoverinc.com</a>. We read every message.</p>"
+          }
+        }
       },
-      "block_order": [ "shop", "help", "contact" ],
-      "settings": { "show_payments": true }
+      "block_order": [
+        "shop",
+        "help",
+        "contact"
+      ],
+      "settings": {
+        "brand_text": "<p>Premium anointing oils handcrafted from pure olive oil and biblical botanicals. Ethically sourced blends for worship, prayer and home blessings.</p>",
+        "show_payments": true
+      }
     }
   },
-  "order": [ "newsletter", "footer" ]
+  "order": [
+    "newsletter",
+    "footer"
+  ]
 }

@@ -1,7 +1,7 @@
 {
   "current": {
-    "logo_width": 150,
-    "tagline": "Thou anointest my head with oil; my cup runneth over.",
+    "logo_width": 120,
+    "tagline": "You anoint my head with oil; my cup runs over.",
     "tagline_ref": "Psalm 23:5",
     "color_background": "#FAF6EE",
     "color_surface": "#F1E9DA",
@@ -28,7 +28,9 @@
     "card_quick_add": true,
     "card_hover_image": true,
     "cart_type": "drawer",
-    "free_shipping_threshold": 50,
-    "cart_show_note": true
+    "free_shipping_threshold": 0,
+    "cart_show_note": true,
+    "logo": "shopify://shop_images/MycuprunnethoD16aR02aP01ZL_TM_mdm.jpg",
+    "favicon": "shopify://shop_images/MycuprunnethoD16aR02aP01ZL_TM_mdm.jpg"
   }
 }
