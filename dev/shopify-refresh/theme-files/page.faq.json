@@ -1,0 +1,125 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "cat-shipping": {
+          "type": "category",
+          "settings": {
+            "title": "Shipping & Delivery"
+          }
+        },
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer free shipping?",
+            "answer": "<p>Yes! We offer free standard shipping on all US orders of $45 or more. Orders under $45 ship at a flat rate within the US.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Orders are processed within 1 to 3 business days. Standard US shipping typically arrives within 5 to 7 business days after processing. You'll receive a tracking number by email once your order ships.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes, we ship worldwide. International shipping rates and delivery times vary by destination. Customs duties or import taxes may apply and are the responsibility of the buyer.</p>"
+          }
+        },
+        "cat-products": {
+          "type": "category",
+          "settings": {
+            "title": "Products & Ingredients"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "What are anointing oils?",
+            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, a tradition rooted in Scripture. Our oils combine this biblical heritage with modern cosmeceutical science, so they also nourish and benefit the skin.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "What is Polyphenol Alpha (α)?",
+            "answer": "<p>Polyphenol Alpha (α)™ is our proprietary complex of concentrated polyphenols, terpenes, and bioactive compounds extracted from biblical botanicals like frankincense, myrrh, hyssop, and spikenard. These deliver clinically meaningful levels of antioxidants and anti-inflammatory benefits to the skin.</p>"
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "What is squalane and why do you use it?",
+            "answer": "<p>Squalane is an olive-derived moisturizer that closely mimics your skin's natural oils. We use it as our carrier base because it absorbs quickly, doesn't clog pores, and helps deliver our botanical actives deep into the skin.</p>"
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "question": "Are your products cruelty-free?",
+            "answer": "<p>Yes. Mount of Olives products are never tested on animals. We are committed to cruelty-free, ethically sourced ingredients.</p>"
+          }
+        },
+        "cat-orders": {
+          "type": "category",
+          "settings": {
+            "title": "Orders & Returns"
+          }
+        },
+        "q8": {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We want you to love your anointing oil. If you're not satisfied, please contact us within 30 days of delivery and we'll work with you to make it right. See our full Refund Policy for details.</p>"
+          }
+        },
+        "q9": {
+          "type": "question",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "<p>Once your order ships, you'll receive a confirmation email with a tracking number. You can also check your order status by logging into your account on our website.</p>"
+          }
+        },
+        "q10": {
+          "type": "question",
+          "settings": {
+            "question": "How do I contact customer support?",
+            "answer": "<p>Email us at info@mountofolives.co or use the Contact page on our website. We typically respond within 1 business day.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "cat-shipping",
+        "q1",
+        "q2",
+        "q3",
+        "cat-products",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "cat-orders",
+        "q8",
+        "q9",
+        "q10"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "faq"
+  ]
+}
