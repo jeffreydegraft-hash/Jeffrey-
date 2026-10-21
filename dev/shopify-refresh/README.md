@@ -133,6 +133,6 @@ Theme Check: the same 15 pre-existing offences. The themes table at the top name
 
 ### Oct 21: favicon
 
-The owner supplied the round "Mount of Olives Anointing Oils" logo for the favicon. It is cropped to the circle with a transparent outside, saved at 512px (`theme-files/mo-favicon-logo.png`), uploaded to Files as `mo-favicon-logo.png`, and set as `favicon` in `config/settings_data.json` in the phone-fixes copy (the previous `mo-favicon.png` in Files is fully transparent, which is why tabs showed no icon). At tab size the circle, ring and olive sprig read; the lettering does not, as with any wordmark favicon.
+The owner supplied the round "Mount of Olives Anointing Oils" logo for the favicon, then chose the version with the large olive sprig. It is cropped to the circle with a transparent outside, saved at 512px (`theme-files/mo-favicon-sprig.png`), uploaded to Files as `mo-favicon-sprig.png`, and set as `favicon` in `config/settings_data.json` in the phone-fixes copy (the previous `mo-favicon.png` in Files is fully transparent, which is why tabs showed no icon; the first candidate, `mo-favicon-logo.png`, stays in Files unused). At tab size the gold sprig inside the ring reads clearly; the lettering does not, as with any wordmark favicon.
 
 `tools/bottle-composite.py` places a real product bottle (cut out of its white-background product photo) into the generated praying photo, keeping the hands in front; it is offered to the owner, not applied.
