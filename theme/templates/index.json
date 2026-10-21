@@ -1,0 +1,157 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "layout": "split",
+        "min_height": 72,
+        "eyebrow": "Biblical anointing oils",
+        "heading": "Thou anointest my head with oil; <em>my cup runneth over.</em>",
+        "text": "<p>Scripture-inspired anointing oils, hand-blended in small batches for prayer, worship, healing and consecration. Rooted in Psalm 23. Made for your daily walk.</p>",
+        "cta_label": "Shop anointing oils",
+        "cta2_label": "Find your oil",
+        "cta2_link": "#purpose",
+        "show_proof": true,
+        "proof_text": "Loved by thousands of believers",
+        "card_title": "Psalm 23:5",
+        "card_text": "Every bottle is prayed over before it ships."
+      }
+    },
+    "trust": {
+      "type": "trust-bar",
+      "blocks": {
+        "t1": { "type": "item", "settings": { "icon": "leaf", "text": "Hand-blended in small batches" } },
+        "t2": { "type": "item", "settings": { "icon": "book", "text": "Scripture-inspired blends" } },
+        "t3": { "type": "item", "settings": { "icon": "truck", "text": "Free U.S. shipping over $50" } },
+        "t4": { "type": "item", "settings": { "icon": "lock", "text": "Secure checkout" } }
+      },
+      "block_order": [ "t1", "t2", "t3", "t4" ],
+      "settings": {}
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "The collection",
+        "heading": "Oils for every season of faith",
+        "text": "Each blend is named for a passage of Scripture and crafted for a purpose: protection, healing, worship, renewal.",
+        "limit": 8,
+        "columns": "4",
+        "show_view_all": true,
+        "view_all_label": "View all oils",
+        "surface": false
+      }
+    },
+    "purpose": {
+      "type": "collection-list",
+      "blocks": {
+        "p1": { "type": "tile", "settings": { "eyebrow": "For", "title": "Prayer & worship", "text": "Set apart your quiet time." } },
+        "p2": { "type": "tile", "settings": { "eyebrow": "For", "title": "Protection", "text": "Cover your home and family." } },
+        "p3": { "type": "tile", "settings": { "eyebrow": "For", "title": "Healing", "text": "Anoint the sick in faith." } },
+        "p4": { "type": "tile", "settings": { "eyebrow": "For", "title": "Gifting", "text": "Sets for those you love." } }
+      },
+      "block_order": [ "p1", "p2", "p3", "p4" ],
+      "settings": {
+        "eyebrow": "Find your oil",
+        "heading": "What are you praying for?",
+        "text": "Start with the need. Every oil is matched to a purpose and a passage.",
+        "cta_label": "Explore →"
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "value": "100%", "label": "Biblical botanicals, no fillers" } },
+        "s2": { "type": "stat", "settings": { "value": "Small", "label": "batches, hand-blended" } },
+        "s3": { "type": "stat", "settings": { "value": "Ps. 23", "label": "The promise in every bottle" } }
+      },
+      "block_order": [ "s1", "s2", "s3" ],
+      "settings": {
+        "image_position": "left",
+        "eyebrow": "Our story",
+        "heading": "Rooted in Scripture. Blended with care.",
+        "text": "<p>My Cup Runneth Over began with a simple conviction: that anointing oil should be made the way it was meant to be — from the botanicals of the Bible, prayed over, and offered with reverence.</p><p>Every bottle starts with a pure olive oil base and the resins, flowers and spices named in Scripture. No fillers. No shortcuts. Just oil set apart for a purpose.</p>",
+        "cta_label": "Read our story",
+        "surface": false
+      }
+    },
+    "tiers": {
+      "type": "size-tiers",
+      "blocks": {
+        "z1": { "type": "tier", "settings": { "name": "1 oz", "tagline": "For travel and daily prayer", "price": "From $16.98", "price_note": "per bottle", "features": "30 ml glass bottle\nFits a purse or pocket\nEvery blend available", "highlight": false, "button_label": "Shop 1 oz" } },
+        "z2": { "type": "tier", "settings": { "name": "2 oz", "tagline": "For the home and the prayer closet", "price": "From $22.98", "price_note": "per bottle", "features": "60 ml glass bottle\nTwice the oil, better value\nEvery blend available", "flag": "Most popular", "highlight": true, "button_label": "Shop 2 oz" } },
+        "z3": { "type": "tier", "settings": { "name": "4 oz", "tagline": "For churches, ministries and families", "price": "From $34.98", "price_note": "per bottle", "features": "118 ml glass bottle\nBest value per ounce\nIdeal for anointing services", "highlight": false, "button_label": "Shop 4 oz" } },
+        "z4": { "type": "tier", "settings": { "name": "Gift sets", "tagline": "Discover your oil, or give one", "price": "From $84.98", "price_note": "per set", "features": "Curated multi-oil sets\nGift-ready packaging\nScripture card included", "flag": "Best gift", "highlight": false, "button_label": "Shop sets" } }
+      },
+      "block_order": [ "z1", "z2", "z3", "z4" ],
+      "settings": {
+        "eyebrow": "Sizes & sets",
+        "heading": "Choose the size that fits your walk",
+        "text": "Same oil, same prayer, three sizes. Save more as you go up.",
+        "note": "Prices shown are starting prices. Final price is shown on each product."
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "r1": { "type": "testimonial", "settings": { "stars": 5, "quote": "I anoint my children every morning before school. The Frankincense & Myrrh smells exactly like I imagined the gifts of the Magi would.", "name": "Jasmine M.", "subtitle": "Houston, TX", "verified": true } },
+        "r2": { "type": "testimonial", "settings": { "stars": 5, "quote": "Our prayer team uses the 4 oz Hyssop for every altar call. The quality is unmatched and it arrived beautifully packaged.", "name": "Pastor R. Adams", "subtitle": "Grace Fellowship", "verified": true } },
+        "r3": { "type": "testimonial", "settings": { "stars": 5, "quote": "I ordered the gift set for my mother. She cried when she read the scripture card. Thank you for making something so meaningful.", "name": "Tasha K.", "subtitle": "Atlanta, GA", "verified": true } }
+      },
+      "block_order": [ "r1", "r2", "r3" ],
+      "settings": {
+        "eyebrow": "Testimonies",
+        "heading": "What the saints are saying",
+        "rating": "4.9",
+        "summary": "average from verified buyers",
+        "dark": false
+      }
+    },
+    "scripture": {
+      "type": "scripture-banner",
+      "settings": {
+        "quote": "Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over.",
+        "reference": "Psalm 23:5 (KJV)",
+        "dark": true,
+        "cta_label": "Shop the oils"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "What is anointing oil used for?", "answer": "<p>Throughout Scripture, oil is used to set apart people, places and moments for God: prayer, blessing a home, anointing the sick (James 5:14), consecration and worship. Our oils are made to accompany those moments.</p>" } },
+        "q2": { "type": "qa", "settings": { "question": "What is in your oils?", "answer": "<p>A pure olive oil base and the botanicals named in the Bible — frankincense, myrrh, hyssop, spikenard, pomegranate, rose of Sharon and more. No synthetic fragrance oils, no fillers.</p>" } },
+        "q3": { "type": "qa", "settings": { "question": "How do I use it?", "answer": "<p>Place a small drop on your fingertip and apply to the forehead, hands, or doorposts as you pray. A little goes a long way. Always patch-test first if you have sensitive skin.</p>" } },
+        "q4": { "type": "qa", "settings": { "question": "Is the oil blessed or prayed over?", "answer": "<p>Yes. Every batch is prayed over before it is bottled and again before it ships. The power is not in the oil itself but in the faith and the One we pray to.</p>" } },
+        "q5": { "type": "qa", "settings": { "question": "How long does shipping take?", "answer": "<p>Orders ship within 1–2 business days. Most U.S. orders arrive in 3–5 business days. Free U.S. shipping on orders over $50.</p>" } },
+        "q6": { "type": "qa", "settings": { "question": "Can I order for my church or ministry?", "answer": "<p>Absolutely. Our 4 oz bottles are ideal for congregational use, and we offer ministry pricing on bulk orders. Reach out through the contact page.</p>" } }
+      },
+      "block_order": [ "q1", "q2", "q3", "q4", "q5", "q6" ],
+      "settings": {
+        "eyebrow": "Good questions",
+        "heading": "Everything you want to know",
+        "open_first": true,
+        "contact_text": "Still have a question?",
+        "contact_label": "Send us a message",
+        "contact_link": "/pages/contact"
+      }
+    },
+    "social": {
+      "type": "social-grid",
+      "blocks": {
+        "i1": { "type": "post", "settings": {} },
+        "i2": { "type": "post", "settings": {} },
+        "i3": { "type": "post", "settings": {} },
+        "i4": { "type": "post", "settings": {} },
+        "i5": { "type": "post", "settings": {} },
+        "i6": { "type": "post", "settings": {} }
+      },
+      "block_order": [ "i1", "i2", "i3", "i4", "i5", "i6" ],
+      "settings": {
+        "eyebrow": "Community",
+        "heading": "Anointed and shared",
+        "handle": "@mycuprunnethover"
+      }
+    }
+  },
+  "order": [ "hero", "trust", "featured", "purpose", "story", "tiers", "testimonials", "scripture", "faq", "social" ]
+}

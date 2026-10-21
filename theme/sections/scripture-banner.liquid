@@ -1,0 +1,27 @@
+<section class="section scripture{% if section.settings.dark %} section--dark{% endif %}" {{ section.shopify_attributes }}>
+  {%- if section.settings.image != blank -%}
+    <div class="scripture__bg">{{ section.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', sizes: '100vw' }}</div>
+  {%- endif -%}
+  <div class="container scripture__inner">
+    <div class="scripture__mark">{% render 'icon', icon: 'quote' %}</div>
+    <p class="scripture__quote">{{ section.settings.quote }}</p>
+    <p class="scripture__ref">{{ section.settings.reference }}</p>
+    {%- if section.settings.cta_label != blank -%}
+      <a class="btn {% if section.settings.dark %}btn--ghost{% else %}btn--secondary{% endif %}" style="margin-top:1.5rem" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta_label }}</a>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Scripture banner",
+  "settings": [
+    { "type": "textarea", "id": "quote", "label": "Quote", "default": "Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over." },
+    { "type": "text", "id": "reference", "label": "Reference", "default": "Psalm 23:5 (KJV)" },
+    { "type": "image_picker", "id": "image", "label": "Background image (optional)" },
+    { "type": "checkbox", "id": "dark", "label": "Dark background", "default": true },
+    { "type": "text", "id": "cta_label", "label": "Button label" },
+    { "type": "url", "id": "cta_link", "label": "Button link" }
+  ],
+  "presets": [ { "name": "Scripture banner" } ]
+}
+{% endschema %}

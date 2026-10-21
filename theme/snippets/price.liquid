@@ -1,0 +1,19 @@
+{%- comment -%}
+  Renders a price. Accepts: product (required), use_from (boolean, show "From" when price varies)
+{%- endcomment -%}
+{%- liquid
+  assign target = product.selected_or_first_available_variant | default: product
+  assign current_price = target.price | default: 0
+  assign compare_price = target.compare_at_price
+  assign show_from = false
+  if use_from and product.price_varies
+    assign show_from = true
+    assign current_price = product.price_min
+  endif
+-%}
+<div class="price{% if compare_price > current_price and show_from == false %} price--on-sale{% endif %}">
+  <span class="price__current">{% if show_from %}From {% endif %}{{ current_price | money }}</span>
+  {%- if compare_price > current_price and show_from == false -%}
+    <s class="price__compare">{{ compare_price | money }}</s>
+  {%- endif -%}
+</div>

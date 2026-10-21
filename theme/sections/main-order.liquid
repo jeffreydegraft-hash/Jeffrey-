@@ -1,0 +1,45 @@
+<section class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="page-head" style="padding-top:2rem">
+      <p class="eyebrow"><a href="{{ routes.account_url }}">← Back to account</a></p>
+      <h1 class="h2">Order {{ order.name }}</h1>
+      <p class="muted">Placed {{ order.created_at | date: '%B %d, %Y' }}{% if order.cancelled %} · Cancelled {{ order.cancelled_at | date: '%B %d, %Y' }}{% endif %}</p>
+    </div>
+    <div class="account">
+      <div>
+        <h2 class="h4">Billing address</h2>
+        <div class="address-card">{{ order.billing_address | format_address }}</div>
+        <h2 class="h4">Shipping address</h2>
+        <div class="address-card">{{ order.shipping_address | format_address }}</div>
+      </div>
+      <div>
+        <table class="table">
+          <thead><tr><th>Product</th><th>SKU</th><th>Price</th><th>Qty</th><th>Total</th></tr></thead>
+          <tbody>
+            {%- for line_item in order.line_items -%}
+              <tr>
+                <td>{% if line_item.product.url %}<a class="link" href="{{ line_item.product.url }}">{{ line_item.title }}</a>{% else %}{{ line_item.title }}{% endif %}
+                  {%- if line_item.fulfillment -%}<br><small class="muted">Fulfilled {{ line_item.fulfillment.created_at | date: '%b %d, %Y' }}{% if line_item.fulfillment.tracking_url %} · <a class="link" href="{{ line_item.fulfillment.tracking_url }}">Track</a>{% endif %}</small>{%- endif -%}
+                </td>
+                <td>{{ line_item.sku }}</td>
+                <td>{{ line_item.final_price | money }}</td>
+                <td>{{ line_item.quantity }}</td>
+                <td>{{ line_item.final_line_price | money }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+        <table class="table table--totals" style="margin-top:1rem;max-width:360px;margin-left:auto">
+          <tr><td>Subtotal</td><td style="text-align:right">{{ order.line_items_subtotal_price | money }}</td></tr>
+          {%- for discount in order.cart_level_discount_applications -%}<tr><td>{{ discount.title }}</td><td style="text-align:right">-{{ discount.total_allocated_amount | money }}</td></tr>{%- endfor -%}
+          {%- for shipping_method in order.shipping_methods -%}<tr><td>Shipping ({{ shipping_method.title }})</td><td style="text-align:right">{{ shipping_method.price | money }}</td></tr>{%- endfor -%}
+          {%- for tax_line in order.tax_lines -%}<tr><td>{{ tax_line.title }} {{ tax_line.rate | times: 100 }}%</td><td style="text-align:right">{{ tax_line.price | money }}</td></tr>{%- endfor -%}
+          <tr><td>Total</td><td style="text-align:right">{{ order.total_price | money }}</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{ "name": "Order", "settings": [] }
+{% endschema %}

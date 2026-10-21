@@ -1,0 +1,15 @@
+<div class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    {%- for block in section.blocks -%}
+      {% render block %}
+    {%- endfor -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Apps",
+  "settings": [],
+  "blocks": [ { "type": "@app" } ],
+  "presets": [ { "name": "Apps" } ]
+}
+{% endschema %}

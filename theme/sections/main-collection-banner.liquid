@@ -1,0 +1,31 @@
+{%- liquid
+  assign img = collection.image
+  if section.settings.show_image == false
+    assign img = blank
+  endif
+-%}
+<section class="collection-banner{% if img != blank %} collection-banner--image{% endif %}" {{ section.shopify_attributes }}>
+  {%- if img != blank -%}
+    <div class="collection-banner__bg">{{ img | image_url: width: 2400 | image_tag: loading: 'eager', sizes: '100vw', widths: '800,1200,1600,2400', alt: collection.title }}</div>
+  {%- endif -%}
+  <div class="container">
+    <div class="collection-banner__inner">
+      <nav class="breadcrumbs" aria-label="Breadcrumb" style="{% if img != blank %}color:inherit;opacity:.8{% endif %}">
+        <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><a href="{{ routes.collections_url }}">Collections</a><span aria-hidden="true">/</span><span aria-current="page">{{ collection.title }}</span>
+      </nav>
+      <h1>{{ collection.title }}</h1>
+      {%- if section.settings.show_description and collection.description != blank -%}
+        <div class="lead">{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Collection banner",
+  "settings": [
+    { "type": "checkbox", "id": "show_image", "label": "Show collection image", "default": true },
+    { "type": "checkbox", "id": "show_description", "label": "Show collection description", "default": true }
+  ]
+}
+{% endschema %}

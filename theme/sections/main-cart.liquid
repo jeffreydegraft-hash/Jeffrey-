@@ -1,0 +1,55 @@
+<section class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="page-head" style="padding-top:2rem">
+      <h1 class="h2">Your cart</h1>
+    </div>
+    {%- if cart.item_count == 0 -%}
+      <div class="empty">
+        <p class="lead">Your cart is empty.</p>
+        <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">Shop anointing oils</a>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" class="cart-page" id="CartForm">
+        <div>
+          {% render 'shipping-bar' %}
+          {% render 'cart-items', context: 'page' %}
+          <div style="margin-top:1rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+            <a class="link" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+            <button type="submit" name="update" class="link">Update cart</button>
+          </div>
+        </div>
+        <aside class="cart-summary">
+          {%- if settings.cart_show_note -%}
+            <div>
+              <label for="CartNote" class="muted" style="font-size:.85rem;display:block;margin-bottom:.4rem">{{ section.settings.note_label }}</label>
+              <textarea id="CartNote" name="note" placeholder="{{ section.settings.note_placeholder | escape }}">{{ cart.note }}</textarea>
+            </div>
+          {%- endif -%}
+          {%- if cart.cart_level_discount_applications.size > 0 -%}
+            <div class="cart-drawer__discounts">
+              {%- for discount in cart.cart_level_discount_applications -%}<span>{{ discount.title }} (-{{ discount.total_allocated_amount | money }})</span>{%- endfor -%}
+            </div>
+          {%- endif -%}
+          <div class="cart-drawer__subtotal"><span>Subtotal</span><span>{{ cart.total_price | money }}</span></div>
+          <p class="cart-drawer__note">Shipping, taxes and discount codes are calculated at checkout.</p>
+          <button type="submit" name="checkout" class="btn btn--primary btn--full btn--large">Checkout</button>
+          {%- if additional_checkout_buttons and section.settings.show_dynamic -%}
+            <div class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div>
+          {%- endif -%}
+          <div class="cart-summary__payments">{%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag }}{%- endfor -%}</div>
+          <p class="cart-summary__secure">{% render 'icon', icon: 'lock' %} Secure checkout</p>
+        </aside>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    { "type": "text", "id": "note_label", "label": "Note label", "default": "Order note or prayer request" },
+    { "type": "text", "id": "note_placeholder", "label": "Note placeholder", "default": "Anything we should know? A prayer request is always welcome." },
+    { "type": "checkbox", "id": "show_dynamic", "label": "Show additional checkout buttons", "default": true }
+  ]
+}
+{% endschema %}

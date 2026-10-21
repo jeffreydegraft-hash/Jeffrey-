@@ -1,0 +1,26 @@
+<section class="section{% if section.settings.surface %} section--surface{% endif %}" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="{% if section.settings.center %}center{% endif %}" style="max-width:{{ section.settings.width }}px;margin:0 auto">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+      <div class="rte" {% if section.settings.center %}style="margin:0 auto"{% endif %}>{{ section.settings.text }}</div>
+      {%- if section.settings.cta_label != blank -%}<a class="btn btn--primary" style="margin-top:1rem" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta_label }}</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Rich text",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A word for you" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Use this section to share a reflection, an announcement, or a word of encouragement.</p>" },
+    { "type": "text", "id": "cta_label", "label": "Button label" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+    { "type": "range", "id": "width", "min": 600, "max": 1200, "step": 50, "unit": "px", "label": "Max width", "default": 760 },
+    { "type": "checkbox", "id": "center", "label": "Center text", "default": true },
+    { "type": "checkbox", "id": "surface", "label": "Use tinted background", "default": false }
+  ],
+  "presets": [ { "name": "Rich text" } ]
+}
+{% endschema %}

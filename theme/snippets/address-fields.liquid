@@ -1,0 +1,22 @@
+{%- if form.errors -%}<div class="form-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+<div class="field--row">
+  <div class="field"><label for="AddressFirstName{{ id }}">First name</label><input id="AddressFirstName{{ id }}" type="text" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name"></div>
+  <div class="field"><label for="AddressLastName{{ id }}">Last name</label><input id="AddressLastName{{ id }}" type="text" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name"></div>
+</div>
+<div class="field"><label for="AddressCompany{{ id }}">Company / church (optional)</label><input id="AddressCompany{{ id }}" type="text" name="address[company]" value="{{ form.company }}" autocomplete="organization"></div>
+<div class="field"><label for="AddressAddress1{{ id }}">Address</label><input id="AddressAddress1{{ id }}" type="text" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1"></div>
+<div class="field"><label for="AddressAddress2{{ id }}">Apartment, suite, etc.</label><input id="AddressAddress2{{ id }}" type="text" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2"></div>
+<div class="field--row">
+  <div class="field"><label for="AddressCity{{ id }}">City</label><input id="AddressCity{{ id }}" type="text" name="address[city]" value="{{ form.city }}" autocomplete="address-level2"></div>
+  <div class="field"><label for="AddressZip{{ id }}">ZIP / postal code</label><input id="AddressZip{{ id }}" type="text" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code"></div>
+</div>
+<div class="field--row">
+  <div class="field"><label for="AddressCountry{{ id }}">Country</label>
+    <select id="AddressCountry{{ id }}" name="address[country]" data-default="{{ form.country }}" data-address-country="{{ id }}" autocomplete="country">{{ all_country_option_tags }}</select>
+  </div>
+  <div class="field" id="AddressProvinceContainer{{ id }}" style="display:none"><label for="AddressProvince{{ id }}">State / province</label>
+    <select id="AddressProvince{{ id }}" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+  </div>
+</div>
+<div class="field"><label for="AddressPhone{{ id }}">Phone</label><input id="AddressPhone{{ id }}" type="tel" name="address[phone]" value="{{ form.phone }}" autocomplete="tel"></div>
+<div class="field" style="flex-direction:row;align-items:center;gap:.5rem"><input type="checkbox" id="AddressDefault{{ id }}" name="address[default]" value="1"{% if address and address == customer.default_address %} checked{% endif %} style="width:auto"><label for="AddressDefault{{ id }}" style="margin:0">Set as default address</label></div>

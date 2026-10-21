@@ -1,0 +1,243 @@
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign form_id = 'ProductForm-' | append: section.id
+-%}
+<section class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span>
+      {%- if collection -%}
+        <a href="{{ collection.url }}">{{ collection.title }}</a>
+      {%- else -%}
+        <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      {%- endif -%}
+      <span aria-hidden="true">/</span><span aria-current="page">{{ product.title }}</span>
+    </nav>
+    <div class="product" data-product-form>
+      <div class="product__gallery">
+        {%- if product.media.size > 1 -%}
+          <div class="product__thumbs">
+            {%- for media in product.media -%}
+              <button type="button" class="product__thumb{% if forloop.first %} is-active{% endif %}" data-thumb="{{ media.id }}" aria-label="View media {{ forloop.index }}">
+                {{ media.preview_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: media.alt }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <div></div>
+        {%- endif -%}
+        <div class="product__slides" data-slides>
+          {%- for media in product.media -%}
+            <div class="product__slide" data-media-id="{{ media.id }}">
+              {%- case media.media_type -%}
+                {%- when 'image' -%}
+                  {%- if forloop.first -%}
+                    {{ media | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 990px) 55vw, 100vw', widths: '600,900,1200,1600', alt: media.alt }}
+                  {%- else -%}
+                    {{ media | image_url: width: 1600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 55vw, 100vw', widths: '600,900,1200,1600', alt: media.alt }}
+                  {%- endif -%}
+                {%- when 'video' -%}
+                  {{ media | video_tag: controls: true, muted: true, loop: true, preload: 'metadata' }}
+                {%- when 'external_video' -%}
+                  {{ media | external_video_tag }}
+                {%- when 'model' -%}
+                  {{ media | model_viewer_tag }}
+              {%- endcase -%}
+            </div>
+          {%- else -%}
+            <div class="product__slide">{{ 'product-1' | placeholder_svg_tag }}</div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="product__info">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+
+            {%- when 'eyebrow' -%}
+              <p class="eyebrow" {{ block.shopify_attributes }}>{{ block.settings.text | default: product.type }}</p>
+
+            {%- when 'title' -%}
+              <div {{ block.shopify_attributes }}>
+                <h1 class="product__title h2">{{ product.title }}</h1>
+                {%- if block.settings.show_rating -%}
+                  <div class="product__rating"><span class="stars" aria-hidden="true">★★★★★</span><span class="muted">{{ block.settings.rating_text }}</span></div>
+                {%- endif -%}
+              </div>
+
+            {%- when 'price' -%}
+              <div class="product__price" {{ block.shopify_attributes }}>
+                <div class="price{% if current.compare_at_price > current.price %} price--on-sale{% endif %}">
+                  <span class="price__current" data-price>{{ current.price | money }}</span>
+                  <s class="price__compare" data-compare-price{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{{ current.compare_at_price | money }}</s>
+                </div>
+                {%- if block.settings.show_installments -%}
+                  {%- form 'product', product -%}{{ form | payment_terms }}{%- endform -%}
+                {%- endif -%}
+              </div>
+
+            {%- when 'variant_picker' -%}
+              {%- unless product.has_only_default_variant -%}
+                {%- for option in product.options_with_values -%}
+                  <fieldset class="option" data-option-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+                    <legend class="option__label">{{ option.name }} <span data-selected-value>{{ option.selected_value }}</span></legend>
+                    <div class="option__values">
+                      {%- assign option_position = forloop.index -%}
+                      {%- for value in option.values -%}
+                        {%- liquid
+                          assign price_hint = ''
+                          if block.settings.show_price_hints and product.options.size == 1
+                            for v in product.variants
+                              if v.option1 == value
+                                assign price_hint = v.price | money
+                                break
+                              endif
+                            endfor
+                          endif
+                          assign is_best = false
+                          if block.settings.best_value_last and forloop.last and product.options.size == 1 and option.values.size > 1
+                            assign is_best = true
+                          endif
+                        -%}
+                        <div class="option__value{% if is_best %} is-best{% endif %}">
+                          <input type="radio" id="Opt-{{ section.id }}-{{ option_position }}-{{ forloop.index0 }}" name="opt-{{ section.id }}-{{ option_position }}" value="{{ value | escape }}"{% if option.selected_value == value %} checked{% endif %}>
+                          <label for="Opt-{{ section.id }}-{{ option_position }}-{{ forloop.index0 }}">{{ value }}{% if price_hint != '' %}<small>{{ price_hint }}</small>{% endif %}</label>
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                  </fieldset>
+                {%- endfor -%}
+              {%- endunless -%}
+
+            {%- when 'quantity' -%}
+              <div class="option" {{ block.shopify_attributes }}>
+                <span class="option__label">Quantity</span>
+                <div class="qty">
+                  <button type="button" data-qty-minus aria-label="Decrease quantity">&minus;</button>
+                  <input type="number" name="quantity" form="{{ form_id }}" value="1" min="1" aria-label="Quantity">
+                  <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+
+            {%- when 'buy_buttons' -%}
+              <div {{ block.shopify_attributes }}>
+                {%- form 'product', product, id: form_id, data-ajax-cart: 'true' -%}
+                  <input type="hidden" name="id" value="{{ current.id }}">
+                  <div class="buy-row">
+                    <button type="submit" class="btn btn--primary" data-add-button data-add-label="{{ block.settings.label | default: 'Add to cart' }}"{% unless current.available %} disabled{% endunless %}>
+                      <span data-add-text>{% if current.available %}{{ block.settings.label | default: 'Add to cart' }}{% else %}Sold out{% endif %}</span>
+                    </button>
+                  </div>
+                  {%- if block.settings.show_dynamic -%}{{ form | payment_button }}{%- endif -%}
+                {%- endform -%}
+                {%- if block.settings.note != blank -%}<p class="product__note">{{ block.settings.note }}</p>{%- endif -%}
+              </div>
+
+            {%- when 'trust' -%}
+              <ul class="product__trust" {{ block.shopify_attributes }}>
+                {%- if block.settings.item1 != blank -%}<li>{% render 'icon', icon: 'check' %}<span>{{ block.settings.item1 }}</span></li>{%- endif -%}
+                {%- if block.settings.item2 != blank -%}<li>{% render 'icon', icon: 'check' %}<span>{{ block.settings.item2 }}</span></li>{%- endif -%}
+                {%- if block.settings.item3 != blank -%}<li>{% render 'icon', icon: 'check' %}<span>{{ block.settings.item3 }}</span></li>{%- endif -%}
+                {%- if block.settings.item4 != blank -%}<li>{% render 'icon', icon: 'check' %}<span>{{ block.settings.item4 }}</span></li>{%- endif -%}
+              </ul>
+
+            {%- when 'scripture' -%}
+              {%- liquid
+                assign verse = block.settings.verse
+                assign ref = block.settings.reference
+                if product.metafields.custom.scripture != blank
+                  assign verse = product.metafields.custom.scripture
+                endif
+                if product.metafields.custom.scripture_reference != blank
+                  assign ref = product.metafields.custom.scripture_reference
+                endif
+              -%}
+              {%- if verse != blank -%}
+                <blockquote class="product__scripture" {{ block.shopify_attributes }}>{{ verse }}{% if ref != blank %}<small>{{ ref }}</small>{% endif %}</blockquote>
+              {%- endif -%}
+
+            {%- when 'description' -%}
+              {%- if product.description != blank -%}<div class="rte" {{ block.shopify_attributes }}>{{ product.description }}</div>{%- endif -%}
+
+            {%- when 'collapsible' -%}
+              <details class="accordion__item" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
+                <summary>{{ block.settings.heading }}{% render 'icon', icon: 'plus' %}</summary>
+                <div class="accordion__body rte">
+                  {{ block.settings.content }}
+                  {%- if block.settings.page != blank -%}{{ block.settings.page.content }}{%- endif -%}
+                </div>
+              </details>
+
+            {%- when 'share' -%}
+              <div class="product__share" {{ block.shopify_attributes }}>
+                <button type="button" data-share="{{ shop.url }}{{ product.url }}">{% render 'icon', icon: 'share' %} Share this oil</button>
+              </div>
+
+            {%- when 'text' -%}
+              <div class="rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+      <script type="application/json" data-variants-json>{{ product.variants | json }}</script>
+    </div>
+  </div>
+</section>
+
+{%- if section.settings.sticky_atc -%}
+<div class="sticky-atc" data-sticky-atc>
+  <span class="sticky-atc__title">{{ product.title }}</span>
+  <span class="sticky-atc__price" data-sticky-price>{{ current.price | money }}</span>
+  <button type="button" class="btn btn--primary btn--small" data-sticky-submit="{{ form_id }}"{% unless current.available %} disabled{% endunless %}>Add to cart</button>
+</div>
+{%- endif -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "url": {{ shop.url | append: product.url | json }},
+  {%- if product.featured_media -%}"image": {{ product.featured_media | image_url: width: 1200 | prepend: 'https:' | json }},{%- endif -%}
+  "description": {{ product.description | strip_html | json }},
+  "brand": { "@type": "Brand", "name": {{ product.vendor | json }} },
+  "offers": [
+    {%- for variant in product.variants -%}
+      {
+        "@type": "Offer",
+        "sku": {{ variant.sku | json }},
+        "availability": "http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+        "price": {{ variant.price | divided_by: 100.00 | json }},
+        "priceCurrency": {{ cart.currency.iso_code | json }},
+        "url": {{ shop.url | append: variant.url | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "sticky_atc", "label": "Show sticky add-to-cart bar when scrolling", "default": true }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    { "type": "eyebrow", "name": "Eyebrow", "limit": 1, "settings": [ { "type": "text", "id": "text", "label": "Text", "info": "Leave empty to show the product type." } ] },
+    { "type": "title", "name": "Title", "limit": 1, "settings": [ { "type": "checkbox", "id": "show_rating", "label": "Show star rating line", "default": true }, { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.9 · Loved by our community" } ] },
+    { "type": "price", "name": "Price", "limit": 1, "settings": [ { "type": "checkbox", "id": "show_installments", "label": "Show installment messaging (Shop Pay)", "default": true } ] },
+    { "type": "variant_picker", "name": "Size / variant picker", "limit": 1, "settings": [ { "type": "checkbox", "id": "show_price_hints", "label": "Show price under each size", "default": true }, { "type": "checkbox", "id": "best_value_last", "label": "Mark the largest size as best value", "default": true } ] },
+    { "type": "quantity", "name": "Quantity", "limit": 1, "settings": [] },
+    { "type": "buy_buttons", "name": "Buy buttons", "limit": 1, "settings": [ { "type": "text", "id": "label", "label": "Add to cart label", "default": "Add to cart" }, { "type": "checkbox", "id": "show_dynamic", "label": "Show dynamic checkout button", "default": true }, { "type": "text", "id": "note", "label": "Note under buttons", "default": "Ships in 1–2 business days from Texas. Free U.S. shipping over $50." } ] },
+    { "type": "trust", "name": "Trust list", "limit": 1, "settings": [ { "type": "text", "id": "item1", "label": "Item 1", "default": "Pure olive oil base, biblical botanicals" }, { "type": "text", "id": "item2", "label": "Item 2", "default": "Prayed over before bottling and shipping" }, { "type": "text", "id": "item3", "label": "Item 3", "default": "Glass bottle, gift-ready packaging" }, { "type": "text", "id": "item4", "label": "Item 4", "default": "30-day satisfaction guarantee" } ] },
+    { "type": "scripture", "name": "Scripture", "limit": 1, "settings": [ { "type": "textarea", "id": "verse", "label": "Verse", "info": "Overridden by the product metafield custom.scripture when set.", "default": "Is any sick among you? let him call for the elders of the church; and let them pray over him, anointing him with oil in the name of the Lord." }, { "type": "text", "id": "reference", "label": "Reference", "default": "James 5:14" } ] },
+    { "type": "description", "name": "Description", "limit": 1, "settings": [] },
+    { "type": "collapsible", "name": "Collapsible tab", "settings": [ { "type": "text", "id": "heading", "label": "Heading", "default": "Ingredients" }, { "type": "richtext", "id": "content", "label": "Content" }, { "type": "page", "id": "page", "label": "Page content (optional)" }, { "type": "checkbox", "id": "open", "label": "Open by default", "default": false } ] },
+    { "type": "share", "name": "Share", "limit": 1, "settings": [] },
+    { "type": "text", "name": "Text", "settings": [ { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Text block</p>" } ] }
+  ]
+}
+{% endschema %}

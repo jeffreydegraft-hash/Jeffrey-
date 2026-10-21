@@ -1,0 +1,46 @@
+{%- comment -%} Renders cart line items. Accepts: context ('drawer' or 'page') {%- endcomment -%}
+<ul class="cart-drawer__items{% if context == 'page' %} cart-page__items{% endif %}">
+  {%- for item in cart.items -%}
+    <li class="cart-item" data-line="{{ forloop.index }}">
+      <a href="{{ item.url }}" class="cart-item__media">
+        {%- if item.image -%}
+          {{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: item.title }}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag }}
+        {%- endif -%}
+      </a>
+      <div class="cart-item__info">
+        <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title }}</a>
+        {%- unless item.product.has_only_default_variant -%}
+          <p class="cart-item__variant">{{ item.variant.title }}</p>
+        {%- endunless -%}
+        {%- for property in item.properties -%}
+          {%- assign first_char = property.first | slice: 0 -%}
+          {%- if property.last != blank and first_char != '_' -%}
+            <p class="cart-item__prop">{{ property.first }}: {{ property.last }}</p>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if item.selling_plan_allocation -%}
+          <p class="cart-item__prop">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+        {%- endif -%}
+        {%- for discount in item.line_level_discount_allocations -%}
+          <p class="cart-item__prop" style="color:var(--color-primary)">{{ discount.discount_application.title }} (-{{ discount.amount | money }})</p>
+        {%- endfor -%}
+        <div class="cart-item__row">
+          <div class="qty">
+            <button type="button" data-cart-change data-line="{{ forloop.index }}" data-qty="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity">&minus;</button>
+            <input type="number" value="{{ item.quantity }}" min="0" aria-label="Quantity for {{ item.product.title | escape }}" data-cart-qty data-line="{{ forloop.index }}"{% if context == 'page' %} name="updates[]"{% endif %}>
+            <button type="button" data-cart-change data-line="{{ forloop.index }}" data-qty="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity">+</button>
+          </div>
+          <span class="cart-item__price">
+            {%- if item.original_line_price != item.final_line_price -%}
+              <s class="muted">{{ item.original_line_price | money }}</s>
+            {%- endif -%}
+            {{ item.final_line_price | money }}
+          </span>
+        </div>
+      </div>
+      <button type="button" class="cart-item__remove" data-cart-change data-line="{{ forloop.index }}" data-qty="0" aria-label="Remove {{ item.product.title | escape }}">Remove</button>
+    </li>
+  {%- endfor -%}
+</ul>

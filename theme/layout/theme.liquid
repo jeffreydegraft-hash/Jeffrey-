@@ -1,0 +1,54 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+  {%- endif -%}
+  <title>
+    {{- page_title -}}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+  {% render 'meta-tags' %}
+  {% render 'css-variables' %}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+  <script>
+    window.theme = {
+      moneyFormat: {{ shop.money_format | json }},
+      cartType: {{ settings.cart_type | json }},
+      routes: {
+        root: {{ routes.root_url | json }},
+        cart: {{ routes.cart_url | json }},
+        cartAdd: {{ routes.cart_add_url | json }},
+        cartChange: {{ routes.cart_change_url | json }},
+        cartUpdate: {{ routes.cart_update_url | json }}
+      }
+    };
+  </script>
+  {{ content_for_header }}
+</head>
+<body class="template-{{ request.page_type | handle }}{% if template.suffix %} template-{{ request.page_type | handle }}-{{ template.suffix | handle }}{% endif %}">
+  <a class="skip-link" href="#MainContent">Skip to content</a>
+  {% sections 'header-group' %}
+  <main id="MainContent" class="main" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+  {% sections 'footer-group' %}
+  {%- if settings.cart_type == 'drawer' -%}
+    {% section 'cart-drawer' %}
+  {%- endif -%}
+  <div id="Toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+</body>
+</html>

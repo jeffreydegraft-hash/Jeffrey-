@@ -1,0 +1,8 @@
+{
+  "sections": {
+    "banner": { "type": "main-collection-banner", "settings": { "show_image": true, "show_description": true } },
+    "grid": { "type": "main-collection", "settings": { "per_page": 24, "columns": "3", "show_filters": true } },
+    "scripture": { "type": "scripture-banner", "settings": { "quote": "Thou anointest my head with oil; my cup runneth over.", "reference": "Psalm 23:5", "dark": true } }
+  },
+  "order": [ "banner", "grid", "scripture" ]
+}

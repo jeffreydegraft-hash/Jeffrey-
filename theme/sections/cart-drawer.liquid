@@ -1,0 +1,41 @@
+<div class="drawer drawer--right" id="CartDrawer" aria-hidden="true">
+  <div class="drawer__overlay" data-drawer-close></div>
+  <div class="drawer__panel cart-drawer" role="dialog" aria-modal="true" aria-label="Your cart">
+    <div class="drawer__head">
+      <span class="drawer__title">Your cart <span class="muted" style="font-family:var(--font-body);font-size:.9rem">({{ cart.item_count }})</span></span>
+      <button type="button" class="icon-btn" data-drawer-close aria-label="Close cart">{% render 'icon', icon: 'close' %}</button>
+    </div>
+    {%- if cart.item_count == 0 -%}
+      <div class="cart-drawer__empty">
+        {% render 'icon', icon: 'drop' %}
+        <p class="h3" style="margin:0">Your cart is empty</p>
+        <p class="muted" style="margin:0">Find the oil that meets you where you are.</p>
+        <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}" data-drawer-close>Shop anointing oils</a>
+      </div>
+    {%- else -%}
+      {% render 'shipping-bar' %}
+      {% render 'cart-items', context: 'drawer' %}
+      <div class="cart-drawer__foot">
+        {%- if cart.cart_level_discount_applications.size > 0 -%}
+          <div class="cart-drawer__discounts">
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <span>{{ discount.title }} (-{{ discount.total_allocated_amount | money }})</span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        <div class="cart-drawer__subtotal"><span>Subtotal</span><span>{{ cart.total_price | money }}</span></div>
+        <p class="cart-drawer__note">Shipping, taxes and discount codes are calculated at checkout.</p>
+        <form action="{{ routes.cart_url }}" method="post">
+          <button type="submit" name="checkout" class="btn btn--primary btn--full btn--large">Checkout</button>
+        </form>
+        <a href="{{ routes.cart_url }}" class="link center" style="font-size:.85rem">View full cart</a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": []
+}
+{% endschema %}

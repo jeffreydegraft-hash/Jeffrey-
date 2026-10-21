@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "eyebrow": { "type": "eyebrow", "settings": {} },
+        "title": { "type": "title", "settings": { "show_rating": true, "rating_text": "4.9 · Loved by our community" } },
+        "price": { "type": "price", "settings": { "show_installments": true } },
+        "variants": { "type": "variant_picker", "settings": { "show_price_hints": true, "best_value_last": true } },
+        "quantity": { "type": "quantity", "settings": {} },
+        "buy": { "type": "buy_buttons", "settings": { "label": "Add to cart", "show_dynamic": true, "note": "Ships in 1–2 business days. Free U.S. shipping over $50." } },
+        "trust": { "type": "trust", "settings": { "item1": "Pure olive oil base, biblical botanicals", "item2": "Prayed over before bottling and shipping", "item3": "Glass bottle, gift-ready packaging", "item4": "30-day satisfaction guarantee" } },
+        "scripture": { "type": "scripture", "settings": { "verse": "Is any sick among you? let him call for the elders of the church; and let them pray over him, anointing him with oil in the name of the Lord.", "reference": "James 5:14" } },
+        "description": { "type": "description", "settings": {} },
+        "tab_use": { "type": "collapsible", "settings": { "heading": "How to use", "content": "<p>Place a small drop on your fingertip and apply to the forehead, hands or doorposts as you pray. A little goes a long way.</p>", "open": false } },
+        "tab_ingredients": { "type": "collapsible", "settings": { "heading": "Ingredients", "content": "<p>Pure olive oil base with botanicals named in Scripture. Free from synthetic fragrance oils and fillers. See the product description for this blend's specific botanicals.</p>", "open": false } },
+        "tab_shipping": { "type": "collapsible", "settings": { "heading": "Shipping & returns", "content": "<p>Orders ship within 1–2 business days. Free U.S. shipping on orders over $50. Not satisfied? Contact us within 30 days.</p>", "open": false } },
+        "share": { "type": "share", "settings": {} }
+      },
+      "block_order": [ "eyebrow", "title", "price", "variants", "quantity", "buy", "trust", "scripture", "description", "tab_use", "tab_ingredients", "tab_shipping", "share" ],
+      "settings": { "sticky_atc": true }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": { "eyebrow": "Pairs well with", "heading": "Often anointed together", "limit": 4 }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "r1": { "type": "testimonial", "settings": { "stars": 5, "quote": "I anoint my children every morning before school. The Frankincense & Myrrh smells exactly like I imagined the gifts of the Magi would.", "name": "Jasmine M.", "subtitle": "Houston, TX", "verified": true } },
+        "r2": { "type": "testimonial", "settings": { "stars": 5, "quote": "Our prayer team uses the 4 oz Hyssop for every altar call. The quality is unmatched.", "name": "Pastor R. Adams", "subtitle": "Grace Fellowship", "verified": true } },
+        "r3": { "type": "testimonial", "settings": { "stars": 5, "quote": "I ordered the gift set for my mother. She cried when she read the scripture card.", "name": "Tasha K.", "subtitle": "Atlanta, GA", "verified": true } }
+      },
+      "block_order": [ "r1", "r2", "r3" ],
+      "settings": { "eyebrow": "Testimonies", "heading": "What the saints are saying", "rating": "4.9", "summary": "average from verified buyers", "dark": false }
+    }
+  },
+  "order": [ "main", "recommendations", "testimonials" ]
+}

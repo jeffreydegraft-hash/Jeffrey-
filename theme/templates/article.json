@@ -1,0 +1,1 @@
+{ "sections": { "main": { "type": "main-article", "settings": {} }, "featured": { "type": "featured-collection", "settings": { "eyebrow": "From the shop", "heading": "Oils mentioned in this post", "limit": 4, "columns": "4", "show_view_all": true, "view_all_label": "View all oils", "surface": true } } }, "order": [ "main", "featured" ] }

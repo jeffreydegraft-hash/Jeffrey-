@@ -1,0 +1,1 @@
+{ "sections": { "main": { "type": "main-blog", "settings": { "eyebrow": "Journal" } } }, "order": [ "main" ] }

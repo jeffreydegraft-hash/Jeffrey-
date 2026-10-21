@@ -1,0 +1,51 @@
+<section class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="page-head" style="padding-top:2rem">
+      <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      <h1 class="h2">{{ page.title }}</h1>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-grid__info">
+        {%- if page.content != blank -%}<div class="rte">{{ page.content }}</div>{%- endif -%}
+        {%- if section.settings.email != blank -%}<div><h3 class="h4">Email</h3><a class="link" href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a></div>{%- endif -%}
+        {%- if section.settings.phone != blank -%}<div><h3 class="h4">Phone</h3><a class="link" href="tel:{{ section.settings.phone | remove: ' ' }}">{{ section.settings.phone }}</a></div>{%- endif -%}
+        {%- if section.settings.hours != blank -%}<div><h3 class="h4">Hours</h3><p class="muted" style="margin:0">{{ section.settings.hours }}</p></div>{%- endif -%}
+        {% render 'social-icons' %}
+      </div>
+      <div>
+        {%- form 'contact', id: 'ContactForm' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="form-success">Thank you. We've received your message and will reply soon.</p>
+          {%- endif -%}
+          {%- if form.errors -%}<div class="form-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+          <div class="field--row">
+            <div class="field"><label for="ContactName">Name</label><input id="ContactName" type="text" name="contact[name]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" autocomplete="name"></div>
+            <div class="field"><label for="ContactEmail">Email</label><input id="ContactEmail" type="email" name="contact[email]" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" autocomplete="email" required></div>
+          </div>
+          <div class="field"><label for="ContactSubject">Subject</label>
+            <select id="ContactSubject" name="contact[subject]">
+              <option>Question about an oil</option>
+              <option>Order help</option>
+              <option>Church or ministry order</option>
+              <option>Prayer request</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div class="field"><label for="ContactMessage">Message</label><textarea id="ContactMessage" name="contact[body]" required>{{ form.body }}</textarea></div>
+          <button type="submit" class="btn btn--primary btn--large">Send message</button>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Contact",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "We'd love to hear from you" },
+    { "type": "text", "id": "email", "label": "Email address" },
+    { "type": "text", "id": "phone", "label": "Phone" },
+    { "type": "text", "id": "hours", "label": "Hours", "default": "Monday–Friday, 9am–5pm CT" }
+  ]
+}
+{% endschema %}

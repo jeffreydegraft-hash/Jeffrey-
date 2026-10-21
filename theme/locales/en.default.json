@@ -1,0 +1,15 @@
+{
+  "general": {
+    "search": { "search": "Search", "placeholder": "Search oils, scripture, purpose" },
+    "cart": { "title": "Your cart", "empty": "Your cart is empty.", "checkout": "Checkout", "subtotal": "Subtotal" },
+    "accessibility": { "skip_to_content": "Skip to content", "close": "Close", "menu": "Menu" }
+  },
+  "products": {
+    "product": { "add_to_cart": "Add to cart", "sold_out": "Sold out", "unavailable": "Unavailable", "quantity": "Quantity" }
+  },
+  "customer": {
+    "login": { "title": "Sign in", "forgot_password": "Forgot your password?", "create_account": "Create account" },
+    "register": { "title": "Create account" },
+    "account": { "title": "My account", "orders": "Orders", "addresses": "Addresses", "log_out": "Log out" }
+  }
+}

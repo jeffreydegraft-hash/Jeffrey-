@@ -1,0 +1,70 @@
+<section class="section{% if section.settings.dark %} section--dark{% else %} section--surface{% endif %}" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+        {%- if section.settings.text != blank -%}<p class="lead">{{ section.settings.text }}</p>{%- endif -%}
+      </div>
+      {%- if section.settings.summary != blank -%}
+        <div class="rating-summary"><span class="stars" aria-hidden="true">★★★★★</span><strong>{{ section.settings.rating }}</strong><span>{{ section.settings.summary }}</span></div>
+      {%- endif -%}
+    </div>
+    <div class="testimonials">
+      {%- for block in section.blocks -%}
+        <figure class="testimonial" {{ block.shopify_attributes }}>
+          <div class="stars" aria-label="{{ block.settings.stars }} out of 5 stars">{% for i in (1..block.settings.stars) %}★{% endfor %}</div>
+          <blockquote class="testimonial__quote">{{ block.settings.quote }}</blockquote>
+          <figcaption class="testimonial__meta">
+            <div class="testimonial__avatar">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: block.settings.name }}{% else %}{{ block.settings.name | slice: 0, 1 | upcase }}{% endif %}</div>
+            <div>
+              <span class="testimonial__name">{{ block.settings.name }}</span>
+              <span class="testimonial__sub">{{ block.settings.subtitle }}</span>
+              {%- if block.settings.product != blank -%}<br><a class="testimonial__product" href="{{ block.settings.product.url }}">{{ block.settings.product.title }}</a>{%- endif -%}
+            </div>
+            {%- if block.settings.verified -%}<span class="testimonial__verified" style="margin-left:auto">{% render 'icon', icon: 'check' %} Verified</span>{%- endif -%}
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Testimonials",
+  "max_blocks": 9,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Testimonies" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What the saints are saying" },
+    { "type": "text", "id": "text", "label": "Text" },
+    { "type": "text", "id": "rating", "label": "Rating number", "default": "4.9" },
+    { "type": "text", "id": "summary", "label": "Rating summary", "default": "average from verified buyers" },
+    { "type": "checkbox", "id": "dark", "label": "Dark background", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "range", "id": "stars", "min": 1, "max": 5, "step": 1, "label": "Stars", "default": 5 },
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "I anoint my children every morning before school. The Frankincense & Myrrh smells exactly like I imagined the gifts of the Magi would." },
+        { "type": "text", "id": "name", "label": "Name", "default": "Jasmine M." },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Houston, TX" },
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "product", "id": "product", "label": "Product mentioned" },
+        { "type": "checkbox", "id": "verified", "label": "Verified buyer", "default": true }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial", "settings": { "quote": "I anoint my children every morning before school. The Frankincense & Myrrh smells exactly like I imagined the gifts of the Magi would.", "name": "Jasmine M.", "subtitle": "Houston, TX" } },
+        { "type": "testimonial", "settings": { "quote": "Our prayer team uses the 4 oz Hyssop for every altar call. The quality is unmatched and it arrived beautifully packaged.", "name": "Pastor R. Adams", "subtitle": "Grace Fellowship" } },
+        { "type": "testimonial", "settings": { "quote": "I ordered the gift set for my mother. She cried when she read the scripture card. Thank you for making something so meaningful.", "name": "Tasha K.", "subtitle": "Atlanta, GA" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

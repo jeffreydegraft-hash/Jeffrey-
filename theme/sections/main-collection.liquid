@@ -1,0 +1,98 @@
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign show_filters = false
+  if section.settings.show_filters and collection.filters.size > 0
+    assign show_filters = true
+  endif
+-%}
+{%- paginate collection.products by section.settings.per_page -%}
+<section class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="collection-toolbar">
+      <div style="display:flex;gap:1rem;align-items:center">
+        <span class="collection-toolbar__count">{{ collection.products_count }} {% if collection.products_count == 1 %}oil{% else %}oils{% endif %}</span>
+        {%- if show_filters -%}<button type="button" class="btn btn--secondary btn--small filters__toggle" data-toggle="FiltersPanel">Filter</button>{%- endif -%}
+      </div>
+      <form class="collection-sort" method="get" id="SortForm">
+        <label for="SortBy">Sort by</label>
+        <select id="SortBy" name="sort_by" data-auto-submit>
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+          {%- endfor -%}
+        </select>
+        {%- for filter in collection.filters -%}
+          {%- for v in filter.active_values -%}<input type="hidden" name="{{ v.param_name }}" value="{{ v.value }}">{%- endfor -%}
+          {%- if filter.type == 'price_range' -%}
+            {%- if filter.min_value.value -%}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}">{%- endif -%}
+            {%- if filter.max_value.value -%}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}">{%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </form>
+    </div>
+
+    <div class="collection-layout{% unless show_filters %} collection-layout--full{% endunless %}">
+      {%- if show_filters -%}
+        <aside class="filters">
+          <div class="filters__panel" id="FiltersPanel">
+            <form method="get" id="FilterForm">
+              <input type="hidden" name="sort_by" value="{{ sort_by }}">
+              {%- assign has_active = false -%}
+              {%- for filter in collection.filters -%}{%- if filter.active_values.size > 0 or filter.min_value.value != blank or filter.max_value.value != blank -%}{%- assign has_active = true -%}{%- endif -%}{%- endfor -%}
+              {%- if has_active -%}
+                <div class="active-filters">
+                  {%- for filter in collection.filters -%}
+                    {%- for v in filter.active_values -%}<a href="{{ v.url_to_remove }}">{{ v.label }} ×</a>{%- endfor -%}
+                    {%- if filter.type == 'price_range' and filter.min_value.value != blank or filter.max_value.value != blank -%}<a href="{{ filter.url_to_remove }}">Price ×</a>{%- endif -%}
+                  {%- endfor -%}
+                  <a href="{{ collection.url }}">Clear all</a>
+                </div>
+              {%- endif -%}
+              {%- for filter in collection.filters -%}
+                <details{% if filter.active_values.size > 0 or forloop.first %} open{% endif %}>
+                  <summary>{{ filter.label }}{% render 'icon', icon: 'chevron-down' %}</summary>
+                  {%- case filter.type -%}
+                    {%- when 'list', 'boolean' -%}
+                      {%- for value in filter.values -%}
+                        <label><input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %} data-auto-submit> {{ value.label }} <span class="muted">({{ value.count }})</span></label>
+                      {%- endfor -%}
+                    {%- when 'price_range' -%}
+                      <div class="price-range">
+                        <input type="number" name="{{ filter.min_value.param_name }}" placeholder="Min" min="0" step="1"{% if filter.min_value.value %} value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %} aria-label="Minimum price">
+                        <span>–</span>
+                        <input type="number" name="{{ filter.max_value.param_name }}" placeholder="Max" min="0" step="1"{% if filter.max_value.value %} value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %} aria-label="Maximum price">
+                      </div>
+                      <button type="submit" class="btn btn--secondary btn--small" style="margin:.25rem 0 .5rem">Apply</button>
+                  {%- endcase -%}
+                </details>
+              {%- endfor -%}
+            </form>
+          </div>
+        </aside>
+      {%- endif -%}
+      <div>
+        <div class="product-grid product-grid--{{ section.settings.columns }}">
+          {%- for product in collection.products -%}
+            {% render 'product-card', product: product %}
+          {%- else -%}
+            <div class="empty">
+              <p class="lead">No oils match those filters yet.</p>
+              <a class="btn btn--secondary" href="{{ collection.url }}">Clear filters</a>
+            </div>
+          {%- endfor -%}
+        </div>
+        {% render 'pagination', paginate: paginate %}
+      </div>
+    </div>
+  </div>
+</section>
+{%- endpaginate -%}
+{% schema %}
+{
+  "name": "Product grid",
+  "settings": [
+    { "type": "range", "id": "per_page", "min": 8, "max": 48, "step": 4, "label": "Products per page", "default": 24 },
+    { "type": "select", "id": "columns", "label": "Columns on desktop", "options": [ { "value": "3", "label": "3" }, { "value": "4", "label": "4" } ], "default": "3" },
+    { "type": "checkbox", "id": "show_filters", "label": "Show filters", "info": "Configure which filters appear under Online Store > Navigation > Filters.", "default": true }
+  ]
+}
+{% endschema %}

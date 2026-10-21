@@ -1,0 +1,45 @@
+<article class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="narrow">
+      <div class="page-head" style="padding-top:2rem">
+        <p class="eyebrow"><a href="{{ blog.url }}">{{ blog.title }}</a></p>
+        <h1 class="h2">{{ article.title }}</h1>
+        <p class="article__meta">{{ article.published_at | date: '%B %d, %Y' }}{% if article.author != blank %} · {{ article.author }}{% endif %}</p>
+      </div>
+      {%- if article.image -%}
+        <div class="article__hero">{{ article.image | image_url: width: 1600 | image_tag: loading: 'eager', sizes: '(min-width: 990px) 760px, 100vw', alt: article.image.alt }}</div>
+      {%- endif -%}
+      <div class="rte">{{ article.content }}</div>
+      <div class="article__footer">
+        <a class="link link--arrow" href="{{ blog.url }}">Back to {{ blog.title | downcase }}</a>
+        <div class="product__share"><button type="button" data-share="{{ shop.url }}{{ article.url }}">{% render 'icon', icon: 'share' %} Share</button></div>
+      </div>
+      {%- if blog.comments_enabled? -%}
+        <div class="divider"></div>
+        <h2 class="h3">Comments ({{ article.comments_count }})</h2>
+        {%- paginate article.comments by 20 -%}
+          {%- for comment in article.comments -%}
+            <div class="address-card"><p style="margin:0 0 .5rem">{{ comment.content }}</p><p class="muted" style="margin:0;font-size:.85rem">{{ comment.author }} · {{ comment.created_at | date: '%B %d, %Y' }}</p></div>
+          {%- endfor -%}
+          {% render 'pagination', paginate: paginate %}
+        {%- endpaginate -%}
+        {%- form 'new_comment', article -%}
+          {%- if form.posted_successfully? -%}<p class="form-success">Thank you. Your comment {% if blog.moderated? %}will appear once approved{% else %}has been posted{% endif %}.</p>{%- endif -%}
+          {%- if form.errors -%}<div class="form-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+          <div class="field--row">
+            <div class="field"><label for="CommentAuthor">Name</label><input id="CommentAuthor" type="text" name="comment[author]" value="{{ form.author }}" required></div>
+            <div class="field"><label for="CommentEmail">Email</label><input id="CommentEmail" type="email" name="comment[email]" value="{{ form.email }}" required></div>
+          </div>
+          <div class="field"><label for="CommentBody">Comment</label><textarea id="CommentBody" name="comment[body]" required>{{ form.body }}</textarea></div>
+          <button type="submit" class="btn btn--primary">Post comment</button>
+        {%- endform -%}
+      {%- endif -%}
+    </div>
+  </div>
+</article>
+{% schema %}
+{
+  "name": "Article",
+  "settings": []
+}
+{% endschema %}

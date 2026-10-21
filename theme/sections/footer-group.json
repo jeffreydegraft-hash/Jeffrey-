@@ -1,0 +1,27 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "Join the table",
+        "heading": "Get 10% off your first order",
+        "text": "<p>Scripture reflections, new blends and member-only offers. No noise, just what fills the cup.</p>",
+        "button_label": "Claim 10% off",
+        "fine_print": "By subscribing you agree to receive emails from us. Unsubscribe anytime."
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "shop": { "type": "menu", "settings": { "heading": "Shop", "menu": "main-menu" } },
+        "help": { "type": "menu", "settings": { "heading": "Help", "menu": "footer" } },
+        "contact": { "type": "text", "settings": { "heading": "Contact", "text": "<p>Questions about an oil, an order, or a prayer need? Reach out — we read every message.</p>" } }
+      },
+      "block_order": [ "shop", "help", "contact" ],
+      "settings": { "show_payments": true }
+    }
+  },
+  "order": [ "newsletter", "footer" ]
+}

@@ -1,0 +1,110 @@
+<header class="header{% if section.settings.sticky %} header--sticky{% endif %}" data-header {{ section.shopify_attributes }}>
+  <div class="container header__inner">
+    <button class="header__burger icon-btn" type="button" aria-label="Open menu" data-drawer-open="MenuDrawer">{% render 'icon', icon: 'menu' %}</button>
+    <a class="header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {%- if settings.logo != blank -%}
+        {{ settings.logo | image_url: width: 600 | image_tag: width: settings.logo_width, alt: shop.name, class: 'header__logo-img', loading: 'eager' }}
+      {%- else -%}
+        <span class="header__wordmark">{{ shop.name }}{% if section.settings.show_wordmark_sub %}<small>{{ section.settings.wordmark_sub }}</small>{% endif %}</span>
+      {%- endif -%}
+    </a>
+    <nav class="header__nav" aria-label="Main navigation">
+      <ul class="nav">
+        {%- for link in section.settings.menu.links -%}
+          <li class="nav__item{% if link.links.size > 0 %} nav__item--has-children{% endif %}">
+            <a href="{{ link.url }}" class="nav__link{% if link.current or link.child_current %} is-active{% endif %}"{% if link.links.size > 0 %} aria-haspopup="true"{% endif %}>
+              {{ link.title }}{% if link.links.size > 0 %}{% render 'icon', icon: 'chevron-down' %}{% endif %}
+            </a>
+            {%- if link.links.size > 0 -%}
+              <div class="nav__dropdown">
+                <ul>
+                  {%- for child in link.links -%}
+                    <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button type="button" class="icon-btn" aria-label="Search" data-drawer-open="SearchDrawer">{% render 'icon', icon: 'search' %}</button>
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="icon-btn header__account" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" aria-label="Account">{% render 'icon', icon: 'user' %}</a>
+      {%- endif -%}
+      <a class="icon-btn header__cart" href="{{ routes.cart_url }}" aria-label="Cart" data-cart-open>
+        {% render 'icon', icon: 'cart' %}
+        <span class="header__cart-count{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+      </a>
+      {%- if section.settings.show_cta -%}
+        <a class="btn btn--primary btn--small header__cta" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</header>
+
+<div class="drawer drawer--left" id="MenuDrawer" aria-hidden="true">
+  <div class="drawer__overlay" data-drawer-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="drawer__head">
+      <span class="drawer__title">Menu</span>
+      <button type="button" class="icon-btn" data-drawer-close aria-label="Close menu">{% render 'icon', icon: 'close' %}</button>
+    </div>
+    <nav class="drawer__nav" aria-label="Mobile navigation">
+      <ul>
+        {%- for link in section.settings.menu.links -%}
+          <li>
+            {%- if link.links.size > 0 -%}
+              <details class="drawer__details">
+                <summary>{{ link.title }}{% render 'icon', icon: 'chevron-down' %}</summary>
+                <ul>
+                  <li><a href="{{ link.url }}">All {{ link.title | downcase }}</a></li>
+                  {%- for child in link.links -%}<li><a href="{{ child.url }}">{{ child.title }}</a></li>{%- endfor -%}
+                </ul>
+              </details>
+            {%- else -%}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+        {%- if shop.customer_accounts_enabled -%}
+          <li><a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">{% if customer %}My account{% else %}Sign in{% endif %}</a></li>
+        {%- endif -%}
+      </ul>
+    </nav>
+    <div class="drawer__foot">
+      {%- if settings.tagline != blank -%}<p class="scripture-small">“{{ settings.tagline }}”</p><p class="muted" style="margin:0;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase">{{ settings.tagline_ref }}</p>{%- endif -%}
+      {% render 'social-icons' %}
+    </div>
+  </div>
+</div>
+
+<div class="drawer drawer--top" id="SearchDrawer" aria-hidden="true">
+  <div class="drawer__overlay" data-drawer-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="Search">
+    <button type="button" class="icon-btn search-drawer__close" data-drawer-close aria-label="Close search">{% render 'icon', icon: 'close' %}</button>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <input type="search" name="q" placeholder="Search oils, scripture, purpose…" aria-label="Search" value="{{ search.terms | escape }}" autocomplete="off">
+      <input type="hidden" name="options[prefix]" value="last">
+      <button type="submit" class="btn btn--primary">Search</button>
+    </form>
+    <p class="search-drawer__hint">Try “frankincense”, “protection”, or “gift set”</p>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "sticky", "label": "Sticky header", "default": true },
+    { "type": "checkbox", "id": "show_wordmark_sub", "label": "Show sub-line under text logo", "default": true },
+    { "type": "text", "id": "wordmark_sub", "label": "Sub-line", "default": "Anointing Oils" },
+    { "type": "checkbox", "id": "show_cta", "label": "Show call-to-action button", "default": true },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop oils" },
+    { "type": "url", "id": "cta_link", "label": "Button link" }
+  ]
+}
+{% endschema %}

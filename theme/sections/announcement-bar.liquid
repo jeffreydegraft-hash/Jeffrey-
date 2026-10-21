@@ -1,0 +1,32 @@
+{%- if section.blocks.size > 0 -%}
+<div class="announcement announcement--{{ section.settings.style }}" data-announcement data-interval="{{ section.settings.interval | times: 1000 }}" {{ section.shopify_attributes }}>
+  <div class="announcement__inner">
+    {%- for block in section.blocks -%}
+      <div class="announcement__item{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
+        {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{{ block.settings.text }}</a>{%- else -%}<span>{{ block.settings.text }}</span>{%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Announcement bar",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "select", "id": "style", "label": "Style", "options": [ { "value": "dark", "label": "Dark" }, { "value": "accent", "label": "Gold" }, { "value": "surface", "label": "Light" } ], "default": "dark" },
+    { "type": "range", "id": "interval", "min": 3, "max": 10, "step": 1, "unit": "s", "label": "Rotate messages every", "default": 5 }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "inline_richtext", "id": "text", "label": "Text", "default": "Free U.S. shipping on orders over $50" },
+        { "type": "url", "id": "link", "label": "Link (optional)" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Announcement bar", "blocks": [ { "type": "message" } ] } ]
+}
+{% endschema %}

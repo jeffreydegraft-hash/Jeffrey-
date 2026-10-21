@@ -1,0 +1,66 @@
+<section class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="page-head" style="padding-top:2rem">
+      <p class="eyebrow"><a href="{{ routes.account_url }}">← Back to account</a></p>
+      <h1 class="h2">Addresses</h1>
+    </div>
+    <div class="account">
+      <nav class="account__nav" aria-label="Account">
+        <a href="{{ routes.account_url }}">Orders</a>
+        <a href="{{ routes.account_addresses_url }}" class="is-active">Addresses</a>
+        <a href="{{ routes.account_logout_url }}">Log out</a>
+      </nav>
+      <div>
+        <button type="button" class="btn btn--primary" data-toggle="AddressNewForm">Add a new address</button>
+        <div id="AddressNewForm" class="address-form" hidden>
+          <h2 class="h3">New address</h2>
+          {%- form 'customer_address', customer.new_address -%}
+            {% render 'address-fields', form: form, id: 'New' %}
+            <button type="submit" class="btn btn--primary">Save address</button>
+            <button type="button" class="btn btn--secondary" data-toggle="AddressNewForm">Cancel</button>
+          {%- endform -%}
+        </div>
+        <div class="divider"></div>
+        {%- paginate customer.addresses by 10 -%}
+          {%- for address in customer.addresses -%}
+            <div class="address-card">
+              {%- if address == customer.default_address -%}<span class="badge" style="margin-bottom:.5rem">Default</span>{%- endif -%}
+              {{ address | format_address }}
+              <div class="address-card__actions">
+                <button type="button" data-toggle="EditAddress{{ address.id }}">Edit</button>
+                <form method="post" action="{{ routes.account_addresses_url }}/{{ address.id }}" onsubmit="return confirm('Delete this address?')">
+                  <input type="hidden" name="_method" value="delete"><button type="submit">Delete</button>
+                </form>
+              </div>
+            </div>
+            <div id="EditAddress{{ address.id }}" class="address-form" hidden>
+              <h2 class="h3">Edit address</h2>
+              {%- form 'customer_address', address -%}
+                {% render 'address-fields', form: form, id: address.id, address: address %}
+                <button type="submit" class="btn btn--primary">Update address</button>
+                <button type="button" class="btn btn--secondary" data-toggle="EditAddress{{ address.id }}">Cancel</button>
+              {%- endform -%}
+            </div>
+          {%- else -%}
+            <p class="muted">No addresses saved yet.</p>
+          {%- endfor -%}
+          {% render 'pagination', paginate: paginate %}
+        {%- endpaginate -%}
+      </div>
+    </div>
+  </div>
+</section>
+{{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-address-country]').forEach(function (select) {
+      var id = select.getAttribute('data-address-country');
+      if (window.Shopify && Shopify.CountryProvinceSelector) {
+        new Shopify.CountryProvinceSelector('AddressCountry' + id, 'AddressProvince' + id, { hideElement: 'AddressProvinceContainer' + id });
+      }
+    });
+  });
+</script>
+{% schema %}
+{ "name": "Addresses", "settings": [] }
+{% endschema %}

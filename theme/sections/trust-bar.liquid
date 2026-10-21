@@ -1,0 +1,38 @@
+<div class="trust-bar" style="--trust-cols: {{ section.blocks.size | at_least: 1 }}" {{ section.shopify_attributes }}>
+  <div class="container trust-bar__inner">
+    {%- for block in section.blocks -%}
+      <div class="trust-bar__item" {{ block.shopify_attributes }}>
+        {% render 'icon', icon: block.settings.icon %}
+        <span>{{ block.settings.text }}</span>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Trust bar",
+  "max_blocks": 5,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [ { "value": "leaf", "label": "Leaf" }, { "value": "drop", "label": "Oil drop" }, { "value": "truck", "label": "Truck" }, { "value": "lock", "label": "Lock" }, { "value": "shield", "label": "Shield" }, { "value": "book", "label": "Bible" }, { "value": "hand", "label": "Hand" }, { "value": "gift", "label": "Gift" }, { "value": "sparkle", "label": "Sparkle" }, { "value": "star", "label": "Star" } ], "default": "leaf" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Hand-blended in small batches" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust bar",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "leaf", "text": "Hand-blended in small batches" } },
+        { "type": "item", "settings": { "icon": "book", "text": "Scripture-inspired blends" } },
+        { "type": "item", "settings": { "icon": "truck", "text": "Free U.S. shipping over $50" } },
+        { "type": "item", "settings": { "icon": "lock", "text": "Secure checkout" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

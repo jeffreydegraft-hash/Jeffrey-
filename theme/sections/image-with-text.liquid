@@ -1,0 +1,57 @@
+<section class="section{% if section.settings.surface %} section--surface{% endif %}" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="iwt{% if section.settings.image_position == 'right' %} iwt--reverse{% endif %}">
+      <div class="iwt__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', widths: '600,900,1200,1400' }}
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder' }}
+        {%- endif -%}
+      </div>
+      <div class="iwt__content">
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+        <div class="rte">{{ section.settings.text }}</div>
+        {%- if section.settings.cta_label != blank -%}
+          <a class="btn btn--secondary" href="{{ section.settings.cta_link | default: '/pages/about' }}">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
+        {%- if section.blocks.size > 0 -%}
+          <div class="iwt__stats">
+            {%- for block in section.blocks -%}
+              <div class="iwt__stat" {{ block.shopify_attributes }}><strong>{{ block.settings.value }}</strong><span>{{ block.settings.label }}</span></div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Image with text",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "select", "id": "image_position", "label": "Image position", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ], "default": "left" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our story" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Rooted in Scripture. Blended with care." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>My Cup Runneth Over began with a simple conviction: that anointing oil should be made the way it was meant to be — from the botanicals of the Bible, prayed over, and offered with reverence.</p><p>Every bottle starts with a cold-pressed olive oil base and the resins, flowers and spices named in Scripture. No fillers. No shortcuts. Just oil set apart for a purpose.</p>" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Read our story" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+    { "type": "checkbox", "id": "surface", "label": "Use tinted background", "default": false }
+  ],
+  "blocks": [
+    { "type": "stat", "name": "Stat", "settings": [ { "type": "text", "id": "value", "label": "Value", "default": "100%" }, { "type": "text", "id": "label", "label": "Label", "default": "Biblical botanicals" } ] }
+  ],
+  "presets": [
+    {
+      "name": "Image with text",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "100%", "label": "Biblical botanicals, no fillers" } },
+        { "type": "stat", "settings": { "value": "Small", "label": "batches, hand-blended" } },
+        { "type": "stat", "settings": { "value": "Ps. 23", "label": "The promise in every bottle" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

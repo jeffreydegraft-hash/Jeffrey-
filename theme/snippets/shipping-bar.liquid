@@ -1,0 +1,18 @@
+{%- if settings.free_shipping_threshold > 0 -%}
+  {%- liquid
+    assign threshold = settings.free_shipping_threshold | times: 100
+    assign remaining = threshold | minus: cart.total_price
+    assign pct = cart.total_price | times: 100 | divided_by: threshold
+    if pct > 100
+      assign pct = 100
+    endif
+  -%}
+  <div class="ship-bar">
+    {%- if remaining > 0 -%}
+      You're <strong>{{ remaining | money }}</strong> away from free U.S. shipping.
+    {%- else -%}
+      <strong>You've unlocked free U.S. shipping.</strong>
+    {%- endif -%}
+    <div class="ship-bar__track"><div class="ship-bar__fill" style="--pct: {{ pct }}%"></div></div>
+  </div>
+{%- endif -%}

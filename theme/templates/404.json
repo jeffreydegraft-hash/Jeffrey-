@@ -1,0 +1,1 @@
+{ "sections": { "main": { "type": "main-404", "settings": {} }, "featured": { "type": "featured-collection", "settings": { "eyebrow": "Start here", "heading": "Our most-loved oils", "limit": 4, "columns": "4", "show_view_all": true, "view_all_label": "View all oils", "surface": true } } }, "order": [ "main", "featured" ] }

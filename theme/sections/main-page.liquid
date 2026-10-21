@@ -1,0 +1,17 @@
+<section class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="narrow">
+      <div class="page-head" style="padding-top:2rem">
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h1 class="h2">{{ page.title }}</h1>
+      </div>
+      <div class="rte">{{ page.content }}</div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Page",
+  "settings": [ { "type": "text", "id": "eyebrow", "label": "Eyebrow" } ]
+}
+{% endschema %}
