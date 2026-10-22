@@ -8,7 +8,7 @@
           "settings": {
             "image": "shopify://shop_images/4_oz_in_the_line_copy.jpg",
             "mobile_image": "shopify://shop_images/4_oz_in_the_line_copy.jpg",
-            "subheading": "With cosmeceuticals derived from biblical botanicals",
+            "subheading": "Anointing oils rooted in Scripture",
             "title": "THE ANOINTING OIL COLLECTION",
             "mobile_text_position": "place-self-end-center text-center",
             "desktop_text_position": "sm:place-self-end-center sm:text-center",
@@ -202,7 +202,7 @@
             "collection": "gethsemane",
             "expand_collection": false,
             "content_position": "place-self-end-start text-start",
-            "subheading": "Vegan Squalane",
+            "subheading": "Unscented",
             "title": "GETHSEMANE",
             "button_text": "",
             "button_link": "shopify://products/gethsemane-anointing-oil-unscented",
@@ -284,7 +284,7 @@
             "image": "shopify://shop_images/SerumAnointingoil.jpg",
             "expand_collection": true,
             "content_position": "place-self-center text-center",
-            "subheading": "Mount of Olives' sustainable, vegan squalane oil, derived from the purity of olives and steeped in biblical tradition, offers hydration from head to toe",
+            "subheading": "From the olive, the tree whose oil lit the tabernacle and anointed kings. Our vegan, sustainably sourced squalane is the base of every oil we make, and on its own it gives light hydration from head to toe",
             "title": "",
             "button_text": "View Products",
             "button_link": "shopify://products/100-squalane",
@@ -563,7 +563,7 @@
         "mobile_two_rows": true,
         "mobile_crop_top": 15,
         "mobile_crop_height": 77,
-        "subheading": "With cosmeceuticals derived from biblical botanicals",
+        "subheading": "Anointing oils rooted in Scripture",
         "title": "The Anointing Oil Collection",
         "content": "",
         "button_text": "Shop now",
@@ -676,7 +676,7 @@
             "icon_width": 28,
             "mobile_icon_width": 24,
             "title": "Anointed with Purpose",
-            "content": "<p>Enriched with Polyphenol Alpha(α)™ to nourish skin and hair.</p>"
+            "content": "<p>Enriched with Polyphenol Alpha (α)™, drawn from biblical botanicals, to nourish skin and hair.</p>"
           }
         }
       },
@@ -732,7 +732,7 @@
         "text_alignment": "start",
         "subheading": "Serums",
         "title": "100% Squalane Oil",
-        "content": "<p>Mount of Olives' sustainable, vegan squalane oil, derived from the purity of olives and steeped in biblical tradition, offers hydration from head to toe.</p>",
+        "content": "<p>From the olive, the tree whose oil lit the tabernacle and anointed kings. Our vegan, sustainably sourced squalane is the base of every oil we make, and on its own it gives light hydration from head to toe.</p>",
         "button_1_text": "View product",
         "button_1_link": "shopify://products/100-squalane",
         "button_1_style": "solid",
@@ -878,7 +878,7 @@
         "cycle_speed": 7,
         "font_size_factor": 1,
         "subheading": "From our customers",
-        "title": "Rated 4 stars and up by {count} customers",
+        "title": "{count} four- and five-star reviews",
         "content": ""
       }
     }

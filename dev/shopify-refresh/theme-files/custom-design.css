@@ -454,15 +454,14 @@
   padding: .3rem .55rem;
 }
 
-@media screen and (min-width: 700px) {
-  .mo-sizes__badge {
-    grid-column: auto;
-    justify-self: end;
-  }
+/* the badge sits under the best row's price on every screen, so the three rows keep one column grid */
+.mo-sizes__row .mo-sizes__badge {
+  grid-column: 2 / -1;
+}
 
-  .mo-sizes__row {
-    grid-template-columns: minmax(4rem, auto) auto 1fr auto;
-  }
+.mo-sizes__per,
+.mo-sizes__badge {
+  white-space: nowrap;
 }
 
 /* ---------- Featured collection tabs: both names fit on a phone screen ---------- */
@@ -698,3 +697,18 @@ line-item-quantity .link::before {
   scroll-margin-top: 7rem;
 }
 
+
+/* ---------- Home: the squalane bottle photo is on pure white; blend it onto the cream ---------- */
+.shopify-section[id$="__mo-squalane"] .multiple-media-with-text__media-wrapper > :nth-child(2) {
+  background: rgb(var(--background));
+  isolation: isolate;
+}
+
+.shopify-section[id$="__mo-squalane"] .multiple-media-with-text__media-wrapper > :nth-child(2) img {
+  mix-blend-mode: multiply;
+}
+
+/* ---------- Product cards: two-line title slot so prices line up across a row ---------- */
+.product-card__info .product-title {
+  min-height: 2lh;
+}

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, maximum-scale=5.0">
 
-    <title>{% if page_title == blank %}{{ shop.name }}{% else %}{{ page_title }}{% if current_page != 1 %} &ndash; {{ 'general.page' | t: page: current_page }}{% endif %}{% endif %}</title>
+    <title>{% if page_title == blank %}{{ shop.name }}{% else %}{{ page_title }}{% if current_page != 1 %} | {{ 'general.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} | {{ shop.name }}{% endunless %}{% endif %}</title>
 
     {%- if request.page_type == 'index' -%}
     <meta name="description" content="Biblical anointing oils from frankincense, myrrh, hyssop and more, in a base of olive squalane. Rooted in Scripture, blended by hand in Texas. Free US shipping on orders $40+.">

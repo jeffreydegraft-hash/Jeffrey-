@@ -99,6 +99,9 @@ product page. The links are spread evenly between the two "bottle area" edges se
           if block.settings.collection != blank
             assign spot_url = block.settings.collection.url
             assign spot_title = block.settings.collection.title
+            if block.settings.product != blank
+              assign spot_title = block.settings.product.title
+            endif
           elsif block.settings.product != blank
             assign spot_url = block.settings.product.url
             assign spot_title = block.settings.product.title
@@ -229,7 +232,7 @@ product page. The links are spread evenly between the two "bottle area" edges se
       "type": "inline_richtext",
       "id": "subheading",
       "label": "Subheading",
-      "default": "With cosmeceuticals derived from biblical botanicals"
+      "default": "Anointing oils rooted in Scripture"
     },
     {
       "type": "inline_richtext",

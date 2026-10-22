@@ -21,7 +21,7 @@ P['frankincense-myrrh-anointing-oil'] = dict(
   intro="Frankincense and myrrh, two gifts of the Magi, symbolize prayer, worship, and blessing. Frankincense invites a deeper reverence and awareness of God's presence, while myrrh recalls purification and Christ's sacrifice. This blend is made for deepening moments of worship, prayer, and intercession.",
   ingredients=[('Ingredients', 'Olive oil, Boswellia serrata (frankincense), Commiphora myrrha (myrrh)'),
                ('Antioxidants', 'Tyrosol, Hydroxytyrosol, Oleuropein-aglycone dialdehyde, Oleuropein-aglycone mono-aldehyde, Ligstroside-aglycone di-aldehyde, Luteolin, Apigenin, Pinoresinol, Squalane, Ellagitannins, Tannins, Gallic acid, Quercetin')],
-  refs="Genesis 37:25, Genesis 43:11, Exodus 30:23, Exodus 30:34, Leviticus 2:2, Leviticus 2:15-16, Leviticus 6:15, Leviticus 24:7, Numbers 5:15, 1 Chronicles 9:29, Nehemiah 13:5, Nehemiah 13:9, Esther 2:12, Psalm 45:8, Proverbs 7:17, Song of Solomon 1:13, Song of Solomon 3:6, Song of Solomon 4:6, Song of Solomon 4:14, Song of Solomon 5:1, Song of Solomon 5:5, Song of Solomon 5:13, Matthew 2:11, Revelation 18:13")
+  refs="Genesis 37:25, Genesis 43:11, Leviticus 2:2, Leviticus 2:15-16, Leviticus 6:15, Leviticus 24:7, Numbers 5:15, 1 Chronicles 9:29, Nehemiah 13:5, Nehemiah 13:9, Esther 2:12, Psalm 45:8, Proverbs 7:17, Song of Solomon 1:13, Song of Solomon 3:6, Song of Solomon 4:6, Song of Solomon 4:14, Song of Solomon 5:1, Song of Solomon 5:5, Song of Solomon 5:13, Matthew 2:11, Revelation 18:13")
 P['frankincense'] = dict(
   word='Protect',
   intro="Frankincense anointing oil is a sacred symbol of prayer rising before God like incense. It consecrates moments of worship and intercession and brings hearts in line with heaven. Made for creating holy, peaceful spaces during prayer, worship, and consecration.",
@@ -101,7 +101,7 @@ SQUALANE = (
   "<li>For external use only.</li>"
   "</ul>"
   "<h3>Scripture references</h3>"
-  "<p>Exodus 27:20, Exodus 30:22-25, 1 Samuel 16:13, Psalm 23:5, Matthew 26:36</p>")
+  "<p>Exodus 27:20, 1 Samuel 16:13, Psalm 23:5, Matthew 26:36</p>")
 
 COLLECTIONS = {
   'rose-of-sharon': "<p>Discover the Rose of Sharon, the flower of the Song of Solomon: \"I am the rose of Sharon, and the lily of the valleys\" (Song of Solomon 2:1). Our Rose of Sharon anointing oil is crafted from Cistus ladaniferus in a base of olive oil with Polyphenol Alpha (α)™, our complex of polyphenols from biblical botanicals. Made for worship, prayer, personal devotion, consecration, and intercession, and it nourishes the skin.</p>",

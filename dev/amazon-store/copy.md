@@ -48,7 +48,7 @@ Link title to type into Store Builder: the oil name. The tile image already carr
 
 ### Our Story page
 - Heading: Rooted in Scripture. Blended in Texas.
-- Body: Anointing with oil runs through the whole of Scripture: the holy anointing oil of Exodus 30, the horn of oil that anointed David, the oil of gladness of the Psalms, the alabaster jar broken at Bethany. Every Mount of Olives oil begins with the plants, resins, and extracts those pages name, revered for millennia: frankincense, myrrh, spikenard, hyssop, pomegranate, rose of Sharon, and lily of the valley. We blend them by hand in Richmond, Texas, in a base of olive squalane, so that an oil made for prayer, worship, and blessing also nourishes the skin.
+- Body: Anointing with oil runs through the whole of Scripture: the horn of oil that anointed David, the oil of gladness of the Psalms, the alabaster jar broken at Bethany. Every Mount of Olives oil begins with the plants, resins, and extracts those pages name, revered for millennia: frankincense, myrrh, spikenard, hyssop, pomegranate, rose of Sharon, and lily of the valley. We blend them by hand in Richmond, Texas, in a base of olive squalane, so that an oil made for prayer, worship, and blessing also nourishes the skin.
 - Heading: What is in every bottle
 - Body: Olive-derived squalane, a light, stable oil from the fruit of the tree Scripture names more than any other, carries the botanical extracts. Our Polyphenol Alpha (α)™ complex brings together polyphenols from those same biblical botanicals. Naturally derived actives. No parabens, phthalates, sulfates, or synthetic fragrances. Non-comedogenic. Cruelty-free. Recyclable packaging.
 - Heading: How we use it
