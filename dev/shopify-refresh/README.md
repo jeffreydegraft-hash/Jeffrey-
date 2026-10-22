@@ -204,8 +204,20 @@ Theme copy (`theme-files/`, goes live when the unpublished copy is published):
 - Squalane bottle photo blended onto the cream page (it was a white box).
 - Compare sizes: the "Best value" badge sits under the best price on every screen, per-ounce prices never wrap.
 - Product cards keep a two-line title slot so prices line up across a row; the ampersand stays with the word before it.
-- Free shipping copy at $40 everywhere (badges, announcement bar, FAQ, cart bar, home meta description), matching the shipping rate.
+- Free shipping copy stays at $45. The rate itself is free from $40.50 so that a $45 cart still ships free after the 10% WELCOME10 discount; that is why the copy says $45, not $40.
+- "Cosmeceutical" removed from the homepage and FAQ answers and the Contact page.
+- Pages that have no description of their own (and would fall back to the store-wide description in Online Store > Preferences, which still says "faith and science ... cosmeceuticals ... healing, protection") use the brand line instead, in search results and share previews.
 
-Store data (changes live at once): see the list in the session summary; product descriptions are in `copy/products/`, built by `tools/product-descriptions-build.py`.
+Uploaded to the new unpublished copy **Mount of Olives – Fix-all (Oct 22, not live)** (`167626965052`, a duplicate of the live Science theme), 11 files, every checksum verified: templates index, page.our-science, page.faq, page.contact; sections footer-group, footer, mo-hero; snippets product-card, social-meta-tags; assets custom-design.css; layout theme.liquid. `config/settings_data.json` was left as it is on the live theme (it carries the Inbox chat and Junip app blocks).
+
+Store data (live at once):
+
+- The sunset praying-woman photo (`PRAYERIMAGE`) detached from Frankincense and Myrrh; the new praying photo now sits sixth on all ten oils, Frankincense & Myrrh included.
+- New product descriptions and search snippets for all eleven products (`copy/products/`, built by `tools/product-descriptions-build.py`): Scripture first, no efficacy claims, no dashes, ingredient lists and How to use kept, Scripture lists in Bible order with the typos fixed (Proverbs 16:15, Numbers 20:5, Leviticus 14:4, Zechariah 10:1) and Exodus 30 taken out.
+- Ten collection descriptions rewritten the same way (`copy/collections.json`); "All Anointing Oil Products" renamed "All Products"; squalane and pomegranate search titles without "Cosmeceutical" and "Antioxidant-Rich".
+- Our Science page record: Exodus 30 out, King James verse. FAQ page record unchanged except the earlier dash fixes.
+- Gallery photo descriptions: the "With Cosmeceuticals - product image N" text replaced with plain descriptions on 32 photos. Note: `fileUpdate` with only `alt` detached those photos from their products; they were re-attached with `referencesToAdd` and put back in order within about 15 minutes. When alt text is changed with `fileUpdate` again, re-read the product galleries afterwards.
+- Footer menu "Refund policy" to "Refund Policy"; the prayer-guide summary without its em dash.
+- Redirects: `/collections/anointing-oils` and `/shop` now go to All Products (23 journal links pointed at the first); 26 old journal redirects that ended on a missing page now land on the matching live post; two inert redirects removed (their paths are live posts).
 
 Checked locally and found to be preview-only, not live issues: the "(2)" rating without reviews (the Junip reviews block renders only on Shopify), the journal card placeholder excerpt, and the JavaScript errors from the cart, recently viewed and country requests that the local preview cannot answer.

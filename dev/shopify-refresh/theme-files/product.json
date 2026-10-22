@@ -55,7 +55,7 @@
         "mo-feature-shipping": {
           "type": "feature_with_icon",
           "settings": {
-            "text": "Free US shipping on orders $40+",
+            "text": "Free US shipping on orders $45+",
             "link": "",
             "icon": "picto-delivery-truck",
             "icon_width": 16,

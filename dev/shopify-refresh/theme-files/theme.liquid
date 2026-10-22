@@ -7,11 +7,14 @@
 
     <title>{% if page_title == blank %}{{ shop.name }}{% else %}{{ page_title }}{% if current_page != 1 %} | {{ 'general.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} | {{ shop.name }}{% endunless %}{% endif %}</title>
 
-    {%- if request.page_type == 'index' -%}
-    <meta name="description" content="Biblical anointing oils from frankincense, myrrh, hyssop and more, in a base of olive squalane. Rooted in Scripture, blended by hand in Texas. Free US shipping on orders $40+.">
-    {%- elsif page_description -%}
-      <meta name="description" content="{{ page_description | escape }}">
-    {%- endif -%}
+    {%- comment -%}Mount of Olives: the store-wide description (Online Store > Preferences) still carries old claim wording, so pages that would fall back to it use the brand line instead.{%- endcomment -%}
+    {%- liquid
+      assign mo_description = page_description
+      if request.page_type == 'index' or mo_description == blank or mo_description == shop.description
+        assign mo_description = 'Biblical anointing oils from frankincense, myrrh, hyssop and more, in a base of olive squalane. Rooted in Scripture, blended by hand in Texas. Free US shipping on orders $45+.'
+      endif
+    -%}
+    <meta name="description" content="{{ mo_description | escape }}">
 
     <link rel="canonical" href="{{ canonical_url }}">
 

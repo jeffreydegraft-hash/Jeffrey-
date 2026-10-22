@@ -365,7 +365,7 @@
         "fp-features": {
           "type": "feature_with_icon",
           "settings": {
-            "text": "Free US shipping on orders $40+",
+            "text": "Free US shipping on orders $45+",
             "link": "",
             "icon": "picto-delivery-truck",
             "icon_width": 16,
@@ -777,14 +777,14 @@
           "type": "question",
           "settings": {
             "question": "What are anointing oils?",
-            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, following a tradition rooted in Scripture. Our oils combine this biblical heritage with careful cosmeceutical craft, so they also nourish the skin.</p>"
+            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, following a tradition rooted in Scripture. Our oils carry this biblical heritage, prepared with care, so they also nourish the skin.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
             "question": "Do you offer free shipping?",
-            "answer": "<p>Yes! We offer free standard shipping on all US orders of $40 or more. Orders under $40 ship at a flat rate within the US.</p>"
+            "answer": "<p>Yes! We offer free standard shipping on all US orders of $45 or more. Orders under $45 ship at a flat rate within the US.</p>"
           }
         },
         "q3": {

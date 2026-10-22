@@ -60,7 +60,7 @@ P['pomegranate-anointing-oil'] = dict(
   refs="Exodus 28:34, Exodus 39:24, Numbers 13:23, Numbers 20:5, Deuteronomy 8:8, 1 Samuel 14:2, 1 Kings 7:20, 1 Kings 7:42, 2 Kings 25:17, 2 Chronicles 3:16, 2 Chronicles 4:13, Song of Solomon 4:3, Song of Solomon 4:13, Song of Solomon 6:7, Song of Solomon 6:11, Song of Solomon 7:12, Song of Solomon 8:2, Jeremiah 52:22-23, Joel 1:12, Haggai 2:19")
 P['rose-of-sharon'] = dict(
   word='Radiance',
-  intro="The Rose of Sharon symbolizes Christ's beauty, love, and purity, \"I am the rose of Sharon, and the lily of the valleys.\" This oil is made for moments of worship, prayer, and personal devotion, for consecration and intercession, and for a sense of spiritual renewal and peace.",
+  intro="The Rose of Sharon symbolizes Christ's beauty, love, and purity: \"I am the rose of Sharon, and the lily of the valleys.\" This oil is made for moments of worship, prayer, and personal devotion, for consecration and intercession, and for a sense of spiritual renewal and peace.",
   ingredients=[('Ingredients', 'Olive oil, Cistus ladaniferus (rose of Sharon)'),
                ('Antioxidants', 'Tyrosol, Hydroxytyrosol, Oleuropein-aglycone, Ligstroside-aglycone, Luteolin, Apigenin, Pinoresinol, Squalane, Ellagitannins, Tannins, Gallic acid, Quercetin')],
   refs="Song of Solomon 2:1, Isaiah 65:10")
