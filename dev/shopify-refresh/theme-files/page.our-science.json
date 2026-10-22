@@ -98,11 +98,11 @@
         "std-5": {
           "type": "item",
           "settings": {
-            "icon": "picto-recycle",
+            "icon": "picto-leaf",
             "icon_width": 32,
             "mobile_icon_width": 28,
-            "title": "Transparent and sustainable",
-            "content": "<p>Recyclable and biodegradable packaging. Every compound published with its botanical origin.</p>"
+            "title": "Transparent and thoughtful",
+            "content": "<p>Packaging chosen with care for God’s creation. Every compound published with its botanical origin.</p>"
           }
         }
       },
@@ -221,7 +221,7 @@
           "type": "tab",
           "settings": {
             "title": "Our standards",
-            "content": "<p>We believe that what we place on our bodies, temples of the Holy Spirit, deserves the highest standards of purity and care. Our commitment:</p><ul><li><strong>100% naturally derived active ingredients.</strong> Every active compound originates from a botanical source.</li><li><strong>Free from parabens, phthalates, sulfates, and synthetic fragrances.</strong> We exclude ingredients that do not align with our values.</li><li><strong>Non-comedogenic formulation.</strong> Made to nourish the skin without clogging pores.</li><li><strong>Cruelty-free.</strong> We honor all of God’s creation and never test on animals.</li><li><strong>Sustainable, eco-conscious packaging.</strong> Recyclable and biodegradable materials, as part of our stewardship of the earth.</li><li><strong>Full ingredient transparency.</strong> We publish every compound and its botanical origin, because we believe informed customers are empowered customers.</li></ul>",
+            "content": "<p>We believe that what we place on our bodies, temples of the Holy Spirit, deserves the highest standards of purity and care. Our commitment:</p><ul><li><strong>100% naturally derived active ingredients.</strong> Every active compound originates from a botanical source.</li><li><strong>Free from parabens, phthalates, sulfates, and synthetic fragrances.</strong> We exclude ingredients that do not align with our values.</li><li><strong>Non-comedogenic formulation.</strong> Made to nourish the skin without clogging pores.</li><li><strong>Cruelty-free.</strong> We honor all of God’s creation and never test on animals.</li><li><strong>Thoughtful packaging.</strong> Chosen with care, as part of our stewardship of the earth.</li><li><strong>Full ingredient transparency.</strong> We publish every compound and its botanical origin, because we believe informed customers are empowered customers.</li></ul>",
             "open_on_mobile": false
           }
         }
