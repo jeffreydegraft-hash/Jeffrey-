@@ -3,8 +3,8 @@
     "hero": {
       "type": "hero-lineup",
       "settings": {
-        "image": "shopify://shop_images/Hero_banner.png",
-        "image_alt": "A woman smiling and holding a bottle of My Cup Runneth Over Frankincense anointing oil",
+        "image": "shopify://shop_images/mcro-hero-frankincense-myrrh.jpg",
+        "image_alt": "A smiling woman holding a 4 oz bottle of My Cup Runneth Over Frankincense & Myrrh anointing oil",
         "eyebrow": "Handcrafting anointing oils since 2010",
         "heading": "You anoint my head with oil; <em>my cup runs over.</em>",
         "text": "<p>Eight biblical blends in a pure olive oil base. Each bottle carries the verse it was named for, and each one is prepared with prayer.</p>",
@@ -90,7 +90,7 @@
         "s3"
       ],
       "settings": {
-        "image": "shopify://shop_images/hyssop-luxury.jpg",
+        "image": "shopify://shop_images/mcro-classic-unscented-4oz.png",
         "image_position": "left",
         "eyebrow": "Our story",
         "heading": "Born from Psalm 23:5",
@@ -396,7 +396,8 @@
         "collection": "sacred-anointing-oils",
         "bundle_size": 6,
         "property_name": "Your oils",
-        "note": "Six full-size 4 oz bottles in one order."
+        "note": "Six full-size 4 oz bottles in one order.",
+        "image": "shopify://shop_images/mcro-anointing-collection-8-oils.jpg"
       }
     },
     "ritual": {
