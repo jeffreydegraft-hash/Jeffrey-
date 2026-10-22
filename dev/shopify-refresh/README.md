@@ -221,3 +221,18 @@ Store data (live at once):
 - Redirects: `/collections/anointing-oils` and `/shop` now go to All Products (23 journal links pointed at the first); 26 old journal redirects that ended on a missing page now land on the matching live post; two inert redirects removed (their paths are live posts).
 
 Checked locally and found to be preview-only, not live issues: the "(2)" rating without reviews (the Junip reviews block renders only on Shopify), the journal card placeholder excerpt, and the JavaScript errors from the cart, recently viewed and country requests that the local preview cannot answer.
+
+### Oct 22 (later): homepage fixes after the owner's phone check
+
+Draft theme "Mount of Olives – Homepage fixes (Oct 22, not live)" (167628374076), a copy of the live theme with 14 files changed:
+
+- Hero: the SHOP buttons sat on the bottle bases on phones. The layout had been tuned on a resized copy of the photo; the live photo (1942×809) puts the bottles at 17.9% to 86.7% of its height and 1.1% to 98.9% of its width. The bottle area and crops now match that photo, and each button hangs a fixed gap below its bottle (`assets/custom-design.css`, `templates/index.json`).
+- Reviews heading counts five-star reviews only and reads "{count} five-star reviews"; Junip counts are added only when their average is 5 (`sections/testimonials.liquid`).
+- Product cards show the review count instead of the star score (`config/settings_schema.json` default `product_rating_mode: count`; a value in `settings_data.json` is dropped by Shopify on upload).
+- Homepage FAQ: shipping under $45 is "calculated at checkout" (there is no flat rate); "ethically sourced" removed; base described as olive squalane everywhere.
+- Free-shipping bar: measures the order before order discounts while the discounted total stays at or above the $40.50 rate, so a $45 cart with WELCOME10 shows free shipping (`snippets/free-shipping-bar.liquid`); messages say US.
+- Homepage title "Mount of Olives | Biblical Anointing Oils Rooted in Scripture"; meta description under 160 characters.
+- "Find your oil" tiles blend onto cream; Shop now goes to All Products; email share link encoded; footer newsletter text and "Email" label; schema logo points at `mo-favicon.png`.
+- Science page: 1 Corinthians 12:20 in King James wording ("many members, yet but one body").
+
+Store changes in the same pass: Frankincense and Hyssop variant weights set to 0.8 lb like the other oils (Frankincense was 0, Hyssop 0.8 oz); Pomegranate collection image set to the 4 oz render.

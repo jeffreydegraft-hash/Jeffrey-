@@ -1,0 +1,43 @@
+{% if request.page_type == 'index' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "{{ shop.url }}/#organization",
+  "name": "Mount of Olives",
+  "url": "{{ shop.url }}",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "{{ 'mo-favicon.png' | asset_url }}",
+    "width": 512,
+    "height": 512
+  },
+  "description": "Authentic, scripture-rooted anointing oils handcrafted with biblical botanicals for prayer, worship, and spiritual practice. Made with clean, natural ingredients.",
+  "foundingDate": "2010",
+  "brand": {
+    "@type": "Brand",
+    "name": "Mount of Olives",
+    "url": "{{ shop.url }}"
+  },
+  "parentOrganization": {
+    "@type": "Organization",
+    "@id": "{{ shop.url }}/#parent-org",
+    "name": "Mount of Olives LLC",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Houston",
+      "addressRegion": "TX",
+      "addressCountry": "US"
+    }
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": "info@mountofolives.co",
+    "url": "{{ shop.url }}/pages/contact",
+    "availableLanguage": "English"
+  },
+  "sameAs": []
+}
+</script>
+{% endif %}

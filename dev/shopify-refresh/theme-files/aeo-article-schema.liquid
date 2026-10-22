@@ -1,0 +1,56 @@
+{% comment %}
+  Enhanced Article Schema with speakable
+{% endcomment %}
+
+{% assign article_text = article.content | strip_html | truncate: 300, '' %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "{{ shop.url }}{{ article.url }}#article",
+  "headline": {{ article.title | json }},
+  "description": {{ article.excerpt_or_content | strip_html | truncate: 160 | json }},
+  "url": "{{ shop.url }}{{ article.url }}",
+  "datePublished": "{{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' }}",
+  "dateModified": "{{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' }}",
+  "wordCount": {{ article.content | strip_html | split: ' ' | size }},
+  {% if article.image %}
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:{{ article.image | image_url: width: 1200 }}",
+    "width": 1200,
+    "height": 630
+  },
+  {% endif %}
+  "publisher": {
+    "@type": "Organization",
+    "name": "Mount of Olives",
+    "url": "{{ shop.url }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ 'mo-favicon.png' | asset_url }}"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ shop.url }}{{ article.url }}"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [
+      ".article-content > p:first-of-type",
+      ".article__content > p:first-of-type",
+      ".rte > p:first-of-type"
+    ]
+  },
+  "isPartOf": {
+    "@type": "Blog",
+    "name": {{ blog.title | json }},
+    "url": "{{ shop.url }}/blogs/{{ blog.handle }}"
+  }
+  {% if article.tags.size > 0 %}
+  ,"keywords": {{ article.tags | json }}
+  {% endif %}
+}
+</script>

@@ -24,7 +24,7 @@
       <div class="section-stack">
         {%- if section.settings.title != blank or section.settings.subheading != blank or section.settings.content != blank -%}
           {%- liquid
-            # Mount of Olives: "{count}" in the heading becomes the live number of reviews rated 4 stars and up, read
+            # Mount of Olives: "{count}" in the heading becomes the live number of five-star reviews, read
             # from the review metafields: Etsy reviews (ReputonEtsyReviews::ProductReviews), Amazon reviews pasted into
             # the custom.amazon_reviews metafield (same shape: {"reviews": [{"rating": 5, ...}]}, on products or the shop),
             # and Junip's counts for reviews left on the store itself
@@ -34,24 +34,25 @@
               for product in collections['all-products'].products
                 for field in product.metafields['ReputonEtsyReviews::ProductReviews']
                   for review in field.last.value.reviews
-                    if review.rating >= 4
+                    if review.rating >= 5
                       assign review_total = review_total | plus: 1
                     endif
                   endfor
                 endfor
                 for review in product.metafields.custom.amazon_reviews.value.reviews
-                  if review.rating >= 4
+                  if review.rating >= 5
                     assign review_total = review_total | plus: 1
                   endif
                 endfor
                 assign junip_count = product.metafields.junip.rating_count.value | default: 0
                 assign junip_average = product.metafields.junip.rating_average.value | default: 0 | times: 1.0
-                if junip_count > 0 and junip_average >= 4
+                # Junip only gives a count and an average, so its reviews are all five-star only when the average is 5
+                if junip_count > 0 and junip_average >= 5
                   assign review_total = review_total | plus: junip_count
                 endif
               endfor
               for review in shop.metafields.custom.amazon_reviews.value.reviews
-                if review.rating >= 4
+                if review.rating >= 5
                   assign review_total = review_total | plus: 1
                 endif
               endfor
@@ -206,12 +207,12 @@
       "type": "inline_richtext",
       "id": "title",
       "label": "t:global.text.heading",
-      "info": "Write {count} to show the live number of reviews rated 4 stars and up (Etsy, Amazon and store reviews)."
+      "info": "Write {count} to show the live number of five-star reviews (Etsy, Amazon and store reviews)."
     },
     {
       "type": "number",
       "id": "amazon_review_count",
-      "label": "Amazon reviews rated 4 stars and up",
+      "label": "Amazon five-star reviews",
       "info": "Added to the live count. Enter the number your Amazon listings show, and keep it current."
     },
     {

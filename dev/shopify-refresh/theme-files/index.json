@@ -338,7 +338,7 @@
         "fp-text": {
           "type": "text",
           "settings": {
-            "text": "<p>Frankincense & Myrrh, these two sacred anointing oils, gifts of the Magi, symbolize prayer, worship, and healing. Frankincense invites a deeper reverence and connection to God's presence, while Myrrh represents purification and Christ's sacrifice.</p>"
+            "text": "<p>Frankincense and myrrh, gifts of the Magi, speak of prayer, worship, and healing. Frankincense invites a deeper reverence for God's presence, while myrrh speaks of purification and Christ's sacrifice.</p>"
           }
         },
         "74111ee2-6aac-45de-b389-20c693072c8b": {
@@ -560,19 +560,21 @@
         "color_scheme": "scheme-1",
         "image": "shopify://shop_images/4_oz_in_the_line_copy.jpg",
         "image_max_width": 1680,
+        "desktop_crop_top": 14,
+        "desktop_crop_height": 86,
         "mobile_two_rows": true,
         "mobile_crop_top": 15,
-        "mobile_crop_height": 77,
+        "mobile_crop_height": 85,
         "subheading": "Anointing oils rooted in Scripture",
         "title": "The Anointing Oil Collection",
         "content": "",
         "button_text": "Shop now",
-        "button_link": "shopify://collections/all",
+        "button_link": "shopify://collections/all-products",
         "button_background": "#c4a265",
         "button_text_color": "#2c3227",
         "bottle_label": "Shop",
-        "bottles_left": 2.6,
-        "bottles_right": 97.9
+        "bottles_left": 1.1,
+        "bottles_right": 98.9
       },
       "blocks": {
         "bottle-1": {
@@ -666,7 +668,7 @@
             "icon_width": 28,
             "mobile_icon_width": 24,
             "title": "Clean Ingredients",
-            "content": "<p>Natural, paraben-free and vegan, with an olive oil base.</p>"
+            "content": "<p>Natural, paraben-free and vegan, in a base of olive squalane.</p>"
           }
         },
         "pillar-purpose": {
@@ -777,14 +779,14 @@
           "type": "question",
           "settings": {
             "question": "What are anointing oils?",
-            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, following a tradition rooted in Scripture. Our oils carry this biblical heritage, prepared with care, so they also nourish the skin.</p>"
+            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, following a tradition rooted in Scripture. Our oils carry this biblical heritage. They are prepared with care in a base of olive squalane, which also nourishes the skin.</p>"
           }
         },
         "q2": {
           "type": "question",
           "settings": {
             "question": "Do you offer free shipping?",
-            "answer": "<p>Yes! We offer free standard shipping on all US orders of $45 or more. Orders under $45 ship at a flat rate within the US.</p>"
+            "answer": "<p>Yes! We offer free standard shipping on all US orders of $45 or more. On smaller orders, shipping is calculated at checkout.</p>"
           }
         },
         "q3": {
@@ -798,7 +800,7 @@
           "type": "question",
           "settings": {
             "question": "Are your products cruelty-free?",
-            "answer": "<p>Yes. Mount of Olives products are never tested on animals. We are committed to cruelty-free, ethically sourced ingredients.</p>"
+            "answer": "<p>Yes. Mount of Olives products are never tested on animals.</p>"
           }
         },
         "q5": {
@@ -878,7 +880,7 @@
         "cycle_speed": 7,
         "font_size_factor": 1,
         "subheading": "From our customers",
-        "title": "{count} four- and five-star reviews",
+        "title": "{count} five-star reviews",
         "content": ""
       }
     }

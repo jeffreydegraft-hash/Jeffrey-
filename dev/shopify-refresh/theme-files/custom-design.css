@@ -203,9 +203,9 @@
   --mo-spot-width: calc((var(--mo-hero-spots-right) - var(--mo-hero-spots-left)) / var(--mo-hero-spots-count) * 1%);
   position: absolute;
   z-index: 1;
-  /* from just above the caps to just below the bottle, where the button sits */
+  /* covers the bottle, from just above the caps to its base; the Shop button hangs just below it */
   top: 17%;
-  height: 69%;
+  height: 70%;
   width: var(--mo-spot-width);
   inset-inline-start: calc(var(--mo-hero-spots-left) * 1% + var(--i) * var(--mo-spot-width));
   display: flex;
@@ -226,7 +226,11 @@
   border: 1px solid rgb(var(--mo-olive) / .45);
   padding: .55rem .9rem .55rem calc(.9rem + .2em);
   transition: background-color .2s var(--mo-ease-out), color .2s var(--mo-ease-out), border-color .2s var(--mo-ease-out);
-  pointer-events: none;
+  /* a fixed gap under the bottle at every width, inside the photo's white margin */
+  position: absolute;
+  top: calc(100% + .5rem);
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
 }
 
 /* hovering anywhere on the bottle fills its button, so the whole bottle reads as the link */
@@ -281,11 +285,8 @@
     inset-inline-start: calc(-100% * var(--mo-hero-row-two-start, 50) / var(--mo-hero-row-span, 50));
   }
 
-  .mo-hero__spot {
-    height: 71.5%;
-  }
-
   .mo-hero__spot-label {
+    top: calc(100% + .25rem);
     letter-spacing: .14em;
     padding: .5rem .65rem .5rem calc(.65rem + .14em);
   }
@@ -345,8 +346,9 @@
   mix-blend-mode: multiply;
 }
 
-/* the card media is an isolated group, so it needs the page colour to blend onto */
-.product-card__media {
+/* the card media and the tile media are isolated groups, so they need the page colour to blend onto */
+.product-card__media,
+.collection-list--text-outside .collection-card .content-over-media {
   background: rgb(var(--background));
 }
 

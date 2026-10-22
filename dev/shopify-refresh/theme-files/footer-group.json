@@ -1,0 +1,64 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "footer-0": {
+          "type": "text",
+          "settings": {
+            "title": "the beauty within",
+            "content": "<p>Rooted in Scripture. Handcrafted with care. Anointing oils for prayer, worship, and daily renewal.</p><p><em>“Thou anointest my head with oil; my cup runneth over.”</em> Psalm 23:5</p>",
+            "enable_follow_on_shop": true
+          }
+        },
+        "footer-1": {
+          "type": "links",
+          "settings": {
+            "menu": "footer",
+            "show_menu_title": true,
+            "menu_title": "Help"
+          }
+        },
+        "footer-2": {
+          "type": "newsletter",
+          "settings": {
+            "title": "Newsletter",
+            "content": "<p>Subscribe for new oils, journal posts, and words of Scripture.</p>",
+            "button_background": "",
+            "button_text_color": ""
+          }
+        },
+        "4eddfa34-4ee7-4d3e-b80d-04e85b8520fe": {
+          "type": "text",
+          "settings": {
+            "title": "Mount of Olives LLC",
+            "content": "<p><strong>Connect with Us!</strong></p><ul><li>Email: <a href=\"mailto:info@mountofolives.co\">info@mountofolives.co</a><br/>We’re here to answer any questions or assist with special requests.</li><li>Phone: (713) 364-2010<br/>Call us for assistance, or leave a message, and we’ll return your call promptly.</li></ul>",
+            "enable_follow_on_shop": true
+          }
+        }
+      },
+      "block_order": [
+        "footer-0",
+        "footer-1",
+        "footer-2",
+        "4eddfa34-4ee7-4d3e-b80d-04e85b8520fe"
+      ],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "separate_section_with_border": true,
+        "show_social_media": true,
+        "show_payment_icons": true,
+        "show_country_selector": true,
+        "show_country_name": true,
+        "show_country_flag": true,
+        "show_locale_selector": true,
+        "show_powered_by_shopify": false
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

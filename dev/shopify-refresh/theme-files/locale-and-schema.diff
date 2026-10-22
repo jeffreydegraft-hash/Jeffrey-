@@ -1,0 +1,82 @@
+diff --git a/config/settings_schema.json b/config/settings_schema.json
+index 724c1de..cdf3b81 100644
+--- a/config/settings_schema.json
++++ b/config/settings_schema.json
+@@ -609,7 +609,7 @@
+             "label": "t:theme_settings.product_card.show_product_rating_as_options.count"
+           }
+         ],
+-        "default": "rating"
++        "default": "count"
+       },
+       {
+         "type": "header",
+diff --git a/locales/en.default.json b/locales/en.default.json
+index 34155b3..f4739d3 100644
+--- a/locales/en.default.json
++++ b/locales/en.default.json
+@@ -50,7 +50,7 @@
+       "title": "Reviews"
+     },
+     "newsletter": {
+-      "email": "E-mail",
++      "email": "Email",
+       "subscribe": "Subscribe",
+       "notify_me": "Notify me",
+       "subscribed_successfully": "You have been subscribed to our newsletter."
+@@ -213,7 +213,7 @@
+       "leave_comment": "Leave a comment",
+       "moderated": "All comments are moderated before being published.",
+       "name": "Name",
+-      "email": "E-mail",
++      "email": "Email",
+       "message": "Message",
+       "submit": "Submit",
+       "comment_sent": "Your comment has been sent. We will publish it in a little while, as our blog is moderated.",
+@@ -233,7 +233,7 @@
+   "contact": {
+     "form": {
+       "name": "Name",
+-      "email": "E-mail",
++      "email": "Email",
+       "message": "Message",
+       "submit": "Send message",
+       "success_message": "Your message has been sent."
+@@ -253,7 +253,7 @@
+     "login": {
+       "title": "Login",
+       "instructions": "Enter your email and password to login:",
+-      "email": "E-mail",
++      "email": "Email",
+       "password": "Password",
+       "submit": "Login",
+       "forgot_password": "Forgot your password?",
+@@ -263,7 +263,7 @@
+     "recover_password": {
+       "title": "Recover password",
+       "instructions": "Enter your email to recover your password:",
+-      "email": "E-mail",
++      "email": "Email",
+       "submit": "Recover",
+       "remember_password": "Remember your password?",
+       "back_to_login": "Back to login",
+@@ -274,7 +274,7 @@
+       "instructions": "Please fill in the information below:",
+       "first_name": "First name",
+       "last_name": "Last name",
+-      "email": "E-mail",
++      "email": "Email",
+       "password": "Password",
+       "accepts_marketing": "Register to our newsletter",
+       "submit": "Create account",
+@@ -377,8 +377,8 @@
+       "remove_with_title": "Remove {{ title }}"
+     },
+     "free_shipping_bar": {
+-      "limit_unreached_html": "Spend {{ remaining_amount }} more and get free shipping!",
+-      "limit_reached_html": "You are eligible for free shipping."
++      "limit_unreached_html": "Spend {{ remaining_amount }} more for free US shipping.",
++      "limit_reached_html": "Your order ships free within the US."
+     },
+     "shipping_estimator": {
+       "estimate_shipping": "Estimate shipping",
