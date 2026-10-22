@@ -4,7 +4,7 @@ MOUNT OF OLIVES REVIEWS
 ----------------------------------------------------------------------------------------------------------------------
 The reviews the rating badge counts, under the product: the average, where the reviews come from, and the newest
 Etsy reviews that the ReputonEtsyReviews app has imported (first names only), with a link to read the rest on Etsy.
-The section is hidden on products without reviews.
+The section is hidden on products without an imported review to show.
 {%- endcomment -%}
 
 {%- liquid
@@ -24,15 +24,23 @@ The section is hidden on products without reviews.
   assign amazon_count = product.metafields.custom.amazon_reviews.value.reviews.size | default: 0
   assign total_count = etsy_count | plus: junip_count | plus: amazon_count
   assign shown = 0
+  assign listable = 0
+  for review in etsy_reviews
+    unless review.hide or review.text == blank
+      assign listable = listable | plus: 1
+    endunless
+  endfor
+
+  assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5
 -%}
 
-{%- if total_count > 0 -%}
-  <div class="section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }}">
+{%- if listable > 0 -%}
+  <div class="section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }}">
     <div class="container">
       <div id="reviews" class="mo-reviews">
         <div class="mo-reviews__header">
           <h2 class="h3">{{ section.settings.title | escape }}</h2>
-          {%- render 'product-rating', product: product, full: true -%}
+          {%- render 'product-rating', product: product, full: true, link: false -%}
           <p class="mo-reviews__sources text-sm text-subdued">
             {%- if etsy_count > 0 -%}{{ etsy_count }} on Etsy{%- endif -%}
             {%- if amazon_count > 0 -%}{% if etsy_count > 0 %} · {% endif %}{{ amazon_count }} on Amazon{%- endif -%}
@@ -40,12 +48,21 @@ The section is hidden on products without reviews.
           </p>
         </div>
 
-        {%- if etsy_reviews != blank -%}
+        {%- if listable > 0 -%}
           <ul class="mo-reviews__list unstyled-list" role="list">
             {%- for review in etsy_reviews -%}
               {%- if review.hide or review.text == blank or shown >= section.settings.reviews_shown -%}{%- continue -%}{%- endif -%}
               {%- assign shown = shown | plus: 1 -%}
-              {%- assign first_name = review.authorName | split: ' ' | first | default: 'Etsy customer' -%}
+              {%- liquid
+                # a first word that starts in lower case or has a digit is an Etsy login, not a name, so it is left out
+                assign first_name = review.authorName | strip | split: ' ' | first | default: ''
+                assign initial = first_name | slice: 0
+                assign initial_up = initial | upcase
+                assign no_digits = first_name | remove: '0' | remove: '1' | remove: '2' | remove: '3' | remove: '4' | remove: '5' | remove: '6' | remove: '7' | remove: '8' | remove: '9'
+                if initial != initial_up or no_digits.size != first_name.size
+                  assign first_name = ''
+                endif
+              -%}
               <li class="mo-reviews__item">
                 <div class="rating-badge__stars" role="img" aria-label="{{ 'general.rating.info' | t: rating_value: review.rating, rating_max: 5 }}">
                   {%- for i in (1..5) -%}
@@ -53,7 +70,7 @@ The section is hidden on products without reviews.
                   {%- endfor -%}
                 </div>
                 <p class="mo-reviews__text">{{ review.text | replace: '&#39;', "’" | replace: '&quot;', '"' | replace: '&amp;', '&' | escape | strip | newline_to_br }}</p>
-                <p class="mo-reviews__meta text-xs text-subdued">{{ first_name | escape }} · Etsy review · {{ review.relativeTimeDescription | date: '%b %-d, %Y' | escape }}</p>
+                <p class="mo-reviews__meta text-xs text-subdued">{% if first_name != blank %}{{ first_name | escape }} · {% endif %}Etsy review · {{ review.relativeTimeDescription | date: '%b %-d, %Y' | escape }}</p>
               </li>
             {%- endfor -%}
           </ul>

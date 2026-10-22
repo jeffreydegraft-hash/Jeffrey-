@@ -730,7 +730,7 @@ line-item-quantity .link::before {
   font-weight: 500;
 }
 
-.rating-badge__count {
+a.rating-badge__summary .rating-badge__count {
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-color: rgb(var(--text-color) / .35);
@@ -777,6 +777,12 @@ line-item-quantity .link::before {
 
 .mo-reviews__meta {
   margin: 0;
+}
+
+/* the theme's subdued grey is just under AA contrast at these small sizes on cream */
+.mo-reviews__sources,
+.mo-reviews__meta {
+  color: rgb(var(--text-color) / .72);
 }
 
 .mo-reviews__more {

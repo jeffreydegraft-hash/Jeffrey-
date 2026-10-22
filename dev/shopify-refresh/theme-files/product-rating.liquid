@@ -15,7 +15,8 @@ Supported variables
 * show_single_star: if set to true, only one star is shown (otherwise, the number of scale)
 * display_mode: either "rating" (e.g.: 3.5) or "count" (e.g.: 4 reviews). Default to "rating" if none is passed
 * full: if set to true, shows the average and the review count after the stars ("4.9 (124 reviews)"), linked to the
-  reviews section on the product page
+  reviews section on the product page when that section has reviews to show
+* link: set to false to show the average and the count without the link (used inside the reviews section itself)
 
 Mount of Olives: the average and the count combine every real review a product has: its Etsy listing's total (the
 ReputonEtsyReviews metafield; when the app has imported all of them their own stars are averaged, otherwise the
@@ -31,6 +32,12 @@ A product with none of these falls back to the standard reviews metafields.
     for field in product.metafields['ReputonEtsyReviews::ProductReviews']
       assign etsy = field.last.value
       assign etsy_count = etsy.reviewsNumber | default: 0
+      for review in etsy.reviews
+        unless review.hide or review.text == blank
+          assign reviews_listed = true
+          break
+        endunless
+      endfor
       if etsy_count > 0
         if etsy.reviews.size == etsy_count
           for review in etsy.reviews
@@ -133,10 +140,10 @@ A product with none of these falls back to the standard reviews metafields.
           assign count_text = count_thousands | append: ',' | append: count_rest
         endif
       -%}
-      <a href="#reviews" class="rating-badge__summary">
+      {%- if reviews_listed and link != false -%}<a href="#reviews" class="rating-badge__summary">{%- else -%}<span class="rating-badge__summary">{%- endif -%}
         <span class="rating-badge__value">{{ rating_text }}</span>
         <span class="rating-badge__count">({{ 'product.rating_count' | t: count: rating_count | replace: rating_count, count_text }})</span>
-      </a>
+      {%- if reviews_listed and link != false -%}</a>{%- else -%}</span>{%- endif -%}
     {%- elsif display_mode == 'count' -%}
       <span class="smallcaps text-xxs text-subdued">({{ rating_count }})</span>
     {%- else -%}
