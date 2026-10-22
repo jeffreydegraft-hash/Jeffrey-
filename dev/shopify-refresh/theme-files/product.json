@@ -150,6 +150,7 @@
     },
     "1737310390d3662d4c": {
       "type": "apps",
+      "disabled": true,
       "blocks": {
         "junip_product_reviews_ugc_junip_product_review_exxLJM": {
           "type": "shopify://apps/junip/blocks/junip-product-review/dc14f5a8-ed15-41b1-ad08-cfba23f9789b",
@@ -174,6 +175,7 @@
     },
     "mo-reviews": {
       "type": "mo-reviews",
+      "disabled": true,
       "settings": {
         "color_scheme": "scheme-1",
         "title": "Reviews",

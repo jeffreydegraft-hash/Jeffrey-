@@ -829,6 +829,7 @@
     },
     "mo-testimonials": {
       "type": "testimonials",
+      "disabled": true,
       "blocks": {
         "t1": {
           "type": "testimonial",
