@@ -1,0 +1,88 @@
+<section class="section anointings{% if section.settings.surface %} section--surface{% endif %}" id="five-anointings" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head section__head--center">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+        {%- if section.settings.text != blank -%}<p class="lead">{{ section.settings.text }}</p>{%- endif -%}
+      </div>
+    </div>
+    <ol class="anointings__list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign oil = block.settings.product
+          assign thumb = block.settings.image
+          if thumb == blank and oil != blank
+            assign thumb = oil.featured_image
+          endif
+          assign oil_name = oil.title | remove: ' Anointing Oil'
+        -%}
+        <li class="anointing" {{ block.shopify_attributes }}>
+          <span class="anointing__num" aria-hidden="true">{{ forloop.index }}</span>
+          {%- if block.settings.reference != blank -%}<p class="anointing__ref">{{ block.settings.reference }}</p>{%- endif -%}
+          <h3 class="anointing__title">{{ block.settings.title }}</h3>
+          {%- if block.settings.verse != blank -%}<blockquote class="anointing__verse">{{ block.settings.verse }}</blockquote>{%- endif -%}
+          {%- if block.settings.text != blank -%}<p class="anointing__text">{{ block.settings.text }}</p>{%- endif -%}
+          {%- if oil != blank -%}
+            <a class="anointing__oil" href="{{ oil.url }}">
+              {%- if thumb != blank -%}
+                {{ thumb | image_url: width: 160 | image_tag: loading: 'lazy', width: 56, height: 56, alt: '' }}
+              {%- endif -%}
+              <span class="anointing__oil-text">
+                <small>{{ section.settings.oil_label }}</small>
+                <strong>{{ oil_name }}</strong>
+                <span class="anointing__price">{{ oil.price | money }}</span>
+              </span>
+            </a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ol>
+    {%- if section.settings.cta_label != blank -%}
+      <p class="center" style="margin:2.5rem 0 0">
+        <a class="btn btn--primary" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta_label }}</a>
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Five anointings",
+  "max_blocks": 7,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Scripture" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The five anointings of Jesus" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Five times the Gospels record Jesus being anointed. Each moment has an oil." },
+    { "type": "text", "id": "oil_label", "label": "Label above the linked oil", "default": "The oil" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop all eight oils" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+    { "type": "checkbox", "id": "surface", "label": "Use tinted background", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "anointing",
+      "name": "Anointing",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Anointed at His baptism" },
+        { "type": "text", "id": "reference", "label": "Scripture reference", "default": "Acts 10:38" },
+        { "type": "textarea", "id": "verse", "label": "Verse" },
+        { "type": "textarea", "id": "text", "label": "Short reflection" },
+        { "type": "product", "id": "product", "label": "Linked oil" },
+        { "type": "image_picker", "id": "image", "label": "Image (optional)", "info": "Defaults to the linked oil's product photo." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Five anointings",
+      "blocks": [
+        { "type": "anointing", "settings": { "title": "Anointed at His baptism", "reference": "Acts 10:38" } },
+        { "type": "anointing", "settings": { "title": "By the woman who loved much", "reference": "Luke 7:37–38" } },
+        { "type": "anointing", "settings": { "title": "By Mary of Bethany", "reference": "John 12:3" } },
+        { "type": "anointing", "settings": { "title": "At the house of Simon", "reference": "Mark 14:3–9" } },
+        { "type": "anointing", "settings": { "title": "For His burial", "reference": "John 19:39–40" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

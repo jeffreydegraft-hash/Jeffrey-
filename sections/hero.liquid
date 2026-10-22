@@ -20,6 +20,9 @@
           <a class="btn {% if layout == 'overlay' %}btn--ghost{% else %}btn--secondary{% endif %} btn--large" href="{{ section.settings.cta2_link | default: '#purpose' }}">{{ section.settings.cta2_label }}</a>
         {%- endif -%}
       </div>
+      {%- if layout == 'products' and section.settings.card_title != blank -%}
+        <div class="hero__note">{% render 'icon', icon: 'hand' %}<p><strong>{{ section.settings.card_title }}</strong>{{ section.settings.card_text }}</p></div>
+      {%- endif -%}
       {%- if section.settings.show_proof -%}
         <div class="hero__proof">
           <span class="stars" aria-hidden="true">★★★★★</span>
@@ -27,6 +30,25 @@
         </div>
       {%- endif -%}
     </div>
+    {%- if layout == 'products' -%}
+      {%- assign hero_collection = section.settings.collection | default: collections.all -%}
+      <div class="hero__collage">
+        {%- for product in hero_collection.products limit: 4 -%}
+          <a class="hero__collage-item" href="{{ product.url }}">
+            {%- if product.featured_image != blank -%}
+              {%- if forloop.index < 3 -%}
+                {{ product.featured_image | image_url: width: 700 | image_tag: loading: 'eager', sizes: '(min-width: 990px) 24vw, 46vw', widths: '300,450,600,700', alt: product.title }}
+              {%- else -%}
+                {{ product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 24vw, 46vw', widths: '300,450,600,700', alt: product.title }}
+              {%- endif -%}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+            {%- endif -%}
+            <span class="hero__collage-name">{{ product.title | remove: ' Anointing Oil' }}</span>
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
     {%- if layout == 'split' -%}
       <div class="hero__media">
         {%- if image != blank -%}
@@ -45,7 +67,8 @@
 {
   "name": "Hero",
   "settings": [
-    { "type": "select", "id": "layout", "label": "Layout", "options": [ { "value": "split", "label": "Split (text + image)" }, { "value": "overlay", "label": "Full-bleed image" } ], "default": "split" },
+    { "type": "select", "id": "layout", "label": "Layout", "options": [ { "value": "products", "label": "Text + product photos" }, { "value": "split", "label": "Text + image" }, { "value": "overlay", "label": "Full-bleed image" } ], "default": "products" },
+    { "type": "collection", "id": "collection", "label": "Products to show", "info": "Used by the 'Text + product photos' layout. Shows the first four products." },
     { "type": "image_picker", "id": "image", "label": "Image", "info": "Portrait image works best for the split layout (4:5)." },
     { "type": "range", "id": "min_height", "min": 40, "max": 100, "step": 5, "unit": "vh", "label": "Minimum height", "default": 70 },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Biblical anointing oils" },

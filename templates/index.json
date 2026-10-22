@@ -3,8 +3,7 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "layout": "split",
-        "image": "shopify://shop_images/latter-rain-luxury.jpg",
+        "layout": "products",
         "min_height": 70,
         "eyebrow": "Handcrafted anointing oils",
         "heading": "You anoint my head with oil; <em>my cup runs over.</em>",
@@ -16,7 +15,8 @@
         "show_proof": false,
         "proof_text": "",
         "card_title": "Handcrafted with prayer",
-        "card_text": "Every bottle is prepared in an atmosphere of worship and intercession, and blessed before it reaches your hands."
+        "card_text": "Every bottle is prepared in an atmosphere of worship and intercession, and blessed before it reaches your hands.",
+        "collection": "sacred-anointing-oils"
       }
     },
     "trust": {
@@ -392,11 +392,83 @@
         "handle": "",
         "link": ""
       }
+    },
+    "anointings": {
+      "type": "five-anointings",
+      "blocks": {
+        "a1": {
+          "type": "anointing",
+          "settings": {
+            "title": "Anointed at His baptism",
+            "reference": "Acts 10:38",
+            "verse": "How God anointed Jesus of Nazareth with the Holy Ghost and with power.",
+            "text": "At the Jordan the Spirit descended upon Him. Every anointing that followed points back to this one.",
+            "product": "latter-rain-anointing-oil"
+          }
+        },
+        "a2": {
+          "type": "anointing",
+          "settings": {
+            "title": "By the woman who loved much",
+            "reference": "Luke 7:37–38",
+            "verse": "She began to wash his feet with tears, and did wipe them with the hairs of her head, and kissed his feet, and anointed them with the ointment.",
+            "text": "In a Pharisee's house, a woman with a past poured out her ointment and was forgiven.",
+            "product": "hyssop-anointing-oil"
+          }
+        },
+        "a3": {
+          "type": "anointing",
+          "settings": {
+            "title": "By Mary of Bethany",
+            "reference": "John 12:3",
+            "verse": "Then took Mary a pound of ointment of spikenard, very costly, and anointed the feet of Jesus.",
+            "text": "Six days before the Passover, and the house was filled with the odour of the ointment.",
+            "product": "spikenard-anointing-oil"
+          }
+        },
+        "a4": {
+          "type": "anointing",
+          "settings": {
+            "title": "At the house of Simon",
+            "reference": "Mark 14:3–9",
+            "verse": "She brake the box, and poured it on his head.",
+            "text": "In Bethany, an alabaster box broken over His head. “She is come aforehand to anoint my body to the burying.”",
+            "product": "classic-unscented-anointing-oil"
+          }
+        },
+        "a5": {
+          "type": "anointing",
+          "settings": {
+            "title": "For His burial",
+            "reference": "John 19:39–40",
+            "verse": "Nicodemus… brought a mixture of myrrh and aloes, about an hundred pound weight.",
+            "text": "Joseph and Nicodemus wound His body in linen with the spices. On the third day, the tomb was empty.",
+            "product": "frankincense-myrrh-anointing-oil"
+          }
+        }
+      },
+      "block_order": [
+        "a1",
+        "a2",
+        "a3",
+        "a4",
+        "a5"
+      ],
+      "settings": {
+        "eyebrow": "Scripture",
+        "heading": "The five anointings of Jesus",
+        "text": "Five times the Gospels record Jesus being anointed. Each moment has an oil.",
+        "oil_label": "The oil",
+        "cta_label": "Shop all eight oils",
+        "cta_link": "/collections/sacred-anointing-oils",
+        "surface": false
+      }
     }
   },
   "order": [
     "hero",
     "trust",
+    "anointings",
     "featured",
     "purpose",
     "story",
