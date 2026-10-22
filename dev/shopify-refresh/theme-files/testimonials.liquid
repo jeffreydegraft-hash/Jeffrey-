@@ -26,7 +26,7 @@
           {%- liquid
             # Mount of Olives: "{count}" in the heading becomes the live number of five-star reviews, read
             # from the review metafields: Etsy reviews (ReputonEtsyReviews::ProductReviews), Amazon reviews pasted into
-            # the custom.amazon_reviews metafield (same shape: {"reviews": [{"rating": 5, ...}]}, on products or the shop),
+            # the custom.amazon_reviews and custom.ebay_reviews metafields (same shape: {"reviews": [{"rating": 5, ...}]}, on products or the shop),
             # and Junip's counts for reviews left on the store itself
             assign heading = section.settings.title
             if heading contains '{count}'
@@ -44,6 +44,11 @@
                     assign review_total = review_total | plus: 1
                   endif
                 endfor
+                for review in product.metafields.custom.ebay_reviews.value.reviews
+                  if review.rating >= 5
+                    assign review_total = review_total | plus: 1
+                  endif
+                endfor
                 assign junip_count = product.metafields.junip.rating_count.value | default: 0
                 assign junip_average = product.metafields.junip.rating_average.value | default: 0 | times: 1.0
                 # Junip only gives a count and an average, so its reviews are all five-star only when the average is 5
@@ -53,6 +58,16 @@
               endfor
               for review in shop.metafields.custom.amazon_reviews.value.reviews
                 if review.rating >= 5
+                  assign review_total = review_total | plus: 1
+                endif
+              endfor
+              for review in shop.metafields.custom.ebay_reviews.value.reviews
+                if review.rating >= 5
+                  assign review_total = review_total | plus: 1
+                endif
+              endfor
+              for entry in shop.metaobjects.customer_review.values
+                if entry.rating.value >= 5
                   assign review_total = review_total | plus: 1
                 endif
               endfor
