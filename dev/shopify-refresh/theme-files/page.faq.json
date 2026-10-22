@@ -22,7 +22,7 @@
           "type": "question",
           "settings": {
             "question": "Do you offer free shipping?",
-            "answer": "<p>Yes! We offer free standard shipping on all US orders of $45 or more. Orders under $45 ship at a flat rate within the US.</p>"
+            "answer": "<p>Yes! We offer free standard shipping on all US orders of $40 or more. Orders under $40 ship at a flat rate within the US.</p>"
           }
         },
         "q2": {

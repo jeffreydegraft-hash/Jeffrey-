@@ -1,6 +1,6 @@
 # Builds templates/page.our-science.json for the Prestige work copy and the matching page body (no em dashes anywhere).
 import json, re, sys, html
-S = '.'  # theme folder: templates/ and the page body are written under it
+S = '.'
 IMG = 'shopify://shop_images/'
 P = {  # products
   'olive': '/products/100-squalane', 'frank': '/products/frankincense', 'myrrh': '/products/myrrh-anointing-oil-1',
@@ -195,7 +195,7 @@ add('glossary', {'type': 'faq', 'blocks': blocks, 'block_order': bo,
 
 add('closing', {'type': 'rich-text', 'blocks': {
   'head': {'type': 'heading', 'settings': {'text': 'Where the science of nature meets the nature of faith', 'heading_tag': 'h2'}},
-  'verse': {'type': 'richtext', 'settings': {'content': '<p><em>\u201cYou anoint my head with oil; my cup runneth over.\u201d</em> Psalm 23:5</p>'}},
+  'verse': {'type': 'richtext', 'settings': {'content': '<p><em>\u201cThou anointest my head with oil; my cup runneth over.\u201d</em> Psalm 23:5</p>'}},
   'shop': {'type': 'button', 'settings': {'style': 'solid', 'text': 'Shop the collection', 'url': 'shopify://collections/all'}},
   'faq': {'type': 'link', 'settings': {'text': 'Questions? Read the FAQ', 'url': 'shopify://pages/faqs'}},
 }, 'block_order': ['head', 'verse', 'shop', 'faq'],
@@ -205,7 +205,7 @@ tpl = {'sections': sections, 'order': order}
 out = json.dumps(tpl, indent=2, ensure_ascii=False)
 bad = [c for c in out if c in '—–']
 assert not bad, 'dash found'
-open(S + '/templates/page.our-science.json', 'w', encoding='utf-8').write(out + '\n')
+open(S + '/work/templates/page.our-science.json', 'w', encoding='utf-8').write(out + '\n')
 
 # ---- page body (fallback for other themes / search engines), same copy, no inline styles
 def h2(t): return f'<h2>{html.escape(t)}</h2>\n'
@@ -220,7 +220,7 @@ for (cat, icon), items in glossary.items():
   body += f'<h3>{html.escape(cat)}</h3>\n'
   for name, text in items:
     body += f'<p><strong>{html.escape(name)}</strong>. {text}</p>\n'
-body += '<p><em>\u201cYou anoint my head with oil; my cup runneth over.\u201d Psalm 23:5</em></p>\n<p><em>Mount of Olives. Where the science of nature meets the nature of faith.</em></p>\n'
+body += '<p><em>\u201cThou anointest my head with oil; my cup runneth over.\u201d Psalm 23:5</em></p>\n<p><em>Mount of Olives. Where the science of nature meets the nature of faith.</em></p>\n'
 assert not [c for c in body if c in '—–']
-open(S + '/our-science-body.html', 'w', encoding='utf-8').write(body)
+open(S + '/science/body.html', 'w', encoding='utf-8').write(body)
 print('template bytes', len(out.encode()), 'sections', order, 'body bytes', len(body.encode()))

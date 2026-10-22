@@ -1,0 +1,102 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "header": {
+      "type": "header",
+      "blocks": {
+        "2a3264f3-6402-4595-9a86-1268dc80689e": {
+          "type": "mega_menu",
+          "settings": {
+            "menu_item": "Shop",
+            "images_position": "right",
+            "image_1_heading": "Frankincense & Myrrh",
+            "image_1_text": "The blend or single oils",
+            "image_1_link": "shopify://collections/frankincense-myrrh",
+            "image_2_heading": "100% Squalane Oil",
+            "image_2_text": "Hydration from head to toe",
+            "image_2_link": "shopify://products/100-squalane",
+            "image_1": "shopify://shop_images/4ozF_M.jpg",
+            "image_2": "shopify://shop_images/squalane1oz.jpg"
+          }
+        },
+        "35700209-5817-4eb6-a25d-9804f7753a17": {
+          "type": "mega_menu",
+          "disabled": true,
+          "settings": {
+            "menu_item": "",
+            "images_position": "right",
+            "image_1_heading": "",
+            "image_1_text": "",
+            "image_1_link": "",
+            "image_2_heading": "",
+            "image_2_text": "",
+            "image_2_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "2a3264f3-6402-4595-9a86-1268dc80689e",
+        "35700209-5817-4eb6-a25d-9804f7753a17"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "enable_sticky": true,
+        "hide_on_scroll": false,
+        "show_separation_border": true,
+        "reduce_padding": false,
+        "logo_max_width": 180,
+        "logo_mobile_max_width": 130,
+        "menu": "main-menu-refresh",
+        "sidebar_menu": "",
+        "menu_open_trigger": "hover",
+        "menu_text_font": "body",
+        "enable_search": true,
+        "sidebar_color_scheme": "scheme-1",
+        "sidebar_text_font": "heading",
+        "sidebar_show_dividers": true,
+        "sidebar_open_second_level_menus": false,
+        "layout": "logo_center_navigation_inline",
+        "show_icons": false,
+        "show_country_selector": true,
+        "show_country_name": false,
+        "show_country_flag": true,
+        "show_locale_selector": true,
+        "transparent_header_text_color": "#ffffff"
+      }
+    },
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message-1": {
+          "type": "message",
+          "settings": {
+            "text": "Free US shipping on orders $40+"
+          }
+        },
+        "message-2": {
+          "type": "message",
+          "settings": {
+            "text": "Biblical botanicals · Handcrafted with care"
+          }
+        }
+      },
+      "block_order": [
+        "message-1",
+        "message-2"
+      ],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "enable_sticky": false,
+        "autoplay": true,
+        "cycle_speed": 5,
+        "desktop_font_size": 11,
+        "mobile_font_size": 11
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

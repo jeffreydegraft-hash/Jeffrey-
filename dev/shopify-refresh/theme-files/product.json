@@ -1,0 +1,181 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title_block_h1": {
+          "type": "title",
+          "settings": {
+            "heading_tag": "h3"
+          }
+        },
+        "fbf78733-5fb7-44ed-a805-e3c4bb0f07d0": {
+          "type": "price",
+          "settings": {
+            "show_taxes_notice": false
+          }
+        },
+        "911c4020-0e58-427d-9bd9-5971ec3a700b": {
+          "type": "variant_picker",
+          "settings": {
+            "hide_sold_out_variants": false,
+            "selector_style": "block",
+            "swatch_selector_style": "swatch",
+            "variant_image_options": "",
+            "size_chart_page": ""
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_payment_button": true,
+            "show_gift_card_recipient": true,
+            "atc_button_background": "#2c3227",
+            "atc_button_text_color": "#faf7f2",
+            "payment_button_background": "#c4a265",
+            "payment_button_text_color": "#2c3227"
+          }
+        },
+        "share_buttons": {
+          "type": "share_buttons",
+          "disabled": true,
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "collapse_content": false,
+            "show_below_gallery": false
+          }
+        },
+        "mo-feature-shipping": {
+          "type": "feature_with_icon",
+          "settings": {
+            "text": "Free US shipping on orders $40+",
+            "link": "",
+            "icon": "picto-delivery-truck",
+            "icon_width": 16,
+            "background": "",
+            "text_color": "",
+            "border_color": ""
+          }
+        },
+        "mo-feature-natural": {
+          "type": "feature_with_icon",
+          "settings": {
+            "text": "Natural, paraben-free and vegan",
+            "link": "",
+            "icon": "picto-leaf",
+            "icon_width": 16,
+            "background": "",
+            "text_color": "",
+            "border_color": ""
+          }
+        },
+        "mo-feature-secure": {
+          "type": "feature_with_icon",
+          "settings": {
+            "text": "Secure checkout",
+            "link": "",
+            "icon": "picto-lock",
+            "icon_width": 16,
+            "background": "",
+            "text_color": "",
+            "border_color": ""
+          }
+        },
+        "mo-size-value": {
+          "type": "liquid",
+          "settings": {
+            "liquid": "{%- comment -%}Mount of Olives: compare sizes by price per ounce. Reads the ounces from size names such as \"4 ounce (118 ml)\".{%- endcomment -%}\n{%- liquid\n  assign size_count = 0\n  assign best_per_oz = 0\n  assign first_per_oz = 0\n  for variant in product.variants\n    assign ounces = variant.title | split: ' ' | first | times: 1.0\n    if ounces > 0\n      assign size_count = size_count | plus: 1\n      assign per_oz = variant.price | divided_by: ounces\n      if first_per_oz == 0\n        assign first_per_oz = per_oz\n      endif\n      if best_per_oz == 0 or per_oz < best_per_oz\n        assign best_per_oz = per_oz\n      endif\n    endif\n  endfor\n-%}\n{%- if size_count > 1 -%}\n  <div class=\"mo-sizes\">\n    <p class=\"mo-sizes__title\">Compare sizes</p>\n    <ul class=\"mo-sizes__list unstyled-list\">\n      {%- for variant in product.variants -%}\n        {%- assign ounces = variant.title | split: ' ' | first | times: 1.0 -%}\n        {%- if ounces > 0 -%}\n          {%- assign per_oz = variant.price | divided_by: ounces -%}\n          <li class=\"mo-sizes__row{% if per_oz == best_per_oz %} is-best{% endif %}\">\n            <span class=\"mo-sizes__size\">{{ variant.title | split: ' (' | first }}</span>\n            <span class=\"mo-sizes__price\">{{ variant.price | money }}</span>\n            <span class=\"mo-sizes__per\">{{ per_oz | round | money }} per oz</span>\n            {%- if per_oz == best_per_oz and first_per_oz > per_oz -%}\n              {%- assign saving = per_oz | times: 100.0 | divided_by: first_per_oz | minus: 100 | times: -1 | floor -%}\n              <span class=\"mo-sizes__badge\">Best value · save {{ saving }}%</span>\n            {%- endif -%}\n          </li>\n        {%- endif -%}\n      {%- endfor -%}\n    </ul>\n  </div>\n{%- endif -%}"
+          }
+        },
+        "mo-rating": {
+          "type": "rating",
+          "settings": {
+            "show_empty": false,
+            "rating_mode": "count"
+          }
+        }
+      },
+      "block_order": [
+        "title_block_h1",
+        "mo-rating",
+        "fbf78733-5fb7-44ed-a805-e3c4bb0f07d0",
+        "911c4020-0e58-427d-9bd9-5971ec3a700b",
+        "mo-size-value",
+        "quantity_selector",
+        "buy_buttons",
+        "mo-feature-shipping",
+        "mo-feature-natural",
+        "mo-feature-secure",
+        "share_buttons",
+        "description"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "container_size": "lg",
+        "product_info_size": 35,
+        "show_sticky_add_to_cart": true,
+        "center_basic_info": false,
+        "desktop_media_layout": "grid",
+        "desktop_media_grid_gap": 30,
+        "mobile_controls": "dots",
+        "enable_media_autoplay": false,
+        "enable_video_looping": false,
+        "enable_image_zoom": true,
+        "max_image_zoom_level": 3
+      }
+    },
+    "recently-viewed-products": {
+      "type": "recently-viewed-products",
+      "settings": {
+        "separate_section_with_border": true,
+        "color_scheme": "",
+        "hide_product_information": false,
+        "stack_products": false,
+        "products_count": 9,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "horizontal_spacing_factor": 1,
+        "vertical_spacing_factor": 1,
+        "subheading": "",
+        "title": "Recently viewed",
+        "content": ""
+      }
+    },
+    "1737310390d3662d4c": {
+      "type": "apps",
+      "blocks": {
+        "junip_product_reviews_ugc_junip_product_review_exxLJM": {
+          "type": "shopify://apps/junip/blocks/junip-product-review/dc14f5a8-ed15-41b1-ad08-cfba23f9789b",
+          "disabled": true,
+          "settings": {
+            "product": "{{product}}",
+            "title": "",
+            "alignment": "",
+            "sortOrder": "mostRecent"
+          }
+        }
+      },
+      "block_order": [
+        "junip_product_reviews_ugc_junip_product_review_exxLJM"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recently-viewed-products",
+    "1737310390d3662d4c"
+  ]
+}

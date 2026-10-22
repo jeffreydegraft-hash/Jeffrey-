@@ -1,0 +1,902 @@
+{
+  "sections": {
+    "slideshow": {
+      "type": "slideshow",
+      "blocks": {
+        "slide-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/4_oz_in_the_line_copy.jpg",
+            "mobile_image": "shopify://shop_images/4_oz_in_the_line_copy.jpg",
+            "subheading": "With cosmeceuticals derived from biblical botanicals",
+            "title": "THE ANOINTING OIL COLLECTION",
+            "mobile_text_position": "place-self-end-center text-center",
+            "desktop_text_position": "sm:place-self-end-center sm:text-center",
+            "content_max_width": 400,
+            "button_1_text": "shop now",
+            "button_1_link": "shopify://collections/all",
+            "button_1_style": "solid",
+            "button_1_background": "#ffffff",
+            "button_1_text_color": "#000000",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "outline",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#000000",
+            "background": "",
+            "background_opacity": 50,
+            "text_color": "#ffffff",
+            "border_color": "",
+            "gradient_overlay": "linear-gradient(180deg, rgba(54, 54, 54, 0.2), rgba(4, 4, 4, 0.65) 100%)"
+          }
+        },
+        "slide-1": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/white-peony-blossom.jpg",
+            "subheading": "Slide title",
+            "title": "TELL YOUR STORY",
+            "mobile_text_position": "place-self-center text-center",
+            "desktop_text_position": "sm:place-self-center sm:text-center",
+            "content_max_width": 780,
+            "button_1_text": "",
+            "button_1_link": "",
+            "button_1_style": "solid",
+            "button_1_background": "#ffffff",
+            "button_1_text_color": "#000000",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "outline",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#000000",
+            "background": "",
+            "background_opacity": 50,
+            "text_color": "#ffffff",
+            "border_color": "",
+            "gradient_overlay": "linear-gradient(180deg, rgba(54, 54, 54, 0.2) 0%, rgba(4, 4, 4, 0.65) 100%)"
+          }
+        },
+        "c1b44019-7617-47d5-b11d-5b036e77e0b6": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/praying-with-frankincense-myrrh.jpg",
+            "mobile_image": "shopify://shop_images/praying-with-frankincense-myrrh.jpg",
+            "subheading": "Slide title",
+            "title": "TELL YOUR STORY",
+            "mobile_text_position": "place-self-center text-center",
+            "desktop_text_position": "sm:place-self-center sm:text-center",
+            "content_max_width": 780,
+            "button_1_text": "",
+            "button_1_link": "",
+            "button_1_style": "solid",
+            "button_1_background": "#ffffff",
+            "button_1_text_color": "#000000",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "outline",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#000000",
+            "background": "",
+            "background_opacity": 50,
+            "text_color": "#ffffff",
+            "border_color": "",
+            "gradient_overlay": "linear-gradient(180deg, rgba(54, 54, 54, 0.2) 0%, rgba(4, 4, 4, 0.65) 100%)"
+          }
+        }
+      },
+      "block_order": [
+        "slide-0",
+        "slide-1",
+        "c1b44019-7617-47d5-b11d-5b036e77e0b6"
+      ],
+      "disabled": true,
+      "settings": {
+        "allow_transparent_header": true,
+        "show_next_section_button": true,
+        "media_size": "auto",
+        "show_initial_transition": false,
+        "autoplay": true,
+        "autoplay_pause_on_video": true,
+        "cycle_speed": 5,
+        "background": "#000000",
+        "controls_color": "#ffffff"
+      }
+    },
+    "featured-collections": {
+      "type": "featured-collections",
+      "blocks": {
+        "3b201ff4-94ab-4b13-adaa-8217a6ef8aff": {
+          "type": "collection",
+          "settings": {
+            "collection": "frankincense-myrrh",
+            "products_count": 4,
+            "title": "",
+            "link_url": "",
+            "link_text": "View all"
+          }
+        },
+        "featured-collection-0": {
+          "type": "collection",
+          "settings": {
+            "collection": "serums",
+            "products_count": 4,
+            "title": "",
+            "link_url": "",
+            "link_text": "View all"
+          }
+        }
+      },
+      "block_order": [
+        "3b201ff4-94ab-4b13-adaa-8217a6ef8aff",
+        "featured-collection-0"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "separate_section_with_border": false,
+        "hide_product_information": false,
+        "stack_products": false,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 3,
+        "horizontal_spacing_factor": 1,
+        "vertical_spacing_factor": 1,
+        "subheading": "Featured collection"
+      }
+    },
+    "collection-list": {
+      "type": "collection-list",
+      "blocks": {
+        "collection-0": {
+          "type": "collection",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "collection": "latter-rain",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "Revitalize",
+            "title": "LATTER RAIN",
+            "button_text": "",
+            "button_link": "shopify://products/latter-rain-anointing-oil",
+            "button_style": "link",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "collection-1": {
+          "type": "collection",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "collection": "hyssop",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "Purification & protection",
+            "title": "HYSSOP",
+            "button_text": "",
+            "button_link": "shopify://products/hyssop",
+            "button_style": "link",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "collection-2": {
+          "type": "collection",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "collection": "frankincense-myrrh",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "Restore",
+            "title": "FRANKINCENSE & MYRRH",
+            "button_text": "",
+            "button_link": "",
+            "button_style": "link",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "7b9e1004-4102-45b9-9be1-cbeff855d772": {
+          "type": "collection",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "collection": "gethsemane",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "Vegan Squalane",
+            "title": "GETHSEMANE",
+            "button_text": "",
+            "button_link": "shopify://products/gethsemane-anointing-oil-unscented",
+            "button_style": "link",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "be8391df-e372-4396-86d8-2e79f65fa79a": {
+          "type": "collection",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "collection": "rose-of-sharon",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "Radiance",
+            "title": "ROSE OF SHARON",
+            "button_text": "",
+            "button_link": "shopify://products/rose-of-sharon",
+            "button_style": "link",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "2dc7fca2-3577-45ca-b187-d14cf37c8176": {
+          "type": "collection",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "collection": "spikenard",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "Renewal",
+            "title": "SPIKENARD",
+            "button_text": "",
+            "button_link": "shopify://products/spikenard-anointing-oil",
+            "button_style": "link",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "eb402072-050a-4346-8c84-4ef50b789a20": {
+          "type": "collection",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "collection": "pomegranate",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "Eternal",
+            "title": "POMEGRANATE",
+            "button_text": "",
+            "button_link": "shopify://products/pomegranate-anointing-oil",
+            "button_style": "link",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "e5892b87-3a62-4dc9-8970-bdea9a1edd39": {
+          "type": "collection",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "collection": "lily-of-the-valley",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "Illuminate",
+            "title": "LILY OF THE VALLEY",
+            "button_text": "",
+            "button_link": "shopify://products/lily-of-the-valley",
+            "button_style": "link",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "928fdf09-71e1-4613-8e93-83e3c6364f0a": {
+          "type": "collection",
+          "disabled": true,
+          "settings": {
+            "color_scheme": "scheme-1",
+            "collection": "serums",
+            "image": "shopify://shop_images/SerumAnointingoil.jpg",
+            "expand_collection": true,
+            "content_position": "place-self-center text-center",
+            "subheading": "Mount of Olives' sustainable, vegan squalane oil, derived from the purity of olives and steeped in biblical tradition, offers hydration from head to toe",
+            "title": "",
+            "button_text": "View Products",
+            "button_link": "shopify://products/100-squalane",
+            "button_style": "solid",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "collection-0",
+        "collection-1",
+        "collection-2",
+        "7b9e1004-4102-45b9-9be1-cbeff855d772",
+        "be8391df-e372-4396-86d8-2e79f65fa79a",
+        "2dc7fca2-3577-45ca-b187-d14cf37c8176",
+        "eb402072-050a-4346-8c84-4ef50b789a20",
+        "e5892b87-3a62-4dc9-8970-bdea9a1edd39",
+        "928fdf09-71e1-4613-8e93-83e3c6364f0a"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "separate_section_with_border": false,
+        "image_size": "auto",
+        "show_text_outside": true,
+        "space_items": true,
+        "stack_collections": true,
+        "collections_per_row_desktop": 4,
+        "stack_collections_mobile": true,
+        "collections_per_row_mobile": "2",
+        "subheading": "The anointing oils",
+        "title": "Find your oil",
+        "content": ""
+      }
+    },
+    "featured-product": {
+      "type": "featured-product",
+      "blocks": {
+        "fp-title": {
+          "type": "title",
+          "settings": {
+            "heading_tag": "h2"
+          }
+        },
+        "fp-price": {
+          "type": "price",
+          "settings": {
+            "show_taxes_notice": false
+          }
+        },
+        "fp-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Frankincense & Myrrh, these two sacred anointing oils, gifts of the Magi, symbolize prayer, worship, and healing. Frankincense invites a deeper reverence and connection to God's presence, while Myrrh represents purification and Christ's sacrifice.</p>"
+          }
+        },
+        "74111ee2-6aac-45de-b389-20c693072c8b": {
+          "type": "variant_picker",
+          "settings": {
+            "hide_sold_out_variants": false,
+            "selector_style": "block",
+            "swatch_selector_style": "swatch",
+            "variant_image_options": "",
+            "size_chart_page": ""
+          }
+        },
+        "buy-buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_payment_button": true,
+            "show_gift_card_recipient": true,
+            "atc_button_background": "#2c3227",
+            "atc_button_text_color": "#faf7f2",
+            "payment_button_background": "#c4a265",
+            "payment_button_text_color": "#2c3227"
+          }
+        },
+        "fp-features": {
+          "type": "feature_with_icon",
+          "settings": {
+            "text": "Free US shipping on orders $40+",
+            "link": "",
+            "icon": "picto-delivery-truck",
+            "icon_width": 16,
+            "background": "",
+            "text_color": "",
+            "border_color": ""
+          }
+        },
+        "share-buttons": {
+          "type": "share_buttons",
+          "settings": {}
+        },
+        "de84fb8e-f2be-4feb-9906-cbaf0ec140c1": {
+          "type": "product_variations",
+          "settings": {
+            "option_name": "",
+            "option_value_metafield": "",
+            "products": [],
+            "selector_style": "swatch"
+          }
+        }
+      },
+      "block_order": [
+        "fp-title",
+        "fp-price",
+        "fp-text",
+        "74111ee2-6aac-45de-b389-20c693072c8b",
+        "buy-buttons",
+        "fp-features",
+        "share-buttons",
+        "de84fb8e-f2be-4feb-9906-cbaf0ec140c1"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "product": "frankincense-myrrh-anointing-oil",
+        "separate_section_with_border": false,
+        "container_size": "lg",
+        "product_info_size": 45,
+        "center_basic_info": false,
+        "desktop_media_layout": "carousel_thumbnails_bottom",
+        "desktop_media_grid_gap": 30,
+        "mobile_controls": "dots",
+        "enable_media_autoplay": false,
+        "enable_video_looping": true,
+        "enable_image_zoom": false,
+        "max_image_zoom_level": 3,
+        "subheading": "",
+        "title": "",
+        "content": ""
+      }
+    },
+    "timeline": {
+      "type": "timeline",
+      "blocks": {
+        "item-0": {
+          "type": "item",
+          "settings": {
+            "label": "2020",
+            "subheading": "Sub-heading",
+            "title": "2000",
+            "content": "<p>Add your own custom content to give more information about your store, availability details...</p>",
+            "link_text": "",
+            "link_url": "",
+            "link_style": "link",
+            "mobile_text_color": "#ffffff"
+          }
+        },
+        "item-1": {
+          "type": "item",
+          "settings": {
+            "label": "2020",
+            "subheading": "Sub-heading",
+            "title": "2001",
+            "content": "<p>Add your own custom content to give more information about your store, availability details...</p>",
+            "link_text": "",
+            "link_url": "",
+            "link_style": "link",
+            "mobile_text_color": "#ffffff"
+          }
+        },
+        "item-2": {
+          "type": "item",
+          "settings": {
+            "label": "2020",
+            "subheading": "Sub-heading",
+            "title": "2002",
+            "content": "<p>Add your own custom content to give more information about your store, availability details...</p>",
+            "link_text": "",
+            "link_url": "",
+            "link_style": "link",
+            "mobile_text_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "item-0",
+        "item-1",
+        "item-2"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "item_color_scheme": "",
+        "separate_section_with_border": true
+      }
+    },
+    "blog-posts": {
+      "type": "blog-posts",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "separate_section_with_border": false,
+        "blog": "the-anointing-journal",
+        "posts_count": 3,
+        "stack_on_mobile": false,
+        "show_category": true,
+        "show_date": false,
+        "show_excerpt": true,
+        "show_read_more": true,
+        "subheading": "From the journal",
+        "title": "The Anointing Journal",
+        "content": "",
+        "button_link": "shopify://blogs/the-anointing-journal",
+        "button_text": "View all articles"
+      }
+    },
+    "shop-the-look": {
+      "type": "shop-the-look",
+      "blocks": {
+        "look-0": {
+          "type": "look",
+          "settings": {
+            "hot_spots_background": "#ffffff",
+            "product_1": "",
+            "product_1_horizontal_position": 30,
+            "product_1_vertical_position": 40,
+            "product_2": "",
+            "product_2_horizontal_position": 45,
+            "product_2_vertical_position": 65,
+            "product_3": "",
+            "product_3_horizontal_position": 70,
+            "product_3_vertical_position": 50,
+            "product_4": "",
+            "product_4_horizontal_position": 85,
+            "product_4_vertical_position": 85
+          }
+        },
+        "look-1": {
+          "type": "look",
+          "settings": {
+            "hot_spots_background": "#ffffff",
+            "product_1": "",
+            "product_1_horizontal_position": 25,
+            "product_1_vertical_position": 45,
+            "product_2": "",
+            "product_2_horizontal_position": 55,
+            "product_2_vertical_position": 30,
+            "product_3": "",
+            "product_3_horizontal_position": 65,
+            "product_3_vertical_position": 60,
+            "product_4": "",
+            "product_4_horizontal_position": 85,
+            "product_4_vertical_position": 85
+          }
+        }
+      },
+      "block_order": [
+        "look-0",
+        "look-1"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "subheading": "Shop",
+        "title": "Our looks",
+        "content": "",
+        "popover_title": "Shop the look"
+      }
+    },
+    "177145162641e76643": {
+      "type": "apps",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "separate_section_with_border": false,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false
+      }
+    },
+    "mo-hero": {
+      "type": "mo-hero",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "image": "shopify://shop_images/4_oz_in_the_line_copy.jpg",
+        "image_max_width": 1680,
+        "mobile_two_rows": true,
+        "mobile_crop_top": 15,
+        "mobile_crop_height": 77,
+        "subheading": "With cosmeceuticals derived from biblical botanicals",
+        "title": "The Anointing Oil Collection",
+        "content": "",
+        "button_text": "Shop now",
+        "button_link": "shopify://collections/all",
+        "button_background": "#c4a265",
+        "button_text_color": "#2c3227",
+        "bottle_label": "Shop",
+        "bottles_left": 2.6,
+        "bottles_right": 97.9
+      },
+      "blocks": {
+        "bottle-1": {
+          "type": "bottle",
+          "settings": {
+            "product": "rose-of-sharon"
+          }
+        },
+        "bottle-2": {
+          "type": "bottle",
+          "settings": {
+            "product": "latter-rain-anointing-oil"
+          }
+        },
+        "bottle-3": {
+          "type": "bottle",
+          "settings": {
+            "product": "hyssop"
+          }
+        },
+        "bottle-4": {
+          "type": "bottle",
+          "settings": {
+            "product": "spikenard-anointing-oil"
+          }
+        },
+        "bottle-5": {
+          "type": "bottle",
+          "settings": {
+            "product": "lily-of-the-valley"
+          }
+        },
+        "bottle-6": {
+          "type": "bottle",
+          "settings": {
+            "product": "frankincense-myrrh-anointing-oil",
+            "collection": "frankincense-myrrh"
+          }
+        },
+        "bottle-7": {
+          "type": "bottle",
+          "settings": {
+            "product": "pomegranate-anointing-oil"
+          }
+        },
+        "bottle-8": {
+          "type": "bottle",
+          "settings": {
+            "product": "gethsemane-anointing-oil-unscented"
+          }
+        }
+      },
+      "block_order": [
+        "bottle-1",
+        "bottle-2",
+        "bottle-3",
+        "bottle-4",
+        "bottle-5",
+        "bottle-6",
+        "bottle-7",
+        "bottle-8"
+      ]
+    },
+    "mo-pillars": {
+      "type": "text-with-icons",
+      "blocks": {
+        "pillar-scripture": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-tree",
+            "icon_width": 28,
+            "mobile_icon_width": 24,
+            "title": "Rooted in Scripture",
+            "content": "<p>Every oil is named for a botanical of the Bible, with its verse on the label.</p>"
+          }
+        },
+        "pillar-set-apart": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-love",
+            "icon_width": 28,
+            "mobile_icon_width": 24,
+            "title": "Set Apart for You",
+            "content": "<p>Made to anoint both your surroundings and yourself.</p>"
+          }
+        },
+        "pillar-clean": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-leaf",
+            "icon_width": 28,
+            "mobile_icon_width": 24,
+            "title": "Clean Ingredients",
+            "content": "<p>Natural, paraben-free and vegan, with an olive oil base.</p>"
+          }
+        },
+        "pillar-purpose": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-bottle",
+            "icon_width": 28,
+            "mobile_icon_width": 24,
+            "title": "Anointed with Purpose",
+            "content": "<p>Enriched with Polyphenol Alpha(α)™ to nourish skin and hair.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "pillar-scripture",
+        "pillar-set-apart",
+        "pillar-clean",
+        "pillar-purpose"
+      ],
+      "settings": {
+        "color_scheme": "scheme-5",
+        "separate_section_with_border": false,
+        "stack_on_mobile": true,
+        "icon_color": "#7a5f30",
+        "text_color": "",
+        "text_alignment": "center"
+      }
+    },
+    "mo-squalane": {
+      "type": "multiple-media-with-text",
+      "blocks": {
+        "sq-face": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/SerumAnointingoil.jpg",
+            "rotation": 0,
+            "link": "shopify://products/100-squalane"
+          }
+        },
+        "sq-bottle": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/squalane1oz.jpg",
+            "rotation": 0,
+            "link": "shopify://products/100-squalane"
+          }
+        }
+      },
+      "block_order": [
+        "sq-face",
+        "sq-bottle"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "reveal_on_scroll": true,
+        "separate_section_with_border": false,
+        "media_position_desktop": "before_text",
+        "media_position_mobile": "before_text",
+        "media_layout": "overlap",
+        "media_alignment": "end",
+        "media_alignment_offset": 80,
+        "media_mobile_alignment_offset": 40,
+        "text_alignment": "start",
+        "subheading": "Serums",
+        "title": "100% Squalane Oil",
+        "content": "<p>Mount of Olives' sustainable, vegan squalane oil, derived from the purity of olives and steeped in biblical tradition, offers hydration from head to toe.</p>",
+        "button_1_text": "View product",
+        "button_1_link": "shopify://products/100-squalane",
+        "button_1_style": "solid",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "solid"
+      }
+    },
+    "mo-scripture": {
+      "type": "rich-text",
+      "blocks": {
+        "verse": {
+          "type": "heading",
+          "settings": {
+            "text": "<em>“Thou anointest my head with oil; my cup runneth over.”</em>",
+            "heading_tag": "h2"
+          }
+        },
+        "ref": {
+          "type": "subheading",
+          "settings": {
+            "text": "Psalm 23:5"
+          }
+        }
+      },
+      "block_order": [
+        "verse",
+        "ref"
+      ],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "separate_section_with_border": false,
+        "content_width": "md",
+        "text_position": "center",
+        "remove_vertical_spacing": false
+      }
+    },
+    "mo-faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "What are anointing oils?",
+            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, following a tradition rooted in Scripture. Our oils combine this biblical heritage with careful cosmeceutical craft, so they also nourish the skin.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer free shipping?",
+            "answer": "<p>Yes! We offer free standard shipping on all US orders of $40 or more. Orders under $40 ship at a flat rate within the US.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Orders are processed within 1 to 3 business days. Standard US shipping typically arrives within 5 to 7 business days after processing. You'll receive a tracking number by email once your order ships.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Are your products cruelty-free?",
+            "answer": "<p>Yes. Mount of Olives products are never tested on animals. We are committed to cruelty-free, ethically sourced ingredients.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We want you to love your anointing oil. If you're not satisfied, please contact us within 30 days of delivery and we'll work with you to make it right. See our full Refund Policy for details.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "settings": {
+        "color_scheme": "scheme-5",
+        "separate_section_with_border": false,
+        "show_categories": false,
+        "subheading": "Need help?",
+        "title": "Questions, answered",
+        "content": "<p>More answers on our <a href=\"/pages/faqs\" title=\"FAQ\">FAQ page</a>.</p>"
+      }
+    },
+    "mo-testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "t1": {
+          "type": "testimonial",
+          "settings": {
+            "content": "<p>Beautiful product all around. Smells delightful, all natural, beautiful packaging and excellent customer service!</p>",
+            "author": "Kimberly · Rose of Sharon · Etsy review",
+            "logo_max_width": 140,
+            "logo_mobile_max_width": 100
+          }
+        },
+        "t2": {
+          "type": "testimonial",
+          "settings": {
+            "content": "<p>Mount of Olives has the best anointing oil blends! Very high quality. Give them a try! Shipping is fast and efficient, too.</p>",
+            "author": "Cara · Rose of Sharon · Etsy review",
+            "logo_max_width": 140,
+            "logo_mobile_max_width": 100
+          }
+        },
+        "t3": {
+          "type": "testimonial",
+          "settings": {
+            "content": "<p>Beautiful. Brings me back to childhood with the warm church, sometimes a warm spring with the windows open to welcome His presence into the house.</p>",
+            "author": "Jake · Frankincense & Myrrh · Etsy review",
+            "logo_max_width": 140,
+            "logo_mobile_max_width": 100
+          }
+        },
+        "t4": {
+          "type": "testimonial",
+          "settings": {
+            "content": "<p>The product came quickly, and it is packaged very nicely. I have been using this every night and enjoy it very much.</p>",
+            "author": "Tatiana · Frankincense & Myrrh · Etsy review",
+            "logo_max_width": 140,
+            "logo_mobile_max_width": 100
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "separate_section_with_border": false,
+        "auto_rotate_between_testimonials": true,
+        "cycle_speed": 7,
+        "font_size_factor": 1,
+        "subheading": "From our customers",
+        "title": "Rated 4 stars and up by {count} customers",
+        "content": ""
+      }
+    }
+  },
+  "order": [
+    "mo-hero",
+    "slideshow",
+    "mo-pillars",
+    "featured-collections",
+    "collection-list",
+    "mo-squalane",
+    "featured-product",
+    "mo-testimonials",
+    "mo-scripture",
+    "blog-posts",
+    "mo-faq",
+    "177145162641e76643",
+    "timeline",
+    "shop-the-look"
+  ]
+}
