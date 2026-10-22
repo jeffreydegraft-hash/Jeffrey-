@@ -258,3 +258,5 @@ Customers can leave their own stars without a paid app. The Reviews section unde
 3. Pick the product, enter the stars (1 to 5), the first name, the review text and the date, set Status to Active, and save.
 
 The review then shows first in that product's Reviews section and counts toward its stars and the store-wide total. Setting an entry back to Draft hides it again.
+
+Journal, Oct 22 afternoon: the last 19 cleaned posts went up, with formatting fixes on 68 posts (title headings no longer repeated at the top of the body, pasted ChatGPT markup and empty paragraphs removed, bold subheads turned into real headings, the old "Gethsemane squalane" name updated, "[website name]" replaced). All 73 uploads were read back from the store and match their files (two differ only by a line break Shopify adds inside a heading). myrrh-bible, which was published with an empty body, is hidden and redirects to myrrh-anointing. vegan-squalane is left as it was: it tells the story of naming the squalane "Gethsemane", which needs the owner's wording now that the product is "100% Squalane Oil".
