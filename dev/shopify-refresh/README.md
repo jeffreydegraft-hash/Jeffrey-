@@ -186,3 +186,26 @@ The copy review confirmed that the dash-free rewrite had quietly softened severa
 - A second review (claims hunter, Scripture checker, phone reader, then a skeptic per finding) runs on the new text; confirmed findings are applied before upload.
 - Uploaded once the connector was back (checksums verified on the copy): `templates/page.our-science.json`, `templates/page.faq.json`, `templates/index.json`; the Science, FAQ and About page bodies and the six collection descriptions are live store data and changed at once.
 - Second review, confirmed and applied (15 of 24 verified findings; the rest were refuted): "purifying and protective power" and "restorative power" in the Hyssop and Frankincense & Myrrh blurbs, "one of the most studied", "remarkably dense", "no synthetic penetration enhancers", "This is not a coincidence. It is by design.", "helps keep the other antioxidants stable", "with antioxidant activity", "cosmeceutical" in the Science tagline and the About opening, and the FAQ's "carries our botanical extracts with it" (now: because it comes from the olive, the tree that lit the tabernacle and anointed kings). The skeptics kept "cosmeceutical" everywhere else as the brand's standing category word. Every Scripture reference on the page checked out. Re-uploaded and verified.
+
+### Oct 22: fix-all pass
+
+The owner asked to fix every issue on the site, to make sure it works on phones, to take Exodus 30 out, and to replace the sunset praying-woman photo with the new praying photo everywhere. A page-by-page review (phone at 320 and 390 px, desktop at 1440 px, page text) found the issues below; each was checked by a second reviewer before it was fixed.
+
+Theme copy (`theme-files/`, goes live when the unpublished copy is published):
+
+- Exodus 30 removed from the Science page hero, the olive squalane tab, the page record text, the Amazon kit and the product description drafts.
+- Footer verse now the King James wording, "Thou anointest my head with oil; my cup runneth over." Psalm 23:5, with curly quotes and no dash.
+- Hero eyebrow "Anointing oils rooted in Scripture" instead of "With cosmeceuticals derived from biblical botanicals".
+- Squalane section text without "derived from the purity" and "steeped in biblical tradition".
+- Gethsemane kicker "Unscented", matching its label; Polyphenol Alpha (α)™ spelled with the space.
+- Review heading "131 four- and five-star reviews" (the live count of 4 and 5 star reviews; it counts reviews, not customers).
+- Page titles end with the store name; the pagination separator is a bar, not an en dash; copyright line without the hyphen.
+- Hero hotspot label for the Frankincense & Myrrh bottle uses the product name instead of the all-caps collection title.
+- Squalane bottle photo blended onto the cream page (it was a white box).
+- Compare sizes: the "Best value" badge sits under the best price on every screen, per-ounce prices never wrap.
+- Product cards keep a two-line title slot so prices line up across a row; the ampersand stays with the word before it.
+- Free shipping copy at $40 everywhere (badges, announcement bar, FAQ, cart bar, home meta description), matching the shipping rate.
+
+Store data (changes live at once): see the list in the session summary; product descriptions are in `copy/products/`, built by `tools/product-descriptions-build.py`.
+
+Checked locally and found to be preview-only, not live issues: the "(2)" rating without reviews (the Junip reviews block renders only on Shopify), the journal card placeholder excerpt, and the JavaScript errors from the cart, recently viewed and country requests that the local preview cannot answer.
