@@ -22,7 +22,7 @@
           "type": "question",
           "settings": {
             "question": "Do you offer free shipping?",
-            "answer": "<p>Yes! We offer free standard shipping on all US orders of $45 or more. Orders under $45 ship at a flat rate within the US.</p>"
+            "answer": "<p>Yes! We offer free standard shipping on all US orders of $45 or more. On smaller orders, shipping is calculated at checkout.</p>"
           }
         },
         "q2": {
@@ -49,14 +49,14 @@
           "type": "question",
           "settings": {
             "question": "What are anointing oils?",
-            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, following a tradition rooted in Scripture. Our oils carry this biblical heritage, prepared with care, so they also nourish the skin.</p>"
+            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, following a tradition rooted in Scripture. Our oils carry this biblical heritage, prepared with care in a base of olive squalane.</p>"
           }
         },
         "q5": {
           "type": "question",
           "settings": {
             "question": "What is Polyphenol Alpha (α)?",
-            "answer": "<p>Polyphenol Alpha (α)™ is our proprietary complex of polyphenols, terpenes, and other natural compounds extracted from biblical botanicals like frankincense, myrrh, hyssop, and spikenard. It is in every oil we make.</p>"
+            "answer": "<p>Polyphenol Alpha (α)™ is our proprietary complex of polyphenols, terpenes, and other natural compounds extracted from biblical botanicals like frankincense, myrrh, hyssop, and spikenard. It is in every anointing oil we make.</p>"
           }
         },
         "q6": {
@@ -70,7 +70,7 @@
           "type": "question",
           "settings": {
             "question": "Are your products cruelty-free?",
-            "answer": "<p>Yes. Mount of Olives products are never tested on animals. We are committed to cruelty-free, ethically sourced ingredients.</p>"
+            "answer": "<p>Yes. We honor all of God’s creation and never test on animals.</p>"
           }
         },
         "cat-orders": {
@@ -83,21 +83,21 @@
           "type": "question",
           "settings": {
             "question": "What is your return policy?",
-            "answer": "<p>We want you to love your anointing oil. If you're not satisfied, please contact us within 30 days of delivery and we'll work with you to make it right. See our full Refund Policy for details.</p>"
+            "answer": "<p>We want you to love your anointing oil. If you're not satisfied, please contact us within 30 days of delivery and we'll work with you to make it right. See our full <a href=\"/policies/refund-policy\">Refund Policy</a> for details.</p>"
           }
         },
         "q9": {
           "type": "question",
           "settings": {
             "question": "How can I track my order?",
-            "answer": "<p>Once your order ships, you'll receive a confirmation email with a tracking number. You can also check your order status by logging into your account on our website.</p>"
+            "answer": "<p>Once your order ships, you'll receive a confirmation email with a tracking number. You can also check your order status by logging into <a href=\"/account\">your account</a>.</p>"
           }
         },
         "q10": {
           "type": "question",
           "settings": {
             "question": "How do I contact customer support?",
-            "answer": "<p>Email us at info@mountofolives.co or use the Contact page on our website. We typically respond within 1 business day.</p>"
+            "answer": "<p>Email us at <a href=\"mailto:info@mountofolives.co\">info@mountofolives.co</a>, call (713) 364-2010, or use our <a href=\"/pages/contact\">Contact page</a>.</p>"
           }
         }
       },

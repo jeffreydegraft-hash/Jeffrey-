@@ -34,7 +34,7 @@
           "type": "text",
           "settings": {
             "title": "Mount of Olives LLC",
-            "content": "<p><strong>Connect with Us!</strong></p><ul><li>Email: <a href=\"mailto:info@mountofolives.co\">info@mountofolives.co</a><br/>We’re here to answer any questions or assist with special requests.</li><li>Phone: (713) 364-2010<br/>Call us for assistance, or leave a message, and we’ll return your call promptly.</li></ul>",
+            "content": "<p>Email: <a href=\"mailto:info@mountofolives.co\">info@mountofolives.co</a><br/>We’re here to answer any questions or assist with special requests.</p><p>Phone: <a href=\"tel:+17133642010\">(713) 364-2010</a><br/>Call us for assistance, or leave a message, and we’ll return your call promptly.</p>",
             "enable_follow_on_shop": true
           }
         }

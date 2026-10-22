@@ -21,7 +21,7 @@
           "type": "heading",
           "settings": {
             "text": "Get in Touch",
-            "heading_tag": "h2"
+            "heading_tag": "h1"
           }
         },
         "info_block": {
@@ -36,7 +36,7 @@
         "info_block"
       ],
       "settings": {
-        "content_width": "medium",
+        "content_width": "xs",
         "text_position": "center"
       }
     },

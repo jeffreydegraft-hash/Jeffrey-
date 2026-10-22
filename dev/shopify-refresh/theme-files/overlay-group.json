@@ -30,14 +30,14 @@
         "success_title": "Your 10% off is ready",
         "success_text": "Tap the button and 10% comes off at checkout. Your code is WELCOME10 if you ever need it.",
         "success_button_text": "Shop with 10% off",
-        "success_link": "shopify://collections/all"
+        "success_link": "shopify://collections/all-products"
       }
     },
     "privacy-banner": {
       "type": "privacy-banner",
       "settings": {
-        "title": "🍪 Cookie policy",
-        "content": "<p>We use cookies and similar technologies to provide the best experience on our website. Refer to our Privacy Policy for more information.</p>"
+        "title": "Cookie policy",
+        "content": "<p>We use cookies and similar technologies to provide the best experience on our website. Refer to our <a href=\"/policies/privacy-policy\">Privacy Policy</a> for more information.</p>"
       }
     }
   },

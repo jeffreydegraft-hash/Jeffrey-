@@ -20,7 +20,8 @@ Supported variables
 
 Mount of Olives: the average and the count combine every real review a product has: its Etsy listing's total (the
 ReputonEtsyReviews metafield; when the app has imported all of them their own stars are averaged, otherwise the
-listing's average is used), Amazon and eBay reviews pasted into custom.amazon_reviews and custom.ebay_reviews (same shape: {"reviews": [{"rating": 5}]}), and Junip reviews left on the store.
+listing's average is used), Amazon and eBay reviews pasted into custom.amazon_reviews and custom.ebay_reviews (same shape: {"reviews": [{"rating": 5}]}), Junip reviews left on the store, and customer reviews the owner has published from the review form (the
+customer_review metaobject).
 A product with none of these falls back to the standard reviews metafields.
 With full, a product with fewer than 10 reviews shows the whole store's rating instead, labelled as such ("4.9 (209
 reviews of our oils)"), counted the same way across the all-products collection plus Amazon and eBay reviews on the shop.
@@ -62,6 +63,14 @@ Product cards leave the count out below 10.
     for review in product.metafields.custom.ebay_reviews.value.reviews
       assign rating_points = rating_points | plus: review.rating
       assign rating_count = rating_count | plus: 1
+    endfor
+
+    for entry in shop.metaobjects.customer_review.values
+      if entry.product.value.id == product.id
+        assign rating_points = rating_points | plus: entry.rating.value
+        assign rating_count = rating_count | plus: 1
+        assign reviews_listed = true
+      endif
     endfor
 
     assign junip_count = product.metafields.junip.rating_count.value | default: 0 | plus: 0
@@ -112,6 +121,10 @@ Product cards leave the count out below 10.
     endfor
     for review in shop.metafields.custom.ebay_reviews.value.reviews
       assign store_points = store_points | plus: review.rating
+      assign store_count = store_count | plus: 1
+    endfor
+    for entry in shop.metaobjects.customer_review.values
+      assign store_points = store_points | plus: entry.rating.value
       assign store_count = store_count | plus: 1
     endfor
 

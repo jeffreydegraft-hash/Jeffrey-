@@ -14,7 +14,7 @@
             "desktop_text_position": "sm:place-self-end-center sm:text-center",
             "content_max_width": 400,
             "button_1_text": "shop now",
-            "button_1_link": "shopify://collections/all",
+            "button_1_link": "shopify://collections/all-products",
             "button_1_style": "solid",
             "button_1_background": "#ffffff",
             "button_1_text_color": "#000000",
@@ -153,7 +153,7 @@
             "color_scheme": "scheme-1",
             "collection": "latter-rain",
             "expand_collection": false,
-            "content_position": "place-self-end-start text-start",
+            "content_position": "place-self-start text-start",
             "subheading": "Revitalize",
             "title": "LATTER RAIN",
             "button_text": "",
@@ -169,8 +169,8 @@
             "color_scheme": "scheme-1",
             "collection": "hyssop",
             "expand_collection": false,
-            "content_position": "place-self-end-start text-start",
-            "subheading": "Purification & protection",
+            "content_position": "place-self-start text-start",
+            "subheading": "Purification",
             "title": "HYSSOP",
             "button_text": "",
             "button_link": "shopify://products/hyssop",
@@ -185,7 +185,7 @@
             "color_scheme": "scheme-1",
             "collection": "frankincense-myrrh",
             "expand_collection": false,
-            "content_position": "place-self-end-start text-start",
+            "content_position": "place-self-start text-start",
             "subheading": "Restore",
             "title": "FRANKINCENSE & MYRRH",
             "button_text": "",
@@ -201,7 +201,7 @@
             "color_scheme": "scheme-1",
             "collection": "gethsemane",
             "expand_collection": false,
-            "content_position": "place-self-end-start text-start",
+            "content_position": "place-self-start text-start",
             "subheading": "Unscented",
             "title": "GETHSEMANE",
             "button_text": "",
@@ -217,7 +217,7 @@
             "color_scheme": "scheme-1",
             "collection": "rose-of-sharon",
             "expand_collection": false,
-            "content_position": "place-self-end-start text-start",
+            "content_position": "place-self-start text-start",
             "subheading": "Radiance",
             "title": "ROSE OF SHARON",
             "button_text": "",
@@ -233,7 +233,7 @@
             "color_scheme": "scheme-1",
             "collection": "spikenard",
             "expand_collection": false,
-            "content_position": "place-self-end-start text-start",
+            "content_position": "place-self-start text-start",
             "subheading": "Renewal",
             "title": "SPIKENARD",
             "button_text": "",
@@ -249,7 +249,7 @@
             "color_scheme": "scheme-1",
             "collection": "pomegranate",
             "expand_collection": false,
-            "content_position": "place-self-end-start text-start",
+            "content_position": "place-self-start text-start",
             "subheading": "Eternal",
             "title": "POMEGRANATE",
             "button_text": "",
@@ -265,7 +265,7 @@
             "color_scheme": "scheme-1",
             "collection": "lily-of-the-valley",
             "expand_collection": false,
-            "content_position": "place-self-end-start text-start",
+            "content_position": "place-self-start text-start",
             "subheading": "Illuminate",
             "title": "LILY OF THE VALLEY",
             "button_text": "",
@@ -338,7 +338,7 @@
         "fp-text": {
           "type": "text",
           "settings": {
-            "text": "<p>Frankincense and myrrh, gifts of the Magi, speak of prayer, worship, and healing. Frankincense invites a deeper reverence for God's presence, while myrrh speaks of purification and Christ's sacrifice.</p>"
+            "text": "<p>Frankincense and myrrh, two gifts of the Magi, symbolize prayer, worship, and blessing. Frankincense invites a deeper reverence and awareness of God's presence, while myrrh recalls purification and Christ's sacrifice.</p>"
           }
         },
         "74111ee2-6aac-45de-b389-20c693072c8b": {
@@ -399,7 +399,7 @@
         "de84fb8e-f2be-4feb-9906-cbaf0ec140c1"
       ],
       "settings": {
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-5",
         "product": "frankincense-myrrh-anointing-oil",
         "separate_section_with_border": false,
         "container_size": "lg",
@@ -573,8 +573,8 @@
         "button_background": "#c4a265",
         "button_text_color": "#2c3227",
         "bottle_label": "Shop",
-        "bottles_left": 1.1,
-        "bottles_right": 98.9
+        "bottles_left": 0.6,
+        "bottles_right": 99.4
       },
       "blocks": {
         "bottle-1": {
@@ -648,7 +648,7 @@
             "icon_width": 28,
             "mobile_icon_width": 24,
             "title": "Rooted in Scripture",
-            "content": "<p>Every oil is named for a botanical of the Bible, with its verse on the label.</p>"
+            "content": "<p>Every anointing oil takes its name from Scripture, with its verse on the label.</p>"
           }
         },
         "pillar-set-apart": {
@@ -678,7 +678,7 @@
             "icon_width": 28,
             "mobile_icon_width": 24,
             "title": "Anointed with Purpose",
-            "content": "<p>Enriched with Polyphenol Alpha (α)™, drawn from biblical botanicals, to nourish skin and hair.</p>"
+            "content": "<p>Enriched with Polyphenol Alpha (α)™, drawn from biblical botanicals, for prayer, worship, and blessing.</p>"
           }
         }
       },
@@ -779,7 +779,7 @@
           "type": "question",
           "settings": {
             "question": "What are anointing oils?",
-            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, following a tradition rooted in Scripture. Our oils carry this biblical heritage. They are prepared with care in a base of olive squalane, which also nourishes the skin.</p>"
+            "answer": "<p>Anointing oils are sacred oils used in prayer, worship, and blessing, following a tradition rooted in Scripture. Our oils carry this biblical heritage, prepared with care in a base of olive squalane.</p>"
           }
         },
         "q2": {
@@ -800,14 +800,14 @@
           "type": "question",
           "settings": {
             "question": "Are your products cruelty-free?",
-            "answer": "<p>Yes. Mount of Olives products are never tested on animals.</p>"
+            "answer": "<p>Yes. We honor all of God’s creation and never test on animals.</p>"
           }
         },
         "q5": {
           "type": "question",
           "settings": {
             "question": "What is your return policy?",
-            "answer": "<p>We want you to love your anointing oil. If you're not satisfied, please contact us within 30 days of delivery and we'll work with you to make it right. See our full Refund Policy for details.</p>"
+            "answer": "<p>We want you to love your anointing oil. If you're not satisfied, please contact us within 30 days of delivery and we'll work with you to make it right. See our full <a href=\"/policies/refund-policy\">Refund Policy</a> for details.</p>"
           }
         }
       },

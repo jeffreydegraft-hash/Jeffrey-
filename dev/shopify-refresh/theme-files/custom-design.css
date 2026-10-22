@@ -381,9 +381,9 @@
 }
 
 /* ---------- "Find your oil" tiles: keep names whole on narrow screens ---------- */
-/* the text sits at the bottom of each tile, so the names line up across a row even when a
-   theme word above wraps to two lines; min-width 0 keeps a long name from pushing a tile
-   out of its half of the row on narrow phones */
+/* the text sits right under each square image, so the theme words and names start at one height
+   across a row; min-width 0 keeps a long name from pushing a tile out of its half of the row on
+   narrow phones */
 .collection-list--text-outside .collection-card {
   grid-template-rows: auto 1fr;
   min-width: 0;
@@ -440,7 +440,7 @@
 }
 
 .mo-sizes__per {
-  color: rgb(var(--text-color) / .65);
+  color: rgb(var(--text-color) / .75);
   font-size: .8125rem;
 }
 
@@ -492,6 +492,10 @@
 /* headings in the pillars and product names on cards break into two even lines instead of
    leaving one word alone on the last line */
 .shopify-section--text-with-icons .h6,
+.section-header .h2,
+.section-header .h6,
+.mo-eyebrow,
+.product-info .product-title,
 .product-card .product-title,
 .line-item-info .h6,
 .article__wrapper .h1 {
@@ -715,6 +719,13 @@ line-item-quantity .link::before {
   min-height: 2lh;
 }
 
+/* on narrow phones the longer names take three lines */
+@media screen and (max-width: 429px) {
+  .product-card__info .product-title {
+    min-height: 3lh;
+  }
+}
+
 
 /* ---------- Star rating with the average and the review count, and the reviews under the product ---------- */
 .rating-badge__summary {
@@ -789,4 +800,105 @@ a.rating-badge__summary .rating-badge__count {
   display: block;
   width: fit-content;
   margin: 1.5rem auto 0;
+}
+
+
+/* ---------- Headings: lining figures, so "100%" stands as tall as the capitals around it ---------- */
+h1, h2, h3, h4, h5, h6,
+.h0, .h1, .h2, .h3, .h4, .h5, .h6,
+.product-title {
+  font-variant-numeric: lining-nums;
+}
+
+/* the pillar lines do not leave one word alone on the last line */
+.shopify-section--text-with-icons .prose p {
+  text-wrap: pretty;
+}
+
+/* ---------- Prices: the theme's subdued grey is just under AA contrast on cream ---------- */
+.price-list sale-price.text-subdued {
+  color: rgb(var(--text-color) / .75);
+}
+
+/* ---------- Product page: the three trust lines under the buy button always stack, one per line ---------- */
+.product-info__block-group.feature-badge-list {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ---------- Journal posts: pasted text carries Apple spacing spans, which the theme would set on their own line ---------- */
+.article__wrapper .prose .Apple-converted-space {
+  display: inline;
+}
+
+.mo-reviews__app {
+  margin-block-start: 2rem;
+}
+
+/* the review form under the reviews: a Write a review button that opens stars, name, email and the review */
+.mo-reviews__write {
+  margin-block-start: 2rem;
+  text-align: center;
+}
+
+.mo-reviews__write > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.mo-reviews__write > summary::-webkit-details-marker {
+  display: none;
+}
+
+.mo-reviews__write[open] > summary {
+  margin-block-end: 1.5rem;
+}
+
+.mo-reviews__form {
+  text-align: start;
+}
+
+.mo-stars-input {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.mo-stars-input__row {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: .25rem;
+  margin-block-start: .5rem;
+}
+
+.mo-stars-input input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mo-stars-input label {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  cursor: pointer;
+  opacity: .25;
+  transition: opacity .15s var(--mo-ease-out);
+}
+
+.mo-stars-input label svg {
+  width: 1.5rem;
+  height: auto;
+}
+
+.mo-stars-input input:checked ~ label,
+.mo-stars-input label:hover,
+.mo-stars-input label:hover ~ label {
+  opacity: 1;
+}
+
+.mo-stars-input input:focus-visible + label {
+  outline: 2px solid rgb(var(--mo-gold-ink));
+  outline-offset: 2px;
 }

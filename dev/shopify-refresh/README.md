@@ -246,3 +246,15 @@ Later the same night, in the same draft: the product page rating reads like Mael
 Owner follow-up (same day): products with fewer than 10 reviews show the store-wide rating, labelled "4.9 (209 reviews of our oils)", instead of "(1 review)"; product cards leave the count out below 10. Amazon and eBay reviews count once pasted into `custom.amazon_reviews` / `custom.ebay_reviews` (product or shop metafields, `{"reviews": [{"rating": 5}]}`); none are in the store yet, so today's 209 is 205 Etsy and 4 mountofolives.co.
 
 Non-English journal posts hidden (Oct 22): the 87 machine-translated posts are unpublished (not deleted). Each old address redirects to its English original where one exists (47) or to /blogs/the-anointing-journal (40), and the 27 older redirects that pointed at them now go straight to the final page. To bring one back, publish it in Online Store > Blog posts and delete its redirect in Navigation > URL redirects.
+
+### Oct 22 (afternoon): QC fixes and a free review form, in the same draft
+
+The full-site QC (220 findings) was triaged: 81 theme fixes went into the draft (structured data, share text, FAQ answers and links, footer phone link, collections, Our Science copy, contrast, cart, and more; see the commit). The draft now holds 30 changed files; checksums were compared after upload.
+
+Customers can leave their own stars without a paid app. The Reviews section under each product has a "Write a review" button: stars, first name, email and the review. It is sent through Shopify's contact form, so it arrives as an email to the store. Nothing shows until the owner approves it:
+
+1. Read the email ("Review for: <oil>", "Rating: 5 of 5 stars").
+2. In Shopify admin, open Content > Metaobjects > Customer review > Add entry.
+3. Pick the product, enter the stars (1 to 5), the first name, the review text and the date, set Status to Active, and save.
+
+The review then shows first in that product's Reviews section and counts toward its stars and the store-wide total. Setting an entry back to Draft hides it again.

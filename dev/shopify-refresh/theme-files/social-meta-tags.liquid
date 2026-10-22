@@ -71,13 +71,13 @@ More information:
 
 {%- if request.page_type == 'product' -%}
   <meta name="twitter:title" content="{{ product.title | escape }}">
-  <meta name="twitter:description" content="{{ product.description | strip_html | truncatewords: 140, '' | escape }}">
+  <meta name="twitter:description" content="{{ mo_description | escape }}">
 {%- elsif request.page_type == 'article' -%}
   <meta name="twitter:title" content="{{ article.title }}">
-  <meta name="twitter:description" content="{{ article.excerpt_or_content | strip_html | truncatewords: 140, '' | escape }}">
+  <meta name="twitter:description" content="{{ mo_description | escape }}">
 {%- elsif request.page_type == 'collection' -%}
   <meta name="twitter:title" content="{{ collection.title }}">
-  <meta name="twitter:description" content="{{ collection.description | strip_html | truncatewords: 140, '' | escape }}">
+  <meta name="twitter:description" content="{{ mo_description | escape }}">
 {%- else -%}
   <meta name="twitter:title" content="{{ page_title | escape }}">
   <meta name="twitter:description" content="{{ mo_description | default: page_title | escape }}">
