@@ -171,10 +171,19 @@
         "remove_vertical_spacing": false,
         "remove_horizontal_spacing": false
       }
+    },
+    "mo-reviews": {
+      "type": "mo-reviews",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "title": "Reviews",
+        "reviews_shown": 6
+      }
     }
   },
   "order": [
     "main",
+    "mo-reviews",
     "recently-viewed-products",
     "1737310390d3662d4c"
   ]

@@ -714,3 +714,73 @@ line-item-quantity .link::before {
 .product-card__info .product-title {
   min-height: 2lh;
 }
+
+
+/* ---------- Star rating with the average and the review count, and the reviews under the product ---------- */
+.rating-badge__summary {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .375rem;
+  font-size: .9375rem;
+  color: rgb(var(--text-color));
+  text-decoration: none;
+}
+
+.rating-badge__value {
+  font-weight: 500;
+}
+
+.rating-badge__count {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgb(var(--text-color) / .35);
+}
+
+.mo-reviews {
+  max-width: 48rem;
+  margin-inline: auto;
+  scroll-margin-top: 6rem;
+}
+
+.mo-reviews__header {
+  display: grid;
+  justify-items: center;
+  gap: .625rem;
+  text-align: center;
+}
+
+.mo-reviews__header .rating-badge {
+  justify-content: center;
+}
+
+.mo-reviews__list {
+  display: grid;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mo-reviews__item {
+  display: grid;
+  gap: .5rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid rgb(var(--text-color) / .12);
+}
+
+.mo-reviews__item:last-child {
+  border-bottom: 1px solid rgb(var(--text-color) / .12);
+}
+
+.mo-reviews__text {
+  margin: 0;
+}
+
+.mo-reviews__meta {
+  margin: 0;
+}
+
+.mo-reviews__more {
+  display: block;
+  width: fit-content;
+  margin: 1.5rem auto 0;
+}

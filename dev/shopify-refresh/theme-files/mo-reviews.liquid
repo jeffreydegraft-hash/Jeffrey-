@@ -1,0 +1,106 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+MOUNT OF OLIVES REVIEWS
+----------------------------------------------------------------------------------------------------------------------
+The reviews the rating badge counts, under the product: the average, where the reviews come from, and the newest
+Etsy reviews that the ReputonEtsyReviews app has imported (first names only), with a link to read the rest on Etsy.
+The section is hidden on products without reviews.
+{%- endcomment -%}
+
+{%- liquid
+  assign etsy_count = 0
+  assign etsy_url = ''
+  assign etsy_reviews = ''
+  for field in product.metafields['ReputonEtsyReviews::ProductReviews']
+    assign etsy = field.last.value
+    assign etsy_count = etsy_count | plus: etsy.reviewsNumber
+    if etsy.url != blank
+      assign etsy_url = etsy.url
+    endif
+    assign etsy_reviews = etsy.reviews
+  endfor
+
+  assign junip_count = product.metafields.junip.rating_count.value | default: 0 | plus: 0
+  assign amazon_count = product.metafields.custom.amazon_reviews.value.reviews.size | default: 0
+  assign total_count = etsy_count | plus: junip_count | plus: amazon_count
+  assign shown = 0
+-%}
+
+{%- if total_count > 0 -%}
+  <div class="section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }}">
+    <div class="container">
+      <div id="reviews" class="mo-reviews">
+        <div class="mo-reviews__header">
+          <h2 class="h3">{{ section.settings.title | escape }}</h2>
+          {%- render 'product-rating', product: product, full: true -%}
+          <p class="mo-reviews__sources text-sm text-subdued">
+            {%- if etsy_count > 0 -%}{{ etsy_count }} on Etsy{%- endif -%}
+            {%- if amazon_count > 0 -%}{% if etsy_count > 0 %} · {% endif %}{{ amazon_count }} on Amazon{%- endif -%}
+            {%- if junip_count > 0 -%}{% if etsy_count > 0 or amazon_count > 0 %} · {% endif %}{{ junip_count }} on mountofolives.co{%- endif -%}
+          </p>
+        </div>
+
+        {%- if etsy_reviews != blank -%}
+          <ul class="mo-reviews__list unstyled-list" role="list">
+            {%- for review in etsy_reviews -%}
+              {%- if review.hide or review.text == blank or shown >= section.settings.reviews_shown -%}{%- continue -%}{%- endif -%}
+              {%- assign shown = shown | plus: 1 -%}
+              {%- assign first_name = review.authorName | split: ' ' | first | default: 'Etsy customer' -%}
+              <li class="mo-reviews__item">
+                <div class="rating-badge__stars" role="img" aria-label="{{ 'general.rating.info' | t: rating_value: review.rating, rating_max: 5 }}">
+                  {%- for i in (1..5) -%}
+                    {%- if i <= review.rating -%}{%- render 'icon' with 'star-rating' -%}{%- else -%}{%- render 'icon' with 'star-rating-empty' -%}{%- endif -%}
+                  {%- endfor -%}
+                </div>
+                <p class="mo-reviews__text">{{ review.text | replace: '&#39;', "’" | replace: '&quot;', '"' | replace: '&amp;', '&' | escape | strip | newline_to_br }}</p>
+                <p class="mo-reviews__meta text-xs text-subdued">{{ first_name | escape }} · Etsy review · {{ review.relativeTimeDescription | date: '%b %-d, %Y' | escape }}</p>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if etsy_url != blank and etsy_count > shown -%}
+          <a href="{{ etsy_url }}" class="link mo-reviews__more" target="_blank" rel="noopener">Read all {{ etsy_count }} Etsy reviews</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product reviews",
+  "class": "shopify-section--mo-reviews",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Reviews"
+    },
+    {
+      "type": "range",
+      "id": "reviews_shown",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Reviews shown",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product reviews"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,146 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+PRODUCT RATING BADGE
+----------------------------------------------------------------------------------------------------------------------
+
+This component generates a review badge from the product metafields information.
+
+********************************************
+Supported variables
+********************************************
+
+* product: the product from which ratings are extracted
+* show_empty: if set to true, the theme shows a 0.0 if there are no rating yet
+* show_placeholder: if set to true, show random value (useful for the product card placeholder)
+* show_single_star: if set to true, only one star is shown (otherwise, the number of scale)
+* display_mode: either "rating" (e.g.: 3.5) or "count" (e.g.: 4 reviews). Default to "rating" if none is passed
+* full: if set to true, shows the average and the review count after the stars ("4.9 (124 reviews)"), linked to the
+  reviews section on the product page
+
+Mount of Olives: the average and the count combine every real review a product has: its Etsy listing's total (the
+ReputonEtsyReviews metafield; when the app has imported all of them their own stars are averaged, otherwise the
+listing's average is used), Amazon reviews pasted into custom.amazon_reviews, and Junip reviews left on the store.
+A product with none of these falls back to the standard reviews metafields.
+{%- endcomment -%}
+
+{%- liquid
+  assign rating_count = 0
+  assign rating_points = 0.0
+
+  if product != blank
+    for field in product.metafields['ReputonEtsyReviews::ProductReviews']
+      assign etsy = field.last.value
+      assign etsy_count = etsy.reviewsNumber | default: 0
+      if etsy_count > 0
+        if etsy.reviews.size == etsy_count
+          for review in etsy.reviews
+            assign rating_points = rating_points | plus: review.rating
+          endfor
+        else
+          assign etsy_points = etsy.rating | times: etsy_count
+          assign rating_points = rating_points | plus: etsy_points
+        endif
+        assign rating_count = rating_count | plus: etsy_count
+      endif
+    endfor
+
+    for review in product.metafields.custom.amazon_reviews.value.reviews
+      assign rating_points = rating_points | plus: review.rating
+      assign rating_count = rating_count | plus: 1
+    endfor
+
+    assign junip_count = product.metafields.junip.rating_count.value | default: 0 | plus: 0
+    if junip_count > 0
+      assign junip_points = product.metafields.junip.rating_average.value | default: 0 | times: junip_count
+      assign rating_points = rating_points | plus: junip_points
+      assign rating_count = rating_count | plus: junip_count
+    endif
+  endif
+
+  if rating_count > 0
+    assign rating_value = rating_points | divided_by: rating_count | round: 1
+    assign rating_max = 5
+  elsif product.metafields.reviews.rating.value != blank
+    assign rating_value = product.metafields.reviews.rating.value.rating | round: 1
+    assign rating_count = product.metafields.reviews.rating_count.value
+    assign rating_max = product.metafields.reviews.rating.value.scale_max
+  elsif show_empty
+    assign rating_value = 0.0
+    assign rating_count = 0
+    assign rating_max = 5
+  elsif show_placeholder
+    assign rating_value = 4.5
+    assign rating_count = 2
+    assign rating_max = 5
+  else
+    assign hide_rating = true
+  endif
+
+  assign rating_decimal = 0
+  assign decimal = rating_value | modulo: 1 | round: 2
+
+  if decimal >= 0.3 and decimal <= 0.7
+    assign rating_decimal = 0.5
+  elsif decimal > 0.7
+    assign rating_decimal = 1
+  endif
+-%}
+
+{%- unless hide_rating -%}
+  <span class="rating-badge" title="{{ 'product.rating_count' | t: count: rating_count }}">
+    <div class="rating-badge__stars" role="img" aria-label="{{ 'general.rating.info' | t: rating_value: rating_value, rating_max: rating_max }}">
+      {%- liquid
+        if show_single_star
+          if rating_count == 0
+            render 'icon' with 'star-rating-empty'
+          else
+            render 'icon' with 'star-rating'
+          endif
+        else
+          for i in (1..rating_max)
+            if rating_count == 0
+              render 'icon' with 'star-rating-empty'
+            else
+              if i <= rating_value
+                render 'icon' with 'star-rating'
+              else
+                if rating_decimal == 0.5
+                  render 'icon' with 'star-rating-half'
+                elsif rating_decimal == 1
+                  render 'icon' with 'star-rating'
+                else
+                  render 'icon' with 'star-rating-empty'
+                endif
+
+                assign rating_decimal = false
+              endif
+            endif
+          endfor
+        endif
+      -%}
+    </div>
+
+    {%- if full -%}
+      {%- liquid
+        assign rating_text = rating_value | append: ''
+        unless rating_text contains '.'
+          assign rating_text = rating_text | append: '.0'
+        endunless
+        assign count_text = rating_count | append: ''
+        if rating_count >= 1000
+          assign count_thousands = rating_count | divided_by: 1000
+          assign count_rest = rating_count | modulo: 1000 | plus: 1000 | append: '' | slice: 1, 3
+          assign count_text = count_thousands | append: ',' | append: count_rest
+        endif
+      -%}
+      <a href="#reviews" class="rating-badge__summary">
+        <span class="rating-badge__value">{{ rating_text }}</span>
+        <span class="rating-badge__count">({{ 'product.rating_count' | t: count: rating_count | replace: rating_count, count_text }})</span>
+      </a>
+    {%- elsif display_mode == 'count' -%}
+      <span class="smallcaps text-xxs text-subdued">({{ rating_count }})</span>
+    {%- else -%}
+      <span class="smallcaps text-xxs text-subdued">({{ rating_value }})</span>
+    {%- endif -%}
+  </span>
+{%- endunless -%}

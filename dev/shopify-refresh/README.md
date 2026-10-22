@@ -236,3 +236,9 @@ Draft theme "Mount of Olives – Homepage fixes (Oct 22, not live)" (16762837407
 - Science page: 1 Corinthians 12:20 in King James wording ("many members, yet but one body").
 
 Store changes in the same pass: Frankincense and Hyssop variant weights set to 0.8 lb like the other oils (Frankincense was 0, Hyssop 0.8 oz); Pomegranate collection image set to the 4 oz render.
+
+Later the same night, in the same draft: the product page rating reads like Maelove's, "★★★★½ 4.7 (39 reviews)", and tapping the count jumps to a new Reviews section under the product.
+
+- The average and the count combine every real review a product has: its Etsy listing's total from the ReputonEtsyReviews metafield (the app imports only part of a big listing, e.g. 48 of Frankincense & Myrrh's 122, so the listing's own average is used then), Amazon reviews in `custom.amazon_reviews`, and Junip reviews on the store (`snippets/product-rating.liquid`, `snippets/product-info.liquid`). Stars round to the nearest half.
+- `sections/mo-reviews.liquid` (added after `main` in `templates/product.json`): heading, the badge, where the reviews come from ("122 on Etsy · 2 on mountofolives.co"), the six newest imported Etsy reviews with first names only and one date format, and a link to read the rest on Etsy. Hidden on products with no reviews.
+- Counts on Oct 22: Frankincense & Myrrh 124, Hyssop 39, Spikenard 24, Rose of Sharon 9, Pomegranate 9, Latter Rain 2, Gethsemane 1, Squalane 1; Lily of the Valley, Frankincense and Myrrh have none. 209 in all. Counts grow only with real reviews (finish the Reputon import, paste Amazon reviews into the metafield, Junip review requests).
