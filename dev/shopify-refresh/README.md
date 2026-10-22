@@ -267,4 +267,4 @@ Oct 22, late afternoon: the owner published "Homepage fixes" (167628374076), whi
 
 Owner confirmed the squalane wording is true and stays ("hydration from head to toe", "nourishes the skin", "doesn't clog pores"). The draft "Packaging wording" theme keeps that wording; it only adds the squalane and olive oil base to the FAQ squalane answer and the Our Science page.
 
-Owner supplied the real 4 oz barcodes: Gethsemane 4 oz 658580343798, Hyssop 4 oz 658580343804 (both pass the UPC check digit). Set as barcode and SKU, replacing the derived 658580343521 and 658580343514.
+Owner sent the printed 4 oz labels. The label barcodes are Gethsemane 4 oz 658580343521 and Hyssop 4 oz 658580343514, so Shopify uses those (barcode and SKU). The other codes the owner listed, Gethsemane 658580343798 and Hyssop 658580343804, stay on Amazon only and must not be changed there.
