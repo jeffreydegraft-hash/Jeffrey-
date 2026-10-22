@@ -1,0 +1,62 @@
+{%- comment -%}
+  Pick-any-N builder for the collection product. Adds the bundle product once, with the chosen
+  oils recorded as a line item property so they show in the cart, at checkout and on the order.
+  Accepts: bundle (product), oils (collection), size (number), property_name, note, image, compact (boolean)
+{%- endcomment -%}
+{%- liquid
+  assign property_name = property_name | default: 'Your oils'
+  assign size = size | default: 6
+  assign summary_image = image | default: bundle.featured_media
+-%}
+<div class="bundle{% if compact %} bundle--compact{% endif %}" data-bundle data-bundle-size="{{ size }}">
+  <div class="bundle__layout">
+    <ul class="bundle__oils" role="list">
+      {%- for product in oils.products limit: 16 -%}
+        {%- if product.id == bundle.id -%}{%- continue -%}{%- endif -%}
+        {%- capture oil_color -%}{% render 'oil-data', handle: product.handle, field: 'color' %}{%- endcapture -%}
+        {%- capture oil_name -%}{% render 'oil-data', handle: product.handle, field: 'name' %}{%- endcapture -%}
+        {%- if oil_name == blank -%}{%- assign oil_name = product.title | remove: ' Anointing Oil' -%}{%- endif -%}
+        <li class="bundle__oil{% unless product.available %} is-unavailable{% endunless %}" style="--oil: {{ oil_color | strip }};" data-bundle-oil="{{ oil_name | escape }}">
+          <span class="bundle__thumb">
+            {%- if product.featured_media != blank -%}
+              {{ product.featured_media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,240', sizes: '96px', alt: '' }}
+            {%- endif -%}
+          </span>
+          <span class="bundle__name">{{ oil_name }}{% unless product.available %}<small>Sold out</small>{% endunless %}</span>
+          <span class="bundle__qty" role="group" aria-label="{{ oil_name | escape }} bottles">
+            <button type="button" data-bundle-minus aria-label="Remove one {{ oil_name | escape }}" disabled>&minus;</button>
+            <output data-bundle-count aria-live="polite">0</output>
+            <button type="button" data-bundle-plus aria-label="Add one {{ oil_name | escape }}"{% unless product.available %} disabled{% endunless %}>+</button>
+          </span>
+        </li>
+      {%- endfor -%}
+    </ul>
+    <aside class="bundle__summary">
+      {%- unless compact -%}
+        {%- if summary_image != blank -%}
+          <div class="bundle__photo">
+            {%- assign summary_alt = summary_image.alt | default: bundle.title -%}
+            {{ summary_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360,540,720,900', sizes: '(min-width: 990px) 380px, 90vw', alt: summary_alt }}
+          </div>
+        {%- endif -%}
+        <p class="bundle__title">{{ bundle.title | split: ' — ' | first }}</p>
+        <p class="bundle__price">{{ bundle.price | money }}<span> for any {{ size }}</span></p>
+      {%- endunless -%}
+      <div class="bundle__progress" aria-hidden="true">
+        {%- for i in (1..size) -%}<span class="bundle__slot" data-bundle-slot></span>{%- endfor -%}
+      </div>
+      <p class="bundle__status" data-bundle-status aria-live="polite">Choose {{ size }} bottles</p>
+      <ul class="bundle__chosen" data-bundle-chosen role="list"></ul>
+      <form action="{{ routes.cart_add_url }}" method="post" data-bundle-form>
+        <input type="hidden" name="id" value="{{ bundle.selected_or_first_available_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <input type="hidden" name="properties[{{ property_name | escape }}]" value="" data-bundle-property>
+        <button type="submit" class="btn btn--primary btn--block btn--lg" data-bundle-submit disabled{% unless bundle.available %} data-bundle-soldout{% endunless %}>
+          {%- if bundle.available -%}Add collection to cart · {{ bundle.price | money }}{%- else -%}Sold out{%- endif -%}
+        </button>
+      </form>
+      {%- if note != blank -%}<p class="bundle__note">{{ note }}</p>{%- endif -%}
+      <button type="button" class="link bundle__reset" data-bundle-reset hidden>Clear selection</button>
+    </aside>
+  </div>
+</div>

@@ -1,8 +1,8 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Runneth",
-    "theme_version": "1.0.0",
+    "theme_name": "Overflow",
+    "theme_version": "2.0.0",
     "theme_author": "My Cup Runneth Over",
     "theme_documentation_url": "https://github.com/jeffreydegraft-hash/Jeffrey-",
     "theme_support_url": "https://github.com/jeffreydegraft-hash/Jeffrey-"
@@ -10,74 +10,346 @@
   {
     "name": "Brand",
     "settings": [
-      { "type": "image_picker", "id": "logo", "label": "Logo" },
-      { "type": "range", "id": "logo_width", "min": 60, "max": 300, "step": 10, "unit": "px", "label": "Logo width", "default": 150 },
-      { "type": "image_picker", "id": "favicon", "label": "Favicon", "info": "Square, at least 64 x 64 px" },
-      { "type": "image_picker", "id": "share_image", "label": "Social sharing image", "info": "1200 x 630 px. Shown when links are shared on social media and in messages (Open Graph image)." },
-      { "type": "text", "id": "tagline", "label": "Brand tagline", "default": "Thou anointest my head with oil; my cup runneth over." },
-      { "type": "text", "id": "tagline_ref", "label": "Tagline reference", "default": "Psalm 23:5" }
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 60,
+        "max": 300,
+        "step": 10,
+        "unit": "px",
+        "label": "Logo width",
+        "default": 150
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Square, at least 64 x 64 px"
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Social sharing image",
+        "info": "1200 x 630 px. Shown when links are shared on social media and in messages (Open Graph image)."
+      },
+      {
+        "type": "text",
+        "id": "tagline",
+        "label": "Brand tagline",
+        "default": "Thou anointest my head with oil; my cup runneth over."
+      },
+      {
+        "type": "text",
+        "id": "tagline_ref",
+        "label": "Tagline reference",
+        "default": "Psalm 23:5"
+      }
     ]
   },
   {
     "name": "Colors",
     "settings": [
-      { "type": "color", "id": "color_background", "label": "Page background", "default": "#FAF6EE" },
-      { "type": "color", "id": "color_surface", "label": "Cards and surfaces", "default": "#F1E9DA" },
-      { "type": "color", "id": "color_text", "label": "Text", "default": "#1E2619" },
-      { "type": "color", "id": "color_muted", "label": "Muted text", "default": "#6B6A62" },
-      { "type": "color", "id": "color_border", "label": "Borders", "default": "#E3DACA" },
-      { "type": "color", "id": "color_primary", "label": "Primary (buttons, links)", "default": "#3F5233" },
-      { "type": "color", "id": "color_primary_text", "label": "Text on primary", "default": "#FFFFFF" },
-      { "type": "color", "id": "color_accent", "label": "Accent (gold)", "default": "#B8903F" },
-      { "type": "color", "id": "color_highlight", "label": "Highlight (sale badges)", "default": "#C7742E" },
-      { "type": "color", "id": "color_dark", "label": "Dark section background", "default": "#1E2619" },
-      { "type": "color", "id": "color_dark_text", "label": "Text on dark", "default": "#F6F1E6" }
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Page background",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Cards and surfaces",
+        "default": "#F7F3EC"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text",
+        "default": "#171512"
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Muted text",
+        "default": "#6F6A62"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Borders",
+        "default": "#E9E4DA"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary (buttons, links)",
+        "default": "#171512"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_text",
+        "label": "Text on primary",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent (gold)",
+        "default": "#B07A2A"
+      },
+      {
+        "type": "color",
+        "id": "color_highlight",
+        "label": "Highlight (sale badges)",
+        "default": "#A0302B"
+      },
+      {
+        "type": "color",
+        "id": "color_dark",
+        "label": "Dark section background",
+        "default": "#171512"
+      },
+      {
+        "type": "color",
+        "id": "color_dark_text",
+        "label": "Text on dark",
+        "default": "#FFFFFF"
+      }
     ]
   },
   {
     "name": "Typography",
     "settings": [
-      { "type": "font_picker", "id": "font_heading", "label": "Headings", "default": "playfair_display_n4" },
-      { "type": "font_picker", "id": "font_body", "label": "Body", "default": "work_sans_n4" },
-      { "type": "range", "id": "heading_scale", "min": 90, "max": 130, "step": 5, "unit": "%", "label": "Heading size", "default": 100 },
-      { "type": "range", "id": "body_scale", "min": 90, "max": 115, "step": 5, "unit": "%", "label": "Body size", "default": 100 }
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Headings",
+        "default": "harmonia_sans_n6"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body",
+        "default": "harmonia_sans_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_scripture",
+        "label": "Scripture font",
+        "info": "Used in italic for verses and quotes.",
+        "default": "playfair_display_n4"
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "min": 90,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "label": "Heading size",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "body_scale",
+        "min": 90,
+        "max": 115,
+        "step": 5,
+        "unit": "%",
+        "label": "Body size",
+        "default": 100
+      }
     ]
   },
   {
     "name": "Layout",
     "settings": [
-      { "type": "range", "id": "page_width", "min": 1000, "max": 1600, "step": 20, "unit": "px", "label": "Page width", "default": 1280 },
-      { "type": "range", "id": "section_spacing", "min": 40, "max": 140, "step": 4, "unit": "px", "label": "Space between sections", "default": 88 },
-      { "type": "range", "id": "radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Corner radius", "default": 4 },
-      { "type": "range", "id": "button_radius", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Button radius", "default": 2 }
+      {
+        "type": "range",
+        "id": "page_width",
+        "min": 1000,
+        "max": 1600,
+        "step": 20,
+        "unit": "px",
+        "label": "Page width",
+        "default": 1360
+      },
+      {
+        "type": "range",
+        "id": "section_spacing",
+        "min": 40,
+        "max": 140,
+        "step": 4,
+        "unit": "px",
+        "label": "Space between sections",
+        "default": 96
+      },
+      {
+        "type": "range",
+        "id": "radius",
+        "min": 0,
+        "max": 24,
+        "step": 2,
+        "unit": "px",
+        "label": "Corner radius",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "button_radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Button radius",
+        "default": 40
+      }
     ]
   },
   {
     "name": "Product cards",
     "settings": [
-      { "type": "select", "id": "card_ratio", "label": "Image ratio", "options": [ { "value": "square", "label": "Square" }, { "value": "portrait", "label": "Portrait" }, { "value": "natural", "label": "Natural" } ], "default": "portrait" },
-      { "type": "checkbox", "id": "card_show_vendor", "label": "Show vendor", "default": false },
-      { "type": "checkbox", "id": "card_show_sizes", "label": "Show size count under the title", "default": true },
-      { "type": "checkbox", "id": "card_quick_add", "label": "Show quick add button", "default": true },
-      { "type": "checkbox", "id": "card_hover_image", "label": "Show second image on hover", "default": true }
+      {
+        "type": "select",
+        "id": "card_ratio",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "square",
+            "label": "Square"
+          },
+          {
+            "value": "portrait",
+            "label": "Portrait"
+          },
+          {
+            "value": "natural",
+            "label": "Natural"
+          }
+        ],
+        "default": "portrait"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "label": "Show vendor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_sizes",
+        "label": "Show size count under the title",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_quick_add",
+        "label": "Show quick add button",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_hover_image",
+        "label": "Show second image on hover",
+        "default": true
+      }
     ]
   },
   {
     "name": "Cart",
     "settings": [
-      { "type": "select", "id": "cart_type", "label": "Cart type", "options": [ { "value": "drawer", "label": "Drawer (slides in)" }, { "value": "page", "label": "Page" } ], "default": "drawer" },
-      { "type": "range", "id": "free_shipping_threshold", "min": 0, "max": 200, "step": 5, "unit": "$", "label": "Free shipping threshold", "info": "Set to 0 to hide the free-shipping progress bar.", "default": 50 },
-      { "type": "checkbox", "id": "cart_show_note", "label": "Enable order notes / prayer requests", "default": true }
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Drawer (slides in)"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "range",
+        "id": "free_shipping_threshold",
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "$",
+        "label": "Free shipping threshold",
+        "info": "Set to 0 to hide the free-shipping progress bar.",
+        "default": 50
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_note",
+        "label": "Enable order notes / prayer requests",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "The Anointing Collection"
+      },
+      {
+        "type": "product",
+        "id": "bundle_product",
+        "label": "Six-bottle product",
+        "info": "Its product page shows the pick-your-oils builder instead of a plain add-to-cart."
+      },
+      {
+        "type": "collection",
+        "id": "bundle_collection",
+        "label": "Oils customers can choose from"
+      },
+      {
+        "type": "range",
+        "id": "bundle_size",
+        "min": 2,
+        "max": 12,
+        "step": 1,
+        "label": "Bottles in the collection",
+        "default": 6
+      }
     ]
   },
   {
     "name": "Social media",
     "settings": [
-      { "type": "url", "id": "social_instagram", "label": "Instagram" },
-      { "type": "url", "id": "social_facebook", "label": "Facebook" },
-      { "type": "url", "id": "social_tiktok", "label": "TikTok" },
-      { "type": "url", "id": "social_youtube", "label": "YouTube" },
-      { "type": "url", "id": "social_pinterest", "label": "Pinterest" }
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube",
+        "label": "YouTube"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest",
+        "label": "Pinterest"
+      }
     ]
   }
 ]

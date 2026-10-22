@@ -4,6 +4,8 @@
   assign heading_italic = heading_font | font_modify: 'style', 'italic'
   assign body_bold = body_font | font_modify: 'weight', 'bold'
   assign body_medium = body_font | font_modify: 'weight', '500'
+  assign scripture_font = settings.font_scripture | default: heading_font
+  assign scripture_italic = scripture_font | font_modify: 'style', 'italic' | default: scripture_font
 -%}
 <style>
   {{ heading_font | font_face: font_display: 'swap' }}
@@ -11,10 +13,12 @@
   {{ body_font | font_face: font_display: 'swap' }}
   {{ body_medium | font_face: font_display: 'swap' }}
   {{ body_bold | font_face: font_display: 'swap' }}
+  {{ scripture_italic | font_face: font_display: 'swap' }}
   :root {
     --font-heading: {{ heading_font.family }}, {{ heading_font.fallback_families }};
     --font-heading-weight: {{ heading_font.weight }};
     --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+    --font-scripture: {{ scripture_italic.family }}, {{ scripture_italic.fallback_families }};
     --heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
     --body-scale: {{ settings.body_scale | divided_by: 100.0 }};
     --color-bg: {{ settings.color_background }};

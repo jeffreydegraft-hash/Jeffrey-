@@ -1,6 +1,7 @@
-/* Runneth theme JS — My Cup Runneth Over
+/* Overflow theme JS — My Cup Runneth Over
    Drawers, AJAX cart (drawer), variant picker, gallery, sticky add-to-cart,
-   recommendations loader, announcement rotation, filters auto-submit. */
+   recommendations loader, announcement rotation, filters auto-submit,
+   find-your-oil quiz, pick-your-oils collection builder. */
 (function () {
   'use strict';
   const theme = window.theme || { moneyFormat: '${{amount}}', cartType: 'drawer', routes: { cart: '/cart', cartAdd: '/cart/add', cartChange: '/cart/change', cartUpdate: '/cart/update' } };
@@ -321,6 +322,132 @@
     const n = e.target.closest('[data-cart-note]');
     if (!n) return;
     fetch(theme.routes.cartUpdate + '.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ note: n.value }) }).catch(() => {});
+  });
+
+  /* ---------- find-your-oil quiz ---------- */
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  $$('[data-quiz]').forEach((quiz) => {
+    let products = {};
+    try { products = JSON.parse(($('[data-quiz-products]', quiz) || {}).textContent || '{}'); } catch (err) { return; }
+    const steps = $$('[data-quiz-step]', quiz);
+    const dots = $$('[data-quiz-dot]', quiz);
+    const result = $('[data-quiz-result]', quiz);
+    const collectionNote = $('[data-quiz-collection]', quiz);
+    let answer = null;
+    function show(n) {
+      steps.forEach((s) => { const on = s.getAttribute('data-quiz-step') === String(n); s.hidden = !on; s.classList.toggle('is-active', on); });
+      dots.forEach((d) => d.classList.toggle('is-active', Number(d.getAttribute('data-quiz-dot')) <= n));
+      const active = steps.find((s) => !s.hidden);
+      const focusEl = active && active.querySelector('.quiz__q');
+      if (focusEl) { focusEl.setAttribute('tabindex', '-1'); focusEl.focus({ preventScroll: true }); }
+    }
+    function render(forWhom) {
+      const p = products[answer];
+      if (!p || !result) return;
+      const img = p.image ? '<img src="' + escapeHtml(p.image) + '" alt="" width="300" height="300" loading="lazy">' : '';
+      const buy = p.available
+        ? '<form action="' + escapeHtml(theme.routes.cartAdd) + '" method="post" data-ajax-cart class="quiz__buy"><input type="hidden" name="id" value="' + escapeHtml(p.variant) + '"><input type="hidden" name="quantity" value="1"><button type="submit" class="btn btn--primary">Add to cart · ' + escapeHtml(p.price) + '</button></form>'
+        : '<p class="muted">Sold out for now.</p>';
+      result.innerHTML =
+        '<article class="quiz__card" style="--oil:' + escapeHtml(p.color || '') + '">' +
+          '<a class="quiz__card-media" href="' + escapeHtml(p.url) + '">' + img + '</a>' +
+          '<div class="quiz__card-body">' +
+            '<h3 class="quiz__card-title"><a href="' + escapeHtml(p.url) + '">' + escapeHtml(p.title) + '</a></h3>' +
+            (p.refs ? '<p class="quiz__card-refs">' + escapeHtml(p.refs) + '</p>' : '') +
+            (p.why ? '<p class="quiz__card-why">' + escapeHtml(p.why) + '</p>' : '') +
+            (p.meaning ? '<p class="quiz__card-meaning">On the label: “' + escapeHtml(p.meaning) + '”</p>' : '') +
+            '<div class="quiz__card-actions">' + buy + '<a class="link-arrow" href="' + escapeHtml(p.url) + '">Read about this oil</a></div>' +
+          '</div>' +
+        '</article>';
+      if (collectionNote) collectionNote.hidden = !(forWhom === 'gift' || forWhom === 'church');
+    }
+    quiz.addEventListener('click', (e) => {
+      const a = e.target.closest('[data-quiz-answer]');
+      if (a) { answer = a.getAttribute('data-quiz-answer'); $$('[data-quiz-answer]', quiz).forEach((b) => b.setAttribute('aria-pressed', String(b === a))); show(2); return; }
+      const f = e.target.closest('[data-quiz-for]');
+      if (f) { render(f.getAttribute('data-quiz-for')); show(3); return; }
+      if (e.target.closest('[data-quiz-back]')) { show(1); return; }
+      if (e.target.closest('[data-quiz-restart]')) { answer = null; if (result) result.innerHTML = ''; show(1); }
+    });
+  });
+
+  /* ---------- collection builder (pick any N oils) ---------- */
+  $$('[data-bundle]').forEach((root) => {
+    const size = Number(root.getAttribute('data-bundle-size')) || 6;
+    const rows = $$('[data-bundle-oil]', root);
+    const counts = new Map(rows.map((r) => [r, 0]));
+    const slots = $$('[data-bundle-slot]', root);
+    const status = $('[data-bundle-status]', root);
+    const chosen = $('[data-bundle-chosen]', root);
+    const property = $('[data-bundle-property]', root);
+    const submit = $('[data-bundle-submit]', root);
+    const reset = $('[data-bundle-reset]', root);
+    const form = $('[data-bundle-form]', root);
+    const total = () => Array.from(counts.values()).reduce((a, b) => a + b, 0);
+    function picks() {
+      const list = [];
+      rows.forEach((r) => { const n = counts.get(r); if (n) list.push({ row: r, name: r.getAttribute('data-bundle-oil'), n, color: r.style.getPropertyValue('--oil') }); });
+      return list;
+    }
+    function update() {
+      const n = total();
+      const full = n >= size;
+      rows.forEach((r) => {
+        const c = counts.get(r);
+        $('[data-bundle-count]', r).textContent = c;
+        r.classList.toggle('is-picked', c > 0);
+        const minus = $('[data-bundle-minus]', r);
+        const plus = $('[data-bundle-plus]', r);
+        if (minus) minus.disabled = c === 0;
+        if (plus) plus.disabled = full || r.classList.contains('is-unavailable');
+      });
+      const list = picks();
+      let i = 0;
+      slots.forEach((s) => { s.style.removeProperty('--oil'); s.classList.remove('is-filled'); });
+      list.forEach((p) => { for (let k = 0; k < p.n && i < slots.length; k++, i++) { slots[i].style.setProperty('--oil', p.color); slots[i].classList.add('is-filled'); } });
+      if (status) status.textContent = full ? 'Your collection is ready' : (n === 0 ? 'Choose ' + size + ' bottles' : n + ' of ' + size + ' chosen. ' + (size - n) + ' to go.');
+      if (chosen) chosen.innerHTML = list.map((p) => '<li style="--oil:' + escapeHtml(p.color) + '"><span></span>' + escapeHtml(p.name) + (p.n > 1 ? ' ×' + p.n : '') + '</li>').join('');
+      if (property) property.value = list.map((p) => p.name + (p.n > 1 ? ' ×' + p.n : '')).join(', ');
+      if (submit) submit.disabled = !full || submit.hasAttribute('data-bundle-soldout');
+      if (reset) reset.hidden = n === 0;
+      root.classList.toggle('is-full', full);
+    }
+    root.addEventListener('click', (e) => {
+      const plus = e.target.closest('[data-bundle-plus]');
+      const minus = e.target.closest('[data-bundle-minus]');
+      if (plus || minus) {
+        const r = (plus || minus).closest('[data-bundle-oil]');
+        const c = counts.get(r) || 0;
+        if (plus && total() < size) counts.set(r, c + 1);
+        if (minus && c > 0) counts.set(r, c - 1);
+        update();
+        return;
+      }
+      if (e.target.closest('[data-bundle-reset]')) { rows.forEach((r) => counts.set(r, 0)); update(); }
+    });
+    if (form) form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (total() !== size || !submit || submit.disabled) return;
+      const original = submit.innerHTML;
+      submit.disabled = true;
+      submit.textContent = 'Adding…';
+      try {
+        const res = await fetch(theme.routes.cartAdd + '.js', { method: 'POST', headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: new FormData(form) });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.description || data.message || 'Could not add to cart');
+        rows.forEach((r) => counts.set(r, 0));
+        if (theme.cartType === 'drawer' && document.getElementById('CartDrawer')) await refreshCart(true);
+        else window.location.href = theme.routes.cart;
+      } catch (err) {
+        toast(err.message || 'Something went wrong. Please try again.');
+      } finally {
+        submit.innerHTML = original;
+        update();
+      }
+    });
+    update();
   });
 
   /* ---------- end ---------- */

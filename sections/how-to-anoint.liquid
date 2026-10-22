@@ -1,0 +1,38 @@
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head section__head--center">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+      </div>
+    </div>
+    <ol class="steps">
+      {%- for block in section.blocks -%}
+        <li class="step" {{ block.shopify_attributes }}>
+          <span class="step__num">{{ forloop.index }}</span>
+          <h3 class="step__title">{{ block.settings.title }}</h3>
+          <p class="step__text">{{ block.settings.text }}</p>
+        </li>
+      {%- endfor -%}
+    </ol>
+    {%- if section.settings.verse != blank -%}
+      <p class="steps__verse">“{{ section.settings.verse }}” <span>{{ section.settings.verse_ref }}</span></p>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "How to anoint",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Ritual" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "How to anoint with oil" },
+    { "type": "textarea", "id": "verse", "label": "Verse", "default": "Is any sick among you? let him call for the elders of the church; and let them pray over him, anointing him with oil in the name of the Lord." },
+    { "type": "text", "id": "verse_ref", "label": "Verse reference", "default": "James 5:14" }
+  ],
+  "blocks": [
+    { "type": "step", "name": "Step", "settings": [ { "type": "text", "id": "title", "label": "Title", "default": "Set apart the moment" }, { "type": "textarea", "id": "text", "label": "Text", "default": "Quiet the room and open with worship." } ] }
+  ],
+  "presets": [ { "name": "How to anoint", "blocks": [ { "type": "step" }, { "type": "step" }, { "type": "step" } ] } ]
+}
+{% endschema %}

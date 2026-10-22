@@ -1,0 +1,55 @@
+{%- comment -%} Color-coded product card. Accepts: product (required), eager (boolean) {%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign v = p.selected_or_first_available_variant
+  capture oil_color
+    render 'oil-data', handle: p.handle, field: 'color'
+  endcapture
+  capture oil_name
+    render 'oil-data', handle: p.handle, field: 'name'
+  endcapture
+  capture oil_meaning
+    render 'oil-data', handle: p.handle, field: 'meaning'
+  endcapture
+  capture oil_refs
+    render 'oil-data', handle: p.handle, field: 'refs'
+  endcapture
+  if oil_name == blank
+    assign oil_name = p.title | remove: ' Anointing Oil'
+  endif
+  assign img = p.featured_media
+  assign img_alt = img.alt | default: p.title
+  assign loading = 'lazy'
+  if eager
+    assign loading = 'eager'
+  endif
+-%}
+<article class="oil-card" style="--oil: {{ oil_color }};">
+  <a class="oil-card__media" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
+    {%- if img != blank -%}
+      {{ img | image_url: width: 900 | image_tag: loading: loading, widths: '360,540,720,900', sizes: '(min-width: 990px) 25vw, 50vw', class: 'oil-card__img', alt: img_alt }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'oil-card__img' }}
+    {%- endif -%}
+    {%- if p.available == false -%}<span class="pill pill--muted oil-card__flag">Sold out</span>{%- elsif p.compare_at_price > p.price -%}<span class="pill oil-card__flag">Sale</span>{%- endif -%}
+  </a>
+  <div class="oil-card__body">
+    <div class="oil-card__top">
+      <h3 class="oil-card__title"><a href="{{ p.url }}">{{ oil_name }}</a></h3>
+      <span class="oil-card__price">{% render 'price', product: p, use_from: true %}</span>
+    </div>
+    {%- if oil_meaning != blank -%}<p class="oil-card__meaning">{{ oil_meaning }}</p>{%- endif -%}
+    {%- if oil_refs != blank -%}<p class="oil-card__refs">{{ oil_refs }}</p>{%- endif -%}
+    {%- if p.available -%}
+      {%- if p.variants.size == 1 -%}
+        <form action="{{ routes.cart_add_url }}" method="post" data-ajax-cart class="oil-card__form">
+          <input type="hidden" name="id" value="{{ v.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="btn btn--primary btn--block">Add to cart</button>
+        </form>
+      {%- else -%}
+        <a class="btn btn--primary btn--block" href="{{ p.url }}">Choose options</a>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</article>

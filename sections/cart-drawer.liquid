@@ -2,19 +2,43 @@
   <div class="drawer__overlay" data-drawer-close></div>
   <div class="drawer__panel cart-drawer" role="dialog" aria-modal="true" aria-label="Your cart">
     <div class="drawer__head">
-      <span class="drawer__title">Your cart <span class="muted" style="font-family:var(--font-body);font-size:.9rem">({{ cart.item_count }})</span></span>
+      <span class="drawer__title">Your cart <span class="drawer__count">({{ cart.item_count }})</span></span>
       <button type="button" class="icon-btn" data-drawer-close aria-label="Close cart">{% render 'icon', icon: 'close' %}</button>
     </div>
     {%- if cart.item_count == 0 -%}
       <div class="cart-drawer__empty">
         {% render 'icon', icon: 'drop' %}
-        <p class="h3" style="margin:0">Your cart is empty</p>
-        <p class="muted" style="margin:0">Find the oil that meets you where you are.</p>
+        <p class="h3">Your cart is empty</p>
+        <p class="muted">Find the oil that meets you where you are.</p>
         <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">Shop anointing oils</a>
       </div>
     {%- else -%}
       {% render 'shipping-bar' %}
       {% render 'cart-items', context: 'drawer' %}
+      {%- liquid
+        assign upsell = settings.bundle_product
+        assign has_bundle = false
+        if upsell != blank
+          for item in cart.items
+            if item.product_id == upsell.id
+              assign has_bundle = true
+              break
+            endif
+          endfor
+        endif
+      -%}
+      {%- if upsell != blank and upsell.available and has_bundle == false -%}
+        <a class="cart-upsell" href="{{ upsell.url }}">
+          <span class="cart-upsell__img">
+            {%- if upsell.featured_media != blank -%}{{ upsell.featured_media | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+          </span>
+          <span class="cart-upsell__text">
+            <strong>Make it a collection</strong>
+            <span>Any {{ settings.bundle_size }} bottles for {{ upsell.price | money_without_trailing_zeros }}</span>
+          </span>
+          {% render 'icon', icon: 'arrow-right' %}
+        </a>
+      {%- endif -%}
       <div class="cart-drawer__foot">
         {%- if cart.cart_level_discount_applications.size > 0 -%}
           <div class="cart-drawer__discounts">
@@ -30,9 +54,9 @@
         <div class="cart-drawer__subtotal"><span>Subtotal</span><span>{{ cart.total_price | money }}</span></div>
         <p class="cart-drawer__note">Shipping, taxes and discount codes are calculated at checkout.</p>
         <form action="{{ routes.cart_url }}" method="post">
-          <button type="submit" name="checkout" class="btn btn--primary btn--full btn--large">Checkout</button>
+          <button type="submit" name="checkout" class="btn btn--primary btn--block btn--lg">Checkout</button>
         </form>
-        <a href="{{ routes.cart_url }}" class="link center" style="font-size:.85rem">View full cart</a>
+        <a href="{{ routes.cart_url }}" class="link center cart-drawer__view">View full cart</a>
       </div>
     {%- endif -%}
   </div>

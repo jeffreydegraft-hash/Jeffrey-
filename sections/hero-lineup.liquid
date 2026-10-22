@@ -1,0 +1,94 @@
+{%- comment -%}
+  Homepage hero: copy beside a lifestyle photo, then a shelf of every bottle in the collection.
+  The photo crop follows the focal point set on the image in the theme editor.
+{%- endcomment -%}
+{%- liquid
+  assign shelf = section.settings.collection
+  if shelf == blank
+    assign shelf = collections.all
+  endif
+  assign photo = section.settings.image
+-%}
+<section class="lineup" {{ section.shopify_attributes }}>
+  <div class="container lineup__inner{% if photo == blank %} lineup__inner--no-photo{% endif %}">
+    <div class="lineup__copy">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h1 class="lineup__title">{{ section.settings.heading }}</h1>
+      {%- if section.settings.text != blank -%}<div class="lineup__text">{{ section.settings.text }}</div>{%- endif -%}
+      <div class="lineup__ctas">
+        {%- if section.settings.cta_label != blank -%}
+          <a class="btn btn--primary btn--lg" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.cta2_label != blank -%}
+          <a class="btn btn--outline btn--lg" href="{{ section.settings.cta2_link | default: '#find-your-oil' }}">{{ section.settings.cta2_label }}</a>
+        {%- endif -%}
+      </div>
+      {%- assign points = section.settings.points | newline_to_br | split: '<br />' -%}
+      {%- if section.settings.points != blank -%}
+        <ul class="lineup__points">
+          {%- for point in points -%}
+            {%- assign point = point | strip -%}
+            {%- if point != blank -%}<li>{% render 'icon', icon: 'check' %}<span>{{ point }}</span></li>{%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+    {%- if photo != blank -%}
+      {%- assign photo_alt = photo.alt | default: section.settings.image_alt -%}
+      <div class="lineup__photo" style="--focal: {{ photo.presentation.focal_point | default: '50% 50%' }};">
+        {{ photo | image_url: width: 2000 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600,900,1200,1600,2000', sizes: '(min-width: 990px) 58vw, 100vw', alt: photo_alt }}
+      </div>
+    {%- endif -%}
+  </div>
+  {%- if section.settings.show_shelf -%}
+    <div class="lineup__shelf">
+      <div class="container">
+        {%- if section.settings.shelf_heading != blank -%}<p class="lineup__shelf-label">{{ section.settings.shelf_heading }}</p>{%- endif -%}
+        <ul class="lineup__row" role="list">
+          {%- for product in shelf.products limit: section.settings.limit -%}
+            {%- capture oil_color -%}{% render 'oil-data', handle: product.handle, field: 'color' %}{%- endcapture -%}
+            {%- capture oil_name -%}{% render 'oil-data', handle: product.handle, field: 'name' %}{%- endcapture -%}
+            {%- if oil_name == blank -%}{%- assign oil_name = product.title | remove: ' Anointing Oil' -%}{%- endif -%}
+            <li>
+              <a class="lineup__bottle" href="{{ product.url }}" style="--oil: {{ oil_color | strip }};">
+                <span class="lineup__bottle-img">
+                  {%- if product.featured_media != blank -%}
+                    {%- assign bottle_alt = product.featured_media.alt | default: product.title -%}
+                    {{ product.featured_media | image_url: width: 400 | image_tag: loading: 'lazy', widths: '160,240,320,400', sizes: '(min-width: 990px) 140px, 28vw', alt: bottle_alt }}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag }}
+                  {%- endif -%}
+                </span>
+                <span class="lineup__name">{{ oil_name }}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+{% schema %}
+{
+  "name": "Hero: photo and bottles",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Set the focal point on the image to control the crop." },
+    { "type": "text", "id": "image_alt", "label": "Photo description", "default": "A woman smiling and holding a bottle of My Cup Runneth Over anointing oil" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Handcrafting anointing oils since 2010" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Anointing oil, <em>poured with prayer.</em>" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Eight biblical blends in a pure olive oil base, each one tied to a passage of Scripture.</p>" },
+    { "type": "text", "id": "cta_label", "label": "Primary button", "default": "Shop all oils" },
+    { "type": "url", "id": "cta_link", "label": "Primary button link" },
+    { "type": "text", "id": "cta2_label", "label": "Secondary button", "default": "Find your oil" },
+    { "type": "url", "id": "cta2_link", "label": "Secondary button link" },
+    { "type": "textarea", "id": "points", "label": "Check list", "info": "One point per line.", "default": "Pure olive oil base\nHandcrafted with prayer\nA verse on every label" },
+    { "type": "header", "content": "Bottle shelf" },
+    { "type": "checkbox", "id": "show_shelf", "label": "Show bottle shelf", "default": true },
+    { "type": "text", "id": "shelf_heading", "label": "Shelf label", "default": "Shop by oil" },
+    { "type": "collection", "id": "collection", "label": "Bottles on the shelf" },
+    { "type": "range", "id": "limit", "min": 3, "max": 10, "step": 1, "label": "Bottles to show", "default": 8 }
+  ],
+  "presets": [ { "name": "Hero: photo and bottles" } ]
+}
+{% endschema %}

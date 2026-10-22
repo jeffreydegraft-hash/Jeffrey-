@@ -1,22 +1,22 @@
 {
   "sections": {
     "hero": {
-      "type": "hero",
+      "type": "hero-lineup",
       "settings": {
-        "layout": "products",
-        "min_height": 70,
-        "eyebrow": "Handcrafted anointing oils",
+        "image": "shopify://shop_images/Hero_banner.png",
+        "image_alt": "A woman smiling and holding a bottle of My Cup Runneth Over Frankincense anointing oil",
+        "eyebrow": "Handcrafting anointing oils since 2010",
         "heading": "You anoint my head with oil; <em>my cup runs over.</em>",
-        "text": "<p>Premium anointing oils handcrafted from pure olive oil and biblical botanicals. Ethically sourced blends for worship, prayer and home blessings, prepared with prayer before they reach your hands.</p>",
-        "cta_label": "Shop anointing oils",
+        "text": "<p>Eight biblical blends in a pure olive oil base. Each bottle carries the verse it was named for, and each one is prepared with prayer.</p>",
+        "cta_label": "Shop all oils",
         "cta_link": "/collections/sacred-anointing-oils",
         "cta2_label": "Find your oil",
-        "cta2_link": "#purpose",
-        "show_proof": false,
-        "proof_text": "",
-        "card_title": "Handcrafted with prayer",
-        "card_text": "Every bottle is prepared in an atmosphere of worship and intercession, and blessed before it reaches your hands.",
-        "collection": "sacred-anointing-oils"
+        "cta2_link": "#find-your-oil",
+        "points": "Pure olive oil base\nHandcrafted with prayer\nA verse on every label",
+        "show_shelf": true,
+        "shelf_heading": "Shop by oil",
+        "collection": "sacred-anointing-oils",
+        "limit": 8
       }
     },
     "trust": {
@@ -59,74 +59,6 @@
       ],
       "settings": {}
     },
-    "featured": {
-      "type": "featured-collection",
-      "settings": {
-        "collection": "sacred-anointing-oils",
-        "eyebrow": "The collection",
-        "heading": "Sacred anointing oils",
-        "text": "Eight blends, each rooted in Scripture. 4 oz glass bottles, from $35.",
-        "limit": 8,
-        "columns": "4",
-        "show_view_all": true,
-        "view_all_label": "View all oils",
-        "surface": false
-      }
-    },
-    "purpose": {
-      "type": "collection-list",
-      "blocks": {
-        "p1": {
-          "type": "tile",
-          "settings": {
-            "collection": "prayer-worship",
-            "eyebrow": "For",
-            "title": "Prayer & Worship",
-            "text": "Set apart your prayer closet and your worship."
-          }
-        },
-        "p2": {
-          "type": "tile",
-          "settings": {
-            "collection": "protection-cleansing",
-            "eyebrow": "For",
-            "title": "Protection & Cleansing",
-            "text": "Cover your home, your doorposts, your family."
-          }
-        },
-        "p3": {
-          "type": "tile",
-          "settings": {
-            "collection": "healing-renewal",
-            "eyebrow": "For",
-            "title": "Healing & Renewal",
-            "text": "For the sick, the weary and seasons of revival."
-          }
-        },
-        "p4": {
-          "type": "tile",
-          "settings": {
-            "collection": "gifts-sets",
-            "eyebrow": "For",
-            "title": "Gifts & Sets",
-            "text": "Build a treasury of oils for someone you love.",
-            "image": "shopify://shop_images/anointing-collection-bundle.png"
-          }
-        }
-      },
-      "block_order": [
-        "p1",
-        "p2",
-        "p3",
-        "p4"
-      ],
-      "settings": {
-        "eyebrow": "Find your oil",
-        "heading": "What are you praying for?",
-        "text": "Start with the need. Every oil is matched to a purpose and a passage.",
-        "cta_label": "Explore →"
-      }
-    },
     "story": {
       "type": "image-with-text",
       "blocks": {
@@ -166,62 +98,6 @@
         "cta_label": "Read our story",
         "cta_link": "/pages/about-us",
         "surface": false
-      }
-    },
-    "tiers": {
-      "type": "size-tiers",
-      "blocks": {
-        "z1": {
-          "type": "tier",
-          "settings": {
-            "name": "Single bottle",
-            "tagline": "One oil, 4 oz",
-            "price": "$35",
-            "price_note": "per bottle",
-            "features": "4 oz (118 ml) glass bottle\nPure olive oil base and biblical botanicals\nHandcrafted with prayer",
-            "highlight": false,
-            "link": "/collections/sacred-anointing-oils",
-            "button_label": "Shop single oils"
-          }
-        },
-        "z2": {
-          "type": "tier",
-          "settings": {
-            "name": "The Anointing Collection",
-            "tagline": "Choose any six bottles",
-            "price": "$210",
-            "price_note": "per set",
-            "features": "Six 4 oz bottles, your choice of blends\nBuild a personal treasury of sacred oils\nFor families, prayer groups and gifting",
-            "flag": "Most complete",
-            "highlight": true,
-            "product": "the-anointing-collection-choose-any-6-bottles",
-            "button_label": "Build your collection"
-          }
-        },
-        "z3": {
-          "type": "tier",
-          "settings": {
-            "name": "Churches & ministries",
-            "tagline": "Anointing services, outreach, altar calls",
-            "price": "Custom",
-            "price_note": "pricing",
-            "features": "Volume orders for congregations\nThe same oils, in the quantities you need\nTell us what you need and we will reply",
-            "highlight": false,
-            "link": "/pages/contact",
-            "button_label": "Request ministry pricing"
-          }
-        }
-      },
-      "block_order": [
-        "z1",
-        "z2",
-        "z3"
-      ],
-      "settings": {
-        "eyebrow": "Bottles & sets",
-        "heading": "One bottle, or the whole collection",
-        "text": "Every oil comes in a 4 oz glass bottle. Choose a single blend, or gather six.",
-        "note": "Spikenard is priced slightly higher. Final prices are shown on each product."
       }
     },
     "testimonials": {
@@ -273,16 +149,6 @@
         "rating": "",
         "summary": "",
         "dark": false
-      }
-    },
-    "scripture": {
-      "type": "scripture-banner",
-      "settings": {
-        "quote": "You prepare a table before me in the presence of my enemies; You anoint my head with oil; my cup runs over.",
-        "reference": "Psalm 23:5",
-        "dark": true,
-        "cta_label": "Shop the oils",
-        "cta_link": "/collections/sacred-anointing-oils"
       }
     },
     "faq": {
@@ -349,50 +215,6 @@
         "contact_link": "/pages/contact"
       }
     },
-    "social": {
-      "type": "social-grid",
-      "disabled": true,
-      "blocks": {
-        "i1": {
-          "type": "post",
-          "settings": {}
-        },
-        "i2": {
-          "type": "post",
-          "settings": {}
-        },
-        "i3": {
-          "type": "post",
-          "settings": {}
-        },
-        "i4": {
-          "type": "post",
-          "settings": {}
-        },
-        "i5": {
-          "type": "post",
-          "settings": {}
-        },
-        "i6": {
-          "type": "post",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "i1",
-        "i2",
-        "i3",
-        "i4",
-        "i5",
-        "i6"
-      ],
-      "settings": {
-        "eyebrow": "Community",
-        "heading": "Anointed and shared",
-        "handle": "",
-        "link": ""
-      }
-    },
     "anointings": {
       "type": "five-anointings",
       "blocks": {
@@ -433,7 +255,7 @@
             "reference": "Mark 14:3–9",
             "verse": "She brake the box, and poured it on his head.",
             "text": "In Bethany, an alabaster box broken over His head. “She is come aforehand to anoint my body to the burying.”",
-            "product": "classic-unscented-anointing-oil"
+            "product": "spikenard-anointing-oil"
           }
         },
         "a5": {
@@ -461,21 +283,170 @@
         "oil_label": "The oil",
         "cta_label": "Shop all eight oils",
         "cta_link": "/collections/sacred-anointing-oils",
-        "surface": false
+        "surface": true
+      }
+    },
+    "oils": {
+      "type": "oil-grid",
+      "settings": {
+        "collection": "sacred-anointing-oils",
+        "eyebrow": "The collection",
+        "heading": "Eight oils. Eight passages.",
+        "text": "Every blend carries its verse on the label. 4 oz glass bottles.",
+        "limit": 8,
+        "view_all_label": "Shop all"
+      }
+    },
+    "quiz": {
+      "type": "oil-quiz",
+      "blocks": {
+        "q1": {
+          "type": "answer",
+          "settings": {
+            "label": "Cleansing and a fresh start",
+            "product": "hyssop-anointing-oil",
+            "why": "“Purge me with hyssop, and I shall be clean.” For confession, renewal and protection."
+          }
+        },
+        "q2": {
+          "type": "answer",
+          "settings": {
+            "label": "Strength in a hard season",
+            "product": "spikenard-anointing-oil",
+            "why": "The costly spikenard Mary poured at the feet of Jesus. For strength and joy in His presence."
+          }
+        },
+        "q3": {
+          "type": "answer",
+          "settings": {
+            "label": "Intercession for others",
+            "product": "frankincense-myrrh-anointing-oil",
+            "why": "The gifts brought to the newborn King. For intercession and prophecies fulfilled."
+          }
+        },
+        "q4": {
+          "type": "answer",
+          "settings": {
+            "label": "A fresh outpouring of the Spirit",
+            "product": "latter-rain-anointing-oil",
+            "why": "“I will give you the rain of your land in his due season.” For obedience rewarded."
+          }
+        },
+        "q5": {
+          "type": "answer",
+          "settings": {
+            "label": "Abundance and fruitfulness",
+            "product": "pomegranate-anointing-oil",
+            "why": "For embracing life, abundance and the fruit of the Spirit."
+          }
+        },
+        "q6": {
+          "type": "answer",
+          "settings": {
+            "label": "Comfort and God’s love",
+            "product": "rose-of-sharon-anointing-oil",
+            "why": "“I am the rose of Sharon.” For the redeemed and the consoled."
+          }
+        },
+        "q7": {
+          "type": "answer",
+          "settings": {
+            "label": "Peace and trust",
+            "product": "lily-of-the-valley-anointing-oil",
+            "why": "“Consider the lilies of the field.” For resting in the Father’s love."
+          }
+        },
+        "q8": {
+          "type": "answer",
+          "settings": {
+            "label": "Simple daily devotion",
+            "product": "classic-unscented-anointing-oil",
+            "why": "Pure, unscented olive oil, as in Psalm 23:5. Gentle for everyday use and sensitive skin."
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8"
+      ],
+      "settings": {
+        "eyebrow": "30-second quiz",
+        "heading": "Not sure which oil is yours?",
+        "text": "Answer two questions and we will point you to the oil and the verse.",
+        "q1": "What are you bringing to God in prayer?",
+        "q2": "Who is it for?",
+        "result_heading": "Your oil",
+        "collection_note": "Anointing for a family or a ministry? Choose any six bottles for $210.",
+        "collection_link": "Build your collection"
+      }
+    },
+    "bundle": {
+      "type": "bundle-builder",
+      "settings": {
+        "eyebrow": "Build your own",
+        "heading": "The Anointing Collection",
+        "text": "Pick any six bottles. Mix them, or choose six of the same.",
+        "bundle_product": "the-anointing-collection-choose-any-6-bottles",
+        "collection": "sacred-anointing-oils",
+        "bundle_size": 6,
+        "property_name": "Your oils",
+        "note": "Six full-size 4 oz bottles in one order."
+      }
+    },
+    "ritual": {
+      "type": "how-to-anoint",
+      "blocks": {
+        "h1": {
+          "type": "step",
+          "settings": {
+            "title": "Set apart the moment",
+            "text": "Quiet the room. Open with worship or a passage of Scripture."
+          }
+        },
+        "h2": {
+          "type": "step",
+          "settings": {
+            "title": "Apply a small amount",
+            "text": "A drop on your fingertip, then the forehead, the hands, or the doorpost of your home."
+          }
+        },
+        "h3": {
+          "type": "step",
+          "settings": {
+            "title": "Pray in faith",
+            "text": "Speak your prayer aloud or in silence. The oil accompanies the prayer; the power is God’s."
+          }
+        }
+      },
+      "block_order": [
+        "h1",
+        "h2",
+        "h3"
+      ],
+      "settings": {
+        "eyebrow": "Ritual",
+        "heading": "How to anoint with oil",
+        "verse": "Is any sick among you? let him call for the elders of the church; and let them pray over him, anointing him with oil in the name of the Lord.",
+        "verse_ref": "James 5:14"
       }
     }
   },
   "order": [
     "hero",
     "trust",
+    "oils",
+    "quiz",
     "anointings",
-    "featured",
-    "purpose",
+    "bundle",
     "story",
-    "tiers",
     "testimonials",
-    "scripture",
-    "faq",
-    "social"
+    "ritual",
+    "faq"
   ]
 }

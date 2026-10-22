@@ -8,26 +8,12 @@
         "m1": {
           "type": "message",
           "settings": {
-            "text": "Handcrafted anointing oils, rooted in Scripture"
-          }
-        },
-        "m2": {
-          "type": "message",
-          "settings": {
-            "text": "“You anoint my head with oil; my cup runs over.” — Psalm 23:5"
-          }
-        },
-        "m3": {
-          "type": "message",
-          "settings": {
-            "text": "Every bottle prepared with prayer · 100% natural oils"
+            "text": "Handcrafted with prayer · Pure olive oil base · A verse on every label"
           }
         }
       },
       "block_order": [
-        "m1",
-        "m2",
-        "m3"
+        "m1"
       ],
       "settings": {
         "style": "dark",

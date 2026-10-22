@@ -1,7 +1,15 @@
 {%- liquid
   assign current = product.selected_or_first_available_variant
   assign form_id = 'ProductForm-' | append: section.id
+  assign is_bundle = false
+  if settings.bundle_product != blank and settings.bundle_product.id == product.id
+    assign is_bundle = true
+  endif
 -%}
+{%- capture oil_color -%}{% render 'oil-data', handle: product.handle, field: 'color' %}{%- endcapture -%}
+{%- capture oil_meaning -%}{% render 'oil-data', handle: product.handle, field: 'meaning' %}{%- endcapture -%}
+{%- capture oil_refs -%}{% render 'oil-data', handle: product.handle, field: 'refs' %}{%- endcapture -%}
+{%- capture oil_source -%}{% render 'oil-data', handle: product.handle, field: 'source' %}{%- endcapture -%}
 <section class="section section--tight" {{ section.shopify_attributes }}>
   <div class="container">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -13,8 +21,8 @@
       {%- endif -%}
       <span aria-hidden="true">/</span><span aria-current="page">{{ product.title }}</span>
     </nav>
-    <div class="product" data-product-form>
-      <div class="product__gallery">
+    <div class="product{% if is_bundle %} product--bundle{% endif %}" data-product-form style="--oil: {{ oil_color | strip }};">
+      <div class="product__gallery{% if product.media.size < 2 %} product__gallery--single{% endif %}">
         {%- if product.media.size > 1 -%}
           <div class="product__thumbs">
             {%- for media in product.media -%}
@@ -23,8 +31,6 @@
               </button>
             {%- endfor -%}
           </div>
-        {%- else -%}
-          <div></div>
         {%- endif -%}
         <div class="product__slides" data-slides>
           {%- for media in product.media -%}
@@ -57,7 +63,11 @@
               {% render block %}
 
             {%- when 'eyebrow' -%}
-              <p class="eyebrow" {{ block.shopify_attributes }}>{{ block.settings.text | default: product.type }}</p>
+              {%- if is_bundle -%}
+                <p class="eyebrow" {{ block.shopify_attributes }}>The collection · {{ settings.bundle_size }} bottles, 4 oz each</p>
+              {%- else -%}
+                <p class="eyebrow" {{ block.shopify_attributes }}>{{ block.settings.text | default: product.type }}</p>
+              {%- endif -%}
 
             {%- when 'title' -%}
               <div {{ block.shopify_attributes }}>
@@ -78,8 +88,37 @@
                 {%- endif -%}
               </div>
 
+            {%- when 'oil_meaning' -%}
+              {%- if oil_meaning != blank and is_bundle == false -%}
+                <div class="product__meaning" {{ block.shopify_attributes }}>
+                  {%- if block.settings.label != blank -%}<p class="product__meaning-label">{{ block.settings.label }}</p>{%- endif -%}
+                  <p class="product__meaning-text">{{ oil_meaning | strip }}</p>
+                  <p class="product__meaning-meta">
+                    {%- if oil_refs != blank -%}<span>{{ oil_refs | strip }}</span>{%- endif -%}
+                    {%- if oil_source != blank -%}<span>{{ oil_source | strip }}</span>{%- endif -%}
+                  </p>
+                </div>
+              {%- endif -%}
+
+            {%- when 'bundle_upsell' -%}
+              {%- assign upsell = settings.bundle_product -%}
+              {%- if upsell != blank and is_bundle == false and upsell.available -%}
+                <a class="product__upsell" href="{{ upsell.url }}" {{ block.shopify_attributes }}>
+                  <span class="product__upsell-img">
+                    {%- if upsell.featured_media != blank -%}{{ upsell.featured_media | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+                  </span>
+                  <span class="product__upsell-text">
+                    <strong>{{ block.settings.heading }}</strong>
+                    {%- assign upsell_price = upsell.price | money_without_trailing_zeros -%}
+                    {%- assign upsell_size = settings.bundle_size | append: '' -%}
+                    <span>{{ block.settings.text | replace: '[price]', upsell_price | replace: '[size]', upsell_size }}</span>
+                  </span>
+                  {% render 'icon', icon: 'arrow-right' %}
+                </a>
+              {%- endif -%}
+
             {%- when 'variant_picker' -%}
-              {%- unless product.has_only_default_variant -%}
+              {%- unless product.has_only_default_variant or is_bundle -%}
                 {%- for option in product.options_with_values -%}
                   <fieldset class="option" data-option-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
                     <legend class="option__label">{{ option.name }} <span data-selected-value>{{ option.selected_value }}</span></legend>
@@ -112,6 +151,7 @@
               {%- endunless -%}
 
             {%- when 'quantity' -%}
+              {%- if is_bundle -%}{%- continue -%}{%- endif -%}
               <div class="option" {{ block.shopify_attributes }}>
                 <span class="option__label">Quantity</span>
                 <div class="qty">
@@ -122,6 +162,16 @@
               </div>
 
             {%- when 'buy_buttons' -%}
+              {%- if is_bundle -%}
+                <div {{ block.shopify_attributes }}>
+                  {%- if settings.bundle_collection != blank -%}
+                    {% render 'bundle-ui', bundle: product, oils: settings.bundle_collection, size: settings.bundle_size, property_name: 'Your oils', note: block.settings.note, compact: true %}
+                  {%- else -%}
+                    <p class="muted">Choose the oils collection in Theme settings › Cart to show the bottle picker.</p>
+                  {%- endif -%}
+                </div>
+                {%- continue -%}
+              {%- endif -%}
               <div {{ block.shopify_attributes }}>
                 {%- form 'product', product, id: form_id, data-ajax-cart: 'true' -%}
                   <input type="hidden" name="id" value="{{ current.id }}">
@@ -133,6 +183,13 @@
                   {%- if block.settings.show_dynamic -%}{{ form | payment_button }}{%- endif -%}
                 {%- endform -%}
                 {%- if block.settings.note != blank -%}<p class="product__note">{{ block.settings.note }}</p>{%- endif -%}
+                {%- if block.settings.show_policies -%}
+                  <p class="product__policies">
+                    {%- if shop.shipping_policy != blank -%}<a href="{{ shop.shipping_policy.url }}">Shipping</a>{%- endif -%}
+                    {%- if shop.refund_policy != blank -%}<a href="{{ shop.refund_policy.url }}">Returns</a>{%- endif -%}
+                    <span>{% render 'icon', icon: 'lock' %}Secure checkout</span>
+                  </p>
+                {%- endif -%}
               </div>
 
             {%- when 'trust' -%}
@@ -185,7 +242,7 @@
   </div>
 </section>
 
-{%- if section.settings.sticky_atc -%}
+{%- if section.settings.sticky_atc and is_bundle == false -%}
 <div class="sticky-atc" data-sticky-atc>
   <span class="sticky-atc__title">{{ product.title }}</span>
   <span class="sticky-atc__price" data-sticky-price>{{ current.price | money }}</span>
@@ -231,7 +288,9 @@
     { "type": "price", "name": "Price", "limit": 1, "settings": [ { "type": "checkbox", "id": "show_installments", "label": "Show installment messaging (Shop Pay)", "default": true } ] },
     { "type": "variant_picker", "name": "Size / variant picker", "limit": 1, "settings": [ { "type": "checkbox", "id": "show_price_hints", "label": "Show price under each size", "default": true }, { "type": "checkbox", "id": "best_value_last", "label": "Mark the largest size as best value", "default": true } ] },
     { "type": "quantity", "name": "Quantity", "limit": 1, "settings": [] },
-    { "type": "buy_buttons", "name": "Buy buttons", "limit": 1, "settings": [ { "type": "text", "id": "label", "label": "Add to cart label", "default": "Add to cart" }, { "type": "checkbox", "id": "show_dynamic", "label": "Show dynamic checkout button", "default": true }, { "type": "text", "id": "note", "label": "Note under buttons", "default": "Ships in 1–2 business days from Texas. Free U.S. shipping over $50." } ] },
+    { "type": "buy_buttons", "name": "Buy buttons", "limit": 1, "settings": [ { "type": "text", "id": "label", "label": "Add to cart label", "default": "Add to cart" }, { "type": "checkbox", "id": "show_dynamic", "label": "Show dynamic checkout button", "default": true }, { "type": "text", "id": "note", "label": "Note under buttons" }, { "type": "checkbox", "id": "show_policies", "label": "Show shipping and returns links", "default": true } ] },
+    { "type": "oil_meaning", "name": "Oil meaning", "limit": 1, "settings": [ { "type": "text", "id": "label", "label": "Label", "default": "On the label" } ] },
+    { "type": "bundle_upsell", "name": "Collection upsell", "limit": 1, "settings": [ { "type": "text", "id": "heading", "label": "Heading", "default": "Make it a collection" }, { "type": "text", "id": "text", "label": "Text", "info": "[price] and [size] are filled in from Theme settings › Cart.", "default": "Any [size] bottles for [price]. Mix and match." } ] },
     { "type": "trust", "name": "Trust list", "limit": 1, "settings": [ { "type": "text", "id": "item1", "label": "Item 1", "default": "Pure olive oil base, biblical botanicals" }, { "type": "text", "id": "item2", "label": "Item 2", "default": "Prayed over before bottling and shipping" }, { "type": "text", "id": "item3", "label": "Item 3", "default": "Glass bottle, gift-ready packaging" }, { "type": "text", "id": "item4", "label": "Item 4", "default": "30-day satisfaction guarantee" } ] },
     { "type": "scripture", "name": "Scripture", "limit": 1, "settings": [ { "type": "textarea", "id": "verse", "label": "Verse", "info": "Overridden by the product metafield custom.scripture when set.", "default": "Is any sick among you? let him call for the elders of the church; and let them pray over him, anointing him with oil in the name of the Lord." }, { "type": "text", "id": "reference", "label": "Reference", "default": "James 5:14" } ] },
     { "type": "description", "name": "Description", "limit": 1, "settings": [] },

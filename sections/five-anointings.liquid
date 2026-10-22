@@ -17,7 +17,8 @@
           endif
           assign oil_name = oil.title | remove: ' Anointing Oil'
         -%}
-        <li class="anointing" {{ block.shopify_attributes }}>
+        {%- capture oil_color -%}{% if oil != blank %}{% render 'oil-data', handle: oil.handle, field: 'color' %}{% endif %}{%- endcapture -%}
+        <li class="anointing"{% if oil_color != blank %} style="--oil: {{ oil_color | strip }};"{% endif %} {{ block.shopify_attributes }}>
           <span class="anointing__num" aria-hidden="true">{{ forloop.index }}</span>
           {%- if block.settings.reference != blank -%}<p class="anointing__ref">{{ block.settings.reference }}</p>{%- endif -%}
           <h3 class="anointing__title">{{ block.settings.title }}</h3>
@@ -39,7 +40,7 @@
       {%- endfor -%}
     </ol>
     {%- if section.settings.cta_label != blank -%}
-      <p class="center" style="margin:2.5rem 0 0">
+      <p class="center anointings__cta">
         <a class="btn btn--primary" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta_label }}</a>
       </p>
     {%- endif -%}

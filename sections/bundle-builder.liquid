@@ -1,0 +1,37 @@
+{%- liquid
+  assign bundle = section.settings.bundle_product | default: settings.bundle_product
+  assign oils = section.settings.collection | default: settings.bundle_collection
+-%}
+<section class="section bundle-section" id="build-your-collection" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head section__head--center">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+        {%- if section.settings.text != blank -%}<p class="lead">{{ section.settings.text }}</p>{%- endif -%}
+      </div>
+    </div>
+    {%- if bundle == blank or oils == blank -%}
+      <p class="center muted">Choose the six-bottle product and the oils collection in the theme editor.</p>
+    {%- else -%}
+      {% render 'bundle-ui', bundle: bundle, oils: oils, size: section.settings.bundle_size, property_name: section.settings.property_name, note: section.settings.note, image: section.settings.image %}
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Collection builder",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Build your own" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The Anointing Collection" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Pick any six bottles. Mix them, or choose six of the same." },
+    { "type": "image_picker", "id": "image", "label": "Collection photo", "info": "Defaults to the six-bottle product's photo." },
+    { "type": "product", "id": "bundle_product", "label": "Six-bottle product", "info": "Defaults to the product set in Theme settings › Cart." },
+    { "type": "collection", "id": "collection", "label": "Oils to choose from", "info": "Defaults to the collection set in Theme settings › Cart." },
+    { "type": "range", "id": "bundle_size", "min": 2, "max": 12, "step": 1, "label": "Bottles in the collection", "default": 6 },
+    { "type": "text", "id": "property_name", "label": "Order note label", "default": "Your oils" },
+    { "type": "text", "id": "note", "label": "Note under the button", "default": "Six full-size 4 oz bottles in one order." }
+  ],
+  "presets": [ { "name": "Collection builder" } ]
+}
+{% endschema %}

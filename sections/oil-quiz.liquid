@@ -1,0 +1,99 @@
+{%- comment -%}
+  Two-step "find your oil" quiz. Each answer block points to one oil.
+  Step two asks who the oil is for; "my church" and "a gift" also suggest the six-bottle collection.
+{%- endcomment -%}
+<section class="section section--tint quiz" id="find-your-oil" data-quiz {{ section.shopify_attributes }}>
+  <div class="container quiz__inner">
+    <div class="quiz__head">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}<p class="lead">{{ section.settings.text }}</p>{%- endif -%}
+      <ol class="quiz__steps" aria-hidden="true"><li class="is-active" data-quiz-dot="1">1</li><li data-quiz-dot="2">2</li><li data-quiz-dot="3">3</li></ol>
+    </div>
+    <div class="quiz__panel">
+      <div class="quiz__step is-active" data-quiz-step="1">
+        <p class="quiz__q">{{ section.settings.q1 }}</p>
+        <div class="quiz__options">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.product != blank -%}
+              <button type="button" class="quiz__option" data-quiz-answer="{{ block.id }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="quiz__step" data-quiz-step="2" hidden>
+        <p class="quiz__q">{{ section.settings.q2 }}</p>
+        <div class="quiz__options">
+          <button type="button" class="quiz__option" data-quiz-for="self">For myself</button>
+          <button type="button" class="quiz__option" data-quiz-for="gift">As a gift for someone I love</button>
+          <button type="button" class="quiz__option" data-quiz-for="church">For my church or ministry</button>
+        </div>
+        <button type="button" class="link quiz__back" data-quiz-back>Back</button>
+      </div>
+      <div class="quiz__step" data-quiz-step="3" hidden>
+        <p class="quiz__q">{{ section.settings.result_heading }}</p>
+        <div class="quiz__result" data-quiz-result></div>
+        <p class="quiz__collection" data-quiz-collection hidden>{{ section.settings.collection_note }} <a class="link" href="#build-your-collection">{{ section.settings.collection_link }}</a></p>
+        <button type="button" class="link quiz__back" data-quiz-restart>Start over</button>
+      </div>
+    </div>
+  </div>
+  <script type="application/json" data-quiz-products>
+    {
+      {%- for block in section.blocks -%}
+        {%- assign p = block.settings.product -%}
+        {%- if p != blank -%}
+          {%- capture oil_color -%}{% render 'oil-data', handle: p.handle, field: 'color' %}{%- endcapture -%}
+          {%- capture oil_meaning -%}{% render 'oil-data', handle: p.handle, field: 'meaning' %}{%- endcapture -%}
+          {%- capture oil_refs -%}{% render 'oil-data', handle: p.handle, field: 'refs' %}{%- endcapture -%}
+          {%- liquid
+            assign quiz_img = ''
+            if p.featured_media != blank
+              assign quiz_img = p.featured_media | image_url: width: 600
+            endif
+          -%}
+          {{ block.id | json }}: {
+            "title": {{ p.title | json }},
+            "url": {{ p.url | json }},
+            "image": {{ quiz_img | json }},
+            "price": {{ p.price | money | json }},
+            "variant": {{ p.selected_or_first_available_variant.id | json }},
+            "available": {{ p.available | json }},
+            "color": {{ oil_color | strip | json }},
+            "meaning": {{ oil_meaning | strip | json }},
+            "refs": {{ oil_refs | strip | json }},
+            "why": {{ block.settings.why | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endif -%}
+      {%- endfor -%}
+    }
+  </script>
+</section>
+{% schema %}
+{
+  "name": "Find-your-oil quiz",
+  "max_blocks": 10,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "30-second quiz" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Not sure which oil is yours?" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Answer two questions and we will point you to the oil and the verse." },
+    { "type": "text", "id": "q1", "label": "Question 1", "default": "What are you bringing to God in prayer?" },
+    { "type": "text", "id": "q2", "label": "Question 2", "default": "Who is it for?" },
+    { "type": "text", "id": "result_heading", "label": "Result heading", "default": "Your oil" },
+    { "type": "text", "id": "collection_note", "label": "Collection note (gift or church)", "default": "Anointing for a family or a ministry? Choose any six bottles for $210." },
+    { "type": "text", "id": "collection_link", "label": "Collection link label", "default": "Build your collection" }
+  ],
+  "blocks": [
+    {
+      "type": "answer",
+      "name": "Answer",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Answer text", "default": "Worship and devotion" },
+        { "type": "product", "id": "product", "label": "Oil it leads to" },
+        { "type": "textarea", "id": "why", "label": "Why this oil", "default": "The costly oil Mary poured at the feet of Jesus." }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Find-your-oil quiz", "blocks": [ { "type": "answer" } ] } ]
+}
+{% endschema %}

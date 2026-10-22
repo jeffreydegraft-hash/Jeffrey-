@@ -38,7 +38,8 @@
           "settings": {
             "label": "Add to cart",
             "show_dynamic": true,
-            "note": "Handcrafted with prayer. 100% natural, no artificial additives."
+            "note": "",
+            "show_policies": true
           }
         },
         "trust": {
@@ -96,15 +97,30 @@
         "share": {
           "type": "share",
           "settings": {}
+        },
+        "meaning": {
+          "type": "oil_meaning",
+          "settings": {
+            "label": "On the label"
+          }
+        },
+        "upsell": {
+          "type": "bundle_upsell",
+          "settings": {
+            "heading": "Make it a collection",
+            "text": "Any [size] bottles for [price]. Mix and match."
+          }
         }
       },
       "block_order": [
         "eyebrow",
         "title",
         "price",
+        "meaning",
         "variants",
         "quantity",
         "buy",
+        "upsell",
         "trust",
         "scripture",
         "description",

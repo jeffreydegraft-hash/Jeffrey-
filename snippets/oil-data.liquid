@@ -1,0 +1,79 @@
+{%- comment -%}
+  Per-oil facts taken from the bottle labels. Prints one field.
+  Usage: {% render 'oil-data', handle: product.handle, field: 'color' %}
+  Fields: color, name, meaning, refs, source
+{%- endcomment -%}
+{%- liquid
+  assign color = '#B8651B'
+  assign name = ''
+  assign meaning = ''
+  assign refs = ''
+  assign source = ''
+  case handle
+    when 'classic-unscented-anointing-oil'
+      assign color = '#C69716'
+      assign name = 'Classic Unscented'
+      assign meaning = 'The highest quality of pure, natural anointing oil.'
+      assign refs = 'Psalm 23:5'
+      assign source = 'Pure olive oil, unscented'
+    when 'frankincense-myrrh-anointing-oil'
+      assign color = '#A6764A'
+      assign name = 'Frankincense & Myrrh'
+      assign meaning = 'Intercession, prophecies fulfilled, confessing the Way, the Truth and the Life.'
+      assign refs = 'Matthew 2:11'
+      assign source = 'Boswellia serrata and Commiphora myrrha essential oils'
+    when 'hyssop-anointing-oil'
+      assign color = '#76498F'
+      assign name = 'Hyssop'
+      assign meaning = 'Seeking spiritual cleansing, purification and protection through the Almighty Father.'
+      assign refs = 'Psalm 51:7'
+      assign source = 'Hyssopus officinalis essential oil'
+    when 'latter-rain-anointing-oil'
+      assign color = '#5A68B8'
+      assign name = 'Latter Rain'
+      assign meaning = 'Obedience rewarded, receiving the outpouring of the Holy Spirit.'
+      assign refs = 'Deuteronomy 11:14 · Proverbs 16:15'
+      assign source = 'Infused with select fragrance oil'
+    when 'lily-of-the-valley-anointing-oil'
+      assign color = '#9C9A92'
+      assign name = 'Lily of the Valley'
+      assign meaning = 'Arrayed in righteousness, accepting our Heavenly Father’s immeasurable love.'
+      assign refs = 'Song of Solomon 2:1 · Matthew 6:28–29'
+      assign source = 'Infused with select fragrance oil'
+    when 'pomegranate-anointing-oil'
+      assign color = '#A0302B'
+      assign name = 'Pomegranate'
+      assign meaning = 'Embracing life, abundance and the fruit of the Spirit.'
+      assign refs = 'Song of Solomon 6:7'
+      assign source = 'Punica granatum essential oil'
+    when 'rose-of-sharon-anointing-oil'
+      assign color = '#D7849E'
+      assign name = 'Rose of Sharon'
+      assign meaning = 'Redeemed and consoled in our Bridegroom’s full beauty and glory.'
+      assign refs = 'Song of Solomon 2:1'
+      assign source = 'Cistus ladaniferus essential oil'
+    when 'spikenard-anointing-oil'
+      assign color = '#8E9C33'
+      assign name = 'Spikenard'
+      assign meaning = 'Finding strength and joy at the feet of Jesus.'
+      assign refs = 'John 12:1–8 · Mark 14:3–9'
+      assign source = 'Nardostachys jatamansi essential oil'
+    when 'the-anointing-collection-choose-any-6-bottles'
+      assign color = '#121212'
+      assign name = 'The Anointing Collection'
+      assign meaning = 'Any six bottles from the full collection.'
+      assign refs = 'Psalm 23:5'
+  endcase
+  case field
+    when 'color'
+      echo color
+    when 'name'
+      echo name
+    when 'meaning'
+      echo meaning
+    when 'refs'
+      echo refs
+    when 'source'
+      echo source
+  endcase
+-%}
