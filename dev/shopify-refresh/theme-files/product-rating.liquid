@@ -20,8 +20,11 @@ Supported variables
 
 Mount of Olives: the average and the count combine every real review a product has: its Etsy listing's total (the
 ReputonEtsyReviews metafield; when the app has imported all of them their own stars are averaged, otherwise the
-listing's average is used), Amazon reviews pasted into custom.amazon_reviews, and Junip reviews left on the store.
+listing's average is used), Amazon and eBay reviews pasted into custom.amazon_reviews and custom.ebay_reviews (same shape: {"reviews": [{"rating": 5}]}), and Junip reviews left on the store.
 A product with none of these falls back to the standard reviews metafields.
+With full, a product with fewer than 10 reviews shows the whole store's rating instead, labelled as such ("4.9 (209
+reviews of our oils)"), counted the same way across the all-products collection plus Amazon and eBay reviews on the shop.
+Product cards leave the count out below 10.
 {%- endcomment -%}
 
 {%- liquid
@@ -56,11 +59,66 @@ A product with none of these falls back to the standard reviews metafields.
       assign rating_count = rating_count | plus: 1
     endfor
 
+    for review in product.metafields.custom.ebay_reviews.value.reviews
+      assign rating_points = rating_points | plus: review.rating
+      assign rating_count = rating_count | plus: 1
+    endfor
+
     assign junip_count = product.metafields.junip.rating_count.value | default: 0 | plus: 0
     if junip_count > 0
       assign junip_points = product.metafields.junip.rating_average.value | default: 0 | times: junip_count
       assign rating_points = rating_points | plus: junip_points
       assign rating_count = rating_count | plus: junip_count
+    endif
+  endif
+
+  if full and rating_count > 0 and rating_count < 10
+    assign store_count = 0
+    assign store_points = 0.0
+    for counted in collections['all-products'].products
+      for field in counted.metafields['ReputonEtsyReviews::ProductReviews']
+        assign etsy = field.last.value
+        assign etsy_count = etsy.reviewsNumber | default: 0
+        if etsy_count > 0
+          if etsy.reviews.size == etsy_count
+            for review in etsy.reviews
+              assign store_points = store_points | plus: review.rating
+            endfor
+          else
+            assign etsy_points = etsy.rating | times: etsy_count
+            assign store_points = store_points | plus: etsy_points
+          endif
+          assign store_count = store_count | plus: etsy_count
+        endif
+      endfor
+      for review in counted.metafields.custom.amazon_reviews.value.reviews
+        assign store_points = store_points | plus: review.rating
+        assign store_count = store_count | plus: 1
+      endfor
+      for review in counted.metafields.custom.ebay_reviews.value.reviews
+        assign store_points = store_points | plus: review.rating
+        assign store_count = store_count | plus: 1
+      endfor
+      assign junip_count = counted.metafields.junip.rating_count.value | default: 0 | plus: 0
+      if junip_count > 0
+        assign junip_points = counted.metafields.junip.rating_average.value | default: 0 | times: junip_count
+        assign store_points = store_points | plus: junip_points
+        assign store_count = store_count | plus: junip_count
+      endif
+    endfor
+    for review in shop.metafields.custom.amazon_reviews.value.reviews
+      assign store_points = store_points | plus: review.rating
+      assign store_count = store_count | plus: 1
+    endfor
+    for review in shop.metafields.custom.ebay_reviews.value.reviews
+      assign store_points = store_points | plus: review.rating
+      assign store_count = store_count | plus: 1
+    endfor
+
+    if store_count > rating_count
+      assign rating_count = store_count
+      assign rating_points = store_points
+      assign store_wide = true
     endif
   endif
 
@@ -142,10 +200,10 @@ A product with none of these falls back to the standard reviews metafields.
       -%}
       {%- if reviews_listed and link != false -%}<a href="#reviews" class="rating-badge__summary">{%- else -%}<span class="rating-badge__summary">{%- endif -%}
         <span class="rating-badge__value">{{ rating_text }}</span>
-        <span class="rating-badge__count">({{ 'product.rating_count' | t: count: rating_count | replace: rating_count, count_text }})</span>
+        <span class="rating-badge__count">({{ 'product.rating_count' | t: count: rating_count | replace: rating_count, count_text }}{% if store_wide %} of our oils{% endif %})</span>
       {%- if reviews_listed and link != false -%}</a>{%- else -%}</span>{%- endif -%}
     {%- elsif display_mode == 'count' -%}
-      <span class="smallcaps text-xxs text-subdued">({{ rating_count }})</span>
+      {%- if rating_count >= 10 -%}<span class="smallcaps text-xxs text-subdued">({{ rating_count }})</span>{%- endif -%}
     {%- else -%}
       <span class="smallcaps text-xxs text-subdued">({{ rating_value }})</span>
     {%- endif -%}

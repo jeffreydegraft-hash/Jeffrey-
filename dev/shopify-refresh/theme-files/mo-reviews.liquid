@@ -22,7 +22,8 @@ The section is hidden on products without an imported review to show.
 
   assign junip_count = product.metafields.junip.rating_count.value | default: 0 | plus: 0
   assign amazon_count = product.metafields.custom.amazon_reviews.value.reviews.size | default: 0
-  assign total_count = etsy_count | plus: junip_count | plus: amazon_count
+  assign ebay_count = product.metafields.custom.ebay_reviews.value.reviews.size | default: 0
+  assign total_count = etsy_count | plus: junip_count | plus: amazon_count | plus: ebay_count
   assign shown = 0
   assign listable = 0
   for review in etsy_reviews
@@ -44,7 +45,8 @@ The section is hidden on products without an imported review to show.
           <p class="mo-reviews__sources text-sm text-subdued">
             {%- if etsy_count > 0 -%}{{ etsy_count }} on Etsy{%- endif -%}
             {%- if amazon_count > 0 -%}{% if etsy_count > 0 %} · {% endif %}{{ amazon_count }} on Amazon{%- endif -%}
-            {%- if junip_count > 0 -%}{% if etsy_count > 0 or amazon_count > 0 %} · {% endif %}{{ junip_count }} on mountofolives.co{%- endif -%}
+            {%- if ebay_count > 0 -%}{% if etsy_count > 0 or amazon_count > 0 %} · {% endif %}{{ ebay_count }} on eBay{%- endif -%}
+            {%- if junip_count > 0 -%}{% if etsy_count > 0 or amazon_count > 0 or ebay_count > 0 %} · {% endif %}{{ junip_count }} on mountofolives.co{%- endif -%}
           </p>
         </div>
 
