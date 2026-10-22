@@ -212,6 +212,9 @@ Product cards leave the count out below 10.
     assign hide_rating = true
   endif
 
+  # Mount of Olives: the owner asked for no stars anywhere on the site (Oct 22); the counting above is kept
+  assign hide_rating = true
+
   assign rating_decimal = 0
   assign decimal = rating_value | modulo: 1 | round: 2
 

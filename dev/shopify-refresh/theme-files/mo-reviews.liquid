@@ -6,8 +6,8 @@ The reviews the rating badge counts, under the product: the average, where the r
 Etsy reviews that the ReputonEtsyReviews app has imported (first names only), with a link to read the rest on Etsy.
 Customers write their own review with the form at the end. It is posted as a comment on this product's article in the
 hidden "reviews" blog (Online Store > Blog posts > Customer Reviews), which publishes comments automatically after
-Shopify's spam check, so it shows here and counts toward the stars at once. The form writes the stars as a first line
-"Rating: N/5". The owner can hide or delete a review under Blog posts > Manage comments. customer_review metaobject
+Shopify's spam check, so it shows here and counts toward the stars at once. No stars are shown or asked for
+(the owner's choice, Oct 22). The owner can hide or delete a review under Blog posts > Manage comments. customer_review metaobject
 entries still show too.
 {%- endcomment -%}
 
@@ -33,12 +33,7 @@ entries still show too.
   assign review_key = 'reviews/' | append: product.handle
   assign review_article = articles[review_key]
   assign comment_count = 0
-  for comment in review_article.comments
-    assign review_head = comment.content | strip_html | strip | slice: 0, 8
-    if review_head == 'Rating: '
-      assign comment_count = comment_count | plus: 1
-    endif
-  endfor
+  assign comment_count = review_article.comments_count | default: 0
   assign ebay_count = product.metafields.custom.ebay_reviews.value.reviews.size | default: 0
   assign total_count = etsy_count | plus: junip_count | plus: amazon_count | plus: ebay_count
   assign store_reviews = ''
@@ -85,25 +80,22 @@ entries still show too.
           <ul class="mo-reviews__list unstyled-list" role="list">
             {%- for comment in review_article.comments -%}
               {%- liquid
-                assign review_text = comment.content | strip_html | strip
-                assign review_head = review_text | slice: 0, 8
-                if review_head != 'Rating: ' or shown >= section.settings.reviews_shown
+                if shown >= section.settings.reviews_shown
+                  break
+                endif
+                # a review posted while the form still asked for stars opens with a "Rating: N/5" line; that line is dropped
+                assign review_body = comment.content | strip_html | strip
+                assign review_head = review_body | slice: 0, 8
+                if review_head == 'Rating: '
+                  assign review_body = review_body | slice: 11, 5000 | strip
+                endif
+                if review_body == blank
                   continue
                 endif
-                assign review_stars = review_text | slice: 8 | plus: 0
-                if review_stars < 1 or review_stars > 5
-                  continue
-                endif
-                assign review_body = review_text | slice: 11, 5000 | strip
                 assign shown = shown | plus: 1
               -%}
               <li class="mo-reviews__item">
-                <div class="rating-badge__stars" role="img" aria-label="{{ 'general.rating.info' | t: rating_value: review_stars, rating_max: 5 }}">
-                  {%- for i in (1..5) -%}
-                    {%- if i <= review_stars -%}{%- render 'icon' with 'star-rating' -%}{%- else -%}{%- render 'icon' with 'star-rating-empty' -%}{%- endif -%}
-                  {%- endfor -%}
-                </div>
-                {%- if review_body != blank -%}<p class="mo-reviews__text">{{ review_body | escape | newline_to_br }}</p>{%- endif -%}
+                <p class="mo-reviews__text">{{ review_body | escape | newline_to_br }}</p>
                 <p class="mo-reviews__meta text-xs text-subdued">{{ comment.author | strip | split: ' ' | first | escape }} · mountofolives.co review · {{ comment.created_at | date: '%b %-d, %Y' }}</p>
               </li>
             {%- endfor -%}
@@ -113,11 +105,6 @@ entries still show too.
               {%- if shown >= section.settings.reviews_shown -%}{%- break -%}{%- endif -%}
               {%- assign shown = shown | plus: 1 -%}
               <li class="mo-reviews__item">
-                <div class="rating-badge__stars" role="img" aria-label="{{ 'general.rating.info' | t: rating_value: entry.rating.value, rating_max: 5 }}">
-                  {%- for i in (1..5) -%}
-                    {%- if i <= entry.rating.value -%}{%- render 'icon' with 'star-rating' -%}{%- else -%}{%- render 'icon' with 'star-rating-empty' -%}{%- endif -%}
-                  {%- endfor -%}
-                </div>
                 <p class="mo-reviews__text">{{ entry.review.value | escape | strip | newline_to_br }}</p>
                 <p class="mo-reviews__meta text-xs text-subdued">{{ entry.name.value | split: ' ' | first | escape }} · mountofolives.co review · {{ entry.date.value | date: '%b %-d, %Y' }}</p>
               </li>
@@ -137,11 +124,6 @@ entries still show too.
                 endif
               -%}
               <li class="mo-reviews__item">
-                <div class="rating-badge__stars" role="img" aria-label="{{ 'general.rating.info' | t: rating_value: review.rating, rating_max: 5 }}">
-                  {%- for i in (1..5) -%}
-                    {%- if i <= review.rating -%}{%- render 'icon' with 'star-rating' -%}{%- else -%}{%- render 'icon' with 'star-rating-empty' -%}{%- endif -%}
-                  {%- endfor -%}
-                </div>
                 <p class="mo-reviews__text">{{ review.text | replace: '&#39;', "’" | replace: '&quot;', '"' | replace: '&amp;', '&' | escape | strip | newline_to_br }}</p>
                 <p class="mo-reviews__meta text-xs text-subdued">{% if first_name != blank %}{{ first_name | escape }} · {% endif %}Etsy review · {{ review.relativeTimeDescription | date: '%b %-d, %Y' | escape }}</p>
               </li>
@@ -155,22 +137,12 @@ entries still show too.
 
         {%- if review_article != blank -%}
         {%- comment -%}
-          The stars and the review are joined into the comment body by the script below ("Rating: 5/5", a blank line,
-          the review). Shopify sends the visitor to the article page after posting; the "review" article template
+          The script below copies the review into the comment body (the visible box is disabled on submit, so it is not sent twice). Shopify sends the visitor to the article page after posting; the "review" article template
           thanks them and brings them back here.
         {%- endcomment -%}
         <details class="mo-reviews__write" id="write-review">
           <summary class="button">Write a review</summary>
           {%- form 'new_comment', review_article, class: 'form mo-reviews__form', id: 'mo-review-form' -%}
-            <fieldset class="mo-stars-input">
-              <legend class="text-sm">Your rating</legend>
-              <div class="mo-stars-input__row">
-                {%- for i in (1..5) reversed -%}
-                  <input type="radio" id="mo-star-{{ section.id }}-{{ i }}" name="mo_rating" value="{{ i }}" required{% if i == 5 %} checked{% endif %}>
-                  <label for="mo-star-{{ section.id }}-{{ i }}" title="{{ i }} of 5 stars"><span class="sr-only">{{ i }} of 5 stars</span>{%- render 'icon' with 'star-rating' -%}</label>
-                {%- endfor -%}
-              </div>
-            </fieldset>
 
             <div class="fieldset">
               <div class="fieldset-row">
@@ -181,7 +153,7 @@ entries still show too.
             </div>
             <input type="hidden" name="comment[body]" value="">
 
-            <p class="text-xs text-subdued">Your review appears on this page right away. Only your first name and stars are shown.</p>
+            <p class="text-xs text-subdued">Your review appears on this page right away. Only your first name is shown.</p>
             {%- render 'button', content: 'Post review', type: 'submit' -%}
           {%- endform -%}
         </details>
@@ -190,9 +162,8 @@ entries still show too.
             const form = document.getElementById('mo-review-form');
             if (!form) return;
             form.addEventListener('submit', () => {
-              const stars = form.querySelector('input[name="mo_rating"]:checked');
               const text = form.querySelector('[name="mo_review_text"]');
-              form.querySelector('input[name="comment[body]"]').value = 'Rating: ' + (stars ? stars.value : '5') + '/5\n\n' + (text ? text.value.trim() : '');
+              form.querySelector('input[name="comment[body]"]').value = text ? text.value.trim() : '';
               if (text) text.disabled = true;
             });
             const openForm = () => { if (location.hash === '#write-review') form.closest('details').open = true; };
