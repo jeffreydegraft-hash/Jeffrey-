@@ -16,6 +16,7 @@ Supported variables
 * display_mode: either "rating" (e.g.: 3.5) or "count" (e.g.: 4 reviews). Default to "rating" if none is passed
 * full: if set to true, shows the average and the review count after the stars ("4.9 (124 reviews)"), linked to the
   reviews section on the product page when that section has reviews to show
+* store: set to true to always show the whole store's rating (used on the homepage)
 * link: set to false to show the average and the count without the link (used inside the reviews section itself)
 
 Mount of Olives: the average and the count combine every real review a product has: its Etsy listing's total (the
@@ -24,7 +25,8 @@ listing's average is used), Amazon and eBay reviews pasted into custom.amazon_re
 customer_review metaobject).
 A product with none of these falls back to the standard reviews metafields.
 With full, a product with fewer than 10 reviews shows the whole store's rating instead, labelled as such ("4.9 (209
-reviews of our oils)"), counted the same way across the all-products collection plus Amazon and eBay reviews on the shop.
+reviews of our oils)"), counted the same way across the all-products collection plus Amazon and eBay reviews on the shop and the
+Amazon star rating of the whole listing family (shop metafield custom.amazon_rating: count, average).
 Product cards leave the count out below 10.
 {%- endcomment -%}
 
@@ -81,7 +83,15 @@ Product cards leave the count out below 10.
     endif
   endif
 
+  assign use_store = false
   if full and rating_count > 0 and rating_count < 10
+    assign use_store = true
+  endif
+  if full and store
+    assign use_store = true
+  endif
+
+  if use_store
     assign store_count = 0
     assign store_points = 0.0
     for counted in collections['all-products'].products
@@ -127,8 +137,15 @@ Product cards leave the count out below 10.
       assign store_points = store_points | plus: entry.rating.value
       assign store_count = store_count | plus: 1
     endfor
+    # the Amazon rating covers the whole listing family (every scent), so it only ever counts toward the store total
+    assign amazon = shop.metafields.custom.amazon_rating.value
+    if amazon.count > 0
+      assign amazon_points = amazon.average | times: amazon.count
+      assign store_points = store_points | plus: amazon_points
+      assign store_count = store_count | plus: amazon.count
+    endif
 
-    if store_count > rating_count
+    if store_count > rating_count or store
       assign rating_count = store_count
       assign rating_points = store_points
       assign store_wide = true
@@ -213,7 +230,7 @@ Product cards leave the count out below 10.
       -%}
       {%- if reviews_listed and link != false -%}<a href="#reviews" class="rating-badge__summary">{%- else -%}<span class="rating-badge__summary">{%- endif -%}
         <span class="rating-badge__value">{{ rating_text }}</span>
-        <span class="rating-badge__count">({{ 'product.rating_count' | t: count: rating_count | replace: rating_count, count_text }}{% if store_wide %} of our oils{% endif %})</span>
+        <span class="rating-badge__count">({% if store_wide %}{{ count_text }} ratings of our oils{% else %}{{ 'product.rating_count' | t: count: rating_count | replace: rating_count, count_text }}{% endif %})</span>
       {%- if reviews_listed and link != false -%}</a>{%- else -%}</span>{%- endif -%}
     {%- elsif display_mode == 'count' -%}
       {%- if rating_count >= 10 -%}<span class="smallcaps text-xxs text-subdued">({{ rating_count }})</span>{%- endif -%}

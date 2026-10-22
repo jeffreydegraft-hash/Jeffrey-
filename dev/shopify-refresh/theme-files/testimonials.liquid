@@ -83,6 +83,8 @@
             endif
           -%}
           {%- render 'section-header', subheading: section.settings.subheading, heading: heading, content: section.settings.content, text_alignment: 'center' -%}
+          {%- assign rating_product = collections['all-products'].products.first -%}
+          <div class="mo-store-rating">{%- render 'product-rating', product: rating_product, full: true, store: true, link: false -%}</div>
         {%- endif -%}
 
         <div class="testimonial-list">
