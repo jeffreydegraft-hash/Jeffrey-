@@ -187,7 +187,11 @@ Supported variables
 
           {%- when 'rating' -%}
             {%- if product != blank -%}
-              {%- render 'product-rating', product: product, show_empty: block.settings.show_empty, display_mode: block.settings.rating_mode, show_placeholder: false, full: true -%}
+              <div class="mo-rating-row">
+                {%- render 'product-rating', product: product, show_empty: block.settings.show_empty, display_mode: block.settings.rating_mode, show_placeholder: false, full: true -%}
+                {%- assign review_key = 'reviews/' | append: product.handle -%}
+                {%- if articles[review_key] != blank and request.page_type == 'product' -%}<a href="#write-review" class="link text-sm mo-write-link">Write a review</a>{%- endif -%}
+              </div>
             {%- else -%}
               {%- render 'product-rating', show_placeholder: true -%}
             {%- endif -%}

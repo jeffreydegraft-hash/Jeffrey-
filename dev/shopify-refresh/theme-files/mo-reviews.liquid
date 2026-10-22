@@ -4,9 +4,11 @@ MOUNT OF OLIVES REVIEWS
 ----------------------------------------------------------------------------------------------------------------------
 The reviews the rating badge counts, under the product: the average, where the reviews come from, and the newest
 Etsy reviews that the ReputonEtsyReviews app has imported (first names only), with a link to read the rest on Etsy.
-Customers can write their own review with the form at the end. It is sent as a contact email to the store; the owner
-reads it and publishes it as a "Customer review" entry (Content > Metaobjects), which then shows here first and
-counts toward the stars.
+Customers write their own review with the form at the end. It is posted as a comment on this product's article in the
+hidden "reviews" blog (Online Store > Blog posts > Customer Reviews), which publishes comments automatically after
+Shopify's spam check, so it shows here and counts toward the stars at once. The form writes the stars as a first line
+"Rating: N/5". The owner can hide or delete a review under Blog posts > Manage comments. customer_review metaobject
+entries still show too.
 {%- endcomment -%}
 
 {%- liquid
@@ -22,8 +24,21 @@ counts toward the stars.
     assign etsy_reviews = etsy.reviews
   endfor
 
-  assign junip_count = product.metafields.junip.rating_count.value | default: 0 | plus: 0
+  assign junip_count = product.metafields.custom.earlier_site_reviews.value.count | default: 0 | plus: 0
   assign amazon_count = product.metafields.custom.amazon_reviews.value.reviews.size | default: 0
+  if product.metafields.custom.on_amazon_listing.value == true
+    assign amazon_count = amazon_count | plus: shop.metafields.custom.amazon_rating.value.count
+  endif
+
+  assign review_key = 'reviews/' | append: product.handle
+  assign review_article = articles[review_key]
+  assign comment_count = 0
+  for comment in review_article.comments
+    assign review_head = comment.content | strip_html | strip | slice: 0, 8
+    if review_head == 'Rating: '
+      assign comment_count = comment_count | plus: 1
+    endif
+  endfor
   assign ebay_count = product.metafields.custom.ebay_reviews.value.reviews.size | default: 0
   assign total_count = etsy_count | plus: junip_count | plus: amazon_count | plus: ebay_count
   assign store_reviews = ''
@@ -34,10 +49,10 @@ counts toward the stars.
   endfor
   assign store_handles = store_reviews | split: ','
   assign store_count = store_handles.size
-  assign site_count = junip_count | plus: store_count
+  assign site_count = junip_count | plus: store_count | plus: comment_count
 
   assign shown = 0
-  assign listable = store_count
+  assign listable = store_count | plus: comment_count
   for review in etsy_reviews
     unless review.hide or review.text == blank
       assign listable = listable | plus: 1
@@ -54,7 +69,7 @@ counts toward the stars.
         <div class="mo-reviews__header">
           <h2 class="h3">{{ section.settings.title | escape }}</h2>
           {%- render 'product-rating', product: product, full: true, link: false -%}
-          {%- if total_count > 0 or store_count > 0 -%}
+          {%- if total_count > 0 or site_count > 0 -%}
           <p class="mo-reviews__sources text-sm text-subdued">
             {%- if etsy_count > 0 -%}{{ etsy_count }} on Etsy{%- endif -%}
             {%- if amazon_count > 0 -%}{% if etsy_count > 0 %} · {% endif %}{{ amazon_count }} on Amazon{%- endif -%}
@@ -68,6 +83,31 @@ counts toward the stars.
 
         {%- if listable > 0 -%}
           <ul class="mo-reviews__list unstyled-list" role="list">
+            {%- for comment in review_article.comments -%}
+              {%- liquid
+                assign review_text = comment.content | strip_html | strip
+                assign review_head = review_text | slice: 0, 8
+                if review_head != 'Rating: ' or shown >= section.settings.reviews_shown
+                  continue
+                endif
+                assign review_stars = review_text | slice: 8 | plus: 0
+                if review_stars < 1 or review_stars > 5
+                  continue
+                endif
+                assign review_body = review_text | slice: 11, 5000 | strip
+                assign shown = shown | plus: 1
+              -%}
+              <li class="mo-reviews__item">
+                <div class="rating-badge__stars" role="img" aria-label="{{ 'general.rating.info' | t: rating_value: review_stars, rating_max: 5 }}">
+                  {%- for i in (1..5) -%}
+                    {%- if i <= review_stars -%}{%- render 'icon' with 'star-rating' -%}{%- else -%}{%- render 'icon' with 'star-rating-empty' -%}{%- endif -%}
+                  {%- endfor -%}
+                </div>
+                {%- if review_body != blank -%}<p class="mo-reviews__text">{{ review_body | escape | newline_to_br }}</p>{%- endif -%}
+                <p class="mo-reviews__meta text-xs text-subdued">{{ comment.author | strip | split: ' ' | first | escape }} · mountofolives.co review · {{ comment.created_at | date: '%b %-d, %Y' }}</p>
+              </li>
+            {%- endfor -%}
+
             {%- for entry in shop.metaobjects.customer_review.values -%}
               {%- unless store_handles contains entry.system.handle -%}{%- continue -%}{%- endunless -%}
               {%- if shown >= section.settings.reviews_shown -%}{%- break -%}{%- endif -%}
@@ -113,51 +153,54 @@ counts toward the stars.
           <a href="{{ etsy_url }}" class="link mo-reviews__more" target="_blank" rel="noopener">Read all {{ etsy_count }} Etsy reviews</a>
         {%- endif -%}
 
-        {%- assign form_open = false -%}
-        {%- capture review_form -%}
-          {%- capture return_to -%}{{ product.url }}#reviews{%- endcapture -%}
-          {%- form 'contact', class: 'form mo-reviews__form', id: 'mo-review-form', return_to: return_to -%}
-            {%- if form.posted_successfully? or form.errors -%}{%- assign form_open = true -%}{%- endif -%}
-            {%- if form.posted_successfully? -%}
-              {%- render 'banner', status: 'success', content: 'Thank you for your review. It will appear here once we have read it.' -%}
-            {%- else -%}
-              {%- if form.errors -%}
-                {%- capture content -%}{{ form.errors.translated_fields[form.errors.first] | capitalize }} {{ form.errors.messages[form.errors.first] }}{%- endcapture -%}
-                {%- render 'banner', status: 'error', content: content -%}
-              {%- endif -%}
-
-              <input type="hidden" name="contact[Review for]" value="{{ product.title | escape }}">
-              <input type="hidden" name="contact[Product page]" value="{{ shop.url }}{{ product.url }}">
-
-              <fieldset class="mo-stars-input">
-                <legend class="text-sm">Your rating</legend>
-                <div class="mo-stars-input__row">
-                  {%- for i in (1..5) reversed -%}
-                    <input type="radio" id="mo-star-{{ section.id }}-{{ i }}" name="contact[Rating]" value="{{ i }} of 5 stars" required{% if i == 5 %} checked{% endif %}>
-                    <label for="mo-star-{{ section.id }}-{{ i }}" title="{{ i }} of 5 stars"><span class="sr-only">{{ i }} of 5 stars</span>{%- render 'icon' with 'star-rating' -%}</label>
-                  {%- endfor -%}
-                </div>
-              </fieldset>
-
-              <div class="fieldset">
-                <div class="fieldset-row">
-                  {%- render 'input', type: 'text', name: 'contact[name]', label: 'First name', value: customer.first_name, required: true, autocomplete: 'given-name' -%}
-                  {%- render 'input', type: 'email', name: 'contact[email]', label: 'Email (not shown)', value: customer.email, required: true, autocomplete: 'email' -%}
-                </div>
-                {%- render 'input', name: 'contact[body]', label: 'Your review', multiline: 4, required: true -%}
+        {%- if review_article != blank -%}
+        {%- comment -%}
+          The stars and the review are joined into the comment body by the script below ("Rating: 5/5", a blank line,
+          the review). Shopify sends the visitor to the article page after posting; the "review" article template
+          thanks them and brings them back here.
+        {%- endcomment -%}
+        <details class="mo-reviews__write" id="write-review">
+          <summary class="button">Write a review</summary>
+          {%- form 'new_comment', review_article, class: 'form mo-reviews__form', id: 'mo-review-form' -%}
+            <fieldset class="mo-stars-input">
+              <legend class="text-sm">Your rating</legend>
+              <div class="mo-stars-input__row">
+                {%- for i in (1..5) reversed -%}
+                  <input type="radio" id="mo-star-{{ section.id }}-{{ i }}" name="mo_rating" value="{{ i }}" required{% if i == 5 %} checked{% endif %}>
+                  <label for="mo-star-{{ section.id }}-{{ i }}" title="{{ i }} of 5 stars"><span class="sr-only">{{ i }} of 5 stars</span>{%- render 'icon' with 'star-rating' -%}</label>
+                {%- endfor -%}
               </div>
+            </fieldset>
 
-              <p class="text-xs text-subdued">We read every review before it appears. Only your first name and stars are shown.</p>
-              {%- render 'button', content: 'Send review', type: 'submit' -%}
-            {%- endif -%}
+            <div class="fieldset">
+              <div class="fieldset-row">
+                {%- render 'input', type: 'text', name: 'comment[author]', label: 'First name', value: customer.first_name, required: true, autocomplete: 'given-name', maxlength: 40 -%}
+                {%- render 'input', type: 'email', name: 'comment[email]', label: 'Email (not shown)', value: customer.email, required: true, autocomplete: 'email' -%}
+              </div>
+              {%- render 'input', name: 'mo_review_text', label: 'Your review', multiline: 4, required: true, maxlength: 2000 -%}
+            </div>
+            <input type="hidden" name="comment[body]" value="">
+
+            <p class="text-xs text-subdued">Your review appears on this page right away. Only your first name and stars are shown.</p>
+            {%- render 'button', content: 'Post review', type: 'submit' -%}
           {%- endform -%}
-        {%- endcapture -%}
-
-        <details class="mo-reviews__write"{% if form_open %} open{% endif %}>
-          <summary class="button button--outline">Write a review</summary>
-
-{{ review_form }}
         </details>
+        <script>
+          (() => {
+            const form = document.getElementById('mo-review-form');
+            if (!form) return;
+            form.addEventListener('submit', () => {
+              const stars = form.querySelector('input[name="mo_rating"]:checked');
+              const text = form.querySelector('[name="mo_review_text"]');
+              form.querySelector('input[name="comment[body]"]').value = 'Rating: ' + (stars ? stars.value : '5') + '/5\n\n' + (text ? text.value.trim() : '');
+              if (text) text.disabled = true;
+            });
+            const openForm = () => { if (location.hash === '#write-review') form.closest('details').open = true; };
+            openForm();
+            window.addEventListener('hashchange', openForm);
+          })();
+        </script>
+        {%- endif -%}
 
         {%- comment -%}App blocks such as Junip's review form, so customers can leave their own stars here{%- endcomment -%}
         {%- for block in section.blocks -%}

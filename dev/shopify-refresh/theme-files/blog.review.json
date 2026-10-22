@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "mo-review-thanks", "settings": {} }
+  },
+  "order": ["main"]
+}

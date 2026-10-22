@@ -17,6 +17,7 @@
     <meta name="description" content="{{ mo_description | escape }}">
 
     <link rel="canonical" href="{{ canonical_url }}">
+    {%- if blog.handle == 'reviews' -%}<meta name="robots" content="noindex, follow">{%- endif -%}
 
     {%- if settings.favicon -%}
       <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 96 }}">

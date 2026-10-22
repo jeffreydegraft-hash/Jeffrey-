@@ -21,10 +21,12 @@ Supported variables
 
 Mount of Olives: the average and the count combine every real review a product has: its Etsy listing's total (the
 ReputonEtsyReviews metafield; when the app has imported all of them their own stars are averaged, otherwise the
-listing's average is used), Amazon and eBay reviews pasted into custom.amazon_reviews and custom.ebay_reviews (same shape: {"reviews": [{"rating": 5}]}), Junip reviews left on the store, and customer reviews the owner has published from the review form (the
-customer_review metaobject).
+listing's average is used), Amazon and eBay reviews pasted into custom.amazon_reviews and custom.ebay_reviews (same shape: {"reviews": [{"rating": 5}]}), reviews customers post with the form on the product page (comments on
+the product's article in the "reviews" blog, published automatically), the Junip reviews kept as numbers in
+custom.earlier_site_reviews, and customer_review metaobject entries.
 A product with none of these falls back to the standard reviews metafields.
-With full, a product with fewer than 10 reviews shows the whole store's rating instead, labelled as such ("4.9 (209
+A product flagged custom.on_amazon_listing also carries the shared Amazon listing's rating (custom.amazon_rating).
+With full, a product with fewer than 10 reviews (none included) shows the whole store's rating instead, labelled as such ("4.9 (209
 reviews of our oils)"), counted the same way across the all-products collection plus Amazon and eBay reviews on the shop and the
 Amazon star rating of the whole listing family (shop metafield custom.amazon_rating: count, average).
 Product cards leave the count out below 10.
@@ -57,6 +59,16 @@ Product cards leave the count out below 10.
       endif
     endfor
 
+    # a scent sold under the shared Amazon listing carries that listing's rating, as Amazon shows it on every scent
+    if product.metafields.custom.on_amazon_listing.value == true
+      assign amazon = shop.metafields.custom.amazon_rating.value
+      if amazon.count > 0
+        assign amazon_points = amazon.average | times: amazon.count
+        assign rating_points = rating_points | plus: amazon_points
+        assign rating_count = rating_count | plus: amazon.count
+      endif
+    endif
+
     for review in product.metafields.custom.amazon_reviews.value.reviews
       assign rating_points = rating_points | plus: review.rating
       assign rating_count = rating_count | plus: 1
@@ -75,16 +87,33 @@ Product cards leave the count out below 10.
       endif
     endfor
 
-    assign junip_count = product.metafields.junip.rating_count.value | default: 0 | plus: 0
-    if junip_count > 0
-      assign junip_points = product.metafields.junip.rating_average.value | default: 0 | times: junip_count
-      assign rating_points = rating_points | plus: junip_points
-      assign rating_count = rating_count | plus: junip_count
+    # reviews customers post on the site: comments on this product's article in the hidden "reviews" blog, each
+    # opening with the "Rating: N/5" line the review form writes
+    assign review_key = 'reviews/' | append: product.handle
+    for comment in articles[review_key].comments
+      assign review_text = comment.content | strip_html | strip
+      assign review_head = review_text | slice: 0, 8
+      if review_head == 'Rating: '
+        assign review_stars = review_text | slice: 8 | plus: 0
+        if review_stars >= 1 and review_stars <= 5
+          assign rating_points = rating_points | plus: review_stars
+          assign rating_count = rating_count | plus: 1
+          assign reviews_listed = true
+        endif
+      endif
+    endfor
+
+    # site reviews the Junip app collected before it was removed, kept as numbers
+    assign earlier = product.metafields.custom.earlier_site_reviews.value
+    if earlier.count > 0
+      assign earlier_points = earlier.average | times: earlier.count
+      assign rating_points = rating_points | plus: earlier_points
+      assign rating_count = rating_count | plus: earlier.count
     endif
   endif
 
   assign use_store = false
-  if full and rating_count > 0 and rating_count < 10
+  if full and product != blank and rating_count < 10
     assign use_store = true
   endif
   if full and store
@@ -118,11 +147,23 @@ Product cards leave the count out below 10.
         assign store_points = store_points | plus: review.rating
         assign store_count = store_count | plus: 1
       endfor
-      assign junip_count = counted.metafields.junip.rating_count.value | default: 0 | plus: 0
-      if junip_count > 0
-        assign junip_points = counted.metafields.junip.rating_average.value | default: 0 | times: junip_count
-        assign store_points = store_points | plus: junip_points
-        assign store_count = store_count | plus: junip_count
+      assign review_key = 'reviews/' | append: counted.handle
+      for comment in articles[review_key].comments
+        assign review_text = comment.content | strip_html | strip
+        assign review_head = review_text | slice: 0, 8
+        if review_head == 'Rating: '
+          assign review_stars = review_text | slice: 8 | plus: 0
+          if review_stars >= 1 and review_stars <= 5
+            assign store_points = store_points | plus: review_stars
+            assign store_count = store_count | plus: 1
+          endif
+        endif
+      endfor
+      assign earlier = counted.metafields.custom.earlier_site_reviews.value
+      if earlier.count > 0
+        assign earlier_points = earlier.average | times: earlier.count
+        assign store_points = store_points | plus: earlier_points
+        assign store_count = store_count | plus: earlier.count
       endif
     endfor
     for review in shop.metafields.custom.amazon_reviews.value.reviews

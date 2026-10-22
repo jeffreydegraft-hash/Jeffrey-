@@ -1,0 +1,51 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+REVIEW POSTED
+----------------------------------------------------------------------------------------------------------------------
+The "review" article and blog templates. Each product has an article in the hidden "reviews" blog with the product's
+handle; the review form on the product page posts a comment to it and Shopify then opens this article. This section
+thanks the visitor (or shows what went wrong) and takes them back to the product's reviews. Opened any other way, it
+sends the visitor to the product, or to the shop for the blog page itself.
+{%- endcomment -%}
+
+{%- liquid
+  assign back_url = routes.all_products_collection_url
+  if article != blank
+    assign reviewed = all_products[article.handle]
+    if reviewed != blank
+      assign back_url = reviewed.url | append: '#reviews'
+    endif
+  endif
+-%}
+
+<div class="section-spacing">
+  <div class="container container--sm text-center mo-review-thanks">
+    {%- if article != blank -%}
+      {%- form 'new_comment', article -%}
+        {%- if form.posted_successfully? -%}
+          <h1 class="h3">Thank you for your review</h1>
+          <p>It is now on the page{% if reviewed != blank %} for {{ reviewed.title | escape }}{% endif %}. Taking you back…</p>
+          <script>setTimeout(() => location.replace({{ back_url | json }}), 2500);</script>
+        {%- elsif form.errors -%}
+          <h1 class="h3">Your review was not posted</h1>
+          {%- capture content -%}{{ form.errors.translated_fields[form.errors.first] | capitalize }} {{ form.errors.messages[form.errors.first] }}{%- endcapture -%}
+          {%- render 'banner', status: 'error', content: content -%}
+        {%- else -%}
+          <script>location.replace({{ back_url | json }});</script>
+        {%- endif -%}
+      {%- endform -%}
+    {%- else -%}
+      <script>location.replace({{ back_url | json }});</script>
+    {%- endif -%}
+    <p><a class="button" href="{{ back_url }}">Back to {% if reviewed != blank %}{{ reviewed.title | escape }}{% else %}the shop{% endif %}</a></p>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Review posted",
+  "class": "shopify-section--mo-review-thanks",
+  "enabled_on": { "templates": ["article", "blog"] },
+  "settings": []
+}
+{% endschema %}
