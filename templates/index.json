@@ -3,9 +3,9 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "layout": "overlay",
-        "image": "shopify://shop_images/Hero_banner.png",
-        "min_height": 80,
+        "layout": "split",
+        "image": "shopify://shop_images/latter-rain-luxury.jpg",
+        "min_height": 70,
         "eyebrow": "Handcrafted anointing oils",
         "heading": "You anoint my head with oil; <em>my cup runs over.</em>",
         "text": "<p>Premium anointing oils handcrafted from pure olive oil and biblical botanicals. Ethically sourced blends for worship, prayer and home blessings, prepared with prayer before they reach your hands.</p>",
@@ -15,8 +15,8 @@
         "cta2_link": "#purpose",
         "show_proof": false,
         "proof_text": "",
-        "card_title": "",
-        "card_text": ""
+        "card_title": "Handcrafted with prayer",
+        "card_text": "Every bottle is prepared in an atmosphere of worship and intercession, and blessed before it reaches your hands."
       }
     },
     "trust": {
@@ -158,7 +158,7 @@
         "s3"
       ],
       "settings": {
-        "image": "shopify://shop_images/FrankincenseandMyrrh.png",
+        "image": "shopify://shop_images/hyssop-luxury.jpg",
         "image_position": "left",
         "eyebrow": "Our story",
         "heading": "Born from Psalm 23:5",

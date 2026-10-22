@@ -173,7 +173,9 @@
 
     function update(initial) {
       const opts = selected();
-      const variant = variants.find((v) => v.options.every((o, i) => o === opts[i]));
+      const variant = groups.length
+        ? variants.find((v) => v.options.every((o, i) => o === opts[i]))
+        : (variants.find((v) => idInput && String(v.id) === String(idInput.value)) || variants[0]);
       groups.forEach((group, gi) => {
         $$('.option__value', group).forEach((val) => {
           const input = val.querySelector('input');
@@ -306,10 +308,22 @@
     if (!t) return;
     e.preventDefault();
     const target = document.getElementById(t.getAttribute('data-toggle'));
-    if (target) { target.hidden = !target.hidden; target.classList.toggle('is-open', !target.hidden); if (!target.hidden) { const f = target.querySelector('input'); if (f) f.focus(); } }
+    if (!target) return;
+    if (!('toggleHidden' in target.dataset)) target.dataset.toggleHidden = String(target.hidden);
+    const open = !target.classList.contains('is-open');
+    target.classList.toggle('is-open', open);
+    if (target.dataset.toggleHidden === 'true') target.hidden = !open;
+    if (open) { const f = target.querySelector('input'); if (f) f.focus(); }
   });
 
-  /* ---------- newsletter: remember dismissed states etc. (none yet) ---------- */
+  /* ---------- cart note (drawer): save on change ---------- */
+  document.addEventListener('change', (e) => {
+    const n = e.target.closest('[data-cart-note]');
+    if (!n) return;
+    fetch(theme.routes.cartUpdate + '.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ note: n.value }) }).catch(() => {});
+  });
+
+  /* ---------- end ---------- */
   window.theme.formatMoney = formatMoney;
   window.theme.toast = toast;
   window.theme.openDrawer = openDrawer;

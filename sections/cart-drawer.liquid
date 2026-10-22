@@ -10,7 +10,7 @@
         {% render 'icon', icon: 'drop' %}
         <p class="h3" style="margin:0">Your cart is empty</p>
         <p class="muted" style="margin:0">Find the oil that meets you where you are.</p>
-        <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}" data-drawer-close>Shop anointing oils</a>
+        <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">Shop anointing oils</a>
       </div>
     {%- else -%}
       {% render 'shipping-bar' %}
@@ -22,6 +22,10 @@
               <span>{{ discount.title }} (-{{ discount.total_allocated_amount | money }})</span>
             {%- endfor -%}
           </div>
+        {%- endif -%}
+        {%- if settings.cart_show_note -%}
+          <label for="CartDrawerNote" class="cart-drawer__note-label">Order note or prayer request</label>
+          <textarea id="CartDrawerNote" class="cart-drawer__textarea" name="note" data-cart-note rows="2" placeholder="Anything you'd like us to pray for?">{{ cart.note }}</textarea>
         {%- endif -%}
         <div class="cart-drawer__subtotal"><span>Subtotal</span><span>{{ cart.total_price | money }}</span></div>
         <p class="cart-drawer__note">Shipping, taxes and discount codes are calculated at checkout.</p>

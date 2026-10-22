@@ -8,16 +8,22 @@
       <button type="submit" class="btn btn--primary btn--large">Sign in</button>
       <p class="auth__links"><a class="link" href="#recover" data-toggle="RecoverForm">Forgot your password?</a> &middot; <a class="link" href="{{ routes.account_register_url }}">Create account</a></p>
     {%- endform -%}
-    <div id="RecoverForm" hidden>
-      <div class="divider"></div>
-      <h2 class="h3">Reset your password</h2>
-      {%- form 'recover_customer_password' -%}
+    {%- form 'recover_customer_password' -%}
+      {%- liquid
+        assign recover_open = false
+        if form.posted_successfully? or form.errors
+          assign recover_open = true
+        endif
+      -%}
+      <div id="RecoverForm"{% unless recover_open %} hidden{% endunless %}>
+        <div class="divider"></div>
+        <h2 class="h3">Reset your password</h2>
         {%- if form.posted_successfully? -%}<p class="form-success">We've sent you an email with a link to update your password.</p>{%- endif -%}
         {%- if form.errors -%}<div class="form-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
         <div class="field"><label for="RecoverEmail">Email</label><input id="RecoverEmail" type="email" name="email" autocomplete="email" required></div>
         <button type="submit" class="btn btn--secondary">Send reset link</button>
-      {%- endform -%}
-    </div>
+      </div>
+    {%- endform -%}
     {%- if shop.checkout.guest_login -%}
       <div class="divider"></div>
       {%- form 'guest_login' -%}<button type="submit" class="btn btn--secondary">Continue as guest</button>{%- endform -%}

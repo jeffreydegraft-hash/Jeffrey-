@@ -5,8 +5,18 @@
         {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
         <h2>{{ section.settings.heading }}</h2>
       </div>
+      {%- liquid
+        assign profile_url = section.settings.link
+        if profile_url == blank
+          assign profile_url = settings.social_instagram
+        endif
+      -%}
       {%- if section.settings.handle != blank -%}
-        <a class="link link--arrow" href="{{ section.settings.link | default: settings.social_instagram }}" target="_blank" rel="noopener">{{ section.settings.handle }}</a>
+        {%- if profile_url != blank -%}
+          <a class="link link--arrow" href="{{ profile_url }}" target="_blank" rel="noopener">{{ section.settings.handle }}</a>
+        {%- else -%}
+          <span class="link">{{ section.settings.handle }}</span>
+        {%- endif -%}
       {%- endif -%}
     </div>
     <div class="social-grid">

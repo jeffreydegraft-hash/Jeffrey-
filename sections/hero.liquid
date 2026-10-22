@@ -3,7 +3,7 @@
   assign image = section.settings.image
   assign image_alt = image.alt | default: shop.name
 -%}
-<section class="hero hero--{{ layout }}" style="--hero-min-h: {{ section.settings.min_height }}vh;" {{ section.shopify_attributes }}>
+<section class="hero hero--{{ layout }}" style="--hero-min-h: {{ section.settings.min_height }}vh;{% if layout == 'overlay' and image == blank %} background: var(--color-dark);{% endif %}" {{ section.shopify_attributes }}>
   {%- if layout == 'overlay' and image != blank -%}
     <div class="hero__bg">{{ image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '800,1200,1600,2400', alt: image_alt }}</div>
   {%- endif -%}
@@ -22,7 +22,6 @@
       </div>
       {%- if section.settings.show_proof -%}
         <div class="hero__proof">
-          <div class="avatars" aria-hidden="true"><span>JM</span><span>RA</span><span>TK</span><span>+</span></div>
           <span class="stars" aria-hidden="true">★★★★★</span>
           <span>{{ section.settings.proof_text }}</span>
         </div>
@@ -56,8 +55,8 @@
     { "type": "url", "id": "cta_link", "label": "Primary button link" },
     { "type": "text", "id": "cta2_label", "label": "Secondary button label", "default": "Find your oil" },
     { "type": "url", "id": "cta2_link", "label": "Secondary button link" },
-    { "type": "checkbox", "id": "show_proof", "label": "Show social proof line", "default": true },
-    { "type": "text", "id": "proof_text", "label": "Social proof text", "default": "Loved by thousands of believers" },
+    { "type": "checkbox", "id": "show_proof", "label": "Show proof line (stars + text)", "info": "Only enable with a claim you can back up, e.g. a real review count.", "default": false },
+    { "type": "text", "id": "proof_text", "label": "Proof text" },
     { "type": "text", "id": "card_title", "label": "Floating card title", "default": "Psalm 23:5" },
     { "type": "text", "id": "card_text", "label": "Floating card text", "default": "Every bottle is prayed over before it ships." }
   ],
