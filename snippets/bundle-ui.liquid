@@ -56,6 +56,7 @@
         </button>
       </form>
       {%- if note != blank -%}<p class="bundle__note">{{ note }}</p>{%- endif -%}
+      <noscript><p class="bundle__nojs">Please turn on JavaScript in your browser to choose your {{ size }} oils.</p></noscript>
       <button type="button" class="link bundle__reset" data-bundle-reset hidden>Clear selection</button>
     </aside>
   </div>

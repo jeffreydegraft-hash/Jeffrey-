@@ -94,7 +94,7 @@
         "image_position": "left",
         "eyebrow": "Our story",
         "heading": "Born from Psalm 23:5",
-        "text": "<p>Inspired by Psalm 23:5, “You anoint my head with oil; my cup runneth over,” My Cup Runneth Over was born from a deep love for biblical tradition and the sacred practice of anointing.</p><p>Each of our oils is handcrafted with prayer, blending pure natural essences with spiritual intention. Whether you use anointing oil for personal prayer, worship services, or as a meaningful gift, our oils are designed to draw you closer to the divine. We believe the act of anointing is more than a ritual. It is an invitation for God's grace to overflow in your life.</p>",
+        "text": "<p>Inspired by Psalm 23:5, “Thou anointest my head with oil; my cup runneth over,” My Cup Runneth Over was born from a deep love for biblical tradition and the sacred practice of anointing.</p><p>Each of our oils is handcrafted with prayer, blending pure natural essences with spiritual intention. Whether you use anointing oil for personal prayer, worship services, or as a meaningful gift, our oils are designed to draw you closer to the divine. We believe the act of anointing is more than a ritual. It is an invitation for God's grace to overflow in your life.</p>",
         "cta_label": "Read our story",
         "cta_link": "/pages/about-us",
         "surface": false
@@ -382,7 +382,7 @@
         "q1": "What are you bringing to God in prayer?",
         "q2": "Who is it for?",
         "result_heading": "Your oil",
-        "collection_note": "Anointing for a family or a ministry? Choose any six bottles for $210.",
+        "collection_note": "Anointing for a family or a ministry? Choose any [size] bottles for [price].",
         "collection_link": "Build your collection"
       }
     },

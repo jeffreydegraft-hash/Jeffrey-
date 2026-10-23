@@ -49,10 +49,10 @@
 
   /* ---------- drawers ---------- */
   let lastFocus = null;
-  function openDrawer(id) {
+  function openDrawer(id, returnTo) {
     const d = document.getElementById(id);
     if (!d) return;
-    lastFocus = document.activeElement;
+    lastFocus = returnTo || document.activeElement;
     closeDrawers(true);
     d.classList.add('is-open');
     d.setAttribute('aria-hidden', 'false');
@@ -76,7 +76,12 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawers(); });
 
   /* ---------- cart ---------- */
-  async function refreshCart(open) {
+  function cartError(data) {
+    const err = new Error((data && (data.description || data.message)) || 'Could not add to cart');
+    err.userFacing = true;
+    return err;
+  }
+  async function refreshCart(open, returnTo) {
     try {
       const [cartRes, secRes] = await Promise.all([
         fetch(theme.routes.cart + '.js', { headers: { Accept: 'application/json' } }),
@@ -94,7 +99,7 @@
           if (fresh && current) current.innerHTML = fresh.innerHTML;
         }
       }
-      if (open) openDrawer('CartDrawer');
+      if (open) openDrawer('CartDrawer', returnTo);
       return cart;
     } catch (err) {
       console.warn('Cart refresh failed', err);
@@ -112,10 +117,11 @@
     try {
       const res = await fetch(theme.routes.cartAdd + '.js', { method: 'POST', headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: new FormData(form) });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.description || data.message || 'Could not add to cart');
-      await refreshCart(true);
+      if (!res.ok) throw cartError(data);
+      if (btn) { btn.disabled = false; btn.innerHTML = original; }
+      await refreshCart(true, btn);
     } catch (err) {
-      toast(err.message || 'Something went wrong. Please try again.');
+      toast(err.userFacing ? err.message : 'Could not add to cart. Please check your connection and try again.');
     } finally {
       if (btn) { btn.disabled = false; btn.innerHTML = original; }
     }
@@ -328,13 +334,16 @@
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
-  $$('[data-quiz]').forEach((quiz) => {
+  function initQuiz(quiz) {
+    if (quiz.dataset.quizReady) return;
+    quiz.dataset.quizReady = 'true';
     let products = {};
-    try { products = JSON.parse(($('[data-quiz-products]', quiz) || {}).textContent || '{}'); } catch (err) { return; }
+    try { products = JSON.parse(($('[data-quiz-products]', quiz) || {}).textContent || '{}'); } catch (err) { console.warn('Quiz data could not be read', err); }
     const steps = $$('[data-quiz-step]', quiz);
     const dots = $$('[data-quiz-dot]', quiz);
     const result = $('[data-quiz-result]', quiz);
     const collectionNote = $('[data-quiz-collection]', quiz);
+    const panel = $('.quiz__panel', quiz);
     let answer = null;
     function show(n) {
       steps.forEach((s) => { const on = s.getAttribute('data-quiz-step') === String(n); s.hidden = !on; s.classList.toggle('is-active', on); });
@@ -342,6 +351,7 @@
       const active = steps.find((s) => !s.hidden);
       const focusEl = active && active.querySelector('.quiz__q');
       if (focusEl) { focusEl.setAttribute('tabindex', '-1'); focusEl.focus({ preventScroll: true }); }
+      if (panel && panel.getBoundingClientRect().top < 96) panel.scrollIntoView({ block: 'start' });
     }
     function render(forWhom) {
       const p = products[answer];
@@ -352,7 +362,7 @@
         : '<p class="muted">Sold out for now.</p>';
       result.innerHTML =
         '<article class="quiz__card" style="--oil:' + escapeHtml(p.color || '') + '">' +
-          '<a class="quiz__card-media" href="' + escapeHtml(p.url) + '">' + img + '</a>' +
+          '<a class="quiz__card-media" href="' + escapeHtml(p.url) + '" tabindex="-1" aria-hidden="true">' + img + '</a>' +
           '<div class="quiz__card-body">' +
             '<h3 class="quiz__card-title"><a href="' + escapeHtml(p.url) + '">' + escapeHtml(p.title) + '</a></h3>' +
             (p.refs ? '<p class="quiz__card-refs">' + escapeHtml(p.refs) + '</p>' : '') +
@@ -371,10 +381,12 @@
       if (e.target.closest('[data-quiz-back]')) { show(1); return; }
       if (e.target.closest('[data-quiz-restart]')) { answer = null; if (result) result.innerHTML = ''; show(1); }
     });
-  });
+  }
 
   /* ---------- collection builder (pick any N oils) ---------- */
-  $$('[data-bundle]').forEach((root) => {
+  function initBundle(root) {
+    if (root.dataset.bundleReady) return;
+    root.dataset.bundleReady = 'true';
     const size = Number(root.getAttribute('data-bundle-size')) || 6;
     const rows = $$('[data-bundle-oil]', root);
     const counts = new Map(rows.map((r) => [r, 0]));
@@ -385,10 +397,14 @@
     const submit = $('[data-bundle-submit]', root);
     const reset = $('[data-bundle-reset]', root);
     const form = $('[data-bundle-form]', root);
+    const label = submit ? submit.innerHTML : '';
+    const soldOut = !!(submit && submit.hasAttribute('data-bundle-soldout'));
+    let busy = false;
     const total = () => Array.from(counts.values()).reduce((a, b) => a + b, 0);
+    const firstPlus = () => $$('[data-bundle-plus]', root).find((b) => !b.disabled);
     function picks() {
       const list = [];
-      rows.forEach((r) => { const n = counts.get(r); if (n) list.push({ row: r, name: r.getAttribute('data-bundle-oil'), n, color: r.style.getPropertyValue('--oil') }); });
+      rows.forEach((r) => { const n = counts.get(r); if (n) list.push({ name: r.getAttribute('data-bundle-oil'), n, color: r.style.getPropertyValue('--oil') }); });
       return list;
     }
     function update() {
@@ -400,54 +416,84 @@
         r.classList.toggle('is-picked', c > 0);
         const minus = $('[data-bundle-minus]', r);
         const plus = $('[data-bundle-plus]', r);
-        if (minus) minus.disabled = c === 0;
-        if (plus) plus.disabled = full || r.classList.contains('is-unavailable');
+        if (minus) minus.disabled = busy || c === 0;
+        if (plus) plus.disabled = busy || soldOut || full || r.classList.contains('is-unavailable');
       });
       const list = picks();
       let i = 0;
       slots.forEach((s) => { s.style.removeProperty('--oil'); s.classList.remove('is-filled'); });
       list.forEach((p) => { for (let k = 0; k < p.n && i < slots.length; k++, i++) { slots[i].style.setProperty('--oil', p.color); slots[i].classList.add('is-filled'); } });
-      if (status) status.textContent = full ? 'Your collection is ready' : (n === 0 ? 'Choose ' + size + ' bottles' : n + ' of ' + size + ' chosen. ' + (size - n) + ' to go.');
+      if (status) {
+        status.textContent = soldOut ? 'The collection is sold out for now'
+          : full ? 'Your collection is ready'
+          : n === 0 ? 'Choose ' + size + ' bottles'
+          : n + ' of ' + size + ' chosen. ' + (size - n) + ' to go.';
+      }
       if (chosen) chosen.innerHTML = list.map((p) => '<li style="--oil:' + escapeHtml(p.color) + '"><span></span>' + escapeHtml(p.name) + (p.n > 1 ? ' ×' + p.n : '') + '</li>').join('');
       if (property) property.value = list.map((p) => p.name + (p.n > 1 ? ' ×' + p.n : '')).join(', ');
-      if (submit) submit.disabled = !full || submit.hasAttribute('data-bundle-soldout');
+      if (submit) submit.disabled = busy || soldOut || !full;
       if (reset) reset.hidden = n === 0;
       root.classList.toggle('is-full', full);
     }
     root.addEventListener('click', (e) => {
+      if (busy) return;
       const plus = e.target.closest('[data-bundle-plus]');
       const minus = e.target.closest('[data-bundle-minus]');
       if (plus || minus) {
-        const r = (plus || minus).closest('[data-bundle-oil]');
+        const btn = plus || minus;
+        const r = btn.closest('[data-bundle-oil]');
         const c = counts.get(r) || 0;
         if (plus && total() < size) counts.set(r, c + 1);
         if (minus && c > 0) counts.set(r, c - 1);
         update();
+        if (btn.disabled) {
+          // The control the shopper used just disabled itself; keep keyboard focus nearby.
+          const next = plus
+            ? (submit && !submit.disabled ? submit : $('[data-bundle-minus]', r))
+            : $('[data-bundle-plus]', r);
+          if (next && !next.disabled) next.focus();
+        }
         return;
       }
-      if (e.target.closest('[data-bundle-reset]')) { rows.forEach((r) => counts.set(r, 0)); update(); }
+      if (e.target.closest('[data-bundle-reset]')) {
+        rows.forEach((r) => counts.set(r, 0));
+        update();
+        const first = firstPlus();
+        if (first) first.focus();
+      }
     });
     if (form) form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (total() !== size || !submit || submit.disabled) return;
-      const original = submit.innerHTML;
-      submit.disabled = true;
+      if (busy || soldOut || total() !== size || !submit || submit.disabled) return;
+      busy = true;
+      update();
       submit.textContent = 'Adding…';
+      let added = false;
       try {
         const res = await fetch(theme.routes.cartAdd + '.js', { method: 'POST', headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: new FormData(form) });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.description || data.message || 'Could not add to cart');
+        if (!res.ok) throw cartError(data);
+        added = true;
         rows.forEach((r) => counts.set(r, 0));
-        if (theme.cartType === 'drawer' && document.getElementById('CartDrawer')) await refreshCart(true);
-        else window.location.href = theme.routes.cart;
       } catch (err) {
-        toast(err.message || 'Something went wrong. Please try again.');
+        toast(err.userFacing ? err.message : 'Could not add your collection. Please check your connection and try again.');
       } finally {
-        submit.innerHTML = original;
+        busy = false;
+        submit.innerHTML = label;
         update();
       }
+      if (!added) return;
+      if (theme.cartType === 'drawer' && document.getElementById('CartDrawer')) await refreshCart(true, firstPlus() || submit);
+      else window.location.href = theme.routes.cart;
     });
     update();
+  }
+
+  $$('[data-quiz]').forEach(initQuiz);
+  $$('[data-bundle]').forEach(initBundle);
+  document.addEventListener('shopify:section:load', (e) => {
+    $$('[data-quiz]', e.target).forEach(initQuiz);
+    $$('[data-bundle]', e.target).forEach(initBundle);
   });
 
   /* ---------- end ---------- */

@@ -129,13 +129,13 @@
         "type": "font_picker",
         "id": "font_heading",
         "label": "Headings",
-        "default": "harmonia_sans_n6"
+        "default": "work_sans_n6"
       },
       {
         "type": "font_picker",
         "id": "font_body",
         "label": "Body",
-        "default": "harmonia_sans_n4"
+        "default": "work_sans_n4"
       },
       {
         "type": "font_picker",
@@ -236,26 +236,8 @@
       },
       {
         "type": "checkbox",
-        "id": "card_show_vendor",
-        "label": "Show vendor",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "card_show_sizes",
-        "label": "Show size count under the title",
-        "default": true
-      },
-      {
-        "type": "checkbox",
         "id": "card_quick_add",
         "label": "Show quick add button",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "card_hover_image",
-        "label": "Show second image on hover",
         "default": true
       }
     ]

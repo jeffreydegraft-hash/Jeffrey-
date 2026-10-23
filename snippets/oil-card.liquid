@@ -19,6 +19,10 @@
   endif
   assign img = p.featured_media
   assign img_alt = img.alt | default: p.title
+  assign is_bundle_card = false
+  if settings.bundle_product != blank and settings.bundle_product.id == p.id
+    assign is_bundle_card = true
+  endif
   assign loading = 'lazy'
   if eager
     assign loading = 'eager'
@@ -36,12 +40,14 @@
   <div class="oil-card__body">
     <div class="oil-card__top">
       <h3 class="oil-card__title"><a href="{{ p.url }}">{{ oil_name }}</a></h3>
-      <span class="oil-card__price">{% render 'price', product: p, use_from: true %}</span>
+      <div class="oil-card__price">{% render 'price', product: p, use_from: true %}</div>
     </div>
     {%- if oil_meaning != blank -%}<p class="oil-card__meaning">{{ oil_meaning }}</p>{%- endif -%}
     {%- if oil_refs != blank -%}<p class="oil-card__refs">{{ oil_refs }}</p>{%- endif -%}
-    {%- if p.available -%}
-      {%- if p.variants.size == 1 -%}
+    {%- if settings.card_quick_add and p.available -%}
+      {%- if is_bundle_card -%}
+        <a class="btn btn--primary btn--block" href="{{ p.url }}">Choose your oils</a>
+      {%- elsif p.variants.size == 1 -%}
         <form action="{{ routes.cart_add_url }}" method="post" data-ajax-cart class="oil-card__form">
           <input type="hidden" name="id" value="{{ v.id }}">
           <input type="hidden" name="quantity" value="1">

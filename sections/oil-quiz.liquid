@@ -33,13 +33,23 @@
       <div class="quiz__step" data-quiz-step="3" hidden>
         <p class="quiz__q">{{ section.settings.result_heading }}</p>
         <div class="quiz__result" data-quiz-result></div>
-        <p class="quiz__collection" data-quiz-collection hidden>{{ section.settings.collection_note }} <a class="link" href="#build-your-collection">{{ section.settings.collection_link }}</a></p>
+        {%- liquid
+          assign note = section.settings.collection_note
+          if settings.bundle_product != blank
+            assign bundle_price = settings.bundle_product.price | money_without_trailing_zeros
+            assign note = note | replace: '[price]', bundle_price
+          endif
+          assign bundle_size = settings.bundle_size | append: ''
+          assign note = note | replace: '[size]', bundle_size
+        -%}
+        <p class="quiz__collection" data-quiz-collection hidden>{{ note }} <a class="link" href="#build-your-collection">{{ section.settings.collection_link }}</a></p>
         <button type="button" class="link quiz__back" data-quiz-restart>Start over</button>
       </div>
     </div>
   </div>
   <script type="application/json" data-quiz-products>
     {
+      {%- assign sep = '' -%}
       {%- for block in section.blocks -%}
         {%- assign p = block.settings.product -%}
         {%- if p != blank -%}
@@ -52,7 +62,7 @@
               assign quiz_img = p.featured_media | image_url: width: 600
             endif
           -%}
-          {{ block.id | json }}: {
+          {{ sep }}{{ block.id | json }}: {
             "title": {{ p.title | json }},
             "url": {{ p.url | json }},
             "image": {{ quiz_img | json }},
@@ -63,7 +73,8 @@
             "meaning": {{ oil_meaning | strip | json }},
             "refs": {{ oil_refs | strip | json }},
             "why": {{ block.settings.why | json }}
-          }{% unless forloop.last %},{% endunless %}
+          }
+          {%- assign sep = ',' -%}
         {%- endif -%}
       {%- endfor -%}
     }
@@ -80,7 +91,7 @@
     { "type": "text", "id": "q1", "label": "Question 1", "default": "What are you bringing to God in prayer?" },
     { "type": "text", "id": "q2", "label": "Question 2", "default": "Who is it for?" },
     { "type": "text", "id": "result_heading", "label": "Result heading", "default": "Your oil" },
-    { "type": "text", "id": "collection_note", "label": "Collection note (gift or church)", "default": "Anointing for a family or a ministry? Choose any six bottles for $210." },
+    { "type": "text", "id": "collection_note", "label": "Collection note (gift or church)", "info": "[price] and [size] are filled in from Theme settings › Cart.", "default": "Anointing for a family or a ministry? Choose any [size] bottles for [price]." },
     { "type": "text", "id": "collection_link", "label": "Collection link label", "default": "Build your collection" }
   ],
   "blocks": [
