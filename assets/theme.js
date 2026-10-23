@@ -112,14 +112,15 @@
     if (theme.cartType !== 'drawer' || !document.getElementById('CartDrawer')) return; // normal submit → cart page
     e.preventDefault();
     const btn = form.querySelector('[type="submit"]');
+    const active = document.activeElement;
+    const returnTo = e.submitter || (active && active !== document.body ? active : btn);
     const original = btn ? btn.innerHTML : '';
     if (btn) { btn.disabled = true; btn.innerHTML = '<span>Adding…</span>'; }
     try {
       const res = await fetch(theme.routes.cartAdd + '.js', { method: 'POST', headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: new FormData(form) });
       const data = await res.json();
       if (!res.ok) throw cartError(data);
-      if (btn) { btn.disabled = false; btn.innerHTML = original; }
-      await refreshCart(true, btn);
+      await refreshCart(true, returnTo);
     } catch (err) {
       toast(err.userFacing ? err.message : 'Could not add to cart. Please check your connection and try again.');
     } finally {
@@ -443,10 +444,11 @@
         const btn = plus || minus;
         const r = btn.closest('[data-bundle-oil]');
         const c = counts.get(r) || 0;
+        const keyboard = e.detail === 0;
         if (plus && total() < size) counts.set(r, c + 1);
         if (minus && c > 0) counts.set(r, c - 1);
         update();
-        if (btn.disabled) {
+        if (keyboard && btn.disabled) {
           // The control the shopper used just disabled itself; keep keyboard focus nearby.
           const next = plus
             ? (submit && !submit.disabled ? submit : $('[data-bundle-minus]', r))
@@ -459,7 +461,7 @@
         rows.forEach((r) => counts.set(r, 0));
         update();
         const first = firstPlus();
-        if (first) first.focus();
+        if (first) first.focus({ preventScroll: e.detail > 0 });
       }
     });
     if (form) form.addEventListener('submit', async (e) => {
@@ -483,7 +485,9 @@
         update();
       }
       if (!added) return;
-      if (theme.cartType === 'drawer' && document.getElementById('CartDrawer')) await refreshCart(true, firstPlus() || submit);
+      // Return focus to the status line beside the button, so closing the drawer keeps the shopper here.
+      if (status) status.setAttribute('tabindex', '-1');
+      if (theme.cartType === 'drawer' && document.getElementById('CartDrawer')) await refreshCart(true, status || firstPlus());
       else window.location.href = theme.routes.cart;
     });
     update();

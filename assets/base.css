@@ -300,7 +300,7 @@ body.drawer-open{overflow:hidden}
 .quiz__option:hover{border-color:var(--color-text)}
 .quiz__option:hover::after{opacity:1;transform:translateX(2px)}
 .quiz__option[aria-pressed="true"]{border-color:var(--color-text);background:var(--color-surface)}
-.quiz__back{margin-top:.75rem;font-size:.88rem;color:var(--color-muted);min-height:44px;display:inline-flex;align-items:center}
+.quiz__back{margin-top:.75rem;font-size:.88rem;color:var(--color-muted);min-height:44px;min-width:44px;display:inline-flex;align-items:center}
 .quiz__result{margin-bottom:1rem}
 .quiz__card{display:grid;grid-template-columns:150px minmax(0,1fr);gap:1.5rem;align-items:start}
 .quiz__card-media{display:block;border-radius:16px;overflow:hidden;background:color-mix(in srgb,var(--oil,#999) 16%,white);aspect-ratio:1}
@@ -349,6 +349,7 @@ body.drawer-open{overflow:hidden}
 .bundle__qty button{position:relative;width:38px;height:38px;border-radius:50%;font-size:1.15rem;display:grid;place-items:center;transition:background .15s}
 .bundle__qty button::after{content:"";position:absolute;inset:-3px}
 .bundle [data-bundle-submit]{white-space:normal}
+@media (max-width:1099px){.bundle:not(.bundle--compact) [data-bundle-submit]{padding-inline:1rem;font-size:.95rem;min-height:50px}}
 .bundle__qty button:hover:not(:disabled){background:var(--color-surface)}
 .bundle__qty button:disabled{opacity:.3}
 .bundle__qty output{min-width:1.6rem;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
@@ -368,7 +369,8 @@ body.drawer-open{overflow:hidden}
 .bundle__chosen li{display:inline-flex;align-items:center;gap:.35rem;font-size:.8rem;font-weight:500;padding:.3rem .6rem;border-radius:99px;background:color-mix(in srgb,var(--oil,#999) 14%,white)}
 .bundle__chosen li span{width:8px;height:8px;border-radius:50%;background:var(--oil,#999)}
 .bundle__note{margin:0;font-size:.82rem;color:var(--color-muted);text-align:center}
-.bundle__nojs{margin:0;font-size:.85rem;color:var(--color-muted);text-align:center;grid-column:1/-1}
+.bundle__nojs{margin:0;font-size:.85rem;color:var(--color-muted);text-align:center}
+.bundle__summary>noscript{grid-column:1/-1}
 .bundle__reset{justify-self:center;font-size:.85rem;color:var(--color-muted);min-height:44px;display:inline-flex;align-items:center}
 .bundle--compact .bundle__layout{grid-template-columns:1fr;gap:1rem}
 .bundle--compact .bundle__oils{grid-template-columns:1fr;gap:.5rem}

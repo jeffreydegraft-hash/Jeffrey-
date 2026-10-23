@@ -42,7 +42,9 @@
           assign bundle_size = settings.bundle_size | append: ''
           assign note = note | replace: '[size]', bundle_size
         -%}
-        <p class="quiz__collection" data-quiz-collection hidden>{{ note }} <a class="link" href="#build-your-collection">{{ section.settings.collection_link }}</a></p>
+        {%- unless note contains '[price]' -%}
+          <p class="quiz__collection" data-quiz-collection hidden>{{ note }} <a class="link" href="#build-your-collection">{{ section.settings.collection_link }}</a></p>
+        {%- endunless -%}
         <button type="button" class="link quiz__back" data-quiz-restart>Start over</button>
       </div>
     </div>
